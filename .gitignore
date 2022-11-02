@@ -111,3 +111,4 @@ desktop/build
 html/build
 core/build
 ios/build
+.idea
