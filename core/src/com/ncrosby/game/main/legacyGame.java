@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
-public class Game extends Canvas implements Runnable{
+public class legacyGame extends Canvas implements Runnable{
 
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class Game extends Canvas implements Runnable{
 	private HUD hud;
 	
 	// Main runs this first. This is the root of the entire program.
-	public Game() {
+	public legacyGame() {
 
 		System.out.println("Hello LWJGL " +  "!");
 
@@ -141,7 +141,7 @@ public class Game extends Canvas implements Runnable{
 	
 	public static void main(String[] args) {
 		
-		new Game();
+		new legacyGame();
 
 	}
 	

@@ -3,8 +3,8 @@ package com.ncrosby.game;
 import java.awt.*;
 import java.util.Random;
 
-import static com.ncrosby.game.main.Game.HEIGHT;
-import static com.ncrosby.game.main.Game.WIDTH;
+import static com.ncrosby.game.main.legacyGame.HEIGHT;
+import static com.ncrosby.game.main.legacyGame.WIDTH;
 
 public class Player extends GameObject {
 

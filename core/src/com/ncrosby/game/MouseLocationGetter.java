@@ -3,7 +3,7 @@ package com.ncrosby.game;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-import static com.ncrosby.game.main.Game.returnIndex;
+import static com.ncrosby.game.main.legacyGame.returnIndex;
 
 public class MouseLocationGetter extends MouseMotionAdapter {
 

@@ -1,6 +1,6 @@
 package com.ncrosby.game;
 
-import com.ncrosby.game.main.Game;
+import com.ncrosby.game.main.legacyGame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class Window extends Canvas{
      */
     private static final long serialVersionUID = 3010486623466540351L;
 
-    public Window(int width, int height, String title, Game game) {
+    public Window(int width, int height, String title, legacyGame game) {
         JFrame frame = new JFrame(title);
         JPanel panel = new JPanel();
         //frame.getContentPane().addMouseListener(new ClickLocationListener());

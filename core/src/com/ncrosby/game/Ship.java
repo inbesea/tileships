@@ -1,6 +1,6 @@
 package com.ncrosby.game;
 
-import com.ncrosby.game.main.Game;
+import com.ncrosby.game.main.legacyGame;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -64,7 +64,7 @@ public class Ship extends GameObject {
 		// scale the location by the tile size so it can be rendered
 		// give it an ID and the passed in color.
 
-		cam = Game.getCam();
+		cam = legacyGame.getCam();
 		// returnTile handles camera location
 		ShipTile testTile = returnTile(x, y);
 		int indexXY[] = returnIndex(x, y);

@@ -10,8 +10,8 @@ import com.ncrosby.game.main.Game;
  * Entry point for libGDX framework to run the game.
  * We need the logic to be referenced from this point.
  */
-public class tileShipGame extends ApplicationAdapter {
-	SpriteBatch batch;
+public class tileShipGame extends Game {
+	public SpriteBatch batch;
 
 	@Override
 	public void create () {

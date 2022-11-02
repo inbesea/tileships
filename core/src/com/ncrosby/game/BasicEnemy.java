@@ -1,6 +1,6 @@
 package com.ncrosby.game;
 
-import com.ncrosby.game.main.Game;
+import com.ncrosby.game.main.legacyGame;
 
 import java.awt.*;
 
@@ -27,11 +27,11 @@ public class BasicEnemy extends GameObject {
 		x += velX;
 		y += velY;
 		
-		if(y <= 0 + cam.y || y >= Game.HEIGHT - 55 + cam.y) {
+		if(y <= 0 + cam.y || y >= legacyGame.HEIGHT - 55 + cam.y) {
 			y -= velY;
 			velY *= -1;
 		}
-		if(x <= 0 + cam.x || x >= Game.WIDTH - 32 + cam.x) {
+		if(x <= 0 + cam.x || x >= legacyGame.WIDTH - 32 + cam.x) {
 			x -= velX;
 			velX *= -1;
 		}
