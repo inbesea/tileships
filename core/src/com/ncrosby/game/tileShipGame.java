@@ -1,10 +1,9 @@
 package com.ncrosby.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.ncrosby.game.main.Game;
+import com.ncrosby.game.screens.MainMenuScreen;
 
 /**
  * Entry point for libGDX framework to run the game.
@@ -12,22 +11,30 @@ import com.ncrosby.game.main.Game;
  */
 public class tileShipGame extends Game {
 	public SpriteBatch batch;
+	public BitmapFont font;
 
+	/**
+	 * Initialization of the game stuff
+	 */
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		Game game = new Game(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
+		font = new BitmapFont();
+		//legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
+		this.setScreen(new MainMenuScreen(this));
 	}
 
+	/**
+	 * Do this each loop
+	 */
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.end();
+		super.render();
 	}
 	
 	@Override
 	public void dispose () {
+		font.dispose();
 		batch.dispose();
 	}
 }
