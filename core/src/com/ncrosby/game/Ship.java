@@ -1,6 +1,8 @@
 package com.ncrosby.game;
 
-import com.ncrosby.game.main.legacyGame;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
+import com.ncrosby.game.util.generalUtil;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -8,13 +10,19 @@ import java.util.Stack;
 
 public class Ship extends GameObject {
 
+
+	// TODO: fix this class to use libjdx camera and draw methods.
+	/*
+	* Refactor notes
+	* We need to understand how this is used in the firstplace
+	*  */
 	/*
 	 * This class is meant to be used on a JFrame with a canvas in it.
 	 * It should be able to place, remove and keep track of ShipTiles.
 	 */
-	private ShipTile[][] shipTiles;
 	private LinkedList<ShipTile> existingTiles = new LinkedList<ShipTile>();
-	private Camera cam;
+//	private Camera cam;
+	private OrthographicCamera camera;
 	private ShipTile mouseLocation;
 
 	private int pointLocation[] = new int[2];
@@ -23,31 +31,32 @@ public class Ship extends GameObject {
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (int x, int y, ID id, Camera cam) {
+	public Ship (int x, int y, ID id, OrthographicCamera camera) {
 		super(x, y, id);
-		this.cam = cam;
-		addTileByCoord(x, y, ID.CoreTile, cam);
-		addTileByCoord(x + ShipTile.TILESIZE, y, ID.ShipTile, cam);
-		addTileByCoord(x + ShipTile.TILESIZE, y + ShipTile.TILESIZE, ID.ShipTile, cam);
-		addTileByCoord(x, y + ShipTile.TILESIZE, ID.ShipTile, cam);
+//		this.cam = cam;
+		this.camera = camera;
+
+		// Give new ship default tiles.
+		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
+		*   that creates tiles based on a list of tile instances */
+		addTileByCoord(x, y, ID.CoreTile);
+		addTileByCoord(x + ShipTile.TILESIZE, y, ID.ShipTile);
+		addTileByCoord(x + ShipTile.TILESIZE, y + ShipTile.TILESIZE, ID.ShipTile);
+		addTileByCoord(x, y + ShipTile.TILESIZE, ID.ShipTile);
 	}
 
 	/**
 	 *  Loops the list of existing tiles and renders them
-	 * @param g - Graphics renderer
+	 *  TODO : Scale tile locations by the ship position to allow ship movement.
 	 */
-	public void render(Graphics g) {
+	public void render() {
+
 		for(int i = 0; i < existingTiles.size(); i++) {
 			ShipTile tempObject = existingTiles.get(i);
-			tempObject.render(g);
+			Vector3 v3 = new Vector3(tempObject.x, tempObject.y, 0);
+			camera.unproject(v3);
+			generalUtil.render(v3.x, v3.y, tempObject.getTexture());
 		}
-		g.setColor(Color.white);
-
-
-		// I have no idea why this must be scaled by camera at this point. :(
-		int xIndexByTileSizeByCamX = (pointLocation[0] * ShipTile.TILESIZE) - cam.x;
-		int yIndexByTileSizeByCamY = (pointLocation[1] * ShipTile.TILESIZE) - cam.y;
-		g.drawRect(xIndexByTileSizeByCamX, yIndexByTileSizeByCamY, ShipTile.TILESIZE, ShipTile.TILESIZE);
 	}
 
 	/**
@@ -58,13 +67,15 @@ public class Ship extends GameObject {
 	 * @param x - The x coordinate this tile will be added to on the canvas (can go negative)
 	 * @param y - The y coordinate this tile will be added to on the canvas (can go negative)
 	 * @param id - The ID of the GameObject
-	 * @param cam - the camera object needed to adjust render location relative to the camera.
 	 */
-	public void addTileByCoord(int x, int y, ID id, Camera cam) {
-		// scale the location by the tile size so it can be rendered
-		// give it an ID and the passed in color.
+	public void addTileByCoord(int x, int y, ID id) {
 
-		cam = legacyGame.getCam();
+//		cam = legacyGame.getCam();
+		// Use vector to set new tile
+		Vector3 tileLocation = new Vector3();
+		tileLocation.set(x,y,0);
+		camera.unproject(tileLocation);
+
 		// returnTile handles camera location
 		ShipTile testTile = returnTile(x, y);
 		int indexXY[] = returnIndex(x, y);
@@ -80,7 +91,7 @@ public class Ship extends GameObject {
 			System.out.println("Create tile at " + x + "," + y);
 			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
-			ShipTile tempTile = new ShipTile(indexXY[0], indexXY[1], id, cam);
+			ShipTile tempTile = new ShipTile(indexXY[0], indexXY[1], id);
 			this.existingTiles.add(tempTile);
 		}
 		else {

@@ -1,5 +1,7 @@
 package com.ncrosby.game;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import java.awt.*;
 
 public class ShipTile extends GameObject{
@@ -13,19 +15,18 @@ public class ShipTile extends GameObject{
 	private final int xLoc;
 	private final int yLoc;
 
-	private Color color;
-	public Color getColor() {
-		return color;
+	private Texture shipTileTexture;
+	public Texture getTexture() {
+		return shipTileTexture;
 	}
 
-	public void setColor(Color color) {
-		this.color = color;
+	public void setShipTileTexture(Texture shipTileTexture) {
+		this.shipTileTexture = shipTileTexture;
 	}
 
 	private long placed = System.currentTimeMillis();
 	private int cool = 0;
 	//private Timer timer;
-	private final Camera cam;
 	public final static int TILESIZE = 64;
 
 	/**
@@ -35,7 +36,7 @@ public class ShipTile extends GameObject{
 	 *  @param x - The x index of this tile (will be rendered at x*TILESIZE)
 	 *  @param y - The y index of this tile (will be rendered at y*TILESIZE)
 	*/
-	public ShipTile(int x, int y, ID id, Camera cam) {
+	public ShipTile(int x, int y, ID id) {
 		super(x, y, id);
 		this.Up = null;
 		this.Left = null;
@@ -45,13 +46,12 @@ public class ShipTile extends GameObject{
 		this.xLoc = x * TILESIZE;
 		this.yLoc = y * TILESIZE;
 		
-		this.cam = cam;
-		// This is given to the tile now, but probably needs to be changed so the 
+		// This is given to the tile now, but probably needs to be changed so the
 		// appearance is determined by the type instead. 
 		if(id == ID.ShipTile) {
-			this.color = Color.blue;
+			this.shipTileTexture = Color.blue;
 		}else if(id == ID.CoreTile) {
-			this.color = Color.orange;
+			this.shipTileTexture = Color.orange;
 		}
 		
 
@@ -69,16 +69,18 @@ public class ShipTile extends GameObject{
 		
 	}
 
-	/**
-	 * render creates the square of the tile on the Graphics context. 
-	 * @param g - Context for rendering images
-	 */
-	public void render(Graphics g) {
-		// Draw Tile
-		g.setColor(color);
-		g.fillRect(xLoc - cam.x, yLoc - cam.y, TILESIZE - 2, TILESIZE - 2);
-
-		coolPlacedBlock(g);
+//	/**
+//	 * render creates the square of the tile on the Graphics context.
+//	 * @param g - Context for rendering images
+//	 */
+	public void render() {
+		// This function is not needed anymore I think...
+		// The ship is responsible for rendering the tiles it has
+//		// Draw Tile
+//		g.setColor(color);
+//		g.fillRect(xLoc - cam.x, yLoc - cam.y, TILESIZE - 2, TILESIZE - 2);
+//
+//		coolPlacedBlock(g);
 	}
 
 	/**
@@ -87,18 +89,18 @@ public class ShipTile extends GameObject{
 	 * @param g - Graphics context
 	 */
 	private void coolPlacedBlock(Graphics g){
-		long deltaTime = System.currentTimeMillis() - placed;
-		if(deltaTime  >= 150) {
-			//System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));
-
-			if ( cool <= 200 ) {
-				cool = cool + 5;
-				placed = System.currentTimeMillis();
-			}
-		}
-
-		g.setColor(new Color(255 - cool, cool, cool));
-		g.drawRect(xLoc - cam.x, yLoc - cam.y, TILESIZE, TILESIZE);
+//		long deltaTime = System.currentTimeMillis() - placed;
+//		if(deltaTime  >= 150) {
+//			//System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));
+//
+//			if ( cool <= 200 ) {
+//				cool = cool + 5;
+//				placed = System.currentTimeMillis();
+//			}
+//		}
+//
+//		g.setColor(new Color(255 - cool, cool, cool));
+//		g.drawRect(xLoc - cam.x, yLoc - cam.y, TILESIZE, TILESIZE);
 	}
 
 	@Override

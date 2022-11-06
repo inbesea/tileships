@@ -17,9 +17,11 @@ public class PlayerInput {
      * Ultimately this will need to move blocks around, not move the robot.
      */
     public static void clickMoveRobot(OrthographicCamera camera, Rectangle robot){
+        // Gets the click location
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(touchPos);
+        camera.unproject(touchPos); // Moves clicked point to camera location
+
         robot.x = touchPos.x - 64 / 2; // Subtracting 64 handles the size of the texture
         robot.y = touchPos.y - 64 / 2; // Subtracting 64 handles the size of the texture
     }

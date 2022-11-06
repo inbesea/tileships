@@ -6,7 +6,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.ncrosby.game.ID;
+import com.ncrosby.game.Player;
+import com.ncrosby.game.Ship;
 import com.ncrosby.game.tileShipGame;
 
 import static com.ncrosby.game.PlayerInput.clickMoveRobot;
@@ -15,12 +19,15 @@ import static com.ncrosby.game.PlayerInput.handleKeyPressed;
 public class GameScreen implements Screen {
     final tileShipGame game;
     Texture redTile;
-    Rectangle robot;
-    public Texture robotTexture;
+    private Player robot;
+    private Texture robotTexture;
     OrthographicCamera camera;
+    private Array<Ship> ships;
+    private Ship playerShip;
 
     public GameScreen(final tileShipGame game){
         this.game = game;
+        game.setGameScreen(this); // Give this to be disposed at exit
 
         //Load images needed for the game to run.
         redTile = new Texture(Gdx.files.internal("ShipTile_Red.png"));
@@ -32,10 +39,12 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, 800, 480);
 
         // init player
-        robot = new Rectangle(64,64,64,64);
+        // Give player the game reference
+        robot = new Player(64,64, ID.Player ,camera, this.game);
 
         // init ship
-
+        playerShip = new Ship(64,64, ID.Ship, camera);
+        ships.add(playerShip);
     }
 
     @Override
@@ -92,6 +101,5 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
     }
 }

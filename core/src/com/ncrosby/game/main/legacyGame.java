@@ -47,17 +47,17 @@ public class legacyGame extends Canvas implements Runnable{
 		r = new Random();
 		
 		// Adding player and enemy
-		Player player = new Player(WIDTH/2 - 32, HEIGHT/2 - 32, ID.Player, cam);
-		Ship playerSh = player.getPlayerShip();
+//		Player player = new Player(WIDTH/2 - 32, HEIGHT/2 - 32, ID.Player, cam);
+//		Ship playerSh = player.getPlayerShip();
 		//playerSh.addTileByCoord(WIDTH/2 - 32, HEIGHT/2 - 32, null, getBackground(), cam);
 
 
-		handler.addObject(player);
-		handler.addObject(player.getPlayerShip());
-		handler.addObject(new BasicEnemy(WIDTH/2 - 22, HEIGHT/2 - 22, ID.BasicEnemy, player.getPlayerShip(), cam));
-		
-		this.addMouseListener(new ClickLocationListener(player, cam));
-		this.addMouseMotionListener(new MouseLocationGetter(handler, player.getPlayerShip(), cam));
+//		handler.addObject(player);
+//		handler.addObject(player.getPlayerShip());
+//		handler.addObject(new BasicEnemy(WIDTH/2 - 22, HEIGHT/2 - 22, ID.BasicEnemy, player.getPlayerShip(), cam));
+//
+//		this.addMouseListener(new ClickLocationListener(player, cam));
+//		this.addMouseMotionListener(new MouseLocationGetter(handler, player.getPlayerShip(), cam));
 	}
 
 	/**

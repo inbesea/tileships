@@ -1,5 +1,7 @@
 package com.ncrosby.game;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -9,18 +11,18 @@ import static com.ncrosby.game.main.legacyGame.WIDTH;
 public class Player extends GameObject {
 
 	Random r = new Random();
-	private Ship shiphandler;
-	private Camera cam;
+	private tileShipGame game;
+	private OrthographicCamera cam;
 	private int index[] = {0, 0};
 	private int lookAhead = 155;
 	public boolean godMode = false;
 	public ShipTile shipTile;
 	
-	public Player(int x, int y, ID id, Camera cam) {
+	public Player(int x, int y, ID id, OrthographicCamera cam, tileShipGame game) {
 		super(x, y, id);
 		
 		this.cam = cam;
-		this.shiphandler = new Ship(x, y, ID.Ship, cam);
+		this.game = game;
 		//shiphandler.addTileByCoord(x, y, ID.ShipTile, Color.cyan, cam);
 		//velX = r.nextInt(5);
 		//velY = r.nextInt(5);
@@ -76,14 +78,14 @@ public class Player extends GameObject {
 		
 	}
 
-	public void render(Graphics g) {
+	public void render() {
 		//shiphandler.render(g);
-		g.setColor(Color.white);
-		g.fillRect(x - cam.x, y - cam.y, 32, 32);
-		if(this.shipTile != null) {
-			g.setColor(shipTile.getColor());
-			g.fillRect(x + 5 - cam.x, y + 5 - cam.y, 10, 10);
-		}
+//		g.setColor(Color.white);
+//		g.fillRect(x - cam.x, y - cam.y, 32, 32);
+//		if(this.shipTile != null) {
+//			g.setColor(shipTile.getTexture());
+//			g.fillRect(x + 5 - cam.x, y + 5 - cam.y, 10, 10);
+//		}
 		//g.drawRect(index[0], index[1], ShipTile.TILESIZE, ShipTile.TILESIZE);
 	}
 	

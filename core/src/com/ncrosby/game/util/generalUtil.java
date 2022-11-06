@@ -1,5 +1,11 @@
 package com.ncrosby.game.util;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.ncrosby.game.GameObject;
+
 public class generalUtil {
 
     /**
@@ -16,5 +22,20 @@ public class generalUtil {
             return var = min;
         else
             return var;
+    }
+
+    /**
+     *
+     * Renders a texture at normalized x,y
+     *
+     * @param gameObject - object to hold all data needed to render a thing.
+     */
+    public static void render(GameObject gameObject, OrthographicCamera camera){
+        Vector3 vector = new Vector3(gameObject.getX(), gameObject.getY(), 0);
+        camera.unproject(vector);
+
+        // Restrictions, need a reference to the game context to render.
+        // game.batch.draw begin and all that.
+        // Need the normalized x ,y  and the texture.
     }
 }

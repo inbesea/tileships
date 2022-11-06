@@ -1,39 +1,40 @@
 package com.ncrosby.game;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.awt.*;
 
 public abstract class GameObject {
 
-	// Maybe we need to have a way to order these objects for rendering so we can have the objects rendered in a specific order. 
-	
-	protected int x, y;
+
+	protected Vector2 position;
 	// From Enum list, needs a type
 	protected ID id;
 	protected int velX, velY;
 	
-	public GameObject(int x, int y, ID id) {
-		this.x = x;
-		this.y = y;
+	public GameObject(Vector2 position, ID id) {
+		this.position.x = position.x;
+		this.position.y = position.y;
 		this.id = id;
 		
 	}
 	
 	public abstract void tick();
-	public abstract void render(Graphics g);
+	public abstract void render();
 	public abstract Rectangle getBounds();
 	
-	public void setX(int x) {
-		this.x = x;
+	public void setX(float x) {
+		this.position.x = x;
 	}
-	public int getX() {
-		return x;
+	public float getX() {
+		return position.x;
 	}
 	
-	public void setY(int y) {
-		this.y = y;
+	public void setY(float y) {
+		this.position.y = y;
 	}
-	public int getY() {
-		return y;
+	public float getY() {
+		return position.y;
 	}
 	
 	public void setID(ID id) {
@@ -55,5 +56,13 @@ public abstract class GameObject {
 	}
 	public int getVelY() {
 		return velY;
+	}
+
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector2 position) {
+		this.position = position;
 	}
 }

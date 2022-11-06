@@ -1,6 +1,8 @@
 package com.ncrosby.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.ncrosby.game.main.legacyGame;
+import com.ncrosby.game.util.generalUtil;
 
 import java.awt.*;
 
@@ -50,9 +52,9 @@ public class BasicEnemy extends GameObject {
 	/**
 	 * Draws basic enemy on screen relative to the camera
 	 */
-	public void render(Graphics g) {
-		g.setColor(Color.red);
-		g.fillRect(x - cam.x, y - cam.y, 16, 16);
+	public void render() {
+
+		generalUtil.render(position.x, position.y, new Texture("asteroid_purple.png"));
 		
 	}
 
