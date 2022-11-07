@@ -1,6 +1,9 @@
 package com.ncrosby.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.ncrosby.game.util.generalUtil;
 
@@ -22,7 +25,7 @@ public class Ship extends GameObject {
 	 */
 	private LinkedList<ShipTile> existingTiles = new LinkedList<ShipTile>();
 //	private Camera cam;
-	private OrthographicCamera camera;
+	private OrthographicCamera cam;
 	private ShipTile mouseLocation;
 
 	private int pointLocation[] = new int[2];
@@ -31,31 +34,31 @@ public class Ship extends GameObject {
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (int x, int y, ID id, OrthographicCamera camera) {
-		super(x, y, id);
-//		this.cam = cam;
-		this.camera = camera;
+	public Ship (Vector2 position, ID id, OrthographicCamera cam) {
+		super(position, new Vector2(0,0), id);
+		this.cam = cam;
+//		this.camera = camera;
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
-		addTileByCoord(x, y, ID.CoreTile);
-		addTileByCoord(x + ShipTile.TILESIZE, y, ID.ShipTile);
-		addTileByCoord(x + ShipTile.TILESIZE, y + ShipTile.TILESIZE, ID.ShipTile);
-		addTileByCoord(x, y + ShipTile.TILESIZE, ID.ShipTile);
+		addTileByCoord(position.x, position.y, ID.CoreTile);
+		addTileByCoord(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
+		addTileByCoord(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTileByCoord(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
 	}
 
 	/**
 	 *  Loops the list of existing tiles and renders them
 	 *  TODO : Scale tile locations by the ship position to allow ship movement.
 	 */
-	public void render() {
+	public void render(tileShipGame game) {
 
 		for(int i = 0; i < existingTiles.size(); i++) {
 			ShipTile tempObject = existingTiles.get(i);
-			Vector3 v3 = new Vector3(tempObject.x, tempObject.y, 0);
-			camera.unproject(v3);
-			generalUtil.render(v3.x, v3.y, tempObject.getTexture());
+			game.batch.draw(new Texture(Gdx.files.internal(tempObject.getTexture())),
+					tempObject.getX(), tempObject.getY(),
+					tempObject.getSize().x, tempObject.getSize().y);
 		}
 	}
 
@@ -68,17 +71,17 @@ public class Ship extends GameObject {
 	 * @param y - The y coordinate this tile will be added to on the canvas (can go negative)
 	 * @param id - The ID of the GameObject
 	 */
-	public void addTileByCoord(int x, int y, ID id) {
+	public void addTileByCoord(float x, float y, ID id) {
 
 //		cam = legacyGame.getCam();
 		// Use vector to set new tile
 		Vector3 tileLocation = new Vector3();
 		tileLocation.set(x,y,0);
-		camera.unproject(tileLocation);
+		cam.unproject(tileLocation);
 
 		// returnTile handles camera location
 		ShipTile testTile = returnTile(x, y);
-		int indexXY[] = returnIndex(x, y);
+		float indexXY[] = returnIndex(x, y);
 
 		// Place tile at location relative to the camera.
 		if(testTile == null) {
@@ -91,7 +94,7 @@ public class Ship extends GameObject {
 			System.out.println("Create tile at " + x + "," + y);
 			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
-			ShipTile tempTile = new ShipTile(indexXY[0], indexXY[1], id);
+			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
 			this.existingTiles.add(tempTile);
 		}
 		else {
@@ -128,12 +131,12 @@ public class Ship extends GameObject {
 	 * This has a BigO of 2n, up from n^2
 	 * search the resulting size n list (n^2 so far)
 	 */
-	public ShipTile returnTile(int x, int y) {
+	public ShipTile returnTile(float x, float y) {
 		// The index is gotten by using the x and adding camera to it.
 		// Then by using the ship tile size to get an index.
 	 	//int indexX = (x + cam.x) / ShipTile.TILESIZE;
 	 	//int indexY = (y + cam.y) / ShipTile.TILESIZE;
-		int indexXY[] = returnIndex(x, y);
+		float indexXY[] = returnIndex(x, y);
 
 	 	Stack<ShipTile> xTileList = new Stack<>();
 	 	ShipTile temp;
@@ -181,34 +184,34 @@ public class Ship extends GameObject {
 	 * @param y - The y location in the jframe to adjust by cam
 	 * @return
 	 */
-	public int[] returnIndex(int x, int y) {
+	public float[] returnIndex(float x, float y) {
 
-		boolean yNegative = (y  + cam.y <= -1);
-		boolean xNegative = (x  + cam.x <= -1);
+		boolean yNegative = (y  + cam.direction.y <= -1);
+		boolean xNegative = (x  + cam.direction.x <= -1);
 
 
-		int XYresult[] = new int[2];
+		float XYresult[] = new float[2];
 		if (xNegative) {
 			if(yNegative) {
 				// x, y negative
 				// get index and subtract one.
-				XYresult[0] = ((x + cam.x) / ShipTile.TILESIZE) - 1;
-				XYresult[1] = ((y + cam.y) / ShipTile.TILESIZE) - 1;
+				XYresult[0] = (int) (((x + cam.direction.x) / ShipTile.TILESIZE) - 1);
+				XYresult[1] = (int) (((y + cam.direction.y) / ShipTile.TILESIZE) - 1);
 			}
 			else {
 				// only x negative
-				XYresult[0] = ((x + cam.x) / ShipTile.TILESIZE) - 1;
-				XYresult[1] = ((y + cam.y) / ShipTile.TILESIZE);
+				XYresult[0] = (int) (((x + cam.direction.x) / ShipTile.TILESIZE) - 1);
+				XYresult[1] = (int) ((y + cam.direction.y) / ShipTile.TILESIZE);
 			}
 		}
 		else if (yNegative) {
 			// only Y negative
-			XYresult[0] = ((x + cam.x) / ShipTile.TILESIZE);
-			XYresult[1] = ((y + cam.y) / ShipTile.TILESIZE) - 1;
+			XYresult[0] = (int) ((x + cam.direction.x) / ShipTile.TILESIZE);
+			XYresult[1] = (int) (((y + cam.direction.y) / ShipTile.TILESIZE) - 1);
 		}
 		else {
-			XYresult[0] = (x + cam.x) / ShipTile.TILESIZE;
-			XYresult[1] = (y + cam.y) / ShipTile.TILESIZE;
+			XYresult[0] = (int) ((x + cam.direction.x) / ShipTile.TILESIZE);
+			XYresult[1] = (int) ((y + cam.direction.y) / ShipTile.TILESIZE);
 		}
 
 		if(XYresult.length == 2) {

@@ -5,24 +5,28 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.ncrosby.game.ID;
-import com.ncrosby.game.Player;
-import com.ncrosby.game.Ship;
-import com.ncrosby.game.tileShipGame;
+import com.ncrosby.game.*;
+
+import java.util.Objects;
+import java.util.Vector;
 
 import static com.ncrosby.game.PlayerInput.clickMoveRobot;
 import static com.ncrosby.game.PlayerInput.handleKeyPressed;
 
 public class GameScreen implements Screen {
     final tileShipGame game;
+    Sprite sprite;
     Texture redTile;
     private Player robot;
     private Texture robotTexture;
     OrthographicCamera camera;
+    // Arrays to hold different lists of game objects
     private Array<Ship> ships;
+    private Array<GameObject> gameObjects;
     private Ship playerShip;
 
     public GameScreen(final tileShipGame game){
@@ -40,11 +44,16 @@ public class GameScreen implements Screen {
 
         // init player
         // Give player the game reference
-        robot = new Player(64,64, ID.Player ,camera, this.game);
+        robot = new Player(new Vector2(64,64), ID.Player ,camera, this.game);
 
         // init ship
-        playerShip = new Ship(64,64, ID.Ship, camera);
-        ships.add(playerShip);
+        playerShip = new Ship(new Vector2(200,200), ID.Ship, camera);
+
+        // Place init game objects into the array
+        gameObjects = new Array<>();
+        gameObjects.add(robot);
+        gameObjects.add(playerShip);
+
     }
 
     @Override
@@ -63,11 +72,13 @@ public class GameScreen implements Screen {
         // coordinate system specified by the camera.
         game.batch.setProjectionMatrix(camera.combined);
 
-        // begin a new batch and draw the bucket and
-        // all drops
+        // begin a new batch
+        // Loops through the game objects and draws them.
+        // Uses the game and camera context to handle drawing properly.
         game.batch.begin();
-        //game.font.draw(game.batch, "Drops Collected: " + dropsGathered, 0, 480);
-        game.batch.draw(robotTexture, robot.getX(), robot.getY(), 64, 64);
+        for(GameObject go: gameObjects){
+            drawGameObject(go); // Call helper to draw object
+        }
         game.batch.end();
 
         // process user input
@@ -101,5 +112,21 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+    }
+
+    /**
+     * Helper method holds rendering logic, takes game object
+     * Expects to be called after game.batch.begin() and with a batch that has the correct camera location context
+     */
+    private void drawGameObject(GameObject gameObject){
+        // Get the texture of the game object and draw it based on the GameScreen Camera.
+        String t = gameObject.getTexture();
+
+        if(!Objects.equals(t, "none") && !Objects.equals(t, "")){ // If ID has associated string
+            Texture texture = new Texture(Gdx.files.internal(t));
+            Vector2 size = gameObject.getSize();
+            game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
+        }
+        gameObject.render(this.game);
     }
 }

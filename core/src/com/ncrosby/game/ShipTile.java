@@ -1,6 +1,7 @@
 package com.ncrosby.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
 import java.awt.*;
 
@@ -15,15 +16,6 @@ public class ShipTile extends GameObject{
 	private final int xLoc;
 	private final int yLoc;
 
-	private Texture shipTileTexture;
-	public Texture getTexture() {
-		return shipTileTexture;
-	}
-
-	public void setShipTileTexture(Texture shipTileTexture) {
-		this.shipTileTexture = shipTileTexture;
-	}
-
 	private long placed = System.currentTimeMillis();
 	private int cool = 0;
 	//private Timer timer;
@@ -32,27 +24,25 @@ public class ShipTile extends GameObject{
 	/**
 	 *  These tiles will all need health, and a way to relate to tiles next to them..?
 	 *  But they will need to be stored in a 2d array. 
-	 *  So when the game initializes there will need to be an array of tiles built out. 
-	 *  @param x - The x index of this tile (will be rendered at x*TILESIZE)
-	 *  @param y - The y index of this tile (will be rendered at y*TILESIZE)
+	 *  So when the game initializes there will need to be an array of tiles built out.
 	*/
-	public ShipTile(int x, int y, ID id) {
-		super(x, y, id);
+	public ShipTile(Vector2 position, ID id) {
+		super(position, new Vector2(64,64), id);
 		this.Up = null;
 		this.Left = null;
 		this.Right = null;
 		this.Down = null;
 		
-		this.xLoc = x * TILESIZE;
-		this.yLoc = y * TILESIZE;
+		this.xLoc = (int) (position.x * TILESIZE);
+		this.yLoc = (int) (position.y * TILESIZE);
 		
 		// This is given to the tile now, but probably needs to be changed so the
 		// appearance is determined by the type instead. 
-		if(id == ID.ShipTile) {
-			this.shipTileTexture = Color.blue;
-		}else if(id == ID.CoreTile) {
-			this.shipTileTexture = Color.orange;
-		}
+//		if(id == ID.ShipTile) {
+//			this.shipTileTexture = Color.blue;
+//		}else if(id == ID.CoreTile) {
+//			this.shipTileTexture = Color.orange;
+//		}
 		
 
 
@@ -73,7 +63,7 @@ public class ShipTile extends GameObject{
 //	 * render creates the square of the tile on the Graphics context.
 //	 * @param g - Context for rendering images
 //	 */
-	public void render() {
+	public void render(tileShipGame game) {
 		// This function is not needed anymore I think...
 		// The ship is responsible for rendering the tiles it has
 //		// Draw Tile

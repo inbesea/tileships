@@ -1,9 +1,11 @@
 package com.ncrosby.game;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.Vector;
 
 import static com.ncrosby.game.main.legacyGame.HEIGHT;
 import static com.ncrosby.game.main.legacyGame.WIDTH;
@@ -18,8 +20,8 @@ public class Player extends GameObject {
 	public boolean godMode = false;
 	public ShipTile shipTile;
 	
-	public Player(int x, int y, ID id, OrthographicCamera cam, tileShipGame game) {
-		super(x, y, id);
+	public Player(Vector2 position, ID id, OrthographicCamera cam, tileShipGame game) {
+		super(position, new Vector2(64,64), id);
 		
 		this.cam = cam;
 		this.game = game;
@@ -29,7 +31,7 @@ public class Player extends GameObject {
 	}
 	
 	public Rectangle getBounds() {
-		Rectangle r = new Rectangle(x, y, 32, 32);
+		Rectangle r = new Rectangle((int) position.x, (int) position.y, 32, 32);
 		//r.intersects
 		return r;
 		
@@ -37,48 +39,48 @@ public class Player extends GameObject {
 
 	public void tick() {
 		
-		y += velY;
-		x += velX;
-		
-		// Checking middle of player ( - 16)
-		// Checking for each dimension separately. 
-		
-		int oldX = x + 16 - velX - cam.x;
-		int yLookaheadCam = y + 16  - cam.y;
-		
-		if(shiphandler.returnTile(oldX, yLookaheadCam) == null) {
-			//System.out.println("Y out of bounds");
-			y -= velY;
-		} 
-		if (shiphandler.returnTile(x + 16 - cam.x, y + 16 - velY  - cam.y) == null) {
-			//System.out.println("X out of bounds");
-			x -= velX;
-		}
-		
-		// Build camera lookahead here
-		// Need to check distance from edge of screen. 
-		// This means the x,y of the player never goes off the screen. 
-		// The camera is the thing that changes. 
-		if(x <= (lookAhead + cam.x)) {
-			cam.x += velX;
-		}
-		if(y <= (lookAhead + cam.y - 35)) {
-			// Velocity is negative when moving up lol 
-			cam.y += velY;
-		}
-		if(x >= WIDTH - lookAhead - 45 + cam.x) {
-			cam.x += velX;
-		}
-		if(y >= HEIGHT - lookAhead - 45 + cam.y) {
-			cam.y += velY;
-		}
+//		y += velY;
+//		x += velX;
+//
+//		// Checking middle of player ( - 16)
+//		// Checking for each dimension separately.
+//
+//		int oldX = x + 16 - velX - cam.x;
+//		int yLookaheadCam = y + 16  - cam.y;
+//
+//		if(shiphandler.returnTile(oldX, yLookaheadCam) == null) {
+//			//System.out.println("Y out of bounds");
+//			y -= velY;
+//		}
+//		if (shiphandler.returnTile(x + 16 - cam.x, y + 16 - velY  - cam.y) == null) {
+//			//System.out.println("X out of bounds");
+//			x -= velX;
+//		}
+//
+//		// Build camera lookahead here
+//		// Need to check distance from edge of screen.
+//		// This means the x,y of the player never goes off the screen.
+//		// The camera is the thing that changes.
+//		if(x <= (lookAhead + cam.x)) {
+//			cam.x += velX;
+//		}
+//		if(y <= (lookAhead + cam.y - 35)) {
+//			// Velocity is negative when moving up lol
+//			cam.y += velY;
+//		}
+//		if(x >= WIDTH - lookAhead - 45 + cam.x) {
+//			cam.x += velX;
+//		}
+//		if(y >= HEIGHT - lookAhead - 45 + cam.y) {
+//			cam.y += velY;
+//		}
 		
 		/*x = game.clamp(x, 0, game.WIDTH - 48);
 		y = game.clamp(y, 0, game.HEIGHT - 69);*/
 		
 	}
 
-	public void render() {
+	public void render(tileShipGame game) {
 		//shiphandler.render(g);
 //		g.setColor(Color.white);
 //		g.fillRect(x - cam.x, y - cam.y, 32, 32);
@@ -92,9 +94,16 @@ public class Player extends GameObject {
 	public void mouseover(int[] index) {
 		this.index = index;
 	}
-	
+
+	/**
+	 * This may get reworked so we can get the ship currently used by the player.
+	 *
+	 * It doesn't work currently
+	 * @return
+	 */
 	public Ship getPlayerShip() {
-		return shiphandler;
+//		return shiphandler;
+		return null;
 	}
 	
 	/**

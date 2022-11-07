@@ -16,14 +16,14 @@ public class PlayerInput {
      * TODO: Handle clicking on UI/Grabbing blocks\
      * Ultimately this will need to move blocks around, not move the robot.
      */
-    public static void clickMoveRobot(OrthographicCamera camera, Rectangle robot){
+    public static void clickMoveRobot(OrthographicCamera camera, Player robot){
         // Gets the click location
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos); // Moves clicked point to camera location
 
-        robot.x = touchPos.x - 64 / 2; // Subtracting 64 handles the size of the texture
-        robot.y = touchPos.y - 64 / 2; // Subtracting 64 handles the size of the texture
+        robot.setX(touchPos.x - 64 / 2); // Subtracting 64 handles the size of the texture
+        robot.setY(touchPos.y - 64 / 2); // Subtracting 64 handles the size of the texture
     }
 
     /**
@@ -32,7 +32,7 @@ public class PlayerInput {
      *
      * @param robot - robot Rectangle to update
      */
-    public static void handleKeyPressed(Rectangle robot){
+    public static void handleKeyPressed(Player robot){
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             robot.setY(robot.getY() + 200 * Gdx.graphics.getDeltaTime())  ;
         }

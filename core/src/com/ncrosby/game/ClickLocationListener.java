@@ -16,7 +16,6 @@ public class ClickLocationListener extends MouseAdapter {
 	 * Tiles Could all be in a single list and we could search for them based on the location. 
 	 * The tiles may need a way to hold the 
 	 * 
-	 * @param sh
 	 * @param cam
 	 */
 	public ClickLocationListener(Player pl, Camera cam) {
@@ -43,7 +42,7 @@ public class ClickLocationListener extends MouseAdapter {
 			// godmode checks
 			if(pl.godMode) {
 				if(shipTile == null) {
-					sh.addTileByCoord(x, y, ID.ShipTile, cam);
+					sh.addTileByCoord(x, y, ID.ShipTile);
 				}
 				else if(shipTile instanceof ShipTile) {
 					sh.removeTile(x, y);
@@ -59,7 +58,7 @@ public class ClickLocationListener extends MouseAdapter {
 				if(shipTile == null) {
 					if(pl.shipTile != null) {
 						ShipTile st = pl.placeTile();
-						sh.addTileByCoord(x, y, st.id, cam);
+						sh.addTileByCoord(x, y, st.id);
 					}
 					// Is a tile
 				} else {
