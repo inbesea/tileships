@@ -1,26 +1,39 @@
 package com.ncrosby.game;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import java.awt.*;
 
+/**
+ * Class to handle the basic game object needs.
+ */
 public abstract class GameObject {
 
-
-	protected Vector2 position;
+	protected Sprite sprite;
+	protected Vector2 position = new Vector2();
+	protected Vector2 size = new Vector2();
 	// From Enum list, needs a type
 	protected ID id;
 	protected int velX, velY;
+
+	// Do we need the texture to be set within each
+	protected String textureRef;
 	
-	public GameObject(Vector2 position, ID id) {
+	public GameObject(Vector2 position, Vector2 size ,ID id) {
+		// set location and id to define basics of the game object.
 		this.position.x = position.x;
 		this.position.y = position.y;
+		this.size.x = size.x;
+		this.size.y = size.y;
 		this.id = id;
-		
+		this.textureRef = id.getTexture();
 	}
 	
 	public abstract void tick();
-	public abstract void render();
+	public abstract void render(tileShipGame game);
 	public abstract Rectangle getBounds();
 	
 	public void setX(float x) {
@@ -64,5 +77,24 @@ public abstract class GameObject {
 
 	public void setPosition(Vector2 position) {
 		this.position = position;
+	}
+
+	/**
+	 * Returns a texture used for drawing/rendering object...
+	 * @return
+	 */
+	public String getTexture() {
+		return textureRef;
+	}
+
+	public void setTexture(String textureRef) {
+		this.textureRef = textureRef;
+	}
+	public Vector2 getSize() {
+		return size;
+	}
+
+	public void setSize(Vector2 size) {
+		this.size = size;
 	}
 }
