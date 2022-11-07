@@ -14,8 +14,7 @@ import com.ncrosby.game.*;
 import java.util.Objects;
 import java.util.Vector;
 
-import static com.ncrosby.game.PlayerInput.clickMoveRobot;
-import static com.ncrosby.game.PlayerInput.handleKeyPressed;
+import static com.ncrosby.game.PlayerInput.*;
 
 public class GameScreen implements Screen {
     final tileShipGame game;
@@ -83,11 +82,12 @@ public class GameScreen implements Screen {
 
         // process user input
         if (Gdx.input.isTouched()) {
-            clickMoveRobot(camera, robot);
+            clickMoveRobot(camera, playerShip);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             handleKeyPressed(robot);
         }
+        updateCameraOnPlayer(robot, camera);
     }
 
     @Override
