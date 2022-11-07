@@ -58,7 +58,7 @@ public class PlayerInput {
      * @param camera
      */
     public static void updateCameraOnPlayer(Player player, OrthographicCamera camera){
-        float lerp = 3.1f;
+        float lerp = 0.8f;
         Vector3 cameraPos = camera.position;
         Vector3 playerPos = new Vector3(player.position.x, player.position.y, 0);
 
