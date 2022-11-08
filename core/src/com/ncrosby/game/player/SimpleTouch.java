@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector3;
 public class SimpleTouch implements InputProcessor {
 
     OrthographicCamera camera;
+    Ship playerShip;
+    Player player;
         Vector3 tp = new Vector3();
         boolean dragging;
 

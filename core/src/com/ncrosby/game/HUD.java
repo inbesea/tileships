@@ -14,9 +14,6 @@ public class HUD {
 
     public void tick() {
         HEALTH = clamp(HEALTH, 0, 100);
-
-
-
     }
 
     /**

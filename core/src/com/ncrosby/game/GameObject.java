@@ -1,7 +1,5 @@
 package com.ncrosby.game;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
@@ -13,7 +11,7 @@ import java.awt.*;
 public abstract class GameObject {
 
 	protected Sprite sprite;
-	protected Vector2 position = new Vector2();
+	protected Vector2 playerPosition = new Vector2();
 	protected Vector2 size = new Vector2();
 	// From Enum list, needs a type
 	protected ID id;
@@ -22,10 +20,10 @@ public abstract class GameObject {
 	// Do we need the texture to be set within each
 	protected String textureRef;
 	
-	public GameObject(Vector2 position, Vector2 size ,ID id) {
+	public GameObject(Vector2 playerPosition, Vector2 size , ID id) {
 		// set location and id to define basics of the game object.
-		this.position.x = position.x;
-		this.position.y = position.y;
+		this.playerPosition.x = playerPosition.x;
+		this.playerPosition.y = playerPosition.y;
 		this.size.x = size.x;
 		this.size.y = size.y;
 		this.id = id;
@@ -37,17 +35,17 @@ public abstract class GameObject {
 	public abstract Rectangle getBounds();
 	
 	public void setX(float x) {
-		this.position.x = x;
+		this.playerPosition.x = x;
 	}
 	public float getX() {
-		return position.x;
+		return playerPosition.x;
 	}
 	
 	public void setY(float y) {
-		this.position.y = y;
+		this.playerPosition.y = y;
 	}
 	public float getY() {
-		return position.y;
+		return playerPosition.y;
 	}
 	
 	public void setID(ID id) {
@@ -71,12 +69,12 @@ public abstract class GameObject {
 		return velY;
 	}
 
-	public Vector2 getPosition() {
-		return position;
+	public Vector2 getPlayerPosition() {
+		return playerPosition;
 	}
 
-	public void setPosition(Vector2 position) {
-		this.position = position;
+	public void setPlayerPosition(Vector2 playerPosition) {
+		this.playerPosition = playerPosition;
 	}
 
 	/**
