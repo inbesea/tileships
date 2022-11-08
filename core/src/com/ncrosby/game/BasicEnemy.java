@@ -1,9 +1,6 @@
 package com.ncrosby.game;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.ncrosby.game.main.legacyGame;
-import com.ncrosby.game.util.generalUtil;
 
 import java.awt.*;
 
@@ -23,7 +20,7 @@ public class BasicEnemy extends GameObject {
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle((int) position.x, (int) position.y, 16, 16);
+		return new Rectangle((int) playerPosition.x, (int) playerPosition.y, 16, 16);
 	}
 
 	// TODO : burn this to the ground
