@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.ncrosby.game.*;
 import com.ncrosby.game.player.SimpleTouch;
 
@@ -18,9 +19,12 @@ import static com.ncrosby.game.PlayerInput.*;
 
 public class GameScreen implements Screen {
     final tileShipGame game;
-    Sprite sprite;
+//    Sprite sprite;
     Texture redTile;
-    private final Player robot;
+ExtendViewport extendViewport;
+    private final Player player;
+
+
     OrthographicCamera camera;
     SimpleTouch st;
 
@@ -34,6 +38,10 @@ public class GameScreen implements Screen {
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
+        this.extendViewport = new ExtendViewport(600,500, camera);
+
+        //Load images needed for the game to run.
+        redTile = new Texture(Gdx.files.internal("ShipTile_Red.png"));
 
         // init player
         // Give player the game reference
@@ -60,13 +68,14 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
+        extendViewport.apply();
 
         // tell the camera to update its matrices.
         camera.update();
 
         // tell the SpriteBatch to render in the
         // coordinate system specified by the camera.
-        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(extendViewport.getCamera().combined);
 
         // begin a new batch
         // Loops through the game objects and draws them.
@@ -89,7 +98,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        extendViewport.update(width, height);
     }
 
     @Override
