@@ -9,29 +9,49 @@ import com.badlogic.gdx.math.Vector3;
 public class PlayerInput {
 
     /**
-     * This handles clicking on the screen.
+     * This handles the player's default action when clicking on the screen.
      * currently it lacks handling clicking on UI elements, but we need to make this work simply for now.
      * Instead of clicking on UI, clicking can only move the robot.
-     * TODO: Handle clicking on UI/Grabbing blocks\
+     *
      * Ultimately this will need to move blocks around, not move the robot.
+     *
+     * @return - ShipTile of affected tile if any
      */
-    public static void clickMoveRobot(OrthographicCamera camera, Ship playerShip){
+    public static ShipTile clickPlayerShipTiles(OrthographicCamera camera, Ship playerShip, Player player){
         // Gets the click location
         Vector3 touchPos = new Vector3();
-        System.out.println("X before unproject : " + Gdx.input.getX());
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos); // Moves clicked point to camera location
 
-        //playerShip and camera are here... We can just use the methods in ship to get the tile right?
-        // Lets get the
+        // Remove a tile or place a tile?
         Vector2 index = new Vector2();
         ShipTile tile = playerShip.returnTile(touchPos.x, touchPos.y);
-        if(tile == null){
-            playerShip.addTileByCoord(touchPos.x, touchPos.y, ID.ShipTile);
-        } else {
-            playerShip.removeTile(touchPos.x, touchPos.y);
+
+        // Extract if checks
+        boolean noFoundTileButHeldTile = (tile == null && player.heldShipTiles.size > 0);
+        boolean noFoundTile = (tile == null);
+        boolean holdingTiles = player.heldShipTiles.size > 0;
+
+        if(noFoundTile){
+            if(holdingTiles){
+                // Remove tile from held tiles
+                ShipTile placedTile = player.popTile();
+                // Add tile to location giving tile ID
+                playerShip.addTileByCoord(touchPos.x, touchPos.y, placedTile.id);
+                return placedTile;
+            } else { // No tiles to place
+                System.out.println("Not holding any tiles to place!");
+                return null;
+            }
+        } else { // Found tile
+            if(player.pickupTile(tile)){ // If can pickup tile
+                playerShip.removeTile(tile); // Remove from ship and
+                // Return the tile grabbed
+                return tile;
+            } else {
+                return null; // Else, nothing is changed, return null
+            }
         }
-//        ShipTile tile = getTile
     }
 
     /**
@@ -65,7 +85,7 @@ public class PlayerInput {
     public static void updateCameraOnPlayer(Player player, OrthographicCamera camera){
         float lerp = 0.8f;
         Vector3 cameraPos = camera.position;
-        Vector3 playerPos = new Vector3(player.position.x, player.position.y, 0);
+        Vector3 playerPos = new Vector3(player.playerPosition.x, player.playerPosition.y, 0);
 
         // Give the position of the camera no update if player is close enough to camera.
         Vector3 diff = new Vector3(playerPos);
