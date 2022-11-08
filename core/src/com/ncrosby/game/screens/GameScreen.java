@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.ncrosby.game.*;
 
 import java.util.Objects;
-import java.util.Vector;
 
 import static com.ncrosby.game.PlayerInput.*;
 
@@ -20,13 +19,11 @@ public class GameScreen implements Screen {
     final tileShipGame game;
     Sprite sprite;
     Texture redTile;
-    private Player robot;
-    private Texture robotTexture;
+    private final Player robot;
     OrthographicCamera camera;
-    // Arrays to hold different lists of game objects
-    private Array<Ship> ships;
-    private Array<GameObject> gameObjects;
-    private Ship playerShip;
+
+    private final Array<GameObject> gameObjects;
+    private final Ship playerShip;
 
     public GameScreen(final tileShipGame game){
         this.game = game;
@@ -34,7 +31,6 @@ public class GameScreen implements Screen {
 
         //Load images needed for the game to run.
         redTile = new Texture(Gdx.files.internal("ShipTile_Red.png"));
-        robotTexture = new Texture(Gdx.files.internal("RobotV1.png"));
 
 
         // create the camera and the SpriteBatch
@@ -78,6 +74,8 @@ public class GameScreen implements Screen {
         for(GameObject go: gameObjects){
             drawGameObject(go); // Call helper to draw object
         }
+        drawGameObject(robot);// Draw last to be on top of robot
+        // Draw hud at this step
         game.batch.end();
 
         // process user input

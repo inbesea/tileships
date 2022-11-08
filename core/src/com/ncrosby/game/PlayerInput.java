@@ -3,12 +3,7 @@ package com.ncrosby.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-
-import static com.ncrosby.game.util.generalUtil.clamp;
-
 
 public class PlayerInput {
 
@@ -54,15 +49,13 @@ public class PlayerInput {
      * This algo updates the camera on the player based on the difference between
      * the player and the camera
      *
-     * @param player
-     * @param camera
+     * @param player - Player object
+     * @param camera - Reference to camera context
      */
     public static void updateCameraOnPlayer(Player player, OrthographicCamera camera){
         float lerp = 0.8f;
         Vector3 cameraPos = camera.position;
         Vector3 playerPos = new Vector3(player.position.x, player.position.y, 0);
-
-        System.out.println(cameraPos + " and " + playerPos);
 
         // Give the position of the camera no update if player is close enough to camera.
         Vector3 diff = new Vector3(playerPos);

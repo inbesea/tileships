@@ -4,3 +4,5 @@ Devlog gets to be part of the project for personal use lol
 Okay, some constraints.
 Ships are GameObjects, we call the render method on all game objects just in case.
 Rendering can be called from GameScreen and in gameobjects with reference to the game.
+
+Lets move the tiles in front of the player?
