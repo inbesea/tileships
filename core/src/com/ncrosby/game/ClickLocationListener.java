@@ -56,14 +56,14 @@ public class ClickLocationListener extends MouseAdapter {
 			else {
 				// no tile
 				if(shipTile == null) {
-					if(pl.shipTile != null) {
-						ShipTile st = pl.placeTile();
+					if(pl.heldShipTiles != null) {
+						ShipTile st = pl.popTile();
 						sh.addTileByCoord(x, y, st.id);
 					}
 					// Is a tile
 				} else {
 					// If player is not holding a tile > grab tile 
-					if(pl.shipTile == null) {
+					if(pl.heldShipTiles == null) {
 						pl.pickupTile(shipTile);
 						sh.removeTile(x, y);
 					}
