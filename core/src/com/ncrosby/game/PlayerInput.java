@@ -3,6 +3,7 @@ package com.ncrosby.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class PlayerInput {
@@ -21,6 +22,15 @@ public class PlayerInput {
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos); // Moves clicked point to camera location
 
+        //playerShip and camera are here... We can just use the methods in ship to get the tile right?
+        // Lets get the
+        Vector2 index = new Vector2();
+        ShipTile tile = playerShip.returnTile(touchPos.x, touchPos.y);
+        if(tile == null){
+            playerShip.addTileByCoord(touchPos.x, touchPos.y, ID.ShipTile);
+        } else {
+            playerShip.removeTile(touchPos.x, touchPos.y);
+        }
 //        ShipTile tile = getTile
     }
 

@@ -108,7 +108,7 @@ public class Ship extends GameObject {
 	 * removeTile gets a reference to a tile object and removes it from the linked list.
 	 * Would be cool for a non-tile space to play a BLERT sound effect lol
 	 */
-	public void removeTile(int x, int y) {
+	public void removeTile(float x, float y) {
 		ShipTile tileToRemove = returnTile(x, y);
 
 		if(tileToRemove == null) {
@@ -142,15 +142,14 @@ public class Ship extends GameObject {
 	 	ShipTile temp;
 	 	Stack<ShipTile> resultTiles = new Stack<>();
 
+		 // Checking ship tiles for index matches
 	 	for(int i = 0; i < existingTiles.size(); i++) {
-
-
 	 		//Assign current tile to temp
 	 		temp = existingTiles.get(i);
 	 		// Check if x matches
-			if(temp.getX() == indexXY[0]) {
+			if(temp.getxIndex() == indexXY[0]) {
 				// If yes then check y as well
-				if(temp.getY() == indexXY[1]) {
+				if(temp.getyIndex() == indexXY[1]) {
 					resultTiles.push(temp);
 				}
 			}

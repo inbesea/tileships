@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.ncrosby.game.*;
+import com.ncrosby.game.player.SimpleTouch;
 
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ public class GameScreen implements Screen {
     Texture redTile;
     private final Player robot;
     OrthographicCamera camera;
+    SimpleTouch st;
 
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
@@ -28,6 +30,9 @@ public class GameScreen implements Screen {
     public GameScreen(final tileShipGame game){
         this.game = game;
         game.setGameScreen(this); // Give this to be disposed at exit
+
+        st = new SimpleTouch();
+        Gdx.input.setInputProcessor(st);
 
         //Load images needed for the game to run.
         redTile = new Texture(Gdx.files.internal("ShipTile_Red.png"));

@@ -6,3 +6,12 @@ Ships are GameObjects, we call the render method on all game objects just in cas
 Rendering can be called from GameScreen and in gameobjects with reference to the game.
 
 Lets move the tiles in front of the player?
+
+Can we uh... Figure out where clicks handle clicking on the tiles of the
+
+Okay, I'm starting to fall off the screen lol idk how to keep going tonight.... I have to create input event handling
+the "polling" I was using is going off constantly instead of happening once? I can't use the MouseAdapter because it leaves
+out the GDX stuff we want to keep around.
+
+Going to leave it as is now, and we can work out the rest of the SimpleTouch Handler tomorrow. We can give the stuff to
+the touch handler and it can add and remove the tiles.

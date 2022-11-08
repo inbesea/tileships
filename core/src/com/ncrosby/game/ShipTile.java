@@ -1,6 +1,5 @@
 package com.ncrosby.game;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 import java.awt.*;
@@ -12,9 +11,8 @@ public class ShipTile extends GameObject{
 	private ShipTile Left;
 	private ShipTile Right;
 	private ShipTile Down;
-	
-	private final int xLoc;
-	private final int yLoc;
+
+	private final int xIndex, yIndex;
 
 	private long placed = System.currentTimeMillis();
 	private int cool = 0;
@@ -33,8 +31,8 @@ public class ShipTile extends GameObject{
 		this.Right = null;
 		this.Down = null;
 		
-		this.xLoc = (int) (position.x * TILESIZE);
-		this.yLoc = (int) (position.y * TILESIZE);
+		this.xIndex = (int) (position.x / TILESIZE);
+		this.yIndex = (int) (position.y / TILESIZE);
 		
 		// This is given to the tile now, but probably needs to be changed so the
 		// appearance is determined by the type instead. 
@@ -130,5 +128,11 @@ public class ShipTile extends GameObject{
 	public void setDown(ShipTile down) {
 		Down = down;
 	}
+	public int getxIndex() {
+		return xIndex;
+	}
 
+	public int getyIndex() {
+		return yIndex;
+	}
 }
