@@ -19,8 +19,7 @@ import static com.ncrosby.game.PlayerInput.*;
 
 public class GameScreen implements Screen {
     final tileShipGame game;
-//    Sprite sprite;
-    Texture redTile;
+
 ExtendViewport extendViewport;
     private final Player player;
 
@@ -39,9 +38,6 @@ ExtendViewport extendViewport;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         this.extendViewport = new ExtendViewport(600,500, camera);
-
-        //Load images needed for the game to run.
-        redTile = new Texture(Gdx.files.internal("ShipTile_Red.png"));
 
         // init player
         // Give player the game reference
