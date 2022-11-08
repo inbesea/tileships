@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.ncrosby.game.util.generalUtil;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -71,7 +70,7 @@ public class Ship extends GameObject {
 	 * @param y - The y coordinate this tile will be added to on the canvas (can go negative)
 	 * @param id - The ID of the GameObject
 	 */
-	public void addTileByCoord(float x, float y, ID id) {
+	public ShipTile addTileByCoord(float x, float y, ID id) {
 
 //		cam = legacyGame.getCam();
 		// Use vector to set new tile
@@ -96,10 +95,12 @@ public class Ship extends GameObject {
 
 			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
 			this.existingTiles.add(tempTile);
+			return tempTile; // Will be null
 		}
 		else {
 			System.out.println("Already a tile at :" + x + ", " + y);
 			System.out.println("Already a tile at :" + indexXY[0] + ", " + indexXY[1]);
+			return testTile;
 		}
 	}
 
@@ -115,10 +116,32 @@ public class Ship extends GameObject {
 			System.out.println("No tile found at " + x + ", " + y);
 		}
 		else {
+			logRemovedTile(tileToRemove);
 			this.existingTiles.remove(tileToRemove);
 		}
-
 		//this.existingTiles.remove(tempTile);
+	}
+
+
+	/**
+	 * Removes a tile by reference to the tile instance
+	 * Should only be used when a tile instance is found.
+	 * @param tile
+	 */
+	public void removeTile(ShipTile tile){
+		if(!this.existingTiles.remove(tile)){
+			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
+		} else {
+			logRemovedTile(tile);
+		}
+	}
+
+	/**
+	 * Prints removed tile data to console
+	 */
+	private void logRemovedTile(ShipTile tile) {
+		System.out.println("Removing tile (" + tile.getxIndex() + ", " +
+				tile.getyIndex() + ") of type " + tile.getID().name() +  " from ship : " + this.getID());
 	}
 
 	/**

@@ -15,3 +15,6 @@ out the GDX stuff we want to keep around.
 
 Going to leave it as is now, and we can work out the rest of the SimpleTouch Handler tomorrow. We can give the stuff to
 the touch handler and it can add and remove the tiles.
+
+TODO : Make the player able to pick up tiles.
+TODO: Have held tiles display in a floating circle around the player.

@@ -4,6 +4,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.ncrosby.game.Player;
+import com.ncrosby.game.Ship;
+import com.ncrosby.game.screens.GameScreen;
+
+import static com.ncrosby.game.PlayerInput.clickPlayerShipTiles;
 
 public class SimpleTouch implements InputProcessor {
 
@@ -13,8 +18,18 @@ public class SimpleTouch implements InputProcessor {
         Vector3 tp = new Vector3();
         boolean dragging;
 
-        public SimpleTouch(){
-
+    /**
+     * Constructor for this event handler needs
+     * playership, camera and player
+     * This is so the player may access the tiles on their current ship.
+     *
+     * @param gameScreen
+     */
+    public SimpleTouch(GameScreen gameScreen){
+            this.camera = gameScreen.getCamera();
+            // A future change could be to add a way to update the player ship.
+            this.playerShip = gameScreen.getPlayerShip();
+            this.player = gameScreen.getPlayer();
         }
 
         @Override public boolean mouseMoved (int screenX, int screenY) {
@@ -28,12 +43,15 @@ public class SimpleTouch implements InputProcessor {
         return false;
     }
 
-    @Override public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-            // ignore if its not left mouse button or first touch pointer
-            if (button != Input.Buttons.LEFT || pointer > 0) return false;
-            camera.unproject(tp.set(screenX, screenY, 0));
-            dragging = true;
-            return true;
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        // ignore if its not left mouse button or first touch pointer
+        if (button != Input.Buttons.LEFT || pointer > 0) return false;
+        camera.unproject(tp.set(screenX, screenY, 0));
+        dragging = true;
+        clickPlayerShipTiles(camera, playerShip, player);
+
+        return true;
         }
 
         @Override public boolean touchDragged (int screenX, int screenY, int pointer) {
