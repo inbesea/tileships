@@ -2,6 +2,7 @@ package com.ncrosby.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.utils.Array;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
+
+import static com.badlogic.gdx.math.MathUtils.*;
 
 public class Player extends GameObject {
 
@@ -24,7 +27,9 @@ public class Player extends GameObject {
     private int heldTileLimit;
     // Circle to render held tiles on.
     private Circle heldTileDisplay;
-    private int INIT_HELD_RADIUS = 3;
+    private float tileCircleRotationSpeed = 0.01f;
+    private float circleRotation = 0;
+    private int INIT_HELD_RADIUS = 64;
 
     public Player(Vector2 position, ID id, OrthographicCamera cam, tileShipGame game) {
         super(position, new Vector2(64, 64), id);
@@ -32,7 +37,7 @@ public class Player extends GameObject {
         heldTileDisplay = new Circle(position.x, position.y, INIT_HELD_RADIUS);
         this.cam = cam;
         this.game = game;
-        this.heldTileLimit = 1;
+        this.heldTileLimit = 5;
     }
 
     public Rectangle getBounds() {
@@ -43,46 +48,6 @@ public class Player extends GameObject {
     }
 
     public void tick() {
-
-//		y += velY;
-//		x += velX;
-//
-//		// Checking middle of player ( - 16)
-//		// Checking for each dimension separately.
-//
-//		int oldX = x + 16 - velX - cam.x;
-//		int yLookaheadCam = y + 16  - cam.y;
-//
-//		if(shiphandler.returnTile(oldX, yLookaheadCam) == null) {
-//			//System.out.println("Y out of bounds");
-//			y -= velY;
-//		}
-//		if (shiphandler.returnTile(x + 16 - cam.x, y + 16 - velY  - cam.y) == null) {
-//			//System.out.println("X out of bounds");
-//			x -= velX;
-//		}
-//
-//		// Build camera lookahead here
-//		// Need to check distance from edge of screen.
-//		// This means the x,y of the player never goes off the screen.
-//		// The camera is the thing that changes.
-//		if(x <= (lookAhead + cam.x)) {
-//			cam.x += velX;
-//		}
-//		if(y <= (lookAhead + cam.y - 35)) {
-//			// Velocity is negative when moving up lol
-//			cam.y += velY;
-//		}
-//		if(x >= WIDTH - lookAhead - 45 + cam.x) {
-//			cam.x += velX;
-//		}
-//		if(y >= HEIGHT - lookAhead - 45 + cam.y) {
-//			cam.y += velY;
-//		}
-		
-		/*x = game.clamp(x, 0, game.WIDTH - 48);
-		y = game.clamp(y, 0, game.HEIGHT - 69);*/
-
     }
 
     /**
@@ -91,22 +56,28 @@ public class Player extends GameObject {
      * @param game - reference to the game context
      */
     public void render(tileShipGame game) {
-        // Update radius and position of circle
-        adjustHeldTileDisplay(0.1f);
-        heldTileDisplay.setPosition(playerPosition);
-//        System.out.println("Held tiles : " + this.heldShipTiles.size);
-        // Draw tiny tiles from player stack
-        for (int i = 0; i < heldShipTiles.size; i++) {
-
-        }
+        renderCircleOfHeldTiles(); // Moved this logic out to allow render to be more flexible
     }
 
-    private void adjustHeldTileDisplay(float lerp) {
+    /**
+     * Changes the radius of the held tile circle slowly over time.
+     *
+     * @param ROC - Rate of change to the radius
+     */
+    private void slowRadiusChange(float ROC) {
         heldTileDisplay.radius += (
                 // need to fiddle with this exp. so the value stablizes and goes to 0.
-                (heldTileDisplay.radius - heldShipTiles.size) * // display radius changes based on the size of the hand of tiles.
-                        lerp * Gdx.graphics.getDeltaTime()
+                (heldShipTiles.size - heldTileDisplay.radius/(heldTileDisplay.radius + 1)) * // display radius changes based on the size of the hand of tiles.
+                        ROC * Gdx.graphics.getDeltaTime()
         );
+    }
+
+    /**
+     * Increases the circleRotation float used to display held tiles
+     */
+    private void rotateCircle(){
+        circleRotation += tileCircleRotationSpeed;
+        if(circleRotation > PI2) circleRotation = 0;
     }
 
     public void mouseover(int[] index) {
@@ -158,6 +129,16 @@ public class Player extends GameObject {
                     Arrays.toString(Thread.currentThread().getStackTrace()));
         } else {
             heldShipTiles.add(st);
+
+//            System.out.println("Picked up a tile, printing circle co-ords");
+//            for (int i = 0; i < heldShipTiles.size; i++) {
+//                System.out.println("(360/heldShipTiles.size(" + heldShipTiles.size + ")) = " + (360/heldShipTiles.size) +
+//                        "\nsin(" + i + " * (360/heldShipTiles.size("+ heldShipTiles.size +"))) = " + sin(i * (360/heldShipTiles.size)) +
+//                        " = x");
+//                System.out.println("" +
+//                        "cos(" + i + " * (360/heldShipTiles.size(" + heldShipTiles.size + "))) = " + cos(i * (360/heldShipTiles.size)));
+//            }
+
             return true;
         }
     }
@@ -180,4 +161,29 @@ public class Player extends GameObject {
         }
     }
 
+    /**
+     * Renders a circle of tiles around the playerCharacter
+     */
+    private void renderCircleOfHeldTiles(){
+
+        // Update radius and position of circle
+        slowRadiusChange(0.1f);
+        heldTileDisplay.setPosition(playerPosition);
+        Texture tempTexture;
+        rotateCircle();
+
+        // Get radians based on fractionalized circle
+        float radianFractions = (PI*2)/heldShipTiles.size;
+        // Draw tiny tiles from player stack
+        for (int i = 0; i < heldShipTiles.size; i++) {
+            ShipTile t = heldShipTiles.get(i);
+            tempTexture = new Texture(Gdx.files.internal(t.getID().getTexture()));
+
+            game.batch.draw(tempTexture,
+                    (heldTileDisplay.x + 32) + (sin((i * (radianFractions)) + circleRotation) * heldTileDisplay.radius),
+                    (heldTileDisplay.y + 32) + (cos((i * (radianFractions)) + circleRotation) * heldTileDisplay.radius),
+                    5 ,5);
+
+        }
+    }
 }

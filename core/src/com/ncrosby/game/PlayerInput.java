@@ -44,12 +44,16 @@ public class PlayerInput {
                 return null;
             }
         } else { // Found tile
-            if(player.pickupTile(tile)){ // If can pickup tile
-                playerShip.removeTile(tile); // Remove from ship and
-                // Return the tile grabbed
-                return tile;
-            } else {
-                return null; // Else, nothing is changed, return null
+            if(tile.getID() == ID.CoreTile){
+                return null;
+            }else {
+                if(player.pickupTile(tile)){ // If can pickup tile
+                    playerShip.removeTile(tile); // Remove from ship and
+                    // Return the tile grabbed
+                    return tile;
+                } else {
+                    return null; // Else, nothing is changed, return null
+                }
             }
         }
     }
