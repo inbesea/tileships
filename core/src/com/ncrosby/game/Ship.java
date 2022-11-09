@@ -145,23 +145,27 @@ public class Ship extends GameObject {
 	}
 
 	/**
-	 * Returns reference to a tile based on unadjusted x,y of jFrame.
-	 *
-	 * @param x - click coordinate (without cam adjustment)
-	 * @param y - y click coord. (without cam adjustment)
-	 * @return  - Can return a ShipTile object. Will return null on spaces without tiles.
-	 *
-	 * This has a BigO of 2n, up from n^2
-	 * search the resulting size n list (n^2 so far)
+	 * Lazy bad way to get a tile with a different passed in value, but I don't feel like creating another method for both of these to call.
+	 * @param position
+	 * @return
 	 */
-	public ShipTile returnTile(float x, float y) {
-		// The index is gotten by using the x and adding camera to it.
-		// Then by using the ship tile size to get an index.
-	 	//int indexX = (x + cam.x) / ShipTile.TILESIZE;
-	 	//int indexY = (y + cam.y) / ShipTile.TILESIZE;
-		float indexXY[] = returnIndex(x, y);
+	public ShipTile returnTile(Vector2 position){
+		return returnTile(position.x, position.y);
+	}
 
-	 	Stack<ShipTile> xTileList = new Stack<>();
+	public ShipTile returnTile(float x, float y) {
+		return findTile(new Vector2(x,y));
+	}
+
+	/**
+	 * Returns reference to a tile based on x, y of Vector2
+	 *
+	 * @param position - click coordinates
+	 * @return  - Can return a ShipTile object. Will return null on spaces without tiles.
+	 */
+	private ShipTile findTile(Vector2 position){
+		float indexXY[] = returnIndex(position.x, position.y);
+
 	 	ShipTile temp;
 	 	Stack<ShipTile> resultTiles = new Stack<>();
 
@@ -178,25 +182,17 @@ public class Ship extends GameObject {
 			}
 		}
 
+		 // Handle result array
 	 	if(resultTiles.size() > 1) {
-	 		throw new ArithmeticException("Multiple Tiles Found in ReturnTile() for " + x + "," + y);
+	 		throw new ArithmeticException("Multiple Tiles Found in ReturnTile() for " + position.x + "," + position.y);
 	 	}
 	 	else if (resultTiles.size() <= 0) {
-	 		//System.out.println("No Tiles found at " + x + "," + y);
 	 		return null;
 	 	}
-	 	else if(resultTiles.size() == 1){
+	 	else {
 	 		return resultTiles.pop();
 	 	}
-	 	else {
-	 		throw new ArithmeticException("Error : Problem with result set. " + resultTiles);
-	 	}
-
-	 	// Search the linked list for x matches, return null if empty list (log this happening).
-	 	// and then loop through that list for y matches, return null if this whittles down to nothing.
-	 	// Maybe need a tooltip to popup reminding that empty space cannot be grabbed lol .
 	}
-	// Issue is the pixel location isn't stored anywhere yeah? :/ How can I check the tile at a location without searching all over creation for it...
 
 	/**
 	 * returnIndex returns the index of a tilelocation from an x,y location.
