@@ -17,6 +17,9 @@ import java.util.Objects;
 
 import static com.ncrosby.game.PlayerInput.*;
 
+/**
+ * Main game screen - where the game happens
+ */
 public class GameScreen implements Screen {
     final tileShipGame game;
 
@@ -41,7 +44,7 @@ ExtendViewport extendViewport;
 
         // init player
         // Give player the game reference
-        player = new Player(new Vector2(64, 64), ID.Player, camera, this.game);
+        player = new Player(new Vector2(222, 222), ID.Player, camera, this.game);
 
         // init ship
         playerShip = new Ship(new Vector2(200, 200), ID.Ship, camera);
