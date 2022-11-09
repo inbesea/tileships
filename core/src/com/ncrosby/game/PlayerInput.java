@@ -46,7 +46,9 @@ public class PlayerInput {
         } else { // Found tile
             if(tile.getID() == ID.CoreTile){
                 return null;
-            }else {
+            } else if (playerShip.returnTile(player.getX(), player.getY()) == tile) {
+                return null;
+            } else {
                 if(player.pickupTile(tile)){ // If can pickup tile
                     playerShip.removeTile(tile); // Remove from ship and
                     // Return the tile grabbed
