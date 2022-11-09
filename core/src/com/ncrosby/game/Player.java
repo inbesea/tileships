@@ -14,7 +14,7 @@ import java.util.Random;
 import static com.badlogic.gdx.math.MathUtils.*;
 
 public class Player extends GameObject {
-
+    Ship playerShip;
     Random r = new Random();
     private tileShipGame game;
     private OrthographicCamera cam;
@@ -38,6 +38,7 @@ public class Player extends GameObject {
         this.cam = cam;
         this.game = game;
         this.heldTileLimit = 5;
+        this.playerShip =  game.getPlayerShip();
     }
 
     public Rectangle getBounds() {
@@ -92,8 +93,7 @@ public class Player extends GameObject {
      * @return
      */
     public Ship getPlayerShip() {
-//		return shiphandler;
-        return null;
+		return playerShip;
     }
 
     public Array<ShipTile> getHeldShipTiles() {
@@ -129,16 +129,6 @@ public class Player extends GameObject {
                     Arrays.toString(Thread.currentThread().getStackTrace()));
         } else {
             heldShipTiles.add(st);
-
-//            System.out.println("Picked up a tile, printing circle co-ords");
-//            for (int i = 0; i < heldShipTiles.size; i++) {
-//                System.out.println("(360/heldShipTiles.size(" + heldShipTiles.size + ")) = " + (360/heldShipTiles.size) +
-//                        "\nsin(" + i + " * (360/heldShipTiles.size("+ heldShipTiles.size +"))) = " + sin(i * (360/heldShipTiles.size)) +
-//                        " = x");
-//                System.out.println("" +
-//                        "cos(" + i + " * (360/heldShipTiles.size(" + heldShipTiles.size + "))) = " + cos(i * (360/heldShipTiles.size)));
-//            }
-
             return true;
         }
     }

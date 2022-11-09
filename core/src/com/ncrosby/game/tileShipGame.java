@@ -17,6 +17,7 @@ public class tileShipGame extends Game {
 	Screen gs;
 	public SpriteBatch batch; // Draws the textures and fonts etc.
 	public BitmapFont font;
+	private Ship playerShip;
 
 	/**
 	 * Initialization of the game stuff
@@ -51,5 +52,13 @@ public class tileShipGame extends Game {
 	 */
 	public void setGameScreen(Screen screen){
 		this.gs = screen;
+	}
+
+	public void setPlayerShip(Ship playerShip) {
+		this.playerShip = playerShip;
+	}
+
+	public Ship getPlayerShip() {
+		return playerShip;
 	}
 }

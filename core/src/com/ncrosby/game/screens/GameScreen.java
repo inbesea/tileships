@@ -42,12 +42,13 @@ ExtendViewport extendViewport;
         camera.setToOrtho(false, 800, 480);
         this.extendViewport = new ExtendViewport(600,500, camera);
 
+        // init ship
+        playerShip = new Ship(new Vector2(200, 200), ID.Ship, camera);
+        game.setPlayerShip(playerShip);
+
         // init player
         // Give player the game reference
         player = new Player(new Vector2(222, 222), ID.Player, camera, this.game);
-
-        // init ship
-        playerShip = new Ship(new Vector2(200, 200), ID.Ship, camera);
 
         // Place init game objects into the array
         gameObjects = new Array<>();

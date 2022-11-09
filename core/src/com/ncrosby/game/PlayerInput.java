@@ -65,18 +65,33 @@ public class PlayerInput {
      * @param robot - robot Rectangle to update
      */
     public static void handleKeyPressed(Player robot){
+        Vector2 previousPosition = robot.getPlayerPosition();
+        Ship ship = robot.getPlayerShip();
+
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            robot.setY(robot.getY() + 200 * Gdx.graphics.getDeltaTime())  ;
+            if(ship.returnTile(robot.getX(), robot.getY() + 200 * Gdx.graphics.getDeltaTime()) != null){
+                robot.setY(robot.getY() + 200 * Gdx.graphics.getDeltaTime())  ;
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            robot.setX(robot.getX() - 200 * Gdx.graphics.getDeltaTime())  ;
+            if(ship.returnTile(robot.getX() - 200 * Gdx.graphics.getDeltaTime(), robot.getY()) != null){
+                robot.setX(robot.getX() - 200 * Gdx.graphics.getDeltaTime())  ;
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            robot.setX(robot.getX() + 200 * Gdx.graphics.getDeltaTime())  ;
+            if(ship.returnTile(robot.getX() + 200 * Gdx.graphics.getDeltaTime(), robot.getY()) != null){
+                robot.setX(robot.getX() + 200 * Gdx.graphics.getDeltaTime())  ;
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            robot.setY(robot.getY() - 200 * Gdx.graphics.getDeltaTime())  ;
+            if(ship.returnTile(robot.getX(), robot.getY() - 200 * Gdx.graphics.getDeltaTime()) != null){
+                robot.setY(robot.getY() - 200 * Gdx.graphics.getDeltaTime())  ;
+            }
         }
+    }
+
+    private void returnToShip(){
+
     }
 
     /**
