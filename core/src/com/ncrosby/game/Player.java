@@ -29,7 +29,7 @@ public class Player extends GameObject {
     private Circle heldTileDisplay;
     private float tileCircleRotationSpeed = 0.01f;
     private float circleRotation = 0;
-    private int INIT_HELD_RADIUS = 64;
+    private final int INIT_HELD_RADIUS = 32; // one Radius
 
     public Player(Vector2 position, ID id, OrthographicCamera cam, tileShipGame game) {
         super(position, new Vector2(64, 64), id);
@@ -66,9 +66,24 @@ public class Player extends GameObject {
      * @param ROC - Rate of change to the radius
      */
     private void slowRadiusChange(float ROC) {
+
+        // targetRadius - current
+
+        // Sorry for this terrible formula - check 1.6+\ \frac{\tan\left(x\ -\ 4\right)}{1.02}
+        float targetRadius = (INIT_HELD_RADIUS *  (((8.0f * heldShipTiles.size) + 5.0f) / (heldShipTiles.size + 5.0f)));  // Target based on size of held tiles
+
+        float radius = heldTileDisplay.radius;
+
+        System.out.println("heldShipSize = " + heldShipTiles.size + " \nheldTileDisplay.radius = " + heldTileDisplay.radius +
+                "  \nDiff = (INIT_HELD_RADIUS *  (((3 * heldShipTiles.size) + 5) / (heldShipTiles.size + 5)) - " +
+                "heldTileDisplay.radius = " +
+                (targetRadius - (radius)) );
+
+        System.out.println(targetRadius + " = targetRadius");
+
         heldTileDisplay.radius += (
                 // need to fiddle with this exp. so the value stablizes and goes to 0.
-                (heldShipTiles.size - heldTileDisplay.radius/(heldTileDisplay.radius + 1)) * // display radius changes based on the size of the hand of tiles.
+                (targetRadius - (radius)) * // display radius changes based on the size of the hand of tiles.
                         ROC * Gdx.graphics.getDeltaTime()
         );
     }
@@ -157,7 +172,7 @@ public class Player extends GameObject {
     private void renderCircleOfHeldTiles(){
 
         // Update radius and position of circle
-        slowRadiusChange(0.1f);
+        slowRadiusChange(2.5f);
         heldTileDisplay.setPosition(playerPosition);
         Texture tempTexture;
         rotateCircle();

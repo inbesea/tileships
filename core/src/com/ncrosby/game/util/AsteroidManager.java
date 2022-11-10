@@ -47,7 +47,7 @@ public class AsteroidManager {
         // Need an x,y where x,y = x,y of camera - (0.5 * the width of the viewport) and + the same with the height (Y goes up)
         // The width and  height can grow as the x,y adjust.
         // This is only a little complex because the x will shrink while the y grows as the box grows, and vice versa when shrinking.
-        zoneOfPlay = new Rectangle(screen.getCamera().position.x, screen.getCamera().position.y, );
+//        zoneOfPlay = new Rectangle(screen.getCamera().position.x, screen.getCamera().position.y);
         // If initalized while set to false init will not happen.
         if(spawning){
              while(canSpawn()){
@@ -70,7 +70,7 @@ public class AsteroidManager {
      * Check asteroids and remove any outside of the "zoneOfPlay" - Cleaning up the asteroids that stray too far
      * @return - marking this as unfinished
      */
-    private boolean cleanup() {
+    private void cleanup() {
         // Check asteroids and remove any outside of the "zoneOfPlay"
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
