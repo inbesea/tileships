@@ -9,12 +9,7 @@ import java.awt.*;
 
 public class ShipTile extends GameObject {
 
-	
-	private ShipTile Up;
-	private ShipTile Left;
-	private ShipTile Right;
-	private ShipTile Down;
-
+	private AdjacentTiles neighbors = new AdjacentTiles();
 	private final int xIndex, yIndex;
 
 	private long placed = System.currentTimeMillis();
@@ -29,10 +24,6 @@ public class ShipTile extends GameObject {
 	*/
 	public ShipTile(Vector2 position, ID id) {
 		super(position, new Vector2(64,64), id);
-		this.Up = null;
-		this.Left = null;
-		this.Right = null;
-		this.Down = null;
 		
 		this.xIndex = (int) (position.x / TILESIZE);
 		this.yIndex = (int) (position.y / TILESIZE);
@@ -85,42 +76,19 @@ public class ShipTile extends GameObject {
 		return null;
 	}
 
-	public ShipTile getUp() {
-		return Up;
-	}
-
-	public void setUp(ShipTile up) {
-		Up = up;
-	}
-
-	public ShipTile getLeft() {
-		return Left;
-	}
-
-	public void setLeft(ShipTile left) {
-		Left = left;
-	}
-
-	public ShipTile getRight() {
-		return Right;
-	}
-
-	public void setRight(ShipTile right) {
-		Right = right;
-	}
-
-	public ShipTile getDown() {
-		return Down;
-	}
-
-	public void setDown(ShipTile down) {
-		Down = down;
-	}
 	public int getxIndex() {
 		return xIndex;
 	}
 
 	public int getyIndex() {
 		return yIndex;
+	}
+
+	/**
+	 * Returns neighbors of ShipTile
+	 * @return - AdjacentTile object holding references to neighbors
+	 */
+	public AdjacentTiles getNeighbors() {
+		return neighbors;
 	}
 }

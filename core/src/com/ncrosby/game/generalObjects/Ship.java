@@ -95,12 +95,24 @@ public class Ship extends GameObject {
 			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
 			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
+			setNeighbors(tempTile);
 			this.existingTiles.add(tempTile);
 			return null;
 		} else { // x, y is not vacant
 			System.out.println("Already a tile at (x, y) = (" + x + ", " + y + ") -> index: (" + indexXY[0] + ", " + indexXY[1] + ")");
 			return testTile;
 		}
+	}
+
+	private int setNeighbors(ShipTile tile){
+		AdjacentTiles neighbors = tile.getNeighbors();
+		// set each direction with getTile();
+		neighbors.setUp(returnTile(tile.getX(),tile.getY()));
+		neighbors.setRight(returnTile(tile.getX(),tile.getY()));
+		neighbors.setDown(returnTile(tile.getX(),tile.getY()));
+		neighbors.setLeft(returnTile(tile.getX(),tile.getY()));
+
+		return tile.
 	}
 
 
@@ -152,6 +164,12 @@ public class Ship extends GameObject {
 		return returnTile(position.x, position.y);
 	}
 
+	/**
+	 * Returns reference to a tile
+	 * @param x - horizontal position of tile
+	 * @param y - vertical position of tile
+	 * @return - tile found, if no tile is found it returns null
+	 */
 	public ShipTile returnTile(float x, float y) {
 		return findTile(new Vector2(x,y));
 	}
