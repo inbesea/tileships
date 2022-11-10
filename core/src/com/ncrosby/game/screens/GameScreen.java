@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.ncrosby.game.*;
 import com.ncrosby.game.player.SimpleTouch;
+import com.ncrosby.game.util.AsteroidManager;
 
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ import static com.ncrosby.game.PlayerInput.*;
  */
 public class GameScreen implements Screen {
     final tileShipGame game;
-
+    AsteroidManager asteroidManager;
 ExtendViewport extendViewport;
     private final Player player;
 
@@ -58,6 +59,8 @@ ExtendViewport extendViewport;
         // Add input event handling
         st = new SimpleTouch(this);
         Gdx.input.setInputProcessor(st);
+
+        asteroidManager = new AsteroidManager(this);
     }
 
     @Override
