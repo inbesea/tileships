@@ -2,6 +2,7 @@ package com.ncrosby.game.main;
 
 import com.ncrosby.game.*;
 import com.ncrosby.game.Window;
+import com.ncrosby.game.tiles.ShipTile;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;

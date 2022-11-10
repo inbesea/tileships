@@ -4,14 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.ncrosby.game.Player;
 import com.ncrosby.game.Ship;
-import com.ncrosby.game.ShipTile;
+import com.ncrosby.game.tiles.ShipTile;
 import com.ncrosby.game.screens.GameScreen;
-
-import static com.ncrosby.game.PlayerInput.clickPlayerShipTiles;
 
 public class SimpleTouch implements InputProcessor {
 

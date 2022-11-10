@@ -1,10 +1,13 @@
-package com.ncrosby.game;
+package com.ncrosby.game.tiles;
 
 import com.badlogic.gdx.math.Vector2;
+import com.ncrosby.game.GameObject;
+import com.ncrosby.game.ID;
+import com.ncrosby.game.tileShipGame;
 
 import java.awt.*;
 
-public class ShipTile extends GameObject{
+public class ShipTile extends GameObject {
 
 	
 	private ShipTile Up;
@@ -33,23 +36,8 @@ public class ShipTile extends GameObject{
 		
 		this.xIndex = (int) (position.x / TILESIZE);
 		this.yIndex = (int) (position.y / TILESIZE);
-		
-		// This is given to the tile now, but probably needs to be changed so the
-		// appearance is determined by the type instead. 
-//		if(id == ID.ShipTile) {
-//			this.shipTileTexture = Color.blue;
-//		}else if(id == ID.CoreTile) {
-//			this.shipTileTexture = Color.orange;
-//		}
-		
 
-
-		// this.render = render;
-		// Is this necessary? 
-		// If the element in the 2d array is null then we can just skip it? 
-		// That will result in fewer elements == better runtime. 
-		// Idea : The renderer for the 2d array with tiles for the ship can have a list of existing ship squares. 
-		
+		// Need to knit together the shiptile to adjacent tiles connectAdjacent();
 	}
 
 	public void tick() {
