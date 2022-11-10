@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -155,5 +154,24 @@ ExtendViewport extendViewport;
 
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Add new game object to game.
+     * New object will be renderered based on position and its own render method.
+     * @param go
+     */
+    public void newGameObject(GameObject go){
+        gameObjects.add(go);
+    }
+
+    /**
+     * Finds the game object, removes and returns it from the game screen Array
+     * @param gameObject
+     * @return
+     */
+    public GameObject removeGameObject(GameObject gameObject){
+        int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
+        return gameObjects.removeIndex(i); // Returns the object reference and removes it.
     }
 }
