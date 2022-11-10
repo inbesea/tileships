@@ -1,5 +1,8 @@
 package com.ncrosby.game;
 
+import com.ncrosby.game.generalObjects.GameObject;
+import com.ncrosby.game.generalObjects.Player;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 

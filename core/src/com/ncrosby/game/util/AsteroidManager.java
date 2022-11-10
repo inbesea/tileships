@@ -1,9 +1,8 @@
 package com.ncrosby.game.util;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import com.ncrosby.game.BasicEnemy;
+import com.ncrosby.game.generalObjects.BasicEnemy;
 import com.ncrosby.game.screens.GameScreen;
 
 import java.util.Arrays;

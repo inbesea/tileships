@@ -5,8 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.ncrosby.game.Player;
-import com.ncrosby.game.Ship;
+import com.ncrosby.game.generalObjects.Player;
+import com.ncrosby.game.generalObjects.Ship;
 import com.ncrosby.game.tiles.ShipTile;
 import com.ncrosby.game.screens.GameScreen;
 

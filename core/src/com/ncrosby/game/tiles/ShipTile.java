@@ -1,7 +1,7 @@
 package com.ncrosby.game.tiles;
 
 import com.badlogic.gdx.math.Vector2;
-import com.ncrosby.game.GameObject;
+import com.ncrosby.game.generalObjects.GameObject;
 import com.ncrosby.game.ID;
 import com.ncrosby.game.tileShipGame;
 

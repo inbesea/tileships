@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.ncrosby.game.generalObjects.Player;
+import com.ncrosby.game.generalObjects.Ship;
 import com.ncrosby.game.tiles.ShipTile;
 
 public class PlayerInput {
@@ -38,7 +40,7 @@ public class PlayerInput {
                 // Remove tile from held tiles
                 ShipTile placedTile = player.popTile();
                 // Add tile to location giving tile ID
-                playerShip.addTileByCoord(touchPos.x, touchPos.y, placedTile.id);
+                playerShip.addTileByCoord(touchPos.x, touchPos.y, placedTile.getID());
                 return placedTile;
             } else { // No tiles to place
                 System.out.println("Not holding any tiles to place!");
@@ -107,7 +109,7 @@ public class PlayerInput {
     public static void updateCameraOnPlayer(Player player, OrthographicCamera camera){
         float lerp = 0.8f;
         Vector3 cameraPos = camera.position;
-        Vector3 playerPos = new Vector3(player.playerPosition.x, player.playerPosition.y, 0);
+        Vector3 playerPos = new Vector3(player.getX(), player.getY(), 0);
 
         // Give the position of the camera no update if player is close enough to camera.
         Vector3 diff = new Vector3(playerPos);

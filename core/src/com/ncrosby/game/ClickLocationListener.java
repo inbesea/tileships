@@ -1,5 +1,7 @@
 package com.ncrosby.game;
 
+import com.ncrosby.game.generalObjects.Player;
+import com.ncrosby.game.generalObjects.Ship;
 import com.ncrosby.game.tiles.ShipTile;
 
 import java.awt.event.MouseAdapter;
@@ -60,7 +62,7 @@ public class ClickLocationListener extends MouseAdapter {
 				if(shipTile == null) {
 					if(pl.heldShipTiles != null) {
 						ShipTile st = pl.popTile();
-						sh.addTileByCoord(x, y, st.id);
+						sh.addTileByCoord(x, y, st.getID());
 					}
 					// Is a tile
 				} else {

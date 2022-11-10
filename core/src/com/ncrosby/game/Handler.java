@@ -1,5 +1,7 @@
 package com.ncrosby.game;
 
+import com.ncrosby.game.generalObjects.GameObject;
+
 import java.awt.*;
 import java.util.LinkedList;
 

@@ -1,10 +1,8 @@
 package com.ncrosby.game.util;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.ncrosby.game.GameObject;
+import com.ncrosby.game.generalObjects.GameObject;
 
 public class generalUtil {
 

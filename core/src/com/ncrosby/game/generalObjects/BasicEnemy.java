@@ -1,6 +1,9 @@
-package com.ncrosby.game;
+package com.ncrosby.game.generalObjects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.ncrosby.game.Camera;
+import com.ncrosby.game.ID;
+import com.ncrosby.game.tileShipGame;
 
 import java.awt.*;
 
@@ -9,7 +12,7 @@ public class BasicEnemy extends GameObject {
 	private Ship shiphandler;
 	private Camera cam;
 
-	public BasicEnemy(Vector2 position, Vector2 size ,ID id, Ship shiphandler, Camera cam) {
+	public BasicEnemy(Vector2 position, Vector2 size , ID id, Ship shiphandler, Camera cam) {
 		super(position, size, id);
 
 		// Cam is part of the game object.

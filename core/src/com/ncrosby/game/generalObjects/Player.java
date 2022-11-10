@@ -1,4 +1,4 @@
-package com.ncrosby.game;
+package com.ncrosby.game.generalObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.ncrosby.game.ID;
+import com.ncrosby.game.generalObjects.GameObject;
+import com.ncrosby.game.generalObjects.Ship;
+import com.ncrosby.game.tileShipGame;
 import com.ncrosby.game.tiles.ShipTile;
 
 import java.awt.*;

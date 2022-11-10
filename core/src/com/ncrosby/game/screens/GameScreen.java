@@ -10,6 +10,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.ncrosby.game.*;
+import com.ncrosby.game.generalObjects.GameObject;
+import com.ncrosby.game.generalObjects.Player;
+import com.ncrosby.game.generalObjects.Ship;
 import com.ncrosby.game.player.SimpleTouch;
 import com.ncrosby.game.util.AsteroidManager;
 
