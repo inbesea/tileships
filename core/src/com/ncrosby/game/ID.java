@@ -2,7 +2,7 @@ package com.ncrosby.game;
 
 /**
  * Enums for easy identification of game objects
- *
+ * <p></p>
  * Player
  * BasicEnemy
  * ShipTile
@@ -18,7 +18,7 @@ public enum ID {
 	Player("RobotV1.png"),
 	BasicEnemy("asteroid_purple.png"),
 	ShipTile("ShipTile_Red.png"),
-	CoreTile("ShipTile_Red.png"),
+	CoreTile("ShipTile_Core.png"),
 	Ship("none");
 
 	private String texture;
