@@ -69,8 +69,8 @@ public class Player extends GameObject {
 
         // targetRadius - current
 
-        // Sorry for this terrible formula - check 1.6+\ \frac{\tan\left(x\ -\ 4\right)}{1.02}
-        float targetRadius = (INIT_HELD_RADIUS *  (((8.0f * heldShipTiles.size) + 5.0f) / (heldShipTiles.size + 5.0f)));  // Target based on size of held tiles
+        float targetRadius = (INIT_HELD_RADIUS *  (((8.0f * heldShipTiles.size)) /
+                (heldShipTiles.size + 5.0f)));  // Target based on size of held tiles
 
         float radius = heldTileDisplay.radius;
 
