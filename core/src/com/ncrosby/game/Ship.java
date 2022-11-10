@@ -69,6 +69,7 @@ public class Ship extends GameObject {
 	 * @param x - The x coordinate this tile will be added to on the canvas (can go negative)
 	 * @param y - The y coordinate this tile will be added to on the canvas (can go negative)
 	 * @param id - The ID of the GameObject
+	 * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
 	 */
 	public ShipTile addTileByCoord(float x, float y, ID id) {
 
@@ -82,8 +83,7 @@ public class Ship extends GameObject {
 		ShipTile testTile = returnTile(x, y);
 		float indexXY[] = returnIndex(x, y);
 
-		// Place tile at location relative to the camera.
-		if(testTile == null) {
+		if(testTile == null) { // x, y is vacant
 			/*Dividing by tilesize is meant to get an index.
 			 * by subtracting cam from the location we can get an index.
 			 * However, it might be better to subtract cam first and then divide...
@@ -95,11 +95,9 @@ public class Ship extends GameObject {
 
 			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
 			this.existingTiles.add(tempTile);
-			return tempTile; // Will be null
-		}
-		else {
-			System.out.println("Already a tile at :" + x + ", " + y);
-			System.out.println("Already a tile at :" + indexXY[0] + ", " + indexXY[1]);
+			return null;
+		} else { // x, y is not vacant
+			System.out.println("Already a tile at (x, y) = (" + x + ", " + y + ") -> index: (" + indexXY[0] + ", " + indexXY[1] + ")");
 			return testTile;
 		}
 	}
