@@ -18,5 +18,9 @@ the touch handler and it can add and remove the tiles.
 
 TODO : Make the player restricted to their ship.
 TODO : Regularly spawn asteroids
+ TODO : Create spawner
+  -- This spawner needs to be able to spawn asteroids outside the screen. We also need it to clean up the asteroids...
+  --
+
 Todo : Handle collisions between asteroids and ship
 Todo : add "bouncy" asteroids mode for testing
