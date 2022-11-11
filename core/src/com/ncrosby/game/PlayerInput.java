@@ -65,32 +65,46 @@ public class PlayerInput {
 
     /**
      * Handle key presses from GameScreen
-     * This will update the robot's position based on keys pressed.
+     * This will update the player's position based on keys pressed.
      *
-     * @param robot - robot Rectangle to update
+     * @param player - player Rectangle to update
      */
-    public static void handleKeyPressed(Player robot){
-        Vector2 previousPosition = robot.getPlayerPosition();
-        Ship ship = robot.getPlayerShip();
+    public static void handleKeyPressed(Player player, OrthographicCamera camera){
+
+        Vector3 playerPos = new Vector3(player.getX(), player.getY(), 0);
+        Ship ship = player.getPlayerShip();
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            if(ship.returnTile(robot.getX(), robot.getY() + 200 * Gdx.graphics.getDeltaTime()) != null){
-                robot.setY(robot.getY() + 200 * Gdx.graphics.getDeltaTime())  ;
+            if(ship.returnTile(playerPos.x, (playerPos.y + 10) + 200 * Gdx.graphics.getDeltaTime()) != null){
+                player.setY(playerPos.y + 200 * Gdx.graphics.getDeltaTime())  ;
+            }
+            else {
+                System.out.println("Bumping up!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            if(ship.returnTile(robot.getX() - 200 * Gdx.graphics.getDeltaTime(), robot.getY()) != null){
-                robot.setX(robot.getX() - 200 * Gdx.graphics.getDeltaTime())  ;
+            float leftMove = playerPos.x - 200 * Gdx.graphics.getDeltaTime();
+            if(ship.returnTile(leftMove, playerPos.y) != null){
+                player.setX(leftMove)  ;
+            }
+            else {
+                System.out.println("Bumping left!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            if(ship.returnTile(robot.getX() + 200 * Gdx.graphics.getDeltaTime(), robot.getY()) != null){
-                robot.setX(robot.getX() + 200 * Gdx.graphics.getDeltaTime())  ;
+            if(ship.returnTile((playerPos.x + 64/* Sprite width */) + 200 * Gdx.graphics.getDeltaTime(), playerPos.y) != null){
+                player.setX(playerPos.x + 200 * Gdx.graphics.getDeltaTime())  ;
+            }
+            else {
+                System.out.println("Bumping right!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            if(ship.returnTile(robot.getX(), robot.getY() - 200 * Gdx.graphics.getDeltaTime()) != null){
-                robot.setY(robot.getY() - 200 * Gdx.graphics.getDeltaTime())  ;
+            if(ship.returnTile(playerPos.x, playerPos.y - 200 * Gdx.graphics.getDeltaTime()) != null){
+                player.setY(playerPos.y - 200 * Gdx.graphics.getDeltaTime())  ;
+            }
+            else {
+                System.out.println("Bumping down!");
             }
         }
     }

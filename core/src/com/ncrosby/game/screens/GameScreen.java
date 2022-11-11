@@ -95,7 +95,7 @@ ExtendViewport extendViewport;
 
         // process user input
         if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            handleKeyPressed(player);
+            handleKeyPressed(player, camera);
         }
         updateCameraOnPlayer(player, camera);
 
