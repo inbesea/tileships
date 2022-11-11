@@ -55,7 +55,10 @@ public class SimpleTouch implements InputProcessor {
         Vector3 v = new Vector3();
         v.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(v);
-        tempTile = playerShip.returnTile(v.x, v.y); // Get the tile clicked on
+        ShipTile temp = playerShip.returnTile(v.x, v.y);
+        if(playerShip.returnTile(player.getX(),player.getY()) != temp){// Check if tile is same as tile that is stood on
+            tempTile = temp; // Get the tile clicked on
+        }
         return true;
         }
 
@@ -87,6 +90,8 @@ public class SimpleTouch implements InputProcessor {
 
                 }
                 // TODO : Handle spaces not adjacent to the ship, or spaces occupied by the shiptiles
+
+                tempTile = null;
             }
 
             dragging = false;
