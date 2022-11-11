@@ -98,7 +98,7 @@ public class Ship extends GameObject {
 			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
 			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
-			setNeighbors(tempTile);
+			setNeighbors(tempTile); // Setting tile neighbors within ship
 			this.existingTiles.add(tempTile);
 			return null;
 		} else { // x, y is not vacant
@@ -107,15 +107,35 @@ public class Ship extends GameObject {
 		}
 	}
 
+	/**
+	 * Sets tile neighbors equal to adjacent tiles, or to null if they don't exist
+	 * @param tile - tile to initialize
+	 * @return - number of neighbor tiles
+	 */
 	private int setNeighbors(ShipTile tile){
 		AdjacentTiles neighbors = tile.getNeighbors();
-		// set each direction with getTile();
-		neighbors.setUp(returnTile(tile.getX(),tile.getY()));
-		neighbors.setRight(returnTile(tile.getX(),tile.getY()));
-		neighbors.setDown(returnTile(tile.getX(),tile.getY()));
-		neighbors.setLeft(returnTile(tile.getX(),tile.getY()));
 
-		return tile.
+		float x = tile.getX();
+		float y = tile.getY();
+		// Get references
+		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
+		ShipTile right = returnTile(x + ShipTile.TILESIZE, y);
+		ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
+		ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
+
+		// Set tile in neighbors
+		if(up != null)up.getNeighbors().setDown(tile);
+		if(right != null)right.getNeighbors().setLeft(tile);
+		if(down != null)down.getNeighbors().setUp(tile);
+		if(left != null)left.getNeighbors().setRight(tile);
+
+		// set each direction with getTile();
+		neighbors.setUp(up);
+		neighbors.setRight(right);
+		neighbors.setDown(down);
+		neighbors.setLeft(left);
+
+		return neighbors.numberOfNeighbors();
 	}
 
 
@@ -131,11 +151,35 @@ public class Ship extends GameObject {
 		}
 		else {
 			logRemovedTile(tileToRemove);
+			removeNeighbors(tileToRemove); // Remove references from adjacent tiles
 			this.existingTiles.remove(tileToRemove);
 		}
 		//this.existingTiles.remove(tempTile);
 	}
 
+	/**
+	 * Decouples the passed tile from the adjacent tiles
+	 * @param shipTile
+	 */
+	private void removeNeighbors(ShipTile shipTile){
+		AdjacentTiles neighbors = shipTile.getNeighbors();
+		if(neighbors.numberOfNeighbors() == 0)return;
+
+		float x = shipTile.getX();
+		float y = shipTile.getY();
+
+		// Get references
+		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
+		ShipTile right = returnTile(x + ShipTile.TILESIZE, y);
+		ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
+		ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
+
+		// Remove reference to removed tile with null
+		if(up != null)up.getNeighbors().setDown(null);
+		if(right != null)right.getNeighbors().setLeft(null);
+		if(down != null)down.getNeighbors().setUp(null);
+		if(left != null)left.getNeighbors().setRight(null);
+	}
 
 	/**
 	 * Removes a tile by reference to the tile instance
