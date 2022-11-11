@@ -79,13 +79,6 @@ public class Player extends GameObject {
 
         float radius = heldTileDisplay.radius;
 
-        System.out.println("heldShipSize = " + heldShipTiles.size + " \nheldTileDisplay.radius = " + heldTileDisplay.radius +
-                "  \nDiff = (INIT_HELD_RADIUS *  (((3 * heldShipTiles.size) + 5) / (heldShipTiles.size + 5)) - " +
-                "heldTileDisplay.radius = " +
-                (targetRadius - (radius)) );
-
-        System.out.println(targetRadius + " = targetRadius");
-
         heldTileDisplay.radius += (
                 // need to fiddle with this exp. so the value stablizes and goes to 0.
                 (targetRadius - (radius)) * // display radius changes based on the size of the hand of tiles.
