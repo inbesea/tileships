@@ -23,7 +23,7 @@ public class BasicEnemy extends GameObject {
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle((int) playerPosition.x, (int) playerPosition.y, 16, 16);
+		return new Rectangle((int) position.x, (int) position.y, 16, 16);
 	}
 
 	// TODO : burn this to the ground

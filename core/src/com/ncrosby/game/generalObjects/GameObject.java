@@ -13,7 +13,7 @@ import java.awt.*;
 public abstract class GameObject {
 
 	protected Sprite sprite;
-	protected Vector2 playerPosition = new Vector2();
+	protected Vector2 position = new Vector2();
 	protected Vector2 size = new Vector2();
 	// From Enum list, needs a type
 	protected ID id;
@@ -22,10 +22,10 @@ public abstract class GameObject {
 	// Do we need the texture to be set within each
 	protected String textureRef;
 	
-	public GameObject(Vector2 playerPosition, Vector2 size , ID id) {
+	public GameObject(Vector2 position, Vector2 size , ID id) {
 		// set location and id to define basics of the game object.
-		this.playerPosition.x = playerPosition.x;
-		this.playerPosition.y = playerPosition.y;
+		this.position.x = position.x;
+		this.position.y = position.y;
 		this.size.x = size.x;
 		this.size.y = size.y;
 		this.id = id;
@@ -37,17 +37,17 @@ public abstract class GameObject {
 	public abstract Rectangle getBounds();
 	
 	public void setX(float x) {
-		this.playerPosition.x = x;
+		this.position.x = x;
 	}
 	public float getX() {
-		return playerPosition.x;
+		return position.x;
 	}
 	
 	public void setY(float y) {
-		this.playerPosition.y = y;
+		this.position.y = y;
 	}
 	public float getY() {
-		return playerPosition.y;
+		return position.y;
 	}
 	
 	public void setID(ID id) {
@@ -71,12 +71,12 @@ public abstract class GameObject {
 		return velY;
 	}
 
-	public Vector2 getPlayerPosition() {
-		return playerPosition;
+	public Vector2 getPosition() {
+		return position;
 	}
 
-	public void setPlayerPosition(Vector2 playerPosition) {
-		this.playerPosition = playerPosition;
+	public void setPosition(Vector2 position) {
+		this.position = position;
 	}
 
 	/**

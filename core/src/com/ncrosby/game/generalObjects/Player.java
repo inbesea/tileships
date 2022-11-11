@@ -47,7 +47,7 @@ public class Player extends GameObject {
     }
 
     public Rectangle getBounds() {
-        Rectangle r = new Rectangle((int) playerPosition.x, (int) playerPosition.y, 32, 32);
+        Rectangle r = new Rectangle((int) position.x, (int) position.y, 32, 32);
         //r.intersects
         return r;
 
@@ -171,7 +171,7 @@ public class Player extends GameObject {
 
         // Update radius and position of circle
         slowRadiusChange(2.5f);
-        heldTileDisplay.setPosition(playerPosition);
+        heldTileDisplay.setPosition(position);
         Texture tempTexture;
         rotateCircle();
 
