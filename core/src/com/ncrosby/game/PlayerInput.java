@@ -95,9 +95,6 @@ public class PlayerInput {
         }
     }
 
-    private void returnToShip(){
-
-    }
 
     /**
      * This algo updates the camera on the player based on the difference between
