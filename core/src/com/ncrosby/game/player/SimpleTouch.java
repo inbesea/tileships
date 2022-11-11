@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.ncrosby.game.generalObjects.Player;
 import com.ncrosby.game.generalObjects.Ship;
 import com.ncrosby.game.tiles.ShipTile;
@@ -17,7 +19,7 @@ public class SimpleTouch implements InputProcessor {
         Player player;
         Vector3 tp = new Vector3();
         boolean dragging;
-        private ShipTile tempTile;
+        private ShipTile draggedTile;
 
     /**
      * Constructor for this event handler needs
@@ -57,7 +59,7 @@ public class SimpleTouch implements InputProcessor {
         camera.unproject(v);
         ShipTile temp = playerShip.returnTile(v.x, v.y);
         if(playerShip.returnTile(player.getX(),player.getY()) != temp){// Check if tile is same as tile that is stood on
-            tempTile = temp; // Get the tile clicked on
+            draggedTile = temp; // Get the tile clicked on
         }
         return true;
         }
@@ -66,12 +68,15 @@ public class SimpleTouch implements InputProcessor {
             if (!dragging) return false;
             camera.unproject(tp.set(screenX, screenY, 0));
 
-            if(tempTile != null){
-                Vector3 v = new Vector3();
-                v.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(v);
-                tempTile.setX(v.x - ShipTile.TILESIZE/2.0f);
-                tempTile.setY(v.y - ShipTile.TILESIZE/2.0f);
+            if(draggedTile != null){ // Dragging a tile
+                // Get mouse location
+                Vector3 mouseLocation = new Vector3();
+                mouseLocation.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(mouseLocation);
+
+                // Drag the tile with mouse
+                draggedTile.setX(mouseLocation.x - ShipTile.TILESIZE/2.0f);
+                draggedTile.setY(mouseLocation.y - ShipTile.TILESIZE/2.0f);
             }
 
             return true;
@@ -79,19 +84,32 @@ public class SimpleTouch implements InputProcessor {
 
         @Override public boolean touchUp (int screenX, int screenY, int pointer, int button) {
             if (button != Input.Buttons.LEFT || pointer > 0) return false;
-            Vector3 v = new Vector3();
-            v.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(v);
+            Vector3 mousePosition = new Vector3();
+            mousePosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(mousePosition);
 
-            if(tempTile != null){
-                playerShip.removeTile(tempTile);
+            if(draggedTile != null){ // There is a tile
+
+                ShipTile destinationTile = playerShip.returnTile(mousePosition.x, mousePosition.y);
+                if(destinationTile != null){
+                    // find closest empty space
+                } else { // Empty space was checked
+                    // Find closest shiptile
+                    ShipTile closestTile = playerShip.closestTile(new Vector2(mousePosition.x, mousePosition.y));
+                    // With closest tile, we need to place it on the correct side.
+                    // We can just check if x is smaller or not and then set it to the approps side...
+                    playerShip.setTileOnClosestSide(draggedTile, closestTile, mousePosition);
+                }
+
+                // Remove from the ship so the tile can be placed.
+                playerShip.removeTile(draggedTile);
                 // Will place the tile at an empty location and add it to the ship. Should snap into place.
-                if(playerShip.addTileByCoord(v.x, v.y, tempTile.getID()) != null){ // If found a tile already in place
+                if(playerShip.addTileByCoord(mousePosition.x, mousePosition.y, draggedTile.getID()) != null){ // If found a tile already in place
 
                 }
                 // TODO : Handle spaces not adjacent to the ship, or spaces occupied by the shiptiles
 
-                tempTile = null;
+                draggedTile = null; // Dispose of dragged tile
             }
 
             dragging = false;
