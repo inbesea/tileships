@@ -351,4 +351,32 @@ public class Ship extends GameObject {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	/**
+	 * Takes in a tile, location, and closest tile and determines which side to place the tile.
+	 *
+	 * @param placedTile
+	 * @param closestTile
+	 * @param mousePosition
+	 */
+	public void setTileOnClosestSide(ShipTile placedTile, ShipTile closestTile, Vector3 mousePosition) {
+		Vector2 normalizedMousePosition = new Vector2((mousePosition.x - (closestTile.getX() - (ShipTile.TILESIZE/2.0f))),(mousePosition.y - (closestTile.getY() - (ShipTile.TILESIZE/2.0f))));
+
+		if()
+		// TODO : We can conceptualize this as as a four triangles converging in the center of the "closest tile"
+		// We can use this framing to decide the side to place the tile.
+		if(mousePosition.x < (closestTile.getX() - (ShipTile.TILESIZE/2.0f))){ // Check at halfway point of tile
+			if(mousePosition.y < (closestTile.getY() - (ShipTile.TILESIZE/2.0f))){ // Bottom-Left
+
+			} else { // Top-Left
+
+			}
+		} else { // location is to the right of the closest tile
+			if(mousePosition.y < (closestTile.getY() - (ShipTile.TILESIZE/2.0f))){ // Bottom-Right
+
+			} else { // Top-Right
+
+			}
+		}
+	}
 }
