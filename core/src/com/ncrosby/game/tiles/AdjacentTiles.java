@@ -40,4 +40,17 @@ public class AdjacentTiles {
     public void setDown(ShipTile down) {
         Down = down;
     }
+
+    /**
+     * Returns number of non-null neighbors
+     * @return - number of neighbors
+     */
+    public int numberOfNeighbors(){
+        int result = 0;
+        if(Up != null)result++;
+        if(Down != null)result++;
+        if(Right != null)result++;
+        if(Left != null)result++;
+        return result;
+    }
 }
