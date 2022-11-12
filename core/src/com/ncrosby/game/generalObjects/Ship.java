@@ -61,7 +61,7 @@ public class Ship extends GameObject {
 		}
 		if(draggedTile != null){
 			game.batch.draw(new Texture(Gdx.files.internal(draggedTile.getTexture())),
-					draggedTile.getX(),draggedTile.getyIndex(),draggedTile.getSize().x,draggedTile.getSize().y);
+					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
 	}
 
