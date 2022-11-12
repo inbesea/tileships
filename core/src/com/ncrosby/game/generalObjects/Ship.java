@@ -11,7 +11,6 @@ import com.ncrosby.game.tiles.AdjacentTiles;
 import com.ncrosby.game.tiles.ShipTile;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -363,25 +362,43 @@ public class Ship extends GameObject {
 	 */
 	public void setTileOnClosestSide(ShipTile placedTile, ShipTile closestTile, Vector3 mousePosition) {
 
-		float closeX = closestTile.getX();
-		float closeY = closestTile.getY();
+		int closestSide = getClosestSide(closestTile, new Vector2(mousePosition.x, mousePosition.y));
 
-		float x =
-				(closeX) -
-						mousePosition.x;
-		float y =
-				mousePosition.y -
-				(closeY +
-						(ShipTile.TILESIZE/2.0f));
+		// We can conceptualize this as as a four triangles converging in the center of the "closest tile"
+		// We can use this framing to decide the side to place the tile.
+		if (closestSide == 0) { // North
+			addTileByCoord(closestTile.getX(), closestTile.getY() + ShipTile.TILESIZE, placedTile.getID());
+		} else if (closestSide == 3) { // West
+			addTileByCoord(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+		} else if (closestSide == 1) { // East
+			addTileByCoord(closestTile.getX() + ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+		} else if (closestSide == 2) { // South
+			addTileByCoord(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE, placedTile.getID());
+		} else {
+			throw new RuntimeException("Something went wrong while running setTileOnClosestSide()");
+		}
+	}
 
-		// Set vector such that the center of closestTile is equal to (0,0) and mouse position is a point relative to that
-		Vector2 normalizedMousePosition = new Vector2(
-				(mousePosition.x -
-				(closestTile.getX() +
-						(ShipTile.TILESIZE/2.0f))),
-				(mousePosition.y -
-						(closestTile.getY() +
-								(ShipTile.TILESIZE/2.0f)))); // Find center of block by adding to the x,y
+	/**
+	 * Gets closest side of a tile from a Vector2 point
+	 *
+	 * @param tile - tile to find the side of
+	 * @param position - position to compare with tile
+	 * @return - int representing side of tile as compass - N = 0, E = 1, S = 2, W = 3
+	 */
+	private int getClosestSide(ShipTile tile, Vector2 position){
+		float closeX = tile.getX();
+		float closeY = tile.getY();
+
+		float normalX =
+				position.x -
+						(closeX + (ShipTile.TILESIZE/2.0f));
+		float normalY =
+				position.y -
+						(closeY + (ShipTile.TILESIZE/2.0f));
+
+		// Set vector such that the center of tile is equal to (0,0) and mouse position is a point relative to that
+		Vector2 normalizedMousePosition = new Vector2(normalX,normalY); // Find center of block by adding to the x,y
 
 		// the point is above y = x if the y is larger than x
 		boolean abovexEy = normalizedMousePosition.y > normalizedMousePosition.x;
@@ -391,20 +408,16 @@ public class Ship extends GameObject {
 		// We can conceptualize this as as a four triangles converging in the center of the "closest tile"
 		// We can use this framing to decide the side to place the tile.
 		if(abovexEy){ // Check at halfway point of tile
-			if(aboveNxEy && closestTile.getNeighbors().getUp() == null){ // Top
-					addTileByCoord(closestTile.getX(), closestTile.getY() + ShipTile.TILESIZE, placedTile.getID());
-			} else if (closestTile.getNeighbors().getLeft() == null){ // Left
-				addTileByCoord(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
-			} else {
-				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :");
+			if(aboveNxEy){ // North = 0
+				return  0;
+			} else { // West = 3
+				return 3;
 			}
 		} else { // location is to the right of the closest tile
-			if(aboveNxEy && closestTile.getNeighbors().getRight() == null){ // Right
-				addTileByCoord(closestTile.getX() + ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
-			} else if (closestTile.getNeighbors().getDown() == null) { // Bottom
-				addTileByCoord(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE, placedTile.getID());
-			} else {
-				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :");
+			if(aboveNxEy){ // East = 1
+				return 1;
+			} else { // South = 2
+				return 2;
 			}
 		}
 	}
