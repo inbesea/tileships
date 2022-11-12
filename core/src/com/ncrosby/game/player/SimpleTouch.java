@@ -55,9 +55,8 @@ public class SimpleTouch implements InputProcessor {
         dragging = true;
         //clickPlayerShipTiles(camera, playerShip, player);
 
-        Vector3 v = new Vector3();
-        v.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(v);
+        Vector3 v = returnUnprojectedMousePosition(camera);
+
         ShipTile temp = playerShip.returnTile(v.x, v.y);
         if(playerShip.returnTile(player.getX(),player.getY()) != temp){// Check if tile is same as tile that is stood on
             draggedTile = temp; // Get the tile clicked on
