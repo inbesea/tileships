@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.ncrosby.game.generalObjects.Player;
 import com.ncrosby.game.generalObjects.Ship;
 import com.ncrosby.game.tiles.ShipTile;
@@ -60,6 +59,8 @@ public class SimpleTouch implements InputProcessor {
         ShipTile temp = playerShip.returnTile(v.x, v.y);
         if(playerShip.returnTile(player.getX(),player.getY()) != temp){// Check if tile is same as tile that is stood on
             draggedTile = temp; // Get the tile clicked on
+            playerShip.removeTileFromShip(temp);
+            playerShip.setDragged(draggedTile); // Set intermediate tile to *remove from existing tiles*
         }
         return true;
         }
@@ -88,21 +89,18 @@ public class SimpleTouch implements InputProcessor {
             mousePosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(mousePosition);
 
-            if(draggedTile != null){ // There is a tile
+            if(draggedTile != null){ // There is a tile being dragged
 
                 ShipTile destinationTile = playerShip.returnTile(mousePosition.x, mousePosition.y);
-                if(destinationTile != null){
-                    // find closest empty space
-                } else { // Empty space was checked
-                    // Find closest shiptile
+                if(destinationTile != null){ // Released on Shiptile
+                    Vector2 nearestEmptySpace = playerShip.closestVacancy(new Vector2(mousePosition.x, mousePosition.y));
+//                    playerShip.addTileByCoord();
+                } else { // Released on empty space
                     ShipTile closestTile = playerShip.closestTile(new Vector2(mousePosition.x, mousePosition.y));
-                    // With closest tile, we need to place it on the correct side.
-                    // We can just check if x is smaller or not and then set it to the approps side...
                     playerShip.setTileOnClosestSide(draggedTile, closestTile, mousePosition);
                 }
 
-                // Remove from the ship so the tile can be placed.
-                playerShip.removeTile(draggedTile);
+
                 // Will place the tile at an empty location and add it to the ship. Should snap into place.
                 if(playerShip.addTileByCoord(mousePosition.x, mousePosition.y, draggedTile.getID()) != null){ // If found a tile already in place
 

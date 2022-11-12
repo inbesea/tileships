@@ -11,25 +11,21 @@ import com.ncrosby.game.tiles.AdjacentTiles;
 import com.ncrosby.game.tiles.ShipTile;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Stack;
 
 public class Ship extends GameObject {
 
-
-	// TODO: fix this class to use libjdx camera and draw methods.
 	/*
-	* Refactor notes
-	* We need to understand how this is used in the firstplace
-	*  */
-	/*
-	 * This class is meant to be used on a JFrame with a canvas in it.
+	 * Ship has many methods to manage tiles internally.
 	 * It should be able to place, remove and keep track of ShipTiles.
 	 */
 	private LinkedList<ShipTile> existingTiles = new LinkedList<ShipTile>();
 //	private Camera cam;
 	private OrthographicCamera cam;
 	private ShipTile mouseLocation;
+	private ShipTile draggedTile;
 
 	private int pointLocation[] = new int[2];
 
@@ -58,10 +54,14 @@ public class Ship extends GameObject {
 	public void render(tileShipGame game) {
 
 		for(int i = 0; i < existingTiles.size(); i++) {
-			ShipTile tempObject = existingTiles.get(i);
-			game.batch.draw(new Texture(Gdx.files.internal(tempObject.getTexture())),
-					tempObject.getX(), tempObject.getY(),
-					tempObject.getSize().x, tempObject.getSize().y);
+			ShipTile tempTile = existingTiles.get(i);
+			game.batch.draw(new Texture(Gdx.files.internal(tempTile.getTexture())),
+					tempTile.getX(), tempTile.getY(),
+					tempTile.getSize().x, tempTile.getSize().y);
+		}
+		if(draggedTile != null){
+			game.batch.draw(new Texture(Gdx.files.internal(draggedTile.getTexture())),
+					draggedTile.getX(),draggedTile.getyIndex(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class Ship extends GameObject {
 	 * removeTile gets a reference to a tile object and removes it from the linked list.
 	 * Would be cool for a non-tile space to play a BLERT sound effect lol
 	 */
-	public void removeTile(float x, float y) {
+	public void removeTileFromShip(float x, float y) {
 		ShipTile tileToRemove = returnTile(x, y);
 
 		if(tileToRemove == null) {
@@ -186,7 +186,7 @@ public class Ship extends GameObject {
 	 * Should only be used when a tile instance is found.
 	 * @param tile
 	 */
-	public void removeTile(ShipTile tile){
+	public void removeTileFromShip(ShipTile tile){
 		if(!this.existingTiles.remove(tile)){
 			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
 		} else {
@@ -311,7 +311,6 @@ public class Ship extends GameObject {
 	@Override
 	public void tick() {
 		// TODO Auto-generated method stub
-
 	}
 
 
@@ -360,23 +359,67 @@ public class Ship extends GameObject {
 	 * @param mousePosition
 	 */
 	public void setTileOnClosestSide(ShipTile placedTile, ShipTile closestTile, Vector3 mousePosition) {
-		Vector2 normalizedMousePosition = new Vector2((mousePosition.x - (closestTile.getX() - (ShipTile.TILESIZE/2.0f))),(mousePosition.y - (closestTile.getY() - (ShipTile.TILESIZE/2.0f))));
 
-		if()
-		// TODO : We can conceptualize this as as a four triangles converging in the center of the "closest tile"
+		float closeX = closestTile.getX();
+		float closeY = closestTile.getY();
+
+		float x =
+				(closeX) -
+						mousePosition.x;
+		float y =
+				mousePosition.y -
+				(closeY +
+						(ShipTile.TILESIZE/2.0f));
+
+		// Set vector such that the center of closestTile is equal to (0,0) and mouse position is a point relative to that
+		Vector2 normalizedMousePosition = new Vector2(
+				(mousePosition.x -
+				(closestTile.getX() +
+						(ShipTile.TILESIZE/2.0f))),
+				(mousePosition.y -
+						(closestTile.getY() +
+								(ShipTile.TILESIZE/2.0f)))); // Find center of block by adding to the x,y
+
+		// the point is above y = x if the y is larger than x
+		boolean abovexEy = normalizedMousePosition.y > normalizedMousePosition.x;
+		// the point is above y = -x if the y is larger than the negation of x
+		boolean aboveNxEy = normalizedMousePosition.y > (-normalizedMousePosition.x);
+
+		// We can conceptualize this as as a four triangles converging in the center of the "closest tile"
 		// We can use this framing to decide the side to place the tile.
-		if(mousePosition.x < (closestTile.getX() - (ShipTile.TILESIZE/2.0f))){ // Check at halfway point of tile
-			if(mousePosition.y < (closestTile.getY() - (ShipTile.TILESIZE/2.0f))){ // Bottom-Left
-
-			} else { // Top-Left
-
+		if(abovexEy){ // Check at halfway point of tile
+			if(aboveNxEy && closestTile.getNeighbors().getUp() == null){ // Top
+					addTileByCoord(closestTile.getX(), closestTile.getY() + ShipTile.TILESIZE, placedTile.getID());
+			} else if (closestTile.getNeighbors().getLeft() == null){ // Left
+				addTileByCoord(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+			} else {
+				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :" +
+						Arrays.toString(Thread.currentThread().getStackTrace()));
 			}
 		} else { // location is to the right of the closest tile
-			if(mousePosition.y < (closestTile.getY() - (ShipTile.TILESIZE/2.0f))){ // Bottom-Right
-
-			} else { // Top-Right
-
+			if(aboveNxEy && closestTile.getNeighbors().getRight() == null){ // Right
+				addTileByCoord(closestTile.getX() + ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+			} else if (closestTile.getNeighbors().getDown() == null) { // Bottom
+				addTileByCoord(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE, placedTile.getID());
+			} else {
+				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :" +
+						Arrays.toString(Thread.currentThread().getStackTrace()));
 			}
 		}
+	}
+
+	/**
+	 * Opposite of find ClosestTile,
+	 * expected to be used within the ship's tiles to find a vector on the nearest vacancy
+	 *
+	 * @param vector2
+	 * @return
+	 */
+	public Vector2 closestVacancy(Vector2 vector2) {
+		return  null;
+	}
+
+	public void setDragged(ShipTile draggedTile) {
+		this.draggedTile = draggedTile;
 	}
 }

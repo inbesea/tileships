@@ -49,7 +49,7 @@ public class ClickLocationListener extends MouseAdapter {
 					sh.addTileByCoord(x, y, ID.ShipTile);
 				}
 				else if(shipTile instanceof ShipTile) {
-					sh.removeTile(x, y);
+					sh.removeTileFromShip(x, y);
 				}
 				else {
 					throw new ArithmeticException("Unexpected value for shipTile : " + shipTile);
@@ -69,7 +69,7 @@ public class ClickLocationListener extends MouseAdapter {
 					// If player is not holding a tile > grab tile 
 					if(pl.heldShipTiles == null) {
 						pl.pickupTile(shipTile);
-						sh.removeTile(x, y);
+						sh.removeTileFromShip(x, y);
 					}
 					// If player is holding tile log event
 					else {
@@ -80,7 +80,7 @@ public class ClickLocationListener extends MouseAdapter {
 			}
 		}
 		if(e.getButton() == 3) {
-			pl.getPlayerShip().removeTile(x, y);
+			pl.getPlayerShip().removeTileFromShip(x, y);
 		}
 	}
 	
