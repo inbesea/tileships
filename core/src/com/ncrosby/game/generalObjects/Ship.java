@@ -393,8 +393,7 @@ public class Ship extends GameObject {
 			} else if (closestTile.getNeighbors().getLeft() == null){ // Left
 				addTileByCoord(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
 			} else {
-				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :" +
-						Arrays.toString(Thread.currentThread().getStackTrace()));
+				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :");
 			}
 		} else { // location is to the right of the closest tile
 			if(aboveNxEy && closestTile.getNeighbors().getRight() == null){ // Right
@@ -402,8 +401,7 @@ public class Ship extends GameObject {
 			} else if (closestTile.getNeighbors().getDown() == null) { // Bottom
 				addTileByCoord(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE, placedTile.getID());
 			} else {
-				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :" +
-						Arrays.toString(Thread.currentThread().getStackTrace()));
+				throw new RuntimeException("Tried placing a tile adjacent to a tile without empty spaces :");
 			}
 		}
 	}
