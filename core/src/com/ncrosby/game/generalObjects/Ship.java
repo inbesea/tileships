@@ -159,7 +159,8 @@ public class Ship extends GameObject {
 
 	/**
 	 * Decouples the passed tile from the adjacent tiles
-	 * @param shipTile
+	 *
+	 * @param shipTile - Tile to decouple
 	 */
 	private void removeNeighbors(ShipTile shipTile){
 		AdjacentTiles neighbors = shipTile.getNeighbors();
@@ -183,8 +184,9 @@ public class Ship extends GameObject {
 
 	/**
 	 * Removes a tile by reference to the tile instance
-	 * Should only be used when a tile instance is found.
-	 * @param tile
+	 * Should only be used when a tile instance is found. Handles flushing the adjacency relationships between tiles.
+	 *
+	 * @param tile - Tile to remove from ship
 	 */
 	public void removeTileFromShip(ShipTile tile){
 		if(!this.existingTiles.remove(tile)){

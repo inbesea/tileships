@@ -13,6 +13,10 @@ import com.ncrosby.game.screens.GameScreen;
 
 import static com.ncrosby.game.util.generalUtil.returnUnprojectedMousePosition;
 
+/**
+ * Main user input handling class.
+ * Uses event handling to do things.
+ */
 public class SimpleTouch implements InputProcessor {
 
         OrthographicCamera camera;
@@ -53,7 +57,7 @@ public class SimpleTouch implements InputProcessor {
         if (button != Input.Buttons.LEFT || pointer > 0) return false;
         camera.unproject(tp.set(screenX, screenY, 0));
         dragging = true;
-        //clickPlayerShipTiles(camera, playerShip, player);
+        //clickPlayerShipTiles(camera, playerShip, player); // Used to pickup tiles. Unused currently
 
         Vector3 v = returnUnprojectedMousePosition(camera);
 
