@@ -333,7 +333,7 @@ public class Ship extends GameObject {
 		//Loop through ship to find closest tile
 		for (int i = 0 ; i < existingTiles.size() ; i++){
 			tempT = existingTiles.get(i);
-			tileP = new Vector3(tempT.getPosition().x, tempT.getPosition().y , 0);
+			tileP = new Vector3(tempT.getPosition().x + ShipTile.TILESIZE/2.0f, tempT.getPosition().y  + ShipTile.TILESIZE/2.0f , 0);
 			Float distance = location3.dst(tileP);
 
 			// Check if distance between position and current tile is shorter
