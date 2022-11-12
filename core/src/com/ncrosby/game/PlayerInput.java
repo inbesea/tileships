@@ -67,6 +67,8 @@ public class PlayerInput {
      * Handle key presses from GameScreen
      * This will update the player's position based on keys pressed.
      *
+     * TODO : Migrate this to SimpleTouch.java
+     *
      * @param player - player Rectangle to update
      */
     public static void handleKeyPressed(Player player, OrthographicCamera camera){
@@ -75,7 +77,10 @@ public class PlayerInput {
         Ship ship = player.getPlayerShip();
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            if(ship.returnTile(playerPos.x, (playerPos.y + 10) + 200 * Gdx.graphics.getDeltaTime()) != null){
+            if(ship.returnTile( playerPos.x
+                            + (player.getSize().x/2.0f),
+                    playerPos.y + (200 *
+                            Gdx.graphics.getDeltaTime()) ) != null){
                 player.setY(playerPos.y + 200 * Gdx.graphics.getDeltaTime())  ;
             }
             else {
