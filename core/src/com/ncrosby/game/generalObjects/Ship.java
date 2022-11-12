@@ -190,6 +190,7 @@ public class Ship extends GameObject {
 		if(!this.existingTiles.remove(tile)){
 			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
 		} else {
+			removeNeighbors(tile);
 			logRemovedTile(tile);
 		}
 	}
