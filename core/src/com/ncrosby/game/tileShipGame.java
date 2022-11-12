@@ -1,8 +1,11 @@
 package com.ncrosby.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ncrosby.game.generalObjects.Ship;
 import com.ncrosby.game.screens.MainMenuScreen;
 
 /**
@@ -10,8 +13,11 @@ import com.ncrosby.game.screens.MainMenuScreen;
  * We need the logic to be referenced from this point.
  */
 public class tileShipGame extends Game {
-	public SpriteBatch batch;
+	public AssetManager assetManager; // Assetmanager vital for optimization of reused assets!
+	Screen gs;
+	public SpriteBatch batch; // Draws the textures and fonts etc.
 	public BitmapFont font;
+	private Ship playerShip;
 
 	/**
 	 * Initialization of the game stuff
@@ -36,5 +42,23 @@ public class tileShipGame extends Game {
 	public void dispose () {
 		font.dispose();
 		batch.dispose();
+		gs.dispose();
+	}
+
+	/**
+	 * Used to set current screen in game context
+	 *
+	 * @param screen - Screen object to set in game object
+	 */
+	public void setGameScreen(Screen screen){
+		this.gs = screen;
+	}
+
+	public void setPlayerShip(Ship playerShip) {
+		this.playerShip = playerShip;
+	}
+
+	public Ship getPlayerShip() {
+		return playerShip;
 	}
 }

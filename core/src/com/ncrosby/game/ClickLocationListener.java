@@ -1,5 +1,9 @@
 package com.ncrosby.game;
 
+import com.ncrosby.game.generalObjects.Player;
+import com.ncrosby.game.generalObjects.Ship;
+import com.ncrosby.game.tiles.ShipTile;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -16,7 +20,6 @@ public class ClickLocationListener extends MouseAdapter {
 	 * Tiles Could all be in a single list and we could search for them based on the location. 
 	 * The tiles may need a way to hold the 
 	 * 
-	 * @param sh
 	 * @param cam
 	 */
 	public ClickLocationListener(Player pl, Camera cam) {
@@ -43,10 +46,10 @@ public class ClickLocationListener extends MouseAdapter {
 			// godmode checks
 			if(pl.godMode) {
 				if(shipTile == null) {
-					sh.addTileByCoord(x, y, ID.ShipTile, cam);
+					sh.addTileByCoord(x, y, ID.ShipTile);
 				}
 				else if(shipTile instanceof ShipTile) {
-					sh.removeTile(x, y);
+					sh.removeTileFromShip(x, y);
 				}
 				else {
 					throw new ArithmeticException("Unexpected value for shipTile : " + shipTile);
@@ -57,16 +60,16 @@ public class ClickLocationListener extends MouseAdapter {
 			else {
 				// no tile
 				if(shipTile == null) {
-					if(pl.shipTile != null) {
-						ShipTile st = pl.placeTile();
-						sh.addTileByCoord(x, y, st.id, cam);
+					if(pl.heldShipTiles != null) {
+						ShipTile st = pl.popTile();
+						sh.addTileByCoord(x, y, st.getID());
 					}
 					// Is a tile
 				} else {
 					// If player is not holding a tile > grab tile 
-					if(pl.shipTile == null) {
+					if(pl.heldShipTiles == null) {
 						pl.pickupTile(shipTile);
-						sh.removeTile(x, y);
+						sh.removeTileFromShip(x, y);
 					}
 					// If player is holding tile log event
 					else {
@@ -77,7 +80,7 @@ public class ClickLocationListener extends MouseAdapter {
 			}
 		}
 		if(e.getButton() == 3) {
-			pl.getPlayerShip().removeTile(x, y);
+			pl.getPlayerShip().removeTileFromShip(x, y);
 		}
 	}
 	

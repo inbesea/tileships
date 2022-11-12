@@ -1,5 +1,7 @@
 package com.ncrosby.game;
 
+import com.ncrosby.game.generalObjects.GameObject;
+
 import java.awt.*;
 import java.util.LinkedList;
 
@@ -22,18 +24,18 @@ public class Handler {
 	}
 	
 	public void render(Graphics g) {
-		Player player = null;
-		for(int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
-			if(tempObject.id == ID.Player)
-				player = (Player)tempObject;
-			else{
-				tempObject.render(g);
-			}
-		}
-		// render Player on top of everything
-		// Could probably have a flag to show what objects to render first. 
-		if(player != null)	player.render(g);
+//		Player player = null;
+//		for(int i = 0; i < object.size(); i++) {
+//			GameObject tempObject = object.get(i);
+//			if(tempObject.id == ID.Player)
+//				player = (Player)tempObject;
+//			else{
+//				tempObject.render(g);
+//			}
+//		}
+//		// render Player on top of everything
+//		// Could probably have a flag to show what objects to render first.
+//		if(player != null)	player.render(g);
 	}
 	
 	

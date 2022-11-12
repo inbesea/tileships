@@ -1,5 +1,7 @@
 package com.ncrosby.game;
 
+import com.ncrosby.game.generalObjects.Ship;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
