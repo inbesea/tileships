@@ -93,6 +93,10 @@ public class SimpleTouch implements InputProcessor {
             Vector3 mousePosition = returnUnprojectedMousePosition(camera);
 
             if(draggedTile != null){ // If there is a tile being dragged
+                // This is a good way to make this dependant on the "playerShip" instead of a weird combo of the handler and ship
+                // It does assume that the  placement always works? Which *may* be true, but is an assumption, not something I've fully decided.
+//                boolean placed = playerShip.placeTile(mousePosition, draggedTile);
+
                 handlePlacingDragged(playerShip, mousePosition);
             }
 

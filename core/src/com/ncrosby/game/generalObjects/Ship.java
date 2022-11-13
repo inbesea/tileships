@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.ncrosby.game.ID;
 import com.ncrosby.game.tileShipGame;
 import com.ncrosby.game.tiles.AdjacentTiles;
@@ -16,11 +17,15 @@ import java.util.Stack;
 
 public class Ship extends GameObject {
 
-	/*
+	/**
 	 * Ship has many methods to manage tiles internally.
 	 * It should be able to place, remove and keep track of ShipTiles.
+	 *
+	 * The in and out of tiles into this ship should be concentrated into one class, so that changing how the ship works
+	 * is easy and in one location
 	 */
-	private LinkedList<ShipTile> existingTiles = new LinkedList<ShipTile>();
+	private Array<ShipTile> existingTiles = new Array<>();
+	private Array<ShipTile> edgeTiles = new Array<>();
 //	private Camera cam;
 	private OrthographicCamera cam;
 	private ShipTile mouseLocation;
@@ -52,7 +57,7 @@ public class Ship extends GameObject {
 	 */
 	public void render(tileShipGame game) {
 
-		for(int i = 0; i < existingTiles.size(); i++) {
+		for(int i = 0; i < existingTiles.size; i++) {
 			ShipTile tempTile = existingTiles.get(i);
 			game.batch.draw(new Texture(Gdx.files.internal(tempTile.getTexture())),
 					tempTile.getX(), tempTile.getY(),
@@ -76,7 +81,6 @@ public class Ship extends GameObject {
 	 */
 	public ShipTile addTileByCoord(float x, float y, ID id) {
 
-//		cam = legacyGame.getCam();
 		// Use vector to set new tile
 		Vector3 tileLocation = new Vector3();
 		tileLocation.set(x,y,0);
@@ -107,23 +111,60 @@ public class Ship extends GameObject {
 	}
 
 	/**
+	 * removeTile gets a reference to a tile object and removes it from the ship while decoupling neighbors
+	 */
+	public void removeTileFromShip(float x, float y) {
+		ShipTile tileToRemove = returnTile(x, y);
+
+		if(tileToRemove == null) {
+			System.out.println("No tile found at " + x + ", " + y);
+		}
+		else {
+			logRemovedTile(tileToRemove);
+			removeNeighbors(tileToRemove); // Remove references from adjacent tiles
+			this.existingTiles.removeValue(tileToRemove, true);
+		}
+		//this.existingTiles.remove(tempTile);
+	}
+
+	/**
+	 * Removes a tile by reference to the tile instance
+	 * Should only be used when a tile instance is found. Handles flushing the adjacency relationships between tiles.
+	 *
+	 * @param tile - Tile to remove from ship
+	 */
+	public void removeTileFromShip(ShipTile tile){
+		if(!this.existingTiles.removeValue(tile, true)){
+			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
+		} else {
+
+			removeNeighbors(tile);
+			logRemovedTile(tile);
+		}
+	}
+
+	/**
 	 * Sets tile neighbors equal to adjacent tiles, or to null if they don't exist
 	 * @param tile - tile to initialize
 	 * @return - number of neighbor tiles
 	 */
 	private int setNeighbors(ShipTile tile){
-		AdjacentTiles neighbors = tile.getNeighbors();
 
+		// Init vars
+		AdjacentTiles neighbors = tile.getNeighbors();
 		float x = tile.getX();
 		float y = tile.getY();
-		// Get references
+
+		// Get adjacent tile references
 		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
 		ShipTile right = returnTile(x + ShipTile.TILESIZE, y);
 		ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
 		ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
 
 		// Set tile in neighbors
-		if(up != null)up.getNeighbors().setDown(tile);
+		if(up != null){
+			up.getNeighbors().setDown(tile); // Set up's down to tile
+		}
 		if(right != null)right.getNeighbors().setLeft(tile);
 		if(down != null)down.getNeighbors().setUp(tile);
 		if(left != null)left.getNeighbors().setRight(tile);
@@ -135,25 +176,6 @@ public class Ship extends GameObject {
 		neighbors.setLeft(left);
 
 		return neighbors.numberOfNeighbors();
-	}
-
-
-	/**
-	 * removeTile gets a reference to a tile object and removes it from the linked list.
-	 * Would be cool for a non-tile space to play a BLERT sound effect lol
-	 */
-	public void removeTileFromShip(float x, float y) {
-		ShipTile tileToRemove = returnTile(x, y);
-
-		if(tileToRemove == null) {
-			System.out.println("No tile found at " + x + ", " + y);
-		}
-		else {
-			logRemovedTile(tileToRemove);
-			removeNeighbors(tileToRemove); // Remove references from adjacent tiles
-			this.existingTiles.remove(tileToRemove);
-		}
-		//this.existingTiles.remove(tempTile);
 	}
 
 	/**
@@ -179,21 +201,6 @@ public class Ship extends GameObject {
 		if(right != null)right.getNeighbors().setLeft(null);
 		if(down != null)down.getNeighbors().setUp(null);
 		if(left != null)left.getNeighbors().setRight(null);
-	}
-
-	/**
-	 * Removes a tile by reference to the tile instance
-	 * Should only be used when a tile instance is found. Handles flushing the adjacency relationships between tiles.
-	 *
-	 * @param tile - Tile to remove from ship
-	 */
-	public void removeTileFromShip(ShipTile tile){
-		if(!this.existingTiles.remove(tile)){
-			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
-		} else {
-			removeNeighbors(tile);
-			logRemovedTile(tile);
-		}
 	}
 
 	/**
@@ -236,7 +243,7 @@ public class Ship extends GameObject {
 	 	Stack<ShipTile> resultTiles = new Stack<>();
 
 		 // Checking ship tiles for index matches
-	 	for(int i = 0; i < existingTiles.size(); i++) {
+	 	for(int i = 0; i < existingTiles.size; i++) {
 	 		//Assign current tile to temp
 	 		temp = existingTiles.get(i);
 	 		// Check if x matches
@@ -323,8 +330,8 @@ public class Ship extends GameObject {
 	 * @return
 	 */
 	public ShipTile closestTile(Vector2 location) {
-		if(existingTiles.size() == 0)return null;
-		if(existingTiles.size() == 1)return existingTiles.getFirst();
+		if(existingTiles.size == 0)return null;
+		if(existingTiles.size == 1)return existingTiles.get(0);
 
 		double minDistance = Double.POSITIVE_INFINITY; // First check will always be true
 		ShipTile tempT;
@@ -333,7 +340,7 @@ public class Ship extends GameObject {
 		Vector3 tileP;
 
 		//Loop through ship to find closest tile
-		for (int i = 0 ; i < existingTiles.size() ; i++){
+		for (int i = 0 ; i < existingTiles.size ; i++){
 			tempT = existingTiles.get(i);
 			tileP = new Vector3(tempT.getPosition().x + ShipTile.TILESIZE/2.0f, tempT.getPosition().y  + ShipTile.TILESIZE/2.0f , 0);
 			Float distance = location3.dst(tileP);
@@ -430,7 +437,14 @@ public class Ship extends GameObject {
 	 * @return
 	 */
 	public Vector2 closestVacancy(Vector2 vector2) {
-		return  null;
+		ShipTile underVector = returnTile(vector2);
+
+		if(underVector != null){
+			// Get all Shiptiles that are on edge
+			return null;
+		} else {// Handle trivial case - vector is on vacancy
+			return vector2;
+		}
 	}
 
 	public void setDragged(ShipTile draggedTile) {
