@@ -14,7 +14,7 @@ public class ShipTile extends GameObject {
 
 	private long placed = System.currentTimeMillis();
 	private int cool = 0;
-	//private Timer timer;
+	public boolean isEdge;
 	public final static int TILESIZE = 64;
 
 	/**
@@ -90,5 +90,13 @@ public class ShipTile extends GameObject {
 	 */
 	public AdjacentTiles getNeighbors() {
 		return neighbors;
+	}
+
+	public boolean isEdge() {
+		return isEdge;
+	}
+
+	public void setIsEdge(boolean isEdge){
+		this.isEdge = isEdge;
 	}
 }

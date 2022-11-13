@@ -196,11 +196,33 @@ public class Ship extends GameObject {
 		ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
 		ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
 
-		// Remove reference to removed tile with null
-		if(up != null)up.getNeighbors().setDown(null);
-		if(right != null)right.getNeighbors().setLeft(null);
-		if(down != null)down.getNeighbors().setUp(null);
-		if(left != null)left.getNeighbors().setRight(null);
+		// Remove reference to removed tile with null and set each to edge since an adjacent tile is removed
+		if(up != null){
+			up.getNeighbors().setDown(null);
+			up.setIsEdge(true);
+		}
+		if(right != null){
+			right.getNeighbors().setLeft(null);
+			right.setIsEdge(true);
+		}
+		if(down != null){
+			down.getNeighbors().setUp(null);
+			down.setIsEdge(true);
+		}
+		if(left != null){
+			left.getNeighbors().setRight(null);
+			left.setIsEdge(true);
+		}
+	}
+
+	/**
+	 * Unfinished!
+	 * Takes a tile assumed to exist in the ship and checks if it's on the edge based on ajacentcy.
+	 * Sets tile.isEdge to correct value afterwards.
+	 * @return
+	 */
+	public boolean isTileEdge(){
+		return false;
 	}
 
 	/**
