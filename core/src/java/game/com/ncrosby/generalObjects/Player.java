@@ -187,4 +187,12 @@ public class Player extends GameObject {
 
         }
     }
+
+    /**
+     * Player checks if a position is out of bounds of their ship. 
+     * @param possibleUpPosition - Vector 2 representing a position 
+     */
+    public boolean positionIsOffShip(Vector2 possibleUpPosition) {
+        return playerShip.isPositionOffShip(possibleUpPosition);
+    }
 }

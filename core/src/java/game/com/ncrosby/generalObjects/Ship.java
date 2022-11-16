@@ -12,7 +12,6 @@ import com.ncrosby.game.tiles.AdjacentTiles;
 import com.ncrosby.game.tiles.ShipTile;
 
 import java.awt.*;
-import java.util.LinkedList;
 import java.util.Stack;
 
 public class Ship extends GameObject {
@@ -471,5 +470,21 @@ public class Ship extends GameObject {
 
 	public void setDragged(ShipTile draggedTile) {
 		this.draggedTile = draggedTile;
+	}
+
+	/**
+	 * Returns true if a position does not match a tile on the ship.
+	 * Any checks should ping this method instead of handling the logic of returned value checking.
+	 * Ships should be responsible for checking their own tiles.
+	 * @param position - Vector2 position to check
+	 * @return - Boolean true if no tile found - else return false
+	 */
+	public boolean isPositionOffShip(Vector2 position) {
+		ShipTile tile = returnTile(position.x,position.y);
+		if(tile == null){
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

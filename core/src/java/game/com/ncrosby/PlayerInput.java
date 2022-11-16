@@ -77,13 +77,11 @@ public class PlayerInput {
         Ship ship = player.getPlayerShip();
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            if(ship.returnTile( playerPos.x
-                            + (player.getSize().x/2.0f),
-                    playerPos.y + (200 *
-                            Gdx.graphics.getDeltaTime()) ) != null){
-                player.setY(playerPos.y + 200 * Gdx.graphics.getDeltaTime())  ;
-            }
-            else {
+            // Get vector with position of moving up position
+            Vector2 possibleUpPosition = new Vector2(playerPos.x+ (player.getSize().x/2.0f),playerPos.y + (200 *Gdx.graphics.getDeltaTime()));
+            if(!player.positionIsOffShip(possibleUpPosition)){
+                player.setY(possibleUpPosition.y)  ;
+            } else {
                 System.out.println("Bumping up!");
             }
         }
