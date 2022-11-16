@@ -1,4 +1,4 @@
-package com.ncrosby.game.player;
+package com.shipGame.ncrosby.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,12 +6,12 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.ncrosby.game.generalObjects.Player;
-import com.ncrosby.game.generalObjects.Ship;
-import com.ncrosby.game.tiles.ShipTile;
-import com.ncrosby.game.screens.GameScreen;
+import com.shipGame.ncrosby.generalObjects.Player;
+import com.shipGame.ncrosby.generalObjects.Ship;
+import com.shipGame.ncrosby.tiles.ShipTile;
+import com.shipGame.ncrosby.screens.GameScreen;
 
-import static com.ncrosby.game.util.generalUtil.returnUnprojectedMousePosition;
+import static com.shipGame.ncrosby.util.generalUtil.returnUnprojectedMousePosition;
 
 /**
  * Main user input handling class.
