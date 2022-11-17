@@ -97,4 +97,17 @@ public abstract class GameObject {
 	public void setSize(Vector2 size) {
 		this.size = size;
 	}
+
+	/**
+	 * Returns a float representing the difference between the right and left size point
+	 * Equal to the size.x Vector (x = width, y = height)
+	 * @return - a float representing the size of the Game Object
+	 */
+	public float getWidth(){
+		return size.x;
+	}
+
+	public float getHight(){
+		return size.y;
+	}
 }

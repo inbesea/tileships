@@ -34,8 +34,8 @@ public class Player extends GameObject {
     private float circleRotation = 0;
     private final int INIT_HELD_RADIUS = 32; // one Radius
 
-    public Player(Vector2 position, ID id, OrthographicCamera cam, tileShipGame game) {
-        super(position, new Vector2(64, 64), id);
+    public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, tileShipGame game) {
+        super(position, size, id);
 
         heldTileDisplay = new Circle(position.x, position.y, INIT_HELD_RADIUS);
         this.cam = cam;

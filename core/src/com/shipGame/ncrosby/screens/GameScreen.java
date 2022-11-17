@@ -29,6 +29,8 @@ public class GameScreen implements Screen {
 ExtendViewport extendViewport;
     private final Player player;
 
+    // Represents each side's size
+    private final Vector2 playerSize = new Vector2(47,53);
 
     OrthographicCamera camera;
     SimpleTouch st;
@@ -51,7 +53,7 @@ ExtendViewport extendViewport;
 
         // init player
         // Give player the game reference
-        player = new Player(new Vector2(222, 222), ID.Player, camera, this.game);
+        player = new Player(new Vector2(222, 222), playerSize, ID.Player, camera, this.game);
 
         // Place init game objects into the array
         gameObjects = new Array<>();
