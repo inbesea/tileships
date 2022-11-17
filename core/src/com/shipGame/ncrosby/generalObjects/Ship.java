@@ -24,8 +24,9 @@ public class Ship extends GameObject {
 	 * is easy and in one location
 	 */
 	private Array<ShipTile> existingTiles = new Array<>();
+	// Subset of existing tiles
 	private Array<ShipTile> edgeTiles = new Array<>();
-//	private Camera cam;
+	//	private Camera cam;
 	private OrthographicCamera cam;
 	private ShipTile mouseLocation;
 	private ShipTile draggedTile;
@@ -136,7 +137,6 @@ public class Ship extends GameObject {
 		if(!this.existingTiles.removeValue(tile, true)){
 			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
 		} else {
-
 			removeNeighbors(tile);
 			logRemovedTile(tile);
 		}
@@ -356,7 +356,7 @@ public class Ship extends GameObject {
 
 		double minDistance = Double.POSITIVE_INFINITY; // First check will always be true
 		ShipTile tempT;
-		ShipTile result = null;
+		ShipTile closestTile = null;
 		Vector3 location3 = new Vector3(location.x, location.y, 0);
 		Vector3 tileP;
 
@@ -369,10 +369,10 @@ public class Ship extends GameObject {
 			// Check if distance between position and current tile is shorter
 			if(distance < minDistance){
 				minDistance = distance;
-				result = tempT;
+				closestTile = tempT;
 			}
 		}
-		return result;
+		return closestTile;
 	}
 
 	@Override
