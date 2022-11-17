@@ -473,6 +473,55 @@ public class Ship extends GameObject {
 	}
 
 	/**
+	 * Checks both bottom corners of a gameObject using size and position,
+	 * will also check intermediary points if size > TILESIZE
+	 *
+	 * If a single point is off the ship this returns true.
+	 *
+	 * @return - true if any points checked are off-ship, else returns false
+	 */
+	public boolean isGameObjectOffShip(GameObject gameObject){
+		float objectSize = gameObject.getWidth();
+		Vector2 leftCorner = gameObject.getPosition();
+		Vector2 rightCorner = new Vector2(leftCorner.x + objectSize, leftCorner.y); // Same as left with adjusted x
+
+		return isHorizontalSpanOffShip(leftCorner, rightCorner);
+	}
+
+	/**
+	 * Checks a span defined by two Vector2 points within a ship.
+	 * will also check intermediary points if size > TILESIZE
+	 * If a single point is off the ship this returns true.
+	 * @param leftPoint
+	 * @param rightPoint
+	 * @return - true if any points checked are off-ship, else returns false
+	 */
+	public boolean isHorizontalSpanOffShip(Vector2 leftPoint, Vector2 rightPoint){
+		float objectSize = leftPoint.x - rightPoint.y; // get point span TODO : rename to spanSize
+
+		// Check left and right corner
+		if(isPositionOffShip(leftPoint) || isPositionOffShip(rightPoint)){
+			return true;
+		}
+
+		// Check if additional points need to be checked.
+		if(objectSize > ShipTile.TILESIZE) { // objectSize > TILESIZE ( Check for size is bigger than tilesize )
+			// Want to find number of internal points.
+			// size / Shiptile.TILESIZE
+			// round up and use to find x
+			int objectInternalPoints = (int) Math.ceil(objectSize / ShipTile.TILESIZE);
+			for(int i = 1 ; i > objectInternalPoints - 1 ; i++){ // dont need to check i=objectInternalPoints since this = rightCorner
+				if(isPositionOffShip(new Vector2(leftPoint.x + (i * ShipTile.TILESIZE), rightPoint.y))){
+					return true;
+				}
+			}
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Returns true if a position does not match a tile on the ship.
 	 * Any checks should ping this method instead of handling the logic of returned value checking.
 	 * Ships should be responsible for checking their own tiles.

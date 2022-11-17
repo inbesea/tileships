@@ -78,33 +78,54 @@ public class PlayerInput {
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             // Get vector with position of moving up position
-            Vector2 possibleUpPosition = new Vector2(playerPos.x+ (player.getSize().x/2.0f),playerPos.y + (200 *Gdx.graphics.getDeltaTime()));
-            if(!player.positionIsOffShip(possibleUpPosition)){
+            Vector2 possibleUpPosition = new Vector2(
+                    (playerPos.x),
+                    playerPos.y  + (200 * Gdx.graphics.getDeltaTime()));
+            Vector2 possibleRightCorner = new Vector2(possibleUpPosition.x + player.getWidth(),possibleUpPosition.y);
+            boolean isOffShip = ship.isHorizontalSpanOffShip(possibleUpPosition, possibleRightCorner);
+
+            if(!isOffShip){
                 player.setY(possibleUpPosition.y)  ;
             } else {
                 System.out.println("Bumping up!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            float leftMove = playerPos.x - 200 * Gdx.graphics.getDeltaTime();
-            if(ship.returnTile(leftMove, playerPos.y) != null){
-                player.setX(leftMove)  ;
+            Vector2 possibleLeftPosition = new Vector2(
+                    (playerPos.x) - (200 * Gdx.graphics.getDeltaTime()),
+                    playerPos.y);
+            Vector2 possibleRightCorner = new Vector2(possibleLeftPosition.x + player.getWidth(),possibleLeftPosition.y);
+            boolean isOffShip = ship.isHorizontalSpanOffShip(possibleLeftPosition, possibleRightCorner);
+
+            if(!isOffShip){
+                player.setX(possibleLeftPosition.x)  ;
             }
             else {
                 System.out.println("Bumping left!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            if(ship.returnTile((playerPos.x + 64/* Sprite width */) + 200 * Gdx.graphics.getDeltaTime(), playerPos.y) != null){
-                player.setX(playerPos.x + 200 * Gdx.graphics.getDeltaTime())  ;
+            // Lets check if the new position is off the ship. Get possible position and opposite corner
+            Vector2 possibleRightPosition = new Vector2(
+                    (playerPos.x) + (200 * Gdx.graphics.getDeltaTime()),
+                    playerPos.y);
+            Vector2 possibleRightCorner = new Vector2(possibleRightPosition.x + player.getWidth(),possibleRightPosition.y);
+            boolean isOffShip = ship.isHorizontalSpanOffShip(possibleRightPosition, possibleRightCorner);
+
+            if(!isOffShip){
+                player.setX(possibleRightPosition.x)  ;
             }
             else {
                 System.out.println("Bumping right!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            if(ship.returnTile(playerPos.x, playerPos.y - 200 * Gdx.graphics.getDeltaTime()) != null){
-                player.setY(playerPos.y - 200 * Gdx.graphics.getDeltaTime())  ;
+            Vector2 possibleDownPosition = new Vector2(playerPos.x,playerPos.y - 200 * Gdx.graphics.getDeltaTime());
+            Vector2 possibleDownCorner = new Vector2(possibleDownPosition.x + player.getWidth(),possibleDownPosition.y); //
+            boolean isOffShip = ship.isHorizontalSpanOffShip(possibleDownPosition, possibleDownCorner);
+
+            if(!isOffShip){
+                player.setY(possibleDownPosition.y);
             }
             else {
                 System.out.println("Bumping down!");
