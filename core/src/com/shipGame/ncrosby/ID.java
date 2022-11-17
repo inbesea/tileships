@@ -14,8 +14,9 @@ public enum ID {
 	/**
 	 * ID class to identify and classify different gameobjects.
 	 * Contains reference to asset for sprite texture.
+	 * Sprite selection
 	 */
-	Player("RobotV1.png"),
+	Player("RobotV2.png"),
 	BasicEnemy("asteroid_purple.png"),
 	ShipTile("ShipTile_Red.png"),
 	CoreTile("ShipTile_Core.png"),
