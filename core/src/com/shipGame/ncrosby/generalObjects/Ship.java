@@ -154,7 +154,6 @@ public class Ship extends GameObject {
 	private int setNeighbors(ShipTile tile){
 
 		// Init vars
-		AdjacentTiles neighbors = tile.getNeighbors();
 		float x = tile.getX();
 		float y = tile.getY();
 
@@ -164,29 +163,29 @@ public class Ship extends GameObject {
 		ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
 		ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
 
-		// Set tile in neighbors
-		if(up != null){
-			up.getNeighbors().setDown(tile); // Set up's down to tile
-		}
-		if(right != null)right.getNeighbors().setLeft(tile); // TODO : Hide delegate refactor here.
-		if(down != null)down.getNeighbors().setUp(tile);
-		if(left != null)left.getNeighbors().setRight(tile);
+		int numberOfNeighbors = tile.setNeighbors(up, right, down, left);
 
-		// set each direction with getTile();
-		neighbors.setUp(up);
-		neighbors.setRight(right);
-		neighbors.setDown(down);
-		neighbors.setLeft(left);
+		checkIfTileGoesToEdge(up);
+		checkIfTileGoesToEdge(right);
+		checkIfTileGoesToEdge(down);
+		checkIfTileGoesToEdge(left);
 
-		newTileUpdateEdge();
-
-		return neighbors.numberOfNeighbors();
+		return numberOfNeighbors;
 	}
 
 	/**
-	 * Checks neighbors of a tile to see if any no longer count as "edge" tiles.
+	 * Checks if tile should be removed or added to edge array.
+	 *
+	 * Assumes that the neighbors have been updated and reflect the current shipstate
 	 */
-	private void newTileUpdateEdge() {
+	private void checkIfTileGoesToEdge(ShipTile tile) {
+		if(tile.isEdge){
+			edgeTiles.add(tile);
+		} else if (!tile.isEdge){
+			edgeTiles.removeValue(tile, true);
+		} else {
+			throw new RuntimeException("tile.isEdge was null");
+		}
 	}
 
 	/**
@@ -211,33 +210,34 @@ public class Ship extends GameObject {
 
 		// Remove reference to removed tile with null and set each to edge since an adjacent tile is removed
 		if(up != null){
-			up.getNeighbors().setDown(null);
-			up.setIsEdge(true); // NOTE : This is not a messy sharing of responsibility with this method, as any tile that
-			// is removed will cause it's neighbors to become edge tiles. This keeps the logic robust?... Maybe not.
+			up.setDown(null);
+			if(!up.isEdge){ // if not already in the edge party add it
+				up.setIsEdge(true);
+				edgeTiles.add(up);
+			}
 		}
 		if(right != null){
-			right.getNeighbors().setLeft(null);
-			right.setIsEdge(true);
+			right.setLeft(null);
+			if(!right.isEdge){ // if not already in the edge party add it
+				right.setIsEdge(true);
+				edgeTiles.add(right);
+			}
 		}
 		if(down != null){
-			down.getNeighbors().setUp(null);
-			down.setIsEdge(true);
+			down.setUp(null);
+			if(!down.isEdge){ // if not already in the edge party add it
+				down.setIsEdge(true);
+				edgeTiles.add(down);
+			}
 		}
 		if(left != null){
-			left.getNeighbors().setRight(null);
-			left.setIsEdge(true);
+			left.setRight(null);
+			if(!left.isEdge){ // if not already in the edge party add it
+				left.setIsEdge(true);
+				edgeTiles.add(left);
+			}
 		}
 	}
-
-	/**
-	 * Unfinished!
-	 * Takes a tile assumed to exist in the ship and checks if it's on the edge based on ajacentcy.
-	 * Sets tile.isEdge to correct value afterwards.
-	 * @return
-	 */
-//	public boolean isTileEdge(ShipTile shipTile){
-//		AdjacentTiles adjacentTiles = shipTile.getNeighbors();
-//	}
 
 	/**
 	 * Prints removed tile data to console
@@ -301,6 +301,23 @@ public class Ship extends GameObject {
 	 	else {
 	 		return resultTiles.pop();
 	 	}
+	}
+
+	public int numberOfShipTiles(){
+		return existingTiles.size;
+	}
+
+	public int numberOfEdgeTiles(){
+		return edgeTiles.size;
+	}
+
+	/**
+	 * Returns true if there are more tiles than edge tiles
+	 *
+	 * @return - Boolean representing if ship has non-edge tiles
+	 */
+	public boolean hasNonEdgeTiles(){
+		return existingTiles.size > edgeTiles.size;
 	}
 
 	/**

@@ -99,4 +99,75 @@ public class ShipTile extends GameObject {
 	public void setIsEdge(boolean isEdge){
 		this.isEdge = isEdge;
 	}
+
+	/**
+	 * Delegate method that handles setting the neighbors of a newly placed tile.
+	 * Keeps the edge calculations down in the tiles instead of on the ship level to keep the logic cleaner on the ship level
+	 *
+	 * Ship still determines the context by passing the adjacent tiles
+	 * @param up
+	 * @param right
+	 * @param down
+	 * @param left
+	 */
+	public int setNeighbors(ShipTile up, ShipTile right, ShipTile down, ShipTile left) {
+
+		// Set tile in neighbors - Stitch newTile to neighbor tiles
+		if(up != null){
+			up.setDown(this); // Set up neighbor to this (down)
+			up.setIsEdge(up.calculateIsEdge()); // Since new tile has been placed, check and see if tile is edge.
+		}
+		if(right != null){
+			right.setLeft(this);
+			right.setIsEdge(right.calculateIsEdge());
+		}
+		if(down != null){
+			down.setUp(this);
+			down.setIsEdge(down.calculateIsEdge());
+		}
+		if(left != null){
+			left.setRight(this);
+			left.setIsEdge(left.calculateIsEdge());
+		}
+
+		// set this's each direction with appropriate relative tile.
+		this.neighbors.setUp(up);
+		this.neighbors.setRight(right);
+		this.neighbors.setDown(down);
+		this.neighbors.setLeft(left);
+
+		setIsEdge(calculateIsEdge());// Check if self is edge now.
+
+		return neighbors.numberOfNeighbors();
+	}
+
+
+	public void setUp(ShipTile up){
+		neighbors.setUp(up);
+	}
+
+	public void setRight(ShipTile right){
+		neighbors.setRight(right);
+	}
+
+	public void setDown(ShipTile down){
+		neighbors.setDown(down);
+	}
+
+	public void setLeft(ShipTile left){
+		neighbors.setLeft(left);
+	}
+
+	/**
+	 * Checks if there are 4 neighbors.
+	 * If there are return false, else return true
+	 * @return - Returns  false if all sides have tiles, else returns false.
+	 */
+	private boolean calculateIsEdge(){
+		if(neighbors.numberOfNeighbors() == 4){
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
