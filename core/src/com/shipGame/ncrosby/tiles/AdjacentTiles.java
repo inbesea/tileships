@@ -9,6 +9,9 @@ public class AdjacentTiles {
     private ShipTile Right;
     private ShipTile Down;
 
+    public AdjacentTiles (){
+    }
+
     public ShipTile getUp() {
         return Up;
     }
