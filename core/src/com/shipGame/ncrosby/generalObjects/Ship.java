@@ -22,6 +22,10 @@ public class Ship extends GameObject {
 	 *
 	 * The in and out of tiles into this ship should be concentrated into one class, so that changing how the ship works
 	 * is easy and in one location
+	 *
+	 * Edge management happens on I/O of tiles so we have a reference to the tile being updated.
+	 *
+	 * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
 	 */
 	private Array<ShipTile> existingTiles = new Array<>();
 	// Subset of existing tiles
@@ -164,7 +168,7 @@ public class Ship extends GameObject {
 		if(up != null){
 			up.getNeighbors().setDown(tile); // Set up's down to tile
 		}
-		if(right != null)right.getNeighbors().setLeft(tile);
+		if(right != null)right.getNeighbors().setLeft(tile); // TODO : Hide delegate refactor here.
 		if(down != null)down.getNeighbors().setUp(tile);
 		if(left != null)left.getNeighbors().setRight(tile);
 
@@ -174,7 +178,15 @@ public class Ship extends GameObject {
 		neighbors.setDown(down);
 		neighbors.setLeft(left);
 
+		newTileUpdateEdge();
+
 		return neighbors.numberOfNeighbors();
+	}
+
+	/**
+	 * Checks neighbors of a tile to see if any no longer count as "edge" tiles.
+	 */
+	private void newTileUpdateEdge() {
 	}
 
 	/**
@@ -184,6 +196,8 @@ public class Ship extends GameObject {
 	 */
 	private void removeNeighbors(ShipTile shipTile){
 		AdjacentTiles neighbors = shipTile.getNeighbors();
+
+		// Return if tile has no neighbors
 		if(neighbors.numberOfNeighbors() == 0)return;
 
 		float x = shipTile.getX();
@@ -198,7 +212,8 @@ public class Ship extends GameObject {
 		// Remove reference to removed tile with null and set each to edge since an adjacent tile is removed
 		if(up != null){
 			up.getNeighbors().setDown(null);
-			up.setIsEdge(true);
+			up.setIsEdge(true); // NOTE : This is not a messy sharing of responsibility with this method, as any tile that
+			// is removed will cause it's neighbors to become edge tiles. This keeps the logic robust?... Maybe not.
 		}
 		if(right != null){
 			right.getNeighbors().setLeft(null);
@@ -220,9 +235,9 @@ public class Ship extends GameObject {
 	 * Sets tile.isEdge to correct value afterwards.
 	 * @return
 	 */
-	public boolean isTileEdge(){
-		return false;
-	}
+//	public boolean isTileEdge(ShipTile shipTile){
+//		AdjacentTiles adjacentTiles = shipTile.getNeighbors();
+//	}
 
 	/**
 	 * Prints removed tile data to console

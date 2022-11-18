@@ -19,7 +19,7 @@ import static com.badlogic.gdx.math.MathUtils.*;
 public class Player extends GameObject {
     Ship playerShip;
     Random r = new Random();
-    private tileShipGame game;
+    private tileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
     private OrthographicCamera cam;
     private int index[] = {0, 0};
     private int lookAhead = 155;
