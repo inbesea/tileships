@@ -75,7 +75,7 @@ public class Ship extends GameObject {
 
 	/**
 	 * This Method adds a tile to the ship with a reference to the tile's x and y
-	 * positions (without camera adjustment), the color, ID, and camera object for updating
+	 * positions , the color, ID, and camera object for updating
 	 * the render location
 	 *
 	 * @param x - The x coordinate this tile will be added to on the canvas (can go negative)
@@ -147,6 +147,10 @@ public class Ship extends GameObject {
 	}
 
 	/**
+	 * Sets neighbors and checks if edge values change.
+	 *
+	 * Gets contextual tiles via the ship's context, and calls delegate method within tile, passing the possible neighbor context.
+	 *
 	 * Sets tile neighbors equal to adjacent tiles, or to null if they don't exist
 	 * @param tile - tile to initialize
 	 * @return - number of neighbor tiles

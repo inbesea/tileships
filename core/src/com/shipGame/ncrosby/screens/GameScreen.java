@@ -26,7 +26,7 @@ import java.util.Objects;
 public class GameScreen implements Screen {
     final tileShipGame game;
     AsteroidManager asteroidManager;
-ExtendViewport extendViewport;
+    ExtendViewport extendViewport;
     private final Player player;
 
     // Represents each side's size
