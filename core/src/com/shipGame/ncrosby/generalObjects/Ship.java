@@ -183,12 +183,14 @@ public class Ship extends GameObject {
 	 * Assumes that the neighbors have been updated and reflect the current shipstate
 	 */
 	private void checkIfTileGoesToEdge(ShipTile tile) {
-		if(tile.isEdge){
-			edgeTiles.add(tile);
-		} else if (!tile.isEdge){
-			edgeTiles.removeValue(tile, true);
-		} else {
-			throw new RuntimeException("tile.isEdge was null");
+		if(tile != null){
+			if(tile.isEdge){
+				edgeTiles.add(tile);
+			} else if (!tile.isEdge){
+				edgeTiles.removeValue(tile, true);
+			} else {
+				throw new RuntimeException("tile.isEdge was null");
+			}
 		}
 	}
 
