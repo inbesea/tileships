@@ -53,6 +53,7 @@ public class Ship extends GameObject {
 		addTileByCoord(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
 		addTileByCoord(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
 		addTileByCoord(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTileByCoord(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
 	}
 
 	/**
@@ -168,6 +169,8 @@ public class Ship extends GameObject {
 		checkIfTileGoesToEdge(down);
 		checkIfTileGoesToEdge(left);
 
+		System.out.println("Added a tile, number of edge tiles : " + edgeTiles.size);
+
 		return numberOfNeighbors;
 	}
 
@@ -178,12 +181,12 @@ public class Ship extends GameObject {
 	 */
 	private void checkIfTileGoesToEdge(ShipTile tile) {
 		if(tile != null){
-			if(tile.isEdge){
+			if(tile.isEdge && !edgeTiles.contains(tile, true)){
 				edgeTiles.add(tile);
-			} else if (!tile.isEdge){
+			} else if (!tile.isEdge && edgeTiles.contains(tile, true)){
 				edgeTiles.removeValue(tile, true);
-			} else {
-				throw new RuntimeException("tile.isEdge was null");
+			}  else  {
+				// The
 			}
 		}
 	}
@@ -213,28 +216,44 @@ public class Ship extends GameObject {
 			up.setDown(null);
 			if(!up.isEdge){ // if not already in the edge party add it
 				up.setIsEdge(true);
-				edgeTiles.add(up);
+				if(edgeTiles.contains(up,true)){
+					throw new RuntimeException("Non-edge tile present in edge tile array");
+				} else {
+					edgeTiles.add(up);
+				}
 			}
 		}
 		if(right != null){
 			right.setLeft(null);
 			if(!right.isEdge){ // if not already in the edge party add it
 				right.setIsEdge(true);
-				edgeTiles.add(right);
+				if(edgeTiles.contains(right,true)){
+					throw new RuntimeException("Non-edge tile present in edge tile array");
+				} else {
+					edgeTiles.add(right);
+				}
 			}
 		}
 		if(down != null){
 			down.setUp(null);
 			if(!down.isEdge){ // if not already in the edge party add it
 				down.setIsEdge(true);
-				edgeTiles.add(down);
+				if(edgeTiles.contains(down,true)){
+					throw new RuntimeException("Non-edge tile present in edge tile array");
+				} else {
+					edgeTiles.add(down);
+				}
 			}
 		}
 		if(left != null){
 			left.setRight(null);
 			if(!left.isEdge){ // if not already in the edge party add it
 				left.setIsEdge(true);
-				edgeTiles.add(left);
+				if(edgeTiles.contains(left,true)){
+					throw new RuntimeException("Non-edge tile present in edge tile array");
+				} else {
+					edgeTiles.add(left);
+				}
 			}
 		}
 	}
