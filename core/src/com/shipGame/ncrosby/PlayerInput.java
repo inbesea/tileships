@@ -87,7 +87,7 @@ public class PlayerInput {
             if(!isOffShip){
                 player.setY(possibleUpPosition.y)  ;
             } else {
-                System.out.println("Bumping up!");
+//                System.out.println("Bumping up!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
@@ -101,7 +101,7 @@ public class PlayerInput {
                 player.setX(possibleLeftPosition.x)  ;
             }
             else {
-                System.out.println("Bumping left!");
+//                System.out.println("Bumping left!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
@@ -116,7 +116,7 @@ public class PlayerInput {
                 player.setX(possibleRightPosition.x)  ;
             }
             else {
-                System.out.println("Bumping right!");
+//                System.out.println("Bumping right!");
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
@@ -128,7 +128,7 @@ public class PlayerInput {
                 player.setY(possibleDownPosition.y);
             }
             else {
-                System.out.println("Bumping down!");
+//                System.out.println("Bumping down!");
             }
         }
     }
