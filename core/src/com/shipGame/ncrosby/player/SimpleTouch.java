@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.shipGame.ncrosby.generalObjects.Player;
-import com.shipGame.ncrosby.generalObjects.Ship;
-import com.shipGame.ncrosby.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.Ship;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
 
 import static com.shipGame.ncrosby.util.generalUtil.returnUnprojectedMousePosition;

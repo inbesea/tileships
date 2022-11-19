@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.generalObjects;
+package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.tileShipGame;
-import com.shipGame.ncrosby.tiles.AdjacentTiles;
-import com.shipGame.ncrosby.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 
 import java.awt.*;
 import java.util.Stack;
@@ -94,13 +94,7 @@ public class Ship extends GameObject {
 		ShipTile testTile = returnTile(x, y);
 		float indexXY[] = returnIndex(x, y);
 
-		if(testTile == null) { // x, y is vacant
-			/*Dividing by tilesize is meant to get an index.
-			 * by subtracting cam from the location we can get an index.
-			 * However, it might be better to subtract cam first and then divide...
-			 * This is a serious lack of encapsulation on display here. I need to be
-			 * Able to add tiles by coord and index separately.. Or just
-			 * encapsulate the indexes entirely.*/
+		if(testTile == null) { // No tile found
 			System.out.println("Create tile at " + x + "," + y);
 			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
@@ -148,9 +142,9 @@ public class Ship extends GameObject {
 
 	/**
 	 * Sets neighbors and checks if edge values change.
-	 *
+	 * <p></p>
 	 * Gets contextual tiles via the ship's context, and calls delegate method within tile, passing the possible neighbor context.
-	 *
+	 * <p></p>
 	 * Sets tile neighbors equal to adjacent tiles, or to null if they don't exist
 	 * @param tile - tile to initialize
 	 * @return - number of neighbor tiles

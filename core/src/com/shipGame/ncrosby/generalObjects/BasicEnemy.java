@@ -3,6 +3,7 @@ package com.shipGame.ncrosby.generalObjects;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.Camera;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;

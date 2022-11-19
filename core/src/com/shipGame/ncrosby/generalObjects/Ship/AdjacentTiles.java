@@ -1,4 +1,6 @@
-package com.shipGame.ncrosby.tiles;
+package com.shipGame.ncrosby.generalObjects.Ship;
+
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 
 /**
  * Manages adjacent ShipTiles to a shiptile

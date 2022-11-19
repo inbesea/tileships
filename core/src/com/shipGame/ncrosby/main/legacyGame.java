@@ -5,7 +5,7 @@ import com.shipGame.ncrosby.HUD;
 import com.shipGame.ncrosby.Handler;
 import com.shipGame.ncrosby.KeyInput;
 import com.shipGame.ncrosby.Window;
-import com.shipGame.ncrosby.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;

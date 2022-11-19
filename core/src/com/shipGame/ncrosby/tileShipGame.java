@@ -5,7 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shipGame.ncrosby.generalObjects.Ship;
+import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
 
 /**

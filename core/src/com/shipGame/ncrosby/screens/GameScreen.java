@@ -13,7 +13,7 @@ import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.PlayerInput;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Player;
-import com.shipGame.ncrosby.generalObjects.Ship;
+import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.player.SimpleTouch;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.util.AsteroidManager;

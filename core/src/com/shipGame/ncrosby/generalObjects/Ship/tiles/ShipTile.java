@@ -1,8 +1,9 @@
-package com.shipGame.ncrosby.tiles;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.Ship.AdjacentTiles;
 import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
