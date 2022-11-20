@@ -164,10 +164,11 @@ public class Ship extends GameObject {
 
 		int numberOfNeighbors = tile.setNeighbors(up, right, down, left);
 
-		checkIfTileGoesToEdge(up);
-		checkIfTileGoesToEdge(right);
-		checkIfTileGoesToEdge(down);
-		checkIfTileGoesToEdge(left);
+		checkIfAdjustEdgeArray(up);
+		checkIfAdjustEdgeArray(right);
+		checkIfAdjustEdgeArray(down);
+		checkIfAdjustEdgeArray(left);
+		checkIfAdjustEdgeArray(tile);
 
 		System.out.println("Added a tile, number of edge tiles : " + edgeTiles.size);
 
@@ -179,7 +180,7 @@ public class Ship extends GameObject {
 	 *
 	 * Assumes that the neighbors have been updated and reflect the current shipstate
 	 */
-	private void checkIfTileGoesToEdge(ShipTile tile) {
+	private void checkIfAdjustEdgeArray(ShipTile tile) {
 		if(tile != null){
 			if(tile.isEdge && !edgeTiles.contains(tile, true)){
 				edgeTiles.add(tile);
@@ -194,6 +195,7 @@ public class Ship extends GameObject {
 	/**
 	 * Decouples the passed tile from the adjacent tiles
 	 *
+	 * Responsible for removing the tile from the edge tiles if present.
 	 * @param shipTile - Tile to decouple
 	 */
 	private void removeNeighbors(ShipTile shipTile){
@@ -204,6 +206,8 @@ public class Ship extends GameObject {
 
 		float x = shipTile.getX();
 		float y = shipTile.getY();
+
+		edgeTiles.removeValue(shipTile, true); // Remember to remove the tile from the existing tiles
 
 		// Get references
 		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
