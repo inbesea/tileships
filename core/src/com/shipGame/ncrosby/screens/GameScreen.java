@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-        this.extendViewport = new ExtendViewport(600,500, camera);
+        this.extendViewport = new ExtendViewport(650,550, camera);
 
         // init ship
         playerShip = new Ship(new Vector2(200, 200), ID.Ship, camera);
