@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
@@ -45,8 +46,8 @@ public class Player extends GameObject {
         this.playerShip =  game.getPlayerShip();
     }
 
-    public Rectangle getBounds() {
-        Rectangle r = new Rectangle((int) position.x, (int) position.y, 32, 32);
+    public com.badlogic.gdx.math.Rectangle getBounds() {
+        Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, 32, 32);
         //r.intersects
         return r;
 
