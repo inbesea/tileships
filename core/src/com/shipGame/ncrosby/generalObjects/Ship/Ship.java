@@ -92,20 +92,36 @@ public class Ship extends GameObject {
 		cam.unproject(tileLocation);
 
 		// returnTile handles camera location
-		ShipTile testTile = returnTile(x, y);
+		ShipTile destinationTile = returnTile(x, y);
 		float indexXY[] = returnIndex(x, y);
 
-		if(testTile == null) { // No tile found
+		/*
+		This logic takes the tile, returns the index, and then scales out the x,y by the tile size alligning the
+		tiles along the grid. THIS is the core logic keeping everything on the grid.
+		 */
+		if(destinationTile == null) { // No tile found
 			System.out.println("Create tile at " + x + "," + y);
 			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
 			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
 			setNeighbors(tempTile); // Setting tile neighbors within ship
 			this.existingTiles.add(tempTile);
+
+			if(existingTiles.size < edgeTiles.size){
+				throw new RuntimeException("More edgeTiles than existing! " +
+						" existingTiles.size : " + existingTiles.size +
+						"edgeTiles.size : " + edgeTiles.size);
+			}
 			return null;
 		} else { // x, y is not vacant
 			System.out.println("Already a tile at (x, y) = (" + x + ", " + y + ") -> index: (" + indexXY[0] + ", " + indexXY[1] + ")");
-			return testTile;
+
+			if(existingTiles.size < edgeTiles.size){
+				throw new RuntimeException("More edgeTiles than existing! " +
+						" existingTiles.size : " + existingTiles.size +
+						"edgeTiles.size : " + edgeTiles.size);
+			}
+			return destinationTile;
 		}
 	}
 
