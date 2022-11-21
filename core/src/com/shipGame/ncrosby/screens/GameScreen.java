@@ -155,8 +155,9 @@ public class GameScreen implements Screen {
             // Ships don't directly have collision with anything. Things check if they collide with tiles in the ship
         }else{
             for(GameObject go: gameObjects){
-                if(go.getID() == ID.Ship){
+                if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){
                     go.collision(gameObject); // Give object to ship to check collision for tiles in ship
+                    break;
                 } else { // tiles are in ship so we can take that on it's own.
 //                    if(gameObject == go)continue;
 //                    if(gameObject.getBounds().contains(go.getBounds())){
