@@ -126,7 +126,7 @@ public class SimpleTouch implements InputProcessor {
         ShipTile destinationTile = playerShip.returnTile(mousePosition2);
             if(destinationTile != null){ // Released on Shiptile
                 Vector2 nearestEmptySpace = playerShip.closestVacancy(mousePosition2);
-                playerShip.addTileByCoord(nearestEmptySpace.x, nearestEmptySpace.y, ID.ShipTile);
+                playerShip.addTileByCoord(nearestEmptySpace.x, nearestEmptySpace.y, draggedTile.getID());
             } else { // Released on empty space
                 ShipTile closestTile = playerShip.closestTile(mousePosition2, playerShip.getExistingTiles());
                 playerShip.setTileOnClosestSide(draggedTile, closestTile, mousePosition);
