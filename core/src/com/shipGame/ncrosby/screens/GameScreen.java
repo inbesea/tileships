@@ -92,8 +92,8 @@ public class GameScreen implements Screen {
         // Loops through the game objects and draws them.
         // Uses the game and camera context to handle drawing properly.
         game.batch.begin();
-        for (GameObject go : gameObjects) {
-            drawGameObject(go); // Call helper to draw object
+        for(int i = 0 ; i < gameObjects.size ; i++){
+            drawGameObject(gameObjects.get(i)); // Call helper to draw object
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
