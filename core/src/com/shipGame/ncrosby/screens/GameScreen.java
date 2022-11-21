@@ -26,6 +26,7 @@ import java.util.Objects;
 public class GameScreen implements Screen {
     final tileShipGame game;
     AsteroidManager asteroidManager;
+
     ExtendViewport extendViewport;
     private final Player player;
 
@@ -178,5 +179,13 @@ public class GameScreen implements Screen {
     public GameObject removeGameObject(GameObject gameObject){
         int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
         return gameObjects.removeIndex(i); // Returns the object reference and removes it.
+    }
+
+    /**
+     * Returns a reference to the screens extended viewport
+     * @return
+     */
+    public ExtendViewport getExtendViewport() {
+        return extendViewport;
     }
 }
