@@ -8,19 +8,18 @@ import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
 
+import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
+
 public class BasicEnemy extends GameObject {
 
-	private Ship shiphandler;
-	private Camera cam;
+	int maxSpeed = 5;
+	int minSpeed = 1;
 
-	public BasicEnemy(Vector2 position, Vector2 size , ID id, Ship shiphandler, Camera cam) {
+	public BasicEnemy(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
-		// Cam is part of the game object.
-		this.cam = cam;
-		this.shiphandler = shiphandler;
-		velX = 5;
-		velY = 5;
+		velX = (int)getRandomlyNegativeNumber(1,5);
+		velY = (int)getRandomlyNegativeNumber(1,5);
 	}
 
 	public Rectangle getBounds() {
