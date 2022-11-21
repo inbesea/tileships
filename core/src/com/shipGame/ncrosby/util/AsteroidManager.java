@@ -84,15 +84,34 @@ public class AsteroidManager {
     }
 
     public void spawnAsteroid(){
+
         // Check if active
         if(spawning){
+            Vector2 spawnLocation = getVectorInValidSpawnArea();
 
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.BasicEnemy);
+            screen.newGameObject(asteroid);
+            asteroids.add(asteroid);
         }
-        /*
-         * > Spawn only outside the viewport to hide spawns.
-         * > Give a random velocity
-         * > cleanUpOutOfBounds()
-         */
+    }
+
+    /**
+     * Returns a random point within the non-visible play area
+     * @return
+     */
+    private Vector2 getVectorInValidSpawnArea(){
+        ExtendViewport ev =  screen.getExtendViewport();
+
+        // Get x,y centered on screen, and scaled up to provide band of spawning
+        float x = getRandomlyNegativeNumber(ev.getScreenWidth()/2 , 300);
+        float y = getRandomlyNegativeNumber(ev.getScreenHeight()/2, 300);
+
+        // Make point camera handled
+        System.out.println("Before unproject point: " + x + ", " + y);
+        Vector3 position = new Vector3(x,y,0);
+        screen.getCamera().unproject(position);
+        System.out.println("Unprojected point: " + position.x + ", " + position.y);
+        return new Vector2(position.x,position.y);
     }
 
     /**
