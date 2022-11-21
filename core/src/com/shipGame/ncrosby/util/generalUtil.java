@@ -83,4 +83,15 @@ public class generalUtil {
         }
         return closestVector;
     }
+
+    /**
+     * Creates a random value between min and max
+     *
+     * @param min
+     * @param max
+     * @return
+     */
+    public static float getRandomNumber(int min, int max) {
+        return (float) ((Math.random() * (max - min)) + min);
+    }
 }
