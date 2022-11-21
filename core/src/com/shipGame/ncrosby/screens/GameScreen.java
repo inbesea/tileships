@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
         this.extendViewport = new ExtendViewport(650,550, camera);
 
         // init ship
-        playerShip = new Ship(new Vector2(200, 200), ID.Ship, camera);
+        playerShip = new Ship(new Vector2(200, 200), ID.Ship, camera, this);
         game.setPlayerShip(playerShip);
 
         // init player
@@ -151,12 +151,22 @@ public class GameScreen implements Screen {
     }
 
     private void collisionDetection(GameObject gameObject) {
-//        for(GameObject go: gameObjects){
-//            if(gameObject.getBounds().intersects(go.getBounds())){
-//                gameObject.collision(go);
-//                go.collision(gameObject);
-//            }
-//        }
+        if(gameObject.getID() == ID.Ship){ // Handle checking a ships collision uniquely
+            // Ships don't directly have collision with anything. Things check if they collide with tiles in the ship
+        }else{
+            for(GameObject go: gameObjects){
+                if(go.getID() == ID.Ship){
+                    go.collision(gameObject); // Give object to ship to check collision for tiles in ship
+                } else { // tiles are in ship so we can take that on it's own.
+//                    if(gameObject == go)continue;
+//                    if(gameObject.getBounds().contains(go.getBounds())){
+//                        gameObject.collision(go);
+//                        go.collision(gameObject);
+//                    }
+                }
+            }
+        }
+
     }
 
     public OrthographicCamera getCamera() {
@@ -203,4 +213,9 @@ public class GameScreen implements Screen {
     public ExtendViewport getExtendViewport() {
         return extendViewport;
     }
+
+    public tileShipGame getGame() {
+        return game;
+    }
+
 }

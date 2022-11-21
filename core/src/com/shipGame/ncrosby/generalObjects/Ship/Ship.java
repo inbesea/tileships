@@ -38,6 +38,7 @@ public class Ship extends GameObject {
 	private OrthographicCamera cam;
 	private ShipTile mouseLocation;
 	private ShipTile draggedTile;
+	private GameScreen screen;
 
 	private int pointLocation[] = new int[2];
 
@@ -45,10 +46,11 @@ public class Ship extends GameObject {
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (Vector2 position, ID id, OrthographicCamera cam) {
+	public Ship (Vector2 position, ID id, OrthographicCamera cam, GameScreen screen) {
 		super(position, new Vector2(0,0), id);
 		this.cam = cam;
 //		this.camera = camera;
+		this.screen = screen;
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -470,6 +472,32 @@ public class Ship extends GameObject {
 
 	@Override
 	public void collision(GameObject gameObject) {
+		if(gameObject.getID() == ID.Asteroid){
+			Asteroid asteroid = (Asteroid) gameObject; // The ID confirms casting
+			for(ShipTile st : existingTiles){
+				// asteroid intersects with ship's tile
+				Rectangle rectangle = st.getBounds();
+				Circle asteroidCircle = asteroid.getCircleBounds();
+				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle, screen);
+				if(isCollision){
+					System.out.println("Collision! with " + st.getID());
+					if(st.getID() == ID.CoreTile){
+
+						// New basic tile
+						addTile(gameObject.getX() + gameObject.getSize().x * 0.5f, gameObject.getY() + gameObject.getSize().y * 0.5f,
+								ID.ShipTile);
+//						screen.newGameObject(gameObject);
+						screen.removeGameObject(asteroid);
+						break;
+					} else {
+						// Explode tile and asteroid
+						removeTileFromShip(st);
+						screen.removeGameObject(gameObject);
+					}
+				}
+			}
+		}
+
 		// Might could be used? :/ Probably not tho
 	}
 
