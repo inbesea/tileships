@@ -400,14 +400,15 @@ public class Ship extends GameObject {
 
 
 	/**
-	 * Method to find the closest tile to a point
+	 * Method to find the closest tile to a point given an Array of ShipTiles
 	 *
-	 * @param location
-	 * @return
+	 * @param location - Vector to check prox. to
+	 * @param tiles - Array of Tiles to search in
+	 * @return - closest tile
 	 */
-	public ShipTile closestTile(Vector2 location) {
-		if(existingTiles.size == 0)return null;
-		if(existingTiles.size == 1)return existingTiles.get(0);
+	public ShipTile closestTile(Vector2 location , Array<ShipTile> tiles) {
+		if(tiles.size == 0)return null;
+		if(tiles.size == 1)return tiles.get(0);
 
 		double minDistance = Double.POSITIVE_INFINITY; // First check will always be true
 		ShipTile tempT;
@@ -416,8 +417,8 @@ public class Ship extends GameObject {
 		Vector3 tileP;
 
 		//Loop through ship to find closest tile
-		for (int i = 0 ; i < existingTiles.size ; i++){
-			tempT = existingTiles.get(i);
+		for (int i = 0 ; i < tiles.size ; i++){
+			tempT = tiles.get(i);
 			tileP = new Vector3(tempT.getPosition().x + ShipTile.TILESIZE/2.0f, tempT.getPosition().y  + ShipTile.TILESIZE/2.0f , 0);
 			Float distance = location3.dst(tileP);
 
