@@ -78,6 +78,11 @@ public class ShipTile extends GameObject {
 		return null;
 	}
 
+	@Override
+	public void collision(GameObject gameObject) {
+
+	}
+
 	public int getxIndex() {
 		return xIndex;
 	}

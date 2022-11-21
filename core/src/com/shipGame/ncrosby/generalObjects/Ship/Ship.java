@@ -455,6 +455,11 @@ public class Ship extends GameObject {
 		return null;
 	}
 
+	@Override
+	public void collision(GameObject gameObject) {
+		// Might could be used? :/ Probably not tho
+	}
+
 	/**
 	 * Takes in a tile, location, and closest tile and determines which side to place the tile.
 	 *

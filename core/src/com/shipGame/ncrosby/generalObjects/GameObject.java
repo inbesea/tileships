@@ -35,7 +35,7 @@ public abstract class GameObject {
 	public abstract void tick();
 	public abstract void render(tileShipGame game);
 	public abstract Rectangle getBounds();
-	
+	public abstract void collision(GameObject gameObject);
 	public void setX(float x) {
 		this.position.x = x;
 	}

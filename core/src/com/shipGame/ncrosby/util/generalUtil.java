@@ -83,4 +83,41 @@ public class generalUtil {
         }
         return closestVector;
     }
+
+    /**
+     * Creates a random value between min and max
+     *
+     * @param min
+     * @param max
+     * @return
+     */
+    public static float getRandomNumber(int min, int max) {
+        return (float) ((Math.random() * (max - min)) + min);
+    }
+
+    /**
+     * Returns a negative one or positive one with a 50/50  chance
+     *
+     * @return int of -1 or 1 value
+     */
+    public static int getNegativeOneRandomly(){
+        double random = Math.random();
+        if(random < 0.5f)return -1;
+        else return 1;
+    }
+
+    /**
+     * Returns float within range  with randomly determined positivity/negativity.
+     *
+     * NOTE : CAN be given negative values, but will cause possible output space to just flip instead of forming a hole
+     *
+     * @param min - upper bounds in absolute value terms
+     * @param max - lower bounds in absolute value terms
+     * @return
+     */
+    public static float getRandomlyNegativeNumber(int min, int max){
+        float value = getRandomNumber(min, max);
+        float possiblyNegativeValue = value * getNegativeOneRandomly();
+        return possiblyNegativeValue;
+    }
 }

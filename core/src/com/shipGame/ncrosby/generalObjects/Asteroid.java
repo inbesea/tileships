@@ -1,30 +1,32 @@
 package com.shipGame.ncrosby.generalObjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.shipGame.ncrosby.Camera;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
 
-public class BasicEnemy extends GameObject {
+import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
-	private Ship shiphandler;
-	private Camera cam;
+public class Asteroid extends GameObject {
 
-	public BasicEnemy(Vector2 position, Vector2 size , ID id, Ship shiphandler, Camera cam) {
+	int maxSpeed = 5;
+	int minSpeed = 1;
+
+	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
-		// Cam is part of the game object.
-		this.cam = cam;
-		this.shiphandler = shiphandler;
-		velX = 5;
-		velY = 5;
+		velX = (int)getRandomlyNegativeNumber(1,5);
+		velY = (int)getRandomlyNegativeNumber(1,5);
 	}
 
 	public Rectangle getBounds() {
 		return new Rectangle((int) position.x, (int) position.y, 16, 16);
+	}
+
+	@Override
+	public void collision(GameObject gameObject) {
+
 	}
 
 	// TODO : burn this to the ground
@@ -60,6 +62,8 @@ public class BasicEnemy extends GameObject {
 	 */
 	public void render(tileShipGame game) {
 
+		position.x += velX;
+		position.y += velY;
 //		generalUtil.render(position.x, position.y, new Texture("asteroid_purple.png"));
 		
 	}
