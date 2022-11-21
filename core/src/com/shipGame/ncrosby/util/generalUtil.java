@@ -2,6 +2,8 @@ package com.shipGame.ncrosby.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -119,5 +121,19 @@ public class generalUtil {
         float value = getRandomNumber(min, max);
         float possiblyNegativeValue = value * getNegativeOneRandomly();
         return possiblyNegativeValue;
+    }
+
+    /**
+     * Returns true if circle intersects the rectangle
+     * Works by expanding the rectangle by the circles diameter and checking to see if the circle is within that larger rectangle
+     * @param circle
+     * @param rectangle
+     * @return
+     */
+    public static boolean circleIntersectsRectangle(Circle circle, Rectangle rectangle){
+        Rectangle bigger = new Rectangle(rectangle.x - circle.radius*2, rectangle.y - circle.radius*2,
+                rectangle.width + circle.radius*2, rectangle.height + circle.radius*2);
+        if (bigger.contains(circle))return true;
+        else return false;
     }
 }
