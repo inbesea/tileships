@@ -1,6 +1,7 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.AdjacentTiles;
@@ -10,7 +11,7 @@ import java.awt.*;
 
 public class ShipTile extends GameObject {
 
-	private AdjacentTiles neighbors = new AdjacentTiles();
+	private final AdjacentTiles neighbors = new AdjacentTiles();
 	private final int xIndex, yIndex;
 
 	private long placed = System.currentTimeMillis();
@@ -165,10 +166,53 @@ public class ShipTile extends GameObject {
 	 * @return - Returns  false if all sides have tiles, else returns false.
 	 */
 	private boolean calculateIsEdge(){
-		if(neighbors.numberOfNeighbors() == 4){
+		if(numberOfNeighbors() == 4){
 			return false;
 		} else {
 			return true;
 		}
 	}
+
+	/**
+	 * Returns number of neighbors based on method in AdjacentTiles
+	 *
+	 * @return
+	 */
+	public int numberOfNeighbors(){
+		return neighbors.numberOfNeighbors();
+	}
+
+	/**
+	 * Returns a list of Vectors corresponding to the null sides.
+	 *
+	 * @return - array of vectors corresponding to null sides
+	 */
+	public Array<Vector2> emptySideVectors() {
+		Array<Vector2> results = new Array<>();
+
+		// Get each
+		if(up() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() + ShipTile.TILESIZE));
+		if(right() == null)results.add(new Vector2(getX() + ShipTile.TILESIZE , getY() + (ShipTile.TILESIZE/2.0f)));
+		if(down() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() - 1));
+		if(left() == null)results.add(new Vector2(getX() - 1 , getY() + (ShipTile.TILESIZE/2.0f)));
+
+		return results;
+	}
+
+	public ShipTile up(){
+		return neighbors.getUp();
+	}
+
+	public ShipTile right(){
+		return neighbors.getRight();
+	}
+
+	public ShipTile down(){
+		return neighbors.getDown();
+	}
+
+	public ShipTile left(){
+		return neighbors.getLeft();
+	}
+
 }
