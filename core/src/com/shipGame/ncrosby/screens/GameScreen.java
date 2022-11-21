@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
             PlayerInput.handleKeyPressed(player, camera);
         }
         PlayerInput.updateCameraOnPlayer(player, camera);
-
+        asteroidManager.checkForSpawn(); // Handle the
     }
 
     @Override
@@ -138,6 +138,7 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String t = gameObject.getTexture();
 
+        collision(gameObject);
 
         // Handle updates first
         gameObject.render(this.game);
@@ -146,7 +147,15 @@ public class GameScreen implements Screen {
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
-        gameObject.render(this.game);
+    }
+
+    private void collision(GameObject gameObject) {
+        for(GameObject go: gameObjects){
+            if(gameObject.getBounds().intersects(go.getBounds())){
+                gameObject.collision(go);
+                go.collision(gameObject);
+            }
+        }
     }
 
     public OrthographicCamera getCamera() {
