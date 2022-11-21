@@ -510,17 +510,33 @@ public class Ship extends GameObject {
 	 * Opposite of find ClosestTile,
 	 * expected to be used within the ship's tiles to find a vector on the nearest vacancy
 	 *
-	 * @param vector2
+	 * @param centerOfSearch
 	 * @return
 	 */
-	public Vector2 closestVacancy(Vector2 vector2) {
-		ShipTile underVector = returnTile(vector2);
+	public Vector2 closestVacancy(Vector2 centerOfSearch) {
+		ShipTile underVector = returnTile(centerOfSearch);
 
 		if(underVector != null){
 			// Get all Shiptiles that are on edge
-			return null;
+			ShipTile nearestEdge = closestTile(centerOfSearch, edgeTiles);
+
+			Array<Vector2> nullSidesLocs = nearestEdge.emptySideVectors();
+			int nullSidesCount = nullSidesLocs.size;
+			// We have the closest tile (yay!) We need to act differently depending on the number of null sides.
+			// or do we? Can we just add a vector to a list and the check which is closest?
+			if(nullSidesCount == 0) {
+					throw new RuntimeException("Something went wrong when getting nearest edge vectors, None Found");
+			} else if (nullSidesCount == 1) {
+					System.out.println("Only one side : " + nullSidesLocs.peek().x + ", " + nullSidesLocs.peek().y);
+					return nullSidesLocs.pop();
+			} else if (5 > nullSidesCount) {
+				Vector2 vector2 = closestVector2(centerOfSearch, nullSidesLocs);
+				return vector2;
+			} else {
+				throw new RuntimeException("Too many null sides!");
+			}
 		} else {// Handle trivial case - vector is on vacancy
-			return vector2;
+			return centerOfSearch;
 		}
 	}
 
