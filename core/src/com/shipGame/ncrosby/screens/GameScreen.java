@@ -68,6 +68,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(st);
 
         asteroidManager = new AsteroidManager(this);
+//        newGameObject(new Asteroid(new Vector2(195, 195), new Vector2(64,64), new Vector2(0,0), ID.Asteroid));
     }
 
     @Override

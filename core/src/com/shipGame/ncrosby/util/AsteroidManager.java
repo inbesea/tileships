@@ -114,7 +114,7 @@ public class AsteroidManager {
         if(spawning){
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.BasicEnemy);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.Asteroid);
             screen.newGameObject(asteroid);
             asteroids.add(asteroid);
             numberOfAsteroids = asteroids.size;
