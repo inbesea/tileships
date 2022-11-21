@@ -3,16 +3,19 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import static com.shipGame.ncrosby.util.generalUtil.*;
 
-import java.awt.*;
 import java.util.Stack;
 
 public class Ship extends GameObject {
@@ -50,11 +53,11 @@ public class Ship extends GameObject {
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
-		addTileByCoord(position.x, position.y, ID.CoreTile);
-		addTileByCoord(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
-		addTileByCoord(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTileByCoord(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTileByCoord(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x, position.y, ID.CoreTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
 	}
 
 	/**
@@ -85,45 +88,55 @@ public class Ship extends GameObject {
 	 * @param id - The ID of the GameObject
 	 * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
 	 */
-	public ShipTile addTileByCoord(float x, float y, ID id) {
+	public ShipTile addTile(float x, float y, ID id) {
 
 		// Use vector to set new tile
 		Vector3 tileLocation = new Vector3();
 		tileLocation.set(x,y,0);
-		cam.unproject(tileLocation);
+		Vector2 tileLocation2 = new Vector2(tileLocation.x, tileLocation.y);
+		ShipTile closestTile;
+		ShipTile tempTile;
 
-		// returnTile handles camera location
-		ShipTile destinationTile = returnTile(x, y);
-		float indexXY[] = returnIndex(x, y);
+		ShipTile destinationTile = returnTile(tileLocation2);
+		if(destinationTile == null){ // Released on empty space
+			if(existingTiles.size == 0) return placeTile(x, y , id);
 
+			closestTile = closestTile(tileLocation2, getExistingTiles());
+			Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation);
+			tempTile = placeTile(closestExternalVacancy.x, closestExternalVacancy.y, id);
+		} else { // Released on Shiptile
+			Vector2 nearestEmptySpace = closestInternalVacancy(tileLocation2); // Get closest Vacancy on edge tiles
+			tempTile = placeTile(nearestEmptySpace.x, nearestEmptySpace.y, id);
+		}
+
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing! " +
+					" existingTiles.size : " + existingTiles.size +
+					"edgeTiles.size : " + edgeTiles.size);
+		}
+		return tempTile;
+
+	}
 		/*
 		This logic takes the tile, returns the index, and then scales out the x,y by the tile size alligning the
 		tiles along the grid. THIS is the core logic keeping everything on the grid.
 		 */
-		if(destinationTile == null) { // No tile found
-			System.out.println("Create tile at " + x + "," + y);
-			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
-			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
-			setNeighbors(tempTile); // Setting tile neighbors within ship
-			this.existingTiles.add(tempTile);
+	/**
+	 * Adds a tile expecting the x,y to be a valid placement location
+	 */
+	private ShipTile placeTile(float x, float y, ID id){
+		float indexXY[];
+		ShipTile tempTile;
 
-			if(existingTiles.size < edgeTiles.size){
-				throw new RuntimeException("More edgeTiles than existing! " +
-						" existingTiles.size : " + existingTiles.size +
-						"edgeTiles.size : " + edgeTiles.size);
-			}
-			return null;
-		} else { // x, y is not vacant
-			System.out.println("Already a tile at (x, y) = (" + x + ", " + y + ") -> index: (" + indexXY[0] + ", " + indexXY[1] + ")");
-
-			if(existingTiles.size < edgeTiles.size){
-				throw new RuntimeException("More edgeTiles than existing! " +
-						" existingTiles.size : " + existingTiles.size +
-						"edgeTiles.size : " + edgeTiles.size);
-			}
-			return destinationTile;
-		}
+		indexXY = returnIndex(x, y); // Get index corresponding to that
+		System.out.println("Create tile at " + x + "," + y);
+		System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
+		System.out.println("Type of : " + id);
+		tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
+		setNeighbors(tempTile); // Setting tile neighbors within ship
+		this.existingTiles.add(tempTile);
+		return tempTile;
 	}
 
 	/**
@@ -463,24 +476,23 @@ public class Ship extends GameObject {
 	/**
 	 * Takes in a tile, location, and closest tile and determines which side to place the tile.
 	 *
-	 * @param placedTile
 	 * @param closestTile
 	 * @param mousePosition
 	 */
-	public void setTileOnClosestSide(ShipTile placedTile, ShipTile closestTile, Vector3 mousePosition) {
+	public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector3 mousePosition) {
 
 		int closestSide = getClosestSide(closestTile, new Vector2(mousePosition.x, mousePosition.y));
 
 		// We can conceptualize this as as a four triangles converging in the center of the "closest tile"
 		// We can use this framing to decide the side to place the tile.
 		if (closestSide == 0) { // North
-			addTileByCoord(closestTile.getX(), closestTile.getY() + ShipTile.TILESIZE, placedTile.getID());
+			return  new Vector2(closestTile.getX(), closestTile.getY() + ShipTile.TILESIZE);
 		} else if (closestSide == 3) { // West
-			addTileByCoord(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+			return  new Vector2(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY());
 		} else if (closestSide == 1) { // East
-			addTileByCoord(closestTile.getX() + ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+			return  new Vector2(closestTile.getX() + ShipTile.TILESIZE, closestTile.getY());
 		} else if (closestSide == 2) { // South
-			addTileByCoord(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE, placedTile.getID());
+			return  new Vector2(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE);
 		} else {
 			throw new RuntimeException("Something went wrong while running setTileOnClosestSide()");
 		}
@@ -532,11 +544,12 @@ public class Ship extends GameObject {
 	/**
 	 * Opposite of find ClosestTile,
 	 * expected to be used within the ship's tiles to find a vector on the nearest vacancy
+	 * Returns a Vector2 based on a vacancy closest to a point within the ship
 	 *
 	 * @param centerOfSearch
 	 * @return
 	 */
-	public Vector2 closestVacancy(Vector2 centerOfSearch) {
+	public Vector2 closestInternalVacancy(Vector2 centerOfSearch) {
 		ShipTile underVector = returnTile(centerOfSearch);
 
 		if(underVector != null){
