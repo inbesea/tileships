@@ -10,6 +10,7 @@ import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import static com.shipGame.ncrosby.util.generalUtil.*;
 
 import java.awt.*;
 import java.util.Stack;
@@ -223,7 +224,8 @@ public class Ship extends GameObject {
 		float x = shipTile.getX();
 		float y = shipTile.getY();
 
-		edgeTiles.removeValue(shipTile, true); // Remember to remove the tile from the existing tiles
+		// Remember to remove the tile from the existing tiles
+		edgeTiles.removeValue(shipTile, true);
 
 		// Get references
 		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
@@ -623,5 +625,9 @@ public class Ship extends GameObject {
 		} else {
 			return false;
 		}
+	}
+
+	public Array<ShipTile> getExistingTiles() {
+		return existingTiles;
 	}
 }
