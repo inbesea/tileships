@@ -31,11 +31,18 @@ public class AsteroidManager {
     private Array<Asteroid> asteroids = new Array<>();
     private int numberOfAsteroids = asteroids.size;
 
+    /**
+     * Spawns asteroids.
+     * Assumes spawning is true if using this constructor.
+     *
+     * @param screen
+     */
     public AsteroidManager(GameScreen screen){
         this.screen = screen;
         asteroidLimit = 30;
         numberOfAsteroids = 0;
-        initSpawn();
+        spawning = true; // Assume spawning if using this constructor.
+//        initSpawn();
     }
 
     public AsteroidManager(GameScreen screen, boolean spawning){
@@ -43,7 +50,7 @@ public class AsteroidManager {
         this.spawning = spawning;
         asteroidLimit = 30;
         numberOfAsteroids = 0;
-        initSpawn();
+//        initSpawn();
     }
 
     /**
@@ -80,7 +87,25 @@ public class AsteroidManager {
         // Check asteroids and remove any outside of the "zoneOfPlay"
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
+        for(Asteroid asteroid: asteroids){
+            if(outOfBounds(asteroid)){
+                asteroids.removeValue(asteroid,true);
+                screen.removeGameObject(asteroid);
+                numberOfAsteroids = asteroids.size;
+            }
+        }
+    }
 
+    /**
+     * Returns true if asteroid instance has larger abs x,y than allowed.
+     *
+     * @param asteroid - asteroid instance to check
+     * @return - true if x,y bigger than bounds
+     */
+    private boolean outOfBounds(Asteroid asteroid) {
+        boolean isOutOfValidArea = (Math.abs(asteroid.getX()) > GameScreen.spawnAreaMax + screen.getExtendViewport().getScreenWidth()/2.0f) &&
+                Math.abs(asteroid.getY()) > GameScreen.spawnAreaMax + screen.getExtendViewport().getScreenHeight()/2.0f;
+        return isOutOfValidArea;
     }
 
     public void spawnAsteroid(){
@@ -92,25 +117,32 @@ public class AsteroidManager {
             Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.BasicEnemy);
             screen.newGameObject(asteroid);
             asteroids.add(asteroid);
+            numberOfAsteroids = asteroids.size;
         }
+//        System.out.println("Spawned Asteroid : asteroids.size " + asteroids.size);
     }
 
     /**
      * Returns a random point within the non-visible play area
-     * @return
+     * @return - Vector outside screen, bound by the spawn area size
      */
     private Vector2 getVectorInValidSpawnArea(){
         ExtendViewport ev =  screen.getExtendViewport();
 
+        int screenWidthHalf = ev.getScreenWidth()/2;
+        int screenHightHalf = ev.getScreenHeight()/2;
+
+        // Bad fix for init spawn when worldsize is 0 :/
+        if (screenHightHalf == 0) screenWidthHalf = 400;
+        if (screenWidthHalf == 0) screenWidthHalf = 400;
+
         // Get x,y centered on screen, and scaled up to provide band of spawning
-        float x = getRandomlyNegativeNumber(ev.getScreenWidth()/2 , 300);
-        float y = getRandomlyNegativeNumber(ev.getScreenHeight()/2, 300);
+        float x = getRandomlyNegativeNumber(screenWidthHalf , screenWidthHalf + GameScreen.spawnAreaMax); // Add to scale with ViewPort
+        float y = getRandomlyNegativeNumber(screenHightHalf, screenHightHalf + GameScreen.spawnAreaMax);
 
         // Make point camera handled
         System.out.println("Before unproject point: " + x + ", " + y);
         Vector3 position = new Vector3(x,y,0);
-        screen.getCamera().unproject(position);
-        System.out.println("Unprojected point: " + position.x + ", " + position.y);
         return new Vector2(position.x,position.y);
     }
 
@@ -119,7 +151,7 @@ public class AsteroidManager {
      * @return
      */
     public boolean canSpawn(){
-        return numberOfAsteroids > asteroidLimit;
+        return numberOfAsteroids <= asteroidLimit;
     }
 
     /**
@@ -143,7 +175,7 @@ public class AsteroidManager {
     public void removeAllAsteroids(){
         // Go through the asteroids and remove their reference from the local list and the screen object list
         for(int i = 0 ; i < asteroids.size ; i++){
-            screen.removeGameObject(asteroids.removeIndex(i));
+            screen.removeGameObject(asteroids.removeIndex(i)); // Compact method to remove locally and in GameScreen
         }
         if(asteroids.size == 0) throw new RuntimeException("Did not remove all asteroids in removeAllAsteroids() : \n"
                 + Arrays.toString(Thread.currentThread().getStackTrace()));
