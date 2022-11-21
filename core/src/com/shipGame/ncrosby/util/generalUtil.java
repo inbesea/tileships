@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ncrosby.tileShipGame;
 
 public class generalUtil {
 
@@ -130,10 +132,17 @@ public class generalUtil {
      * @param rectangle
      * @return
      */
-    public static boolean circleIntersectsRectangle(Circle circle, Rectangle rectangle){
-        Rectangle bigger = new Rectangle(rectangle.x - circle.radius*2, rectangle.y - circle.radius*2,
-                rectangle.width + circle.radius*2, rectangle.height + circle.radius*2);
-        if (bigger.contains(circle))return true;
-        else return false;
+    public static boolean circleIntersectsRectangle(Circle circle, Rectangle rectangle, GameScreen screen){
+        Rectangle bigger = new Rectangle(rectangle.x - (circle.radius*2), rectangle.y - (circle.radius*2),
+                rectangle.width + (circle.radius*4), rectangle.height + (circle.radius*4));
+        tileShipGame game = screen.getGame();
+//        game.batch.begin();
+//        screen.g
+        if (bigger.contains(circle)){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
