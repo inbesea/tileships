@@ -1,21 +1,19 @@
 package com.shipGame.ncrosby.generalObjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.shipGame.ncrosby.Camera;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
 
 import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
-public class BasicEnemy extends GameObject {
+public class Asteroid extends GameObject {
 
 	int maxSpeed = 5;
 	int minSpeed = 1;
 
-	public BasicEnemy(Vector2 position, Vector2 size , ID id) {
+	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
 		velX = (int)getRandomlyNegativeNumber(1,5);

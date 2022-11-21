@@ -1,11 +1,17 @@
 package com.shipGame.ncrosby.util;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.generalObjects.BasicEnemy;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.screens.GameScreen;
 
 import java.util.Arrays;
+
+import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
 /*
 * Have a way to call this during render that will handle adding more asteroids.
@@ -19,11 +25,12 @@ import java.util.Arrays;
 public class AsteroidManager {
     private boolean spawning;
     private GameScreen screen;
-    private int numberOfAsteroids;
     private int asteroidLimit;
     Rectangle zoneOfPlay;
     // Keep asteroid references for simplicity
-    private Array<BasicEnemy> asteroids;
+    private Array<Asteroid> asteroids = new Array<>();
+    private int numberOfAsteroids = asteroids.size;
+
     public AsteroidManager(GameScreen screen){
         this.screen = screen;
         asteroidLimit = 30;
