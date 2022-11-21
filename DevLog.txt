@@ -16,7 +16,6 @@ out the GDX stuff we want to keep around.
 Going to leave it as is now, and we can work out the rest of the SimpleTouch Handler tomorrow. We can give the stuff to
 the touch handler and it can add and remove the tiles.
 
-TODO : Make the player restricted to their ship.
 TODO : Regularly spawn asteroids
  TODO : Create spawner
   -- This spawner needs to be able to spawn asteroids outside the screen. We also need it to clean up the asteroids...
@@ -24,3 +23,23 @@ TODO : Regularly spawn asteroids
 
 Todo : Handle collisions between asteroids and ship
 Todo : add "bouncy" asteroids mode for testing
+
+We are adding a way to get closest tile to a point. and then getting closest vacancy on that tile
+TODO : Build a general way to get each
+First going to
+NEejd to0 fix the ship class so it has one in and one out logic location.
+
+thre ship just needs
+The logic should give the tile to place to the ship through a method when mouse upping. The method can return something to
+confirm it worked or not, and we can also have the dragging part pass the point to the ship and draw a line to the middle of the location the ship would
+go to if placed.
+
+Handle placing and removing tiles so that it updates the "edge" tiles.
+This will make getting the edge easy.
+
+ -- Managing edge tiles
+    1. When adjusting neighbors update edge Q  : Is neighbor updating the only point when we need to update the edge tiles? Yes!
+    2.
+
+ -- Placing tile on closest vacant edge
+    1.
