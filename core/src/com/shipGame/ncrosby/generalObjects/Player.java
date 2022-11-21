@@ -52,6 +52,11 @@ public class Player extends GameObject {
 
     }
 
+    @Override
+    public void collision(GameObject gameObject) {
+
+    }
+
     public void tick() {
     }
 

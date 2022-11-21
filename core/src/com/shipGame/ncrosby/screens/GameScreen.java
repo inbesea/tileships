@@ -138,7 +138,7 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String t = gameObject.getTexture();
 
-        collision(gameObject);
+        collisionDetection(gameObject);
 
         // Handle updates first
         gameObject.render(this.game);
@@ -149,13 +149,13 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void collision(GameObject gameObject) {
-        for(GameObject go: gameObjects){
-            if(gameObject.getBounds().intersects(go.getBounds())){
-                gameObject.collision(go);
-                go.collision(gameObject);
-            }
-        }
+    private void collisionDetection(GameObject gameObject) {
+//        for(GameObject go: gameObjects){
+//            if(gameObject.getBounds().intersects(go.getBounds())){
+//                gameObject.collision(go);
+//                go.collision(gameObject);
+//            }
+//        }
     }
 
     public OrthographicCamera getCamera() {
