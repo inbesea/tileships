@@ -57,6 +57,8 @@ public class Asteroid extends GameObject {
 	 */
 	public void render(tileShipGame game) {
 
+		position.x += velX;
+		position.y += velY;
 //		generalUtil.render(position.x, position.y, new Texture("asteroid_purple.png"));
 		
 	}

@@ -38,6 +38,8 @@ public class GameScreen implements Screen {
 
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
+    public static final int spawnAreaMax = 300;
+
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
@@ -136,6 +138,9 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String t = gameObject.getTexture();
 
+
+        // Handle updates first
+        gameObject.render(this.game);
         if (!Objects.equals(t, "none") && !Objects.equals(t, "")) { // If ID has associated string
             Texture texture = new Texture(Gdx.files.internal(t));
             Vector2 size = gameObject.getSize();
