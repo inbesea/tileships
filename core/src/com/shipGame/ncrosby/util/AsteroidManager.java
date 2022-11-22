@@ -39,7 +39,7 @@ public class AsteroidManager {
      */
     public AsteroidManager(GameScreen screen){
         this.screen = screen;
-        asteroidLimit = 30;
+        asteroidLimit = 20;
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
 //        initSpawn();
@@ -77,6 +77,7 @@ public class AsteroidManager {
         while(canSpawn()){
             spawnAsteroid();
         }
+        System.out.println("Asteroid 1 : " + asteroids.get(0).getX() + ", " + asteroids.get(0).getY());
     }
 
     /**
@@ -89,9 +90,11 @@ public class AsteroidManager {
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
         for(Asteroid asteroid: asteroids){
             if(outOfBounds(asteroid)){
+                System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
                 asteroids.removeValue(asteroid,true);
                 screen.removeGameObject(asteroid);
                 numberOfAsteroids = asteroids.size;
+                System.out.println("numberOfAsteroids " + numberOfAsteroids);
             }
         }
     }
@@ -103,8 +106,9 @@ public class AsteroidManager {
      * @return - true if x,y bigger than bounds
      */
     private boolean outOfBounds(Asteroid asteroid) {
-        boolean isOutOfValidArea = (Math.abs(asteroid.getX()) > GameScreen.spawnAreaMax + screen.getExtendViewport().getScreenWidth()/2.0f) &&
-                Math.abs(asteroid.getY()) > GameScreen.spawnAreaMax + screen.getExtendViewport().getScreenHeight()/2.0f;
+        boolean isOutOfValidArea = (Math.abs(asteroid.getX()) > GameScreen.spawnAreaMax + screen.getCamera().viewportWidth)
+                ||
+                Math.abs(asteroid.getY()) > GameScreen.spawnAreaMax + screen.getCamera().viewportHeight;
         return isOutOfValidArea;
     }
 
@@ -140,8 +144,10 @@ public class AsteroidManager {
         float x = getRandomlyNegativeNumber(screenWidthHalf , screenWidthHalf + GameScreen.spawnAreaMax); // Add to scale with ViewPort
         float y = getRandomlyNegativeNumber(screenHightHalf, screenHightHalf + GameScreen.spawnAreaMax);
 
-        // Make point camera handled
-        System.out.println("Before unproject point: " + x + ", " + y);
+        if (outOfBounds(new Asteroid(new Vector2(x,y), new Vector2(64,64), ID.Asteroid))){
+            System.out.println("Creating Asteroid out of bounds lol");
+        }
+
         Vector3 position = new Vector3(x,y,0);
         return new Vector2(position.x,position.y);
     }
