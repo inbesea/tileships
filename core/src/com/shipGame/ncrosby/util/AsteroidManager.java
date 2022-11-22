@@ -129,8 +129,8 @@ public class AsteroidManager {
     private Vector2 getVectorInValidSpawnArea(){
         ExtendViewport ev =  screen.getExtendViewport();
 
-        int screenWidthHalf = ev.getScreenWidth()/2;
-        int screenHightHalf = ev.getScreenHeight()/2;
+        int screenWidthHalf = (int) (ev.getScreenWidth()* 0.7f);
+        int screenHightHalf = (int) (ev.getScreenHeight()* 0.7f);
 
         // Bad fix for init spawn when worldsize is 0 :/
         if (screenHightHalf == 0) screenWidthHalf = 400;
