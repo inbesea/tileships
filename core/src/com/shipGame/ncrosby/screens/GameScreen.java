@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
     private final Player player;
 
     // Represents each side's size
-    private final Vector2 playerSize = new Vector2(47,53);
+    public static final Vector2 playerSize = new Vector2(47,53);
 
     OrthographicCamera camera;
     SimpleTouch st;
@@ -205,7 +205,8 @@ public class GameScreen implements Screen {
     public GameObject removeGameObject(GameObject gameObject){
         int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
         if(i < 0){
-            throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size);
+            throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
+                    " location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " +gameObject.getID());
         }
         return gameObjects.removeIndex(i); // Returns the object reference and removes it.
     }
