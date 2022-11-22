@@ -38,6 +38,7 @@ public class Asteroid extends GameObject {
 		velX = (int) velocity.x;
 		velY = (int) velocity.y;
 		radius = size.y * 0.5f;
+		circle = new Circle(position.x + radius, position.y + radius, radius);
 	}
 
 	public Rectangle getBounds(){
@@ -45,7 +46,7 @@ public class Asteroid extends GameObject {
 	}
 
 	public Circle getCircleBounds() {
-		return new Circle((int) position.x, (int) position.y, radius);
+		return circle;
 	}
 
 	@Override
@@ -93,6 +94,8 @@ public class Asteroid extends GameObject {
 
 		position.x += velX;
 		position.y += velY;
+		circle.x += velX;
+		circle.y += velY;
 //		generalUtil.render(position.x, position.y, new Texture("asteroid_purple.png"));
 		
 	}
