@@ -131,6 +131,12 @@ public class PlayerInput {
 //                System.out.println("Bumping down!");
             }
         }
+        if(Gdx.input.isKeyPressed(Input.Keys.Q)){
+            camera.zoom += tileShipGame.zoomSpeed * Gdx.graphics.getDeltaTime();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.E)){
+            camera.zoom -= tileShipGame.zoomSpeed * Gdx.graphics.getDeltaTime();
+        }
     }
 
 
