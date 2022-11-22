@@ -13,7 +13,7 @@ public class MainMenuScreen implements Screen {
 
     OrthographicCamera camera;
 
-    Music mainMenu;
+    Music mainMenuMusic;
 
     /**
      * Constructs the mainmenu object
@@ -24,9 +24,9 @@ public class MainMenuScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-        mainMenu = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
-        mainMenu.play();
-        mainMenu.setLooping(true);
+        mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
+        mainMenuMusic.play();
+        mainMenuMusic.setLooping(true);
     }
 
     @Override
@@ -49,6 +49,8 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
+            mainMenuMusic.setLooping(false);
+            mainMenuMusic.dispose();
             game.setScreen(new GameScreen(game));
             dispose();
         }
