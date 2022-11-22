@@ -3,6 +3,7 @@ package com.shipGame.ncrosby.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -39,11 +40,15 @@ public class GameScreen implements Screen {
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
     public static final int spawnAreaMax = 300;
-
+    Music gameScreenMusic;
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
         game.setGameScreen(this); // Give this to be disposed at exit
+
+        gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
+        gameScreenMusic.play();
+        gameScreenMusic.setLooping(true);
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
