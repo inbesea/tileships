@@ -2,6 +2,7 @@ package com.shipGame.ncrosby.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.shipGame.ncrosby.tileShipGame;
@@ -12,6 +13,8 @@ public class MainMenuScreen implements Screen {
 
     OrthographicCamera camera;
 
+    Music mainMenu;
+
     /**
      * Constructs the mainmenu object
      * @param game - Game instance for screen to have context 
@@ -21,6 +24,9 @@ public class MainMenuScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
+        mainMenu = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
+        mainMenu.play();
+        mainMenu.setLooping(true);
     }
 
     @Override
