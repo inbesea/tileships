@@ -1,6 +1,7 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
@@ -130,6 +131,8 @@ public class Ship extends GameObject {
 	private ShipTile placeTile(float x, float y, ID id){
 		float indexXY[];
 		ShipTile tempTile;
+		Sound tilePlacement;
+		tilePlacement = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/tilePlacementV2.wav"));
 
 		indexXY = returnIndex(x, y); // Get index corresponding to that
 		System.out.println("Create tile at " + x + "," + y);
@@ -138,6 +141,13 @@ public class Ship extends GameObject {
 		tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
 		setNeighbors(tempTile); // Setting tile neighbors within ship
 		this.existingTiles.add(tempTile);
+
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing! " +
+					" existingTiles.size : " + existingTiles.size +
+					"edgeTiles.size : " + edgeTiles.size);
+		}
+		tilePlacement.play();
 		return tempTile;
 	}
 
@@ -478,6 +488,7 @@ public class Ship extends GameObject {
 				// asteroid intersects with ship's tile
 				Rectangle rectangle = st.getBounds();
 				Circle asteroidCircle = asteroid.getCircleBounds();
+
 				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle, screen);
 				if(isCollision){
 					System.out.println("Collision! with " + st.getID());
