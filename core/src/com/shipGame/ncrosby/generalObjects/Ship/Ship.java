@@ -485,7 +485,6 @@ public class Ship extends GameObject {
 	@Override
 	public void collision(GameObject gameObject) {
 		if(gameObject.getID() == ID.Asteroid){
-			Asteroid asteroid = (Asteroid) gameObject; // The ID confirms casting
 			for(ShipTile st : existingTiles){
 				// asteroid intersects with ship's tile
 				Rectangle rectangle = st.getBounds();
@@ -496,11 +495,11 @@ public class Ship extends GameObject {
 					System.out.println("Collision! with " + st.getID());
 					if(st.getID() == ID.CoreTile){
 
-						float x = asteroid.getX() + asteroid.getSize().x * 0.5f;
-						float y = asteroid.getY() + asteroid.getSize().y * 0.5f;
+						float x = gameObject.getX() + gameObject.getSize().x * 0.5f;
+						float y = gameObject.getY() + gameObject.getSize().y * 0.5f;
 
-						screen.removeGameObject(asteroid);
-						screen.removeAsteroid(asteroid);
+						screen.removeGameObject(gameObject);
+						screen.removeAsteroid(gameObject);
 						// New basic tile
 						addTile(x, y,
 								ID.ShipTile);
@@ -537,13 +536,13 @@ public class Ship extends GameObject {
 		// We can conceptualize this as as a four triangles converging in the center of the "closest tile"
 		// We can use this framing to decide the side to place the tile.
 		if (closestSide == 0) { // North
-			return  new Vector2(closestTile.getX(), closestTile.getY() + ShipTile.TILESIZE);
+			return  new Vector2(closestTile.getX()+(ShipTile.TILESIZE/2.0f), closestTile.getY() + ShipTile.TILESIZE*1.5f);
 		} else if (closestSide == 3) { // West
-			return  new Vector2(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY());
+			return  new Vector2(closestTile.getX() - (ShipTile.TILESIZE/2.0f), closestTile.getY()+(ShipTile.TILESIZE/2.0f));
 		} else if (closestSide == 1) { // East
-			return  new Vector2(closestTile.getX() + ShipTile.TILESIZE, closestTile.getY());
+			return  new Vector2(closestTile.getX() + (ShipTile.TILESIZE * 1.5f), closestTile.getY() + (ShipTile.TILESIZE/2.0f));
 		} else if (closestSide == 2) { // South
-			return  new Vector2(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE);
+			return  new Vector2(closestTile.getX()+(ShipTile.TILESIZE/2.0f), closestTile.getY() - (ShipTile.TILESIZE/2.0f));
 		} else {
 			throw new RuntimeException("Something went wrong while running setTileOnClosestSide()");
 		}
@@ -552,14 +551,15 @@ public class Ship extends GameObject {
 	/**
 	 * Gets closest side of a tile from a Vector2 point
 	 *
-	 * @param tile - tile to find the side of
+	 * @param tileWithSides - tile to find the side of
 	 * @param position - position to compare with tile
 	 * @return - int representing side of tile as compass - N = 0, E = 1, S = 2, W = 3
 	 */
-	private int getClosestSide(ShipTile tile, Vector2 position){
-		float closeX = tile.getX();
-		float closeY = tile.getY();
+	private int getClosestSide(ShipTile tileWithSides, Vector2 position){
+		float closeX = tileWithSides.getX();
+		float closeY = tileWithSides.getY();
 
+		// Should return the difference between the placed position and middle of the close tile.
 		float normalX =
 				position.x -
 						(closeX + (ShipTile.TILESIZE/2.0f));
