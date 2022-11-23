@@ -91,12 +91,20 @@ public class AsteroidManager {
         for(Asteroid asteroid: asteroids){
             if(outOfBounds(asteroid)){
                 System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
-                asteroids.removeValue(asteroid,true);
+                removeAsteroid(asteroid);
                 screen.removeGameObject(asteroid);
                 numberOfAsteroids = asteroids.size;
                 System.out.println("numberOfAsteroids " + numberOfAsteroids);
             }
         }
+    }
+
+    /**
+     * removes asteroid instance by identity
+     * @param asteroid - asteroid to remove
+     */
+    public void removeAsteroid(Asteroid asteroid){
+        asteroids.removeValue(asteroid, true);
     }
 
     /**
@@ -112,6 +120,9 @@ public class AsteroidManager {
         return isOutOfValidArea;
     }
 
+    /**
+     * Method that spawns an asteroid and adds it to the gameObject list and local asteroids list
+     */
     public void spawnAsteroid(){
 
         // Check if active
@@ -131,10 +142,10 @@ public class AsteroidManager {
      * @return - Vector outside screen, bound by the spawn area size
      */
     private Vector2 getVectorInValidSpawnArea(){
-        ExtendViewport ev =  screen.getExtendViewport();
+        OrthographicCamera camera =  screen.getCamera();
 
-        int screenWidthHalf = (int) (ev.getScreenWidth()* 0.7f);
-        int screenHightHalf = (int) (ev.getScreenHeight()* 0.7f);
+        int screenWidthHalf = (int) (camera.viewportWidth* 0.7f);
+        int screenHightHalf = (int) (camera.viewportHeight * 0.7f);
 
         // Bad fix for init spawn when worldsize is 0 :/
         if (screenHightHalf == 0) screenWidthHalf = 400;
