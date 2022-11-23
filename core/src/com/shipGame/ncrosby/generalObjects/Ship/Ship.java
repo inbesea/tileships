@@ -139,8 +139,8 @@ public class Ship extends GameObject {
 		System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 		System.out.println("Type of : " + id);
 		tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
-		setNeighbors(tempTile); // Setting tile neighbors within ship
 		this.existingTiles.add(tempTile);
+		setNeighbors(tempTile); // Setting tile neighbors within ship
 
 		if(existingTiles.size < edgeTiles.size){
 			throw new RuntimeException("More edgeTiles than existing! " +
@@ -199,11 +199,12 @@ public class Ship extends GameObject {
 		float y = tile.getY();
 
 		// Get adjacent tile references
-		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
-		ShipTile right = returnTile(x + ShipTile.TILESIZE, y);
-		ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
-		ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
+		ShipTile up = returnTile(x,y + ShipTile.TILESIZE*1.5f);
+		ShipTile right = returnTile(x + ShipTile.TILESIZE*1.5f, y);
+		ShipTile down = returnTile(x,y - ShipTile.TILESIZE/2.0f);
+		ShipTile left = returnTile(x - ShipTile.TILESIZE/2.0f, y);
 
+		// tie the tiles together
 		int numberOfNeighbors = tile.setNeighbors(up, right, down, left);
 
 		checkIfAdjustEdgeArray(up);
@@ -214,6 +215,12 @@ public class Ship extends GameObject {
 
 		System.out.println("Added a tile, number of edge tiles : " + edgeTiles.size);
 
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing!" +
+					"\nexistingTiles.size : " + existingTiles.size +
+					"\nedgeTiles.size : " + edgeTiles.size);
+		}
+
 		return numberOfNeighbors;
 	}
 
@@ -223,7 +230,9 @@ public class Ship extends GameObject {
 	 * Assumes that the neighbors have been updated and reflect the current shipstate
 	 */
 	private void checkIfAdjustEdgeArray(ShipTile tile) {
-		if(tile != null){
+		if(tile != null && existingTiles.size>1 && tile.numberOfNeighbors()==0){
+			throw new RuntimeException("Tile was placed that has no neighbors despite other tiles existing");
+		}else if(tile != null){
 			if(tile.isEdge && !edgeTiles.contains(tile, true)){
 				edgeTiles.add(tile);
 			} else if (!tile.isEdge && edgeTiles.contains(tile, true)){
@@ -250,7 +259,12 @@ public class Ship extends GameObject {
 		float y = shipTile.getY();
 
 		// Remember to remove the tile from the existing tiles
-		edgeTiles.removeValue(shipTile, true);
+		if(shipTile.isEdge()){ // If was an edge then try to remove
+			if(!edgeTiles.removeValue(shipTile, true)){
+				throw new RuntimeException("Removed tile was not found in edge");
+			}
+		}
+
 
 		// Get references
 		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
@@ -302,6 +316,12 @@ public class Ship extends GameObject {
 					edgeTiles.add(left);
 				}
 			}
+		}
+
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing! " +
+					" existingTiles.size : " + existingTiles.size +
+					"edgeTiles.size : " + edgeTiles.size);
 		}
 	}
 
