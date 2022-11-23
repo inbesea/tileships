@@ -56,12 +56,12 @@ public class GameScreen implements Screen {
         this.extendViewport = new ExtendViewport(650,550, camera);
 
         // init ship
-        playerShip = new Ship(new Vector2(200, 200), ID.Ship, camera, this);
+        playerShip = new Ship(new Vector2(-1, -1), ID.Ship, camera, this);
         game.setPlayerShip(playerShip);
 
         // init player
         // Give player the game reference
-        player = new Player(new Vector2(222, 222), playerSize, ID.Player, camera, this.game);
+        player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, camera, this.game);
 
         // Place init game objects into the array
         gameObjects = new Array<>();
