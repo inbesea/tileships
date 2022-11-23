@@ -396,7 +396,9 @@ public class Ship extends GameObject {
 	 */
 	public float[] returnIndex(float x, float y) {
 
-		// TODO : This isn't working! Returns larger number than should? :/
+
+		// -1 shifting wont cause issues because the flow will subtract one from it either way
+		// -64 - -1 will return index -1 yayy
 
 		boolean yNegative = y <= -1;
 		boolean xNegative = x <= -1;
@@ -407,19 +409,19 @@ public class Ship extends GameObject {
 			if(yNegative) {
 				// x, y negative
 				// get index and subtract one.
-				XYresult[0] = (int) ((x / ShipTile.TILESIZE) - 1);
-				XYresult[1] = (int) ((y / ShipTile.TILESIZE) - 1);
+				XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
+				XYresult[1] = (int) (( (y + 1) / ShipTile.TILESIZE) - 1);
 			}
 			else {
 				// only x negative
-				XYresult[0] = (int) (((x) / ShipTile.TILESIZE) - 1);
-				XYresult[1] = (int) ((y) / ShipTile.TILESIZE);
+				XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
+				XYresult[1] = (int) ( (y) / ShipTile.TILESIZE);
 			}
 		}
 		else if (yNegative) {
 			// only Y negative
 			XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
-			XYresult[1] = (int) (((y) / ShipTile.TILESIZE) - 1);
+			XYresult[1] = (int) (( (y+ 1) / ShipTile.TILESIZE) - 1);
 		}
 		else {
 			XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
