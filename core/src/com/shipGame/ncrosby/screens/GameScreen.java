@@ -99,12 +99,12 @@ public class GameScreen implements Screen {
         // Uses the game and camera context to handle drawing properly.
         game.batch.begin();
         GameObject go ;
+//        for(int i = 0 ; i < gameObjects.size ; i++){
+//            go = gameObjects.get(i);
+//        }
         for(int i = 0 ; i < gameObjects.size ; i++){
             go = gameObjects.get(i);
             drawGameObject(go); // Call helper to draw object
-        }
-        for(int i = 0 ; i < gameObjects.size ; i++){
-            go = gameObjects.get(i);
             System.out.println(go.toString());
             if(gameObjects.contains(go, true) == false){
                 System.out.println("What in the fuck");
@@ -170,7 +170,9 @@ public class GameScreen implements Screen {
         if(gameObject.getID() == ID.Ship){ // Handle checking a ships collision uniquely
             // Ships don't directly have collision with anything. Things check if they collide with tiles in the ship
         }else{
-            for(GameObject go: gameObjects){
+            GameObject go;
+            for(int i = 0 ; i < gameObjects.size ; i++){
+                go = gameObjects.get(i);
                 if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){
                     go.collision(gameObject); // Give object to ship to check collision for tiles in ship
                     break;

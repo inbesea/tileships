@@ -511,7 +511,9 @@ public class Ship extends GameObject {
 	@Override
 	public void collision(GameObject gameObject) {
 		if(gameObject.getID() == ID.Asteroid){
-			for(ShipTile st : existingTiles){
+			ShipTile st;
+			for(int i = 0 ; i < existingTiles.size ; i++){
+				st = existingTiles.get(i);
 				// asteroid intersects with ship's tile
 				Rectangle rectangle = st.getBounds();
 				Circle asteroidCircle = gameObject.getCircleBounds();
