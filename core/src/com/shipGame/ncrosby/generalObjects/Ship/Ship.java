@@ -489,23 +489,28 @@ public class Ship extends GameObject {
 			for(ShipTile st : existingTiles){
 				// asteroid intersects with ship's tile
 				Rectangle rectangle = st.getBounds();
-				Circle asteroidCircle = asteroid.getCircleBounds();
+				Circle asteroidCircle = gameObject.getCircleBounds();
 
 				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle, screen);
 				if(isCollision){
 					System.out.println("Collision! with " + st.getID());
 					if(st.getID() == ID.CoreTile){
 
+						float x = asteroid.getX() + asteroid.getSize().x * 0.5f;
+						float y = asteroid.getY() + asteroid.getSize().y * 0.5f;
+
+						screen.removeGameObject(asteroid);
+						screen.removeAsteroid(asteroid);
 						// New basic tile
-						addTile(gameObject.getX() + gameObject.getSize().x * 0.5f, gameObject.getY() + gameObject.getSize().y * 0.5f,
+						addTile(x, y,
 								ID.ShipTile);
 //						screen.newGameObject(gameObject);
-						screen.removeGameObject(asteroid);
 						break;
-					} else {
+					} else if (st.getID() == ID.ShipTile) {
 						// Explode tile and asteroid
 						removeTileFromShip(st);
 						screen.removeGameObject(gameObject);
+						screen.removeAsteroid(gameObject);
 					}
 				}
 			}
