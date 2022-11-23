@@ -58,6 +58,11 @@ public class Player extends GameObject {
 
     }
 
+    @Override
+    public Circle getCircleBounds() {
+        return null;
+    }
+
     public void tick() {
     }
 

@@ -512,6 +512,11 @@ public class Ship extends GameObject {
 		// Might could be used? :/ Probably not tho
 	}
 
+	@Override
+	public Circle getCircleBounds() {
+		return null;
+	}
+
 	/**
 	 * Takes in a tile, location, and closest tile and determines which side to place the tile.
 	 *

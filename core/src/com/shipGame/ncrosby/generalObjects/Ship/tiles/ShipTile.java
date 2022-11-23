@@ -1,5 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -82,6 +83,11 @@ public class ShipTile extends GameObject {
 	@Override
 	public void collision(GameObject gameObject) {
 
+	}
+
+	@Override
+	public Circle getCircleBounds() {
+		return null;
 	}
 
 	public int getxIndex() {
