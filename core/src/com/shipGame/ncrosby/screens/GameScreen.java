@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.PlayerInput;
+import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
@@ -37,7 +38,7 @@ public class GameScreen implements Screen {
     OrthographicCamera camera;
     SimpleTouch st;
 
-    private final Array<GameObject> gameObjects;
+    private Array<GameObject> gameObjects;
     private final Ship playerShip;
     public static final int spawnAreaMax = 300;
     Music gameScreenMusic;
@@ -97,8 +98,18 @@ public class GameScreen implements Screen {
         // Loops through the game objects and draws them.
         // Uses the game and camera context to handle drawing properly.
         game.batch.begin();
+        GameObject go ;
         for(int i = 0 ; i < gameObjects.size ; i++){
-            drawGameObject(gameObjects.get(i)); // Call helper to draw object
+            go = gameObjects.get(i);
+            drawGameObject(go); // Call helper to draw object
+        }
+        for(int i = 0 ; i < gameObjects.size ; i++){
+            go = gameObjects.get(i);
+            System.out.println(go.toString());
+            if(gameObjects.contains(go, true) == false){
+                System.out.println("What in the fuck");
+            }
+            collisionDetection(go);
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
@@ -144,15 +155,15 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String t = gameObject.getTexture();
 
-        collisionDetection(gameObject);
 
         // Handle updates first
-        gameObject.render(this.game);
+
         if (!Objects.equals(t, "none") && !Objects.equals(t, "")) { // If ID has associated string
             Texture texture = new Texture(Gdx.files.internal(t));
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
+        gameObject.render(this.game);
     }
 
     private void collisionDetection(GameObject gameObject) {
@@ -209,6 +220,10 @@ public class GameScreen implements Screen {
      */
     public GameObject removeGameObject(GameObject gameObject){
         int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
+
+        if(i < 0){
+            System.out.println("OH jeez");
+        }
         if(i < 0){
             throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
                     " location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " +gameObject.getID());
@@ -228,4 +243,13 @@ public class GameScreen implements Screen {
         return game;
     }
 
+
+    public Array<GameObject> getGameObjects() {
+        return gameObjects;
+    }
+
+
+    public void removeAsteroid(GameObject asteroid) {
+        asteroidManager.removeAsteroid((Asteroid) asteroid);
+    }
 }
