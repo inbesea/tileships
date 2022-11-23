@@ -456,6 +456,10 @@ public class Ship extends GameObject {
 		}
 	}
 
+	/**
+	 * Helper method to make Ship aware of mouse location
+	 * @param points
+	 */
 	public void setPointLocation(int[] points) {
 		pointLocation = points;
 	}
