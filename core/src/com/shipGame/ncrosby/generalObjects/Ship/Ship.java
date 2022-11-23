@@ -113,9 +113,9 @@ public class Ship extends GameObject {
 		}
 
 		if(existingTiles.size < edgeTiles.size){
-			throw new RuntimeException("More edgeTiles than existing! " +
-					" existingTiles.size : " + existingTiles.size +
-					"edgeTiles.size : " + edgeTiles.size);
+			throw new RuntimeException("More edgeTiles than existing!" +
+					"\nexistingTiles.size : " + existingTiles.size +
+					"\nedgeTiles.size : " + edgeTiles.size);
 		}
 		return tempTile;
 
@@ -495,8 +495,9 @@ public class Ship extends GameObject {
 					System.out.println("Collision! with " + st.getID());
 					if(st.getID() == ID.CoreTile){
 
-						float x = gameObject.getX() + gameObject.getSize().x * 0.5f;
-						float y = gameObject.getY() + gameObject.getSize().y * 0.5f;
+						// Get middle of Asteroid
+						float x = gameObject.getX() + gameObject.getCircleBounds().radius;
+						float y = gameObject.getY() + gameObject.getCircleBounds().radius;
 
 						screen.removeGameObject(gameObject);
 						screen.removeAsteroid(gameObject);
