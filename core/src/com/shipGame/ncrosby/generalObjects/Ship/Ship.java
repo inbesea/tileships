@@ -508,40 +508,56 @@ public class Ship extends GameObject {
 		return null;
 	}
 
+
+	/**
+	 * Handles collisions between ship and game objects
+	 *
+	 * @param gameObject
+	 */
 	@Override
 	public void collision(GameObject gameObject) {
-		if(gameObject.getID() == ID.Asteroid){
-			ShipTile st;
-			for(int i = 0 ; i < existingTiles.size ; i++){
-				st = existingTiles.get(i);
-				// asteroid intersects with ship's tile
-				Rectangle rectangle = st.getBounds();
-				Circle asteroidCircle = gameObject.getCircleBounds();
 
+		if(gameObject.getID() == ID.Asteroid){ // Object collision was asteroid
+			ShipTile shipTile;
+			boolean removeAsteroid = false;
+
+			for(int i = 0 ; i < existingTiles.size ; i++){
+				shipTile = existingTiles.get(i);
+
+				// Check if asteroid intersects ShipTile
+				Rectangle rectangle = shipTile.getBounds();
+				Circle asteroidCircle = gameObject.getCircleBounds();
 				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle, screen);
+
 				if(isCollision){
-					System.out.println("Collision! with " + st.getID());
-					if(st.getID() == ID.CoreTile){
+					System.out.println("Collision! with " + shipTile.getID());
+					if(shipTile.getID() == ID.CoreTile){
 
 						// Get middle of Asteroid
 						float x = gameObject.getX() + gameObject.getCircleBounds().radius;
 						float y = gameObject.getY() + gameObject.getCircleBounds().radius;
 
-						screen.removeGameObject(gameObject);
-						screen.removeAsteroid(gameObject);
+						removeAsteroid = true;
+
 						// New basic tile
 						addTile(x, y,
 								ID.ShipTile);
-//						screen.newGameObject(gameObject);
 						break;
-					} else if (st.getID() == ID.ShipTile) {
+					} else if (shipTile.getID() == ID.ShipTile) {
 						// Explode tile and asteroid
-						removeTileFromShip(st);
-						screen.removeGameObject(gameObject);
-						screen.removeAsteroid(gameObject);
+						removeTileFromShip(shipTile);
+
+						removeAsteroid = true;
 					}
 				}
 			}
+			//Handles Asteroid destroy.
+			// If this is done in the forloop it can't find the reference
+			if(removeAsteroid){
+				screen.removeGameObject(gameObject);
+				screen.removeAsteroid(gameObject);
+			}
+
 		}
 
 		// Might could be used? :/ Probably not tho

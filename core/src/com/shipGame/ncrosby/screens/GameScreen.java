@@ -27,7 +27,7 @@ import java.util.Objects;
  */
 public class GameScreen implements Screen {
     final tileShipGame game;
-    AsteroidManager asteroidManager;
+    final AsteroidManager asteroidManager;
 
     ExtendViewport extendViewport;
     private final Player player;
@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
     OrthographicCamera camera;
     SimpleTouch st;
 
-    private Array<GameObject> gameObjects;
+    private final Array<GameObject> gameObjects;
     private final Ship playerShip;
     public static final int spawnAreaMax = 300;
     Music gameScreenMusic;
@@ -105,10 +105,6 @@ public class GameScreen implements Screen {
         for(int i = 0 ; i < gameObjects.size ; i++){
             go = gameObjects.get(i);
             drawGameObject(go); // Call helper to draw object
-            System.out.println(go.toString());
-            if(gameObjects.contains(go, true) == false){
-                System.out.println("What in the fuck");
-            }
             collisionDetection(go);
         }
         drawGameObject(player);// Draw last to be on top of robot
@@ -166,14 +162,22 @@ public class GameScreen implements Screen {
         gameObject.render(this.game);
     }
 
+
+    /**
+     * Routes game objects to be checked against other game objects for collisions
+     * @param gameObject
+     */
     private void collisionDetection(GameObject gameObject) {
-        if(gameObject.getID() == ID.Ship){ // Handle checking a ships collision uniquely
+        if(gameObject.getID() == ID.Ship){ // Is GO Ship object?
             // Ships don't directly have collision with anything. Things check if they collide with tiles in the ship
-        }else{
+        }else{ // All other objects
             GameObject go;
-            for(int i = 0 ; i < gameObjects.size ; i++){
-                go = gameObjects.get(i);
-                if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){
+            for(int i = 0 ; i < gameObjects.size ; i++){ // Pass by reference for loop
+
+                go = gameObjects.get(i); // Get a go from all game objects
+
+                if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){ // If the object checked and the possible collision is
+                    // with an asteroid then sent the asteroid into method of the ship.
                     go.collision(gameObject); // Give object to ship to check collision for tiles in ship
                     break;
                 } else { // tiles are in ship so we can take that on it's own.
