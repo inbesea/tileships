@@ -46,7 +46,7 @@ public class ClickLocationListener extends MouseAdapter {
 			// godmode checks
 			if(pl.godMode) {
 				if(shipTile == null) {
-					sh.addTileByCoord(x, y, ID.ShipTile);
+					sh.addTile(x, y, ID.ShipTile);
 				}
 				else if(shipTile instanceof ShipTile) {
 					sh.removeTileFromShip(x, y);
@@ -62,7 +62,7 @@ public class ClickLocationListener extends MouseAdapter {
 				if(shipTile == null) {
 					if(pl.heldShipTiles != null) {
 						ShipTile st = pl.popTile();
-						sh.addTileByCoord(x, y, st.getID());
+						sh.addTile(x, y, st.getID());
 					}
 					// Is a tile
 				} else {

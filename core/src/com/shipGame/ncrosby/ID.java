@@ -4,7 +4,7 @@ package com.shipGame.ncrosby;
  * Enums for easy identification of game objects
  * <p></p>
  * Player
- * BasicEnemy
+ * Asteroid
  * ShipTile
  * CoreTile
  * Ship
@@ -17,7 +17,7 @@ public enum ID {
 	 * Sprite selection
 	 */
 	Player("RobotV2.png"),
-	BasicEnemy("asteroid_purple.png"),
+	Asteroid("asteroid_purple.png"),
 	ShipTile("ShipTile_Red.png"),
 	CoreTile("ShipTile_Core.png"),
 	Ship("none");

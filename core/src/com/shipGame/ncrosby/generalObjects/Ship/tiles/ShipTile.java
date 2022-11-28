@@ -1,5 +1,7 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
@@ -18,7 +20,7 @@ public class ShipTile extends GameObject {
 	private int cool = 0;
 	public boolean isEdge;
 	public final static int TILESIZE = 64;
-
+	private com.badlogic.gdx.math.Rectangle rectangle;
 	/**
 	 *  These tiles will all need health, and a way to relate to tiles next to them..?
 	 *  But they will need to be stored in a 2d array. 
@@ -30,6 +32,7 @@ public class ShipTile extends GameObject {
 		this.xIndex = (int) (position.x / TILESIZE);
 		this.yIndex = (int) (position.y / TILESIZE);
 
+		rectangle = new com.badlogic.gdx.math.Rectangle(position.x, position.y ,ShipTile.TILESIZE, ShipTile.TILESIZE);
 		// Need to knit together the shiptile to adjacent tiles connectAdjacent();
 	}
 
@@ -74,13 +77,17 @@ public class ShipTile extends GameObject {
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return null;
+		return rectangle;
 	}
 
 	@Override
 	public void collision(GameObject gameObject) {
 
+	}
+
+	@Override
+	public Circle getCircleBounds() {
+		return null;
 	}
 
 	public int getxIndex() {

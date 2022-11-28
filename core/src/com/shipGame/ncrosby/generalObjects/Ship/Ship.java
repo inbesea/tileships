@@ -1,18 +1,22 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import static com.shipGame.ncrosby.util.generalUtil.*;
 
-import java.awt.*;
 import java.util.Stack;
 
 public class Ship extends GameObject {
@@ -35,6 +39,7 @@ public class Ship extends GameObject {
 	private OrthographicCamera cam;
 	private ShipTile mouseLocation;
 	private ShipTile draggedTile;
+	private GameScreen screen;
 
 	private int pointLocation[] = new int[2];
 
@@ -42,19 +47,20 @@ public class Ship extends GameObject {
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (Vector2 position, ID id, OrthographicCamera cam) {
+	public Ship (Vector2 position, ID id, OrthographicCamera cam, GameScreen screen) {
 		super(position, new Vector2(0,0), id);
 		this.cam = cam;
 //		this.camera = camera;
+		this.screen = screen;
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
-		addTileByCoord(position.x, position.y, ID.CoreTile);
-		addTileByCoord(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
-		addTileByCoord(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTileByCoord(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTileByCoord(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x, position.y, ID.CoreTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
 	}
 
 	/**
@@ -85,45 +91,64 @@ public class Ship extends GameObject {
 	 * @param id - The ID of the GameObject
 	 * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
 	 */
-	public ShipTile addTileByCoord(float x, float y, ID id) {
+	public ShipTile addTile(float x, float y, ID id) {
 
 		// Use vector to set new tile
 		Vector3 tileLocation = new Vector3();
 		tileLocation.set(x,y,0);
-		cam.unproject(tileLocation);
+		Vector2 tileLocation2 = new Vector2(tileLocation.x, tileLocation.y);
+		ShipTile closestTile;
+		ShipTile tempTile;
 
-		// returnTile handles camera location
-		ShipTile destinationTile = returnTile(x, y);
-		float indexXY[] = returnIndex(x, y);
+		ShipTile destinationTile = returnTile(tileLocation2);
+		if(destinationTile == null){ // Released on empty space
+			if(existingTiles.size == 0) return placeTile(x, y , id);
 
+			closestTile = closestTile(tileLocation2, getExistingTiles());
+			Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation);
+			tempTile = placeTile(closestExternalVacancy.x, closestExternalVacancy.y, id);
+		} else { // Released on Shiptile
+			Vector2 nearestEmptySpace = closestInternalVacancy(tileLocation2); // Get closest Vacancy on edge tiles
+			tempTile = placeTile(nearestEmptySpace.x, nearestEmptySpace.y, id);
+		}
+
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing!" +
+					"\nexistingTiles.size : " + existingTiles.size +
+					"\nedgeTiles.size : " + edgeTiles.size);
+		}
+		return tempTile;
+
+	}
 		/*
 		This logic takes the tile, returns the index, and then scales out the x,y by the tile size alligning the
 		tiles along the grid. THIS is the core logic keeping everything on the grid.
 		 */
-		if(destinationTile == null) { // No tile found
-			System.out.println("Create tile at " + x + "," + y);
-			System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 
-			ShipTile tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
-			setNeighbors(tempTile); // Setting tile neighbors within ship
-			this.existingTiles.add(tempTile);
+	/**
+	 * Adds a tile expecting the x,y to be a valid placement location
+	 */
+	private ShipTile placeTile(float x, float y, ID id){
+		float indexXY[];
+		ShipTile tempTile;
+		Sound tilePlacement;
+		tilePlacement = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/tilePlacementV2.wav"));
 
-			if(existingTiles.size < edgeTiles.size){
-				throw new RuntimeException("More edgeTiles than existing! " +
-						" existingTiles.size : " + existingTiles.size +
-						"edgeTiles.size : " + edgeTiles.size);
-			}
-			return null;
-		} else { // x, y is not vacant
-			System.out.println("Already a tile at (x, y) = (" + x + ", " + y + ") -> index: (" + indexXY[0] + ", " + indexXY[1] + ")");
+		indexXY = returnIndex(x, y); // Get index corresponding to that
+		System.out.println("Create tile at " + x + "," + y);
+		System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
+		System.out.println("Type of : " + id);
+		tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
+		this.existingTiles.add(tempTile);
+		setNeighbors(tempTile); // Setting tile neighbors within ship
 
-			if(existingTiles.size < edgeTiles.size){
-				throw new RuntimeException("More edgeTiles than existing! " +
-						" existingTiles.size : " + existingTiles.size +
-						"edgeTiles.size : " + edgeTiles.size);
-			}
-			return destinationTile;
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing! " +
+					" existingTiles.size : " + existingTiles.size +
+					"edgeTiles.size : " + edgeTiles.size);
 		}
+		tilePlacement.play();
+		return tempTile;
 	}
 
 	/**
@@ -174,11 +199,12 @@ public class Ship extends GameObject {
 		float y = tile.getY();
 
 		// Get adjacent tile references
-		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
-		ShipTile right = returnTile(x + ShipTile.TILESIZE, y);
-		ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
-		ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
+		ShipTile up = returnTile(x,y + ShipTile.TILESIZE*1.5f);
+		ShipTile right = returnTile(x + ShipTile.TILESIZE*1.5f, y);
+		ShipTile down = returnTile(x,y - ShipTile.TILESIZE/2.0f);
+		ShipTile left = returnTile(x - ShipTile.TILESIZE/2.0f, y);
 
+		// tie the tiles together
 		int numberOfNeighbors = tile.setNeighbors(up, right, down, left);
 
 		checkIfAdjustEdgeArray(up);
@@ -189,6 +215,12 @@ public class Ship extends GameObject {
 
 		System.out.println("Added a tile, number of edge tiles : " + edgeTiles.size);
 
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing!" +
+					"\nexistingTiles.size : " + existingTiles.size +
+					"\nedgeTiles.size : " + edgeTiles.size);
+		}
+
 		return numberOfNeighbors;
 	}
 
@@ -198,7 +230,9 @@ public class Ship extends GameObject {
 	 * Assumes that the neighbors have been updated and reflect the current shipstate
 	 */
 	private void checkIfAdjustEdgeArray(ShipTile tile) {
-		if(tile != null){
+		if(tile != null && existingTiles.size>1 && tile.numberOfNeighbors()==0){
+			throw new RuntimeException("Tile was placed that has no neighbors despite other tiles existing");
+		}else if(tile != null){
 			if(tile.isEdge && !edgeTiles.contains(tile, true)){
 				edgeTiles.add(tile);
 			} else if (!tile.isEdge && edgeTiles.contains(tile, true)){
@@ -225,7 +259,12 @@ public class Ship extends GameObject {
 		float y = shipTile.getY();
 
 		// Remember to remove the tile from the existing tiles
-		edgeTiles.removeValue(shipTile, true);
+		if(shipTile.isEdge()){ // If was an edge then try to remove
+			if(!edgeTiles.removeValue(shipTile, true)){
+				throw new RuntimeException("Removed tile was not found in edge");
+			}
+		}
+
 
 		// Get references
 		ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
@@ -277,6 +316,12 @@ public class Ship extends GameObject {
 					edgeTiles.add(left);
 				}
 			}
+		}
+
+		if(existingTiles.size < edgeTiles.size){
+			throw new RuntimeException("More edgeTiles than existing! " +
+					" existingTiles.size : " + existingTiles.size +
+					"edgeTiles.size : " + edgeTiles.size);
 		}
 	}
 
@@ -371,8 +416,12 @@ public class Ship extends GameObject {
 	 */
 	public float[] returnIndex(float x, float y) {
 
-		boolean yNegative = (y  + cam.direction.y <= -1);
-		boolean xNegative = (x  + cam.direction.x <= -1);
+
+		// -1 shifting wont cause issues because the flow will subtract one from it either way
+		// -64 - -1 will return index -1 yayy
+
+		boolean yNegative = y <= -1;
+		boolean xNegative = x <= -1;
 
 
 		float XYresult[] = new float[2];
@@ -380,23 +429,23 @@ public class Ship extends GameObject {
 			if(yNegative) {
 				// x, y negative
 				// get index and subtract one.
-				XYresult[0] = (int) (((x + cam.direction.x) / ShipTile.TILESIZE) - 1);
-				XYresult[1] = (int) (((y + cam.direction.y) / ShipTile.TILESIZE) - 1);
+				XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
+				XYresult[1] = (int) (( (y + 1) / ShipTile.TILESIZE) - 1);
 			}
 			else {
 				// only x negative
-				XYresult[0] = (int) (((x + cam.direction.x) / ShipTile.TILESIZE) - 1);
-				XYresult[1] = (int) ((y + cam.direction.y) / ShipTile.TILESIZE);
+				XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
+				XYresult[1] = (int) ( (y) / ShipTile.TILESIZE);
 			}
 		}
 		else if (yNegative) {
 			// only Y negative
-			XYresult[0] = (int) ((x + cam.direction.x) / ShipTile.TILESIZE);
-			XYresult[1] = (int) (((y + cam.direction.y) / ShipTile.TILESIZE) - 1);
+			XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
+			XYresult[1] = (int) (( (y+ 1) / ShipTile.TILESIZE) - 1);
 		}
 		else {
-			XYresult[0] = (int) ((x + cam.direction.x) / ShipTile.TILESIZE);
-			XYresult[1] = (int) ((y + cam.direction.y) / ShipTile.TILESIZE);
+			XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
+			XYresult[1] = (int) ((y) / ShipTile.TILESIZE);
 		}
 
 		if(XYresult.length == 2) {
@@ -407,6 +456,10 @@ public class Ship extends GameObject {
 		}
 	}
 
+	/**
+	 * Helper method to make Ship aware of mouse location
+	 * @param points
+	 */
 	public void setPointLocation(int[] points) {
 		pointLocation = points;
 	}
@@ -455,32 +508,86 @@ public class Ship extends GameObject {
 		return null;
 	}
 
+
+	/**
+	 * Handles collisions between ship and game objects
+	 *
+	 * @param gameObject
+	 */
 	@Override
 	public void collision(GameObject gameObject) {
+
+		if(gameObject.getID() == ID.Asteroid){ // Object collision was asteroid
+			ShipTile shipTile;
+			boolean removeAsteroid = false;
+
+			for(int i = 0 ; i < existingTiles.size ; i++){
+				shipTile = existingTiles.get(i);
+
+				// Check if asteroid intersects ShipTile
+				Rectangle rectangle = shipTile.getBounds();
+				Circle asteroidCircle = gameObject.getCircleBounds();
+				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle, screen);
+
+				if(isCollision){
+					System.out.println("Collision! with " + shipTile.getID());
+					if(shipTile.getID() == ID.CoreTile){
+
+						// Get middle of Asteroid
+						float x = gameObject.getX() + gameObject.getCircleBounds().radius;
+						float y = gameObject.getY() + gameObject.getCircleBounds().radius;
+
+						removeAsteroid = true;
+
+						// New basic tile
+						addTile(x, y,
+								ID.ShipTile);
+						break;
+					} else if (shipTile.getID() == ID.ShipTile) {
+						// Explode tile and asteroid
+						removeTileFromShip(shipTile);
+
+						removeAsteroid = true;
+					}
+				}
+			}
+			//Handles Asteroid destroy.
+			// If this is done in the forloop it can't find the reference
+			if(removeAsteroid){
+				screen.removeGameObject(gameObject);
+				screen.removeAsteroid(gameObject);
+			}
+
+		}
+
 		// Might could be used? :/ Probably not tho
+	}
+
+	@Override
+	public Circle getCircleBounds() {
+		return null;
 	}
 
 	/**
 	 * Takes in a tile, location, and closest tile and determines which side to place the tile.
 	 *
-	 * @param placedTile
 	 * @param closestTile
 	 * @param mousePosition
 	 */
-	public void setTileOnClosestSide(ShipTile placedTile, ShipTile closestTile, Vector3 mousePosition) {
+	public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector3 mousePosition) {
 
 		int closestSide = getClosestSide(closestTile, new Vector2(mousePosition.x, mousePosition.y));
 
 		// We can conceptualize this as as a four triangles converging in the center of the "closest tile"
 		// We can use this framing to decide the side to place the tile.
 		if (closestSide == 0) { // North
-			addTileByCoord(closestTile.getX(), closestTile.getY() + ShipTile.TILESIZE, placedTile.getID());
+			return  new Vector2(closestTile.getX()+(ShipTile.TILESIZE/2.0f), closestTile.getY() + ShipTile.TILESIZE*1.5f);
 		} else if (closestSide == 3) { // West
-			addTileByCoord(closestTile.getX() - ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+			return  new Vector2(closestTile.getX() - (ShipTile.TILESIZE/2.0f), closestTile.getY()+(ShipTile.TILESIZE/2.0f));
 		} else if (closestSide == 1) { // East
-			addTileByCoord(closestTile.getX() + ShipTile.TILESIZE, closestTile.getY(), placedTile.getID());
+			return  new Vector2(closestTile.getX() + (ShipTile.TILESIZE * 1.5f), closestTile.getY() + (ShipTile.TILESIZE/2.0f));
 		} else if (closestSide == 2) { // South
-			addTileByCoord(closestTile.getX(), closestTile.getY() - ShipTile.TILESIZE, placedTile.getID());
+			return  new Vector2(closestTile.getX()+(ShipTile.TILESIZE/2.0f), closestTile.getY() - (ShipTile.TILESIZE/2.0f));
 		} else {
 			throw new RuntimeException("Something went wrong while running setTileOnClosestSide()");
 		}
@@ -489,14 +596,15 @@ public class Ship extends GameObject {
 	/**
 	 * Gets closest side of a tile from a Vector2 point
 	 *
-	 * @param tile - tile to find the side of
+	 * @param tileWithSides - tile to find the side of
 	 * @param position - position to compare with tile
 	 * @return - int representing side of tile as compass - N = 0, E = 1, S = 2, W = 3
 	 */
-	private int getClosestSide(ShipTile tile, Vector2 position){
-		float closeX = tile.getX();
-		float closeY = tile.getY();
+	private int getClosestSide(ShipTile tileWithSides, Vector2 position){
+		float closeX = tileWithSides.getX();
+		float closeY = tileWithSides.getY();
 
+		// Should return the difference between the placed position and middle of the close tile.
 		float normalX =
 				position.x -
 						(closeX + (ShipTile.TILESIZE/2.0f));
@@ -532,11 +640,12 @@ public class Ship extends GameObject {
 	/**
 	 * Opposite of find ClosestTile,
 	 * expected to be used within the ship's tiles to find a vector on the nearest vacancy
+	 * Returns a Vector2 based on a vacancy closest to a point within the ship
 	 *
 	 * @param centerOfSearch
 	 * @return
 	 */
-	public Vector2 closestVacancy(Vector2 centerOfSearch) {
+	public Vector2 closestInternalVacancy(Vector2 centerOfSearch) {
 		ShipTile underVector = returnTile(centerOfSearch);
 
 		if(underVector != null){

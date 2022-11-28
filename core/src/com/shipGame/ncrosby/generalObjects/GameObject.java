@@ -1,6 +1,8 @@
 package com.shipGame.ncrosby.generalObjects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.tileShipGame;
@@ -110,4 +112,6 @@ public abstract class GameObject {
 	public float getHight(){
 		return size.y;
 	}
+
+	public abstract Circle getCircleBounds();
 }

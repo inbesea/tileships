@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
@@ -116,26 +115,16 @@ public class SimpleTouch implements InputProcessor {
      * @param playerShip - The ship the tile can be added to
      * @param mousePosition - the unprojected mouse position
      */
-    private void handlePlacingDragged(Ship playerShip, Vector3 mousePosition){
+    private void handlePlacingDragged(Ship playerShip, Vector3 mousePosition) {
 
         Vector2 mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
 
-        // Does this logic need to be here? Can we build a method to "add tile to coordinate"
-        // that does these checks for us?
-        // TODO : Handle spaces not adjacent to the ship, or spaces occupied by the shiptiles
-        ShipTile destinationTile = playerShip.returnTile(mousePosition2);
-            if(destinationTile != null){ // Released on Shiptile
-                Vector2 nearestEmptySpace = playerShip.closestVacancy(mousePosition2);
-                playerShip.addTileByCoord(nearestEmptySpace.x, nearestEmptySpace.y, draggedTile.getID());
-            } else { // Released on empty space
-                ShipTile closestTile = playerShip.closestTile(mousePosition2, playerShip.getExistingTiles());
-                playerShip.setTileOnClosestSide(draggedTile, closestTile, mousePosition);
-            }
+        playerShip.addTile(mousePosition2.x, mousePosition.y, draggedTile.getID());
 
-            // Dispose of used dragged tile references
-            playerShip.setDragged(null);
-            draggedTile = null; // Dispose of dragged tile
-        }
+        // Dispose of used dragged tile references
+        playerShip.setDragged(null);
+        draggedTile = null; // Dispose of dragged tile
+    }
 
         @Override public boolean keyDown (int keycode) {
             return false;

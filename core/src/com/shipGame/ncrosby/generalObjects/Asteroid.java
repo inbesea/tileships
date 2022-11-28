@@ -1,5 +1,7 @@
 package com.shipGame.ncrosby.generalObjects;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.tileShipGame;
@@ -12,21 +14,49 @@ public class Asteroid extends GameObject {
 
 	int maxSpeed = 5;
 	int minSpeed = 1;
-
+	Circle circle;
+	float radius;
 	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
 		velX = (int)getRandomlyNegativeNumber(1,5);
 		velY = (int)getRandomlyNegativeNumber(1,5);
+		radius = size.y * 0.5f;
+		circle = new Circle(position.x + radius, position.y + radius, radius);
 	}
 
-	public Rectangle getBounds() {
-		return new Rectangle((int) position.x, (int) position.y, 16, 16);
+	/**
+	 * Create asteroid with specific velocity
+	 * @param position
+	 * @param size
+	 * @param velocity
+	 * @param id
+	 */
+	public Asteroid(Vector2 position, Vector2 size, Vector2 velocity, ID id) {
+		super(position, size, id);
+
+		velX = (int) velocity.x;
+		velY = (int) velocity.y;
+		radius = size.y * 0.5f;
+		circle = new Circle(position.x + radius, position.y + radius, radius);
+	}
+
+	public Rectangle getBounds(){
+		return null;
+	}
+
+	public Circle getCircleBounds() {
+		return circle;
 	}
 
 	@Override
 	public void collision(GameObject gameObject) {
-
+//		ID id = gameObject.getID();
+//		if(id == ID.CoreTile){
+//
+//		} else if(id == ID.ShipTile){
+//
+//		}
 	}
 
 	// TODO : burn this to the ground
@@ -64,6 +94,8 @@ public class Asteroid extends GameObject {
 
 		position.x += velX;
 		position.y += velY;
+		circle.x += velX;
+		circle.y += velY;
 //		generalUtil.render(position.x, position.y, new Texture("asteroid_purple.png"));
 		
 	}

@@ -1,10 +1,10 @@
 package com.shipGame.ncrosby.util;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.screens.GameScreen;
@@ -39,7 +39,7 @@ public class AsteroidManager {
      */
     public AsteroidManager(GameScreen screen){
         this.screen = screen;
-        asteroidLimit = 30;
+        asteroidLimit = 20;
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
 //        initSpawn();
@@ -76,6 +76,10 @@ public class AsteroidManager {
         cleanup();
         while(canSpawn()){
             spawnAsteroid();
+            Asteroid asteroid = asteroids.get(0);
+            System.out.println("Asteroid 1 : " + asteroid.getX() + ", " + asteroid.getY() + " Velocity : " +
+                    asteroid.getVelX() + ", " + asteroid.getVelY());
+//            if()
         }
     }
 
@@ -88,12 +92,25 @@ public class AsteroidManager {
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
         for(Asteroid asteroid: asteroids){
+            if(!screen.getGameObjects().contains(asteroid, true)){
+                throw new RuntimeException("Aw jeez");
+            }
             if(outOfBounds(asteroid)){
-                asteroids.removeValue(asteroid,true);
+                System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
+                removeAsteroid(asteroid);
                 screen.removeGameObject(asteroid);
                 numberOfAsteroids = asteroids.size;
+                System.out.println("numberOfAsteroids " + numberOfAsteroids);
             }
         }
+    }
+
+    /**
+     * removes asteroid instance by identity
+     * @param asteroid - asteroid to remove
+     */
+    public void removeAsteroid(Asteroid asteroid){
+        asteroids.removeValue(asteroid, true);
     }
 
     /**
@@ -103,21 +120,30 @@ public class AsteroidManager {
      * @return - true if x,y bigger than bounds
      */
     private boolean outOfBounds(Asteroid asteroid) {
-        boolean isOutOfValidArea = (Math.abs(asteroid.getX()) > GameScreen.spawnAreaMax + screen.getExtendViewport().getScreenWidth()/2.0f) &&
-                Math.abs(asteroid.getY()) > GameScreen.spawnAreaMax + screen.getExtendViewport().getScreenHeight()/2.0f;
+        boolean isOutOfValidArea = (Math.abs(asteroid.getX()) > GameScreen.spawnAreaMax + screen.getCamera().viewportWidth)
+                ||
+                Math.abs(asteroid.getY()) > GameScreen.spawnAreaMax + screen.getCamera().viewportHeight;
         return isOutOfValidArea;
     }
 
+    /**
+     * Method that spawns an asteroid and adds it to the gameObject list and local asteroids list
+     */
     public void spawnAsteroid(){
 
         // Check if active
         if(spawning){
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.BasicEnemy);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.Asteroid);
             screen.newGameObject(asteroid);
             asteroids.add(asteroid);
             numberOfAsteroids = asteroids.size;
+            int i = screen.getGameObjects().indexOf(asteroid, true); // Get index of gameObject
+            if(i < 0){
+                throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + screen.getGameObjects().size +
+                        " location of gameObject " + asteroid.getX() + ", " + asteroid.getY() + " GameObject ID : " +asteroid.getID());
+            }
         }
 //        System.out.println("Spawned Asteroid : asteroids.size " + asteroids.size);
     }
@@ -127,10 +153,10 @@ public class AsteroidManager {
      * @return - Vector outside screen, bound by the spawn area size
      */
     private Vector2 getVectorInValidSpawnArea(){
-        ExtendViewport ev =  screen.getExtendViewport();
+        OrthographicCamera camera =  screen.getCamera();
 
-        int screenWidthHalf = ev.getScreenWidth()/2;
-        int screenHightHalf = ev.getScreenHeight()/2;
+        int screenWidthHalf = (int) (camera.viewportWidth* 0.7f);
+        int screenHightHalf = (int) (camera.viewportHeight * 0.7f);
 
         // Bad fix for init spawn when worldsize is 0 :/
         if (screenHightHalf == 0) screenWidthHalf = 400;
@@ -140,8 +166,10 @@ public class AsteroidManager {
         float x = getRandomlyNegativeNumber(screenWidthHalf , screenWidthHalf + GameScreen.spawnAreaMax); // Add to scale with ViewPort
         float y = getRandomlyNegativeNumber(screenHightHalf, screenHightHalf + GameScreen.spawnAreaMax);
 
-        // Make point camera handled
-        System.out.println("Before unproject point: " + x + ", " + y);
+//        if (outOfBounds(new Asteroid(new Vector2(x,y), new Vector2(64,64), ID.Asteroid))){
+//            System.out.println("Creating Asteroid out of bounds lol");
+//        }
+
         Vector3 position = new Vector3(x,y,0);
         return new Vector2(position.x,position.y);
     }

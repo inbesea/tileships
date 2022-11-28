@@ -19,6 +19,8 @@ public class tileShipGame extends Game {
 	public BitmapFont font;
 	private Ship playerShip;
 
+	public static int zoomSpeed = 5;
+
 	/**
 	 * Initialization of the game stuff
 	 */
