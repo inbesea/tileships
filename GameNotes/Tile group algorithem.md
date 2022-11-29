@@ -1,0 +1,1 @@
+Loop over the "remaining" tiles (which equals the ship's overall tiles) and have the first  

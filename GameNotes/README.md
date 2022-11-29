@@ -1,0 +1,3 @@
+This is a game based on ships made of square tiles. The game's main loop is arriving at a location and having stuff happen, after which you have time to adjust your ship and make it stronger. 
+The "action screen" has asteroids flying everywhere in addition to other possible events, while a map screen ties the rest of the game together with nodes that can be traveled through. 
+Near the beginning of the game the ship is very basic with a core and a few tiles. As time goes on the ship will be built up by the player and the player will aquire new tile types. 

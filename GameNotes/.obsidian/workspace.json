@@ -11,11 +11,52 @@
             "id": "ebb74678aefacfdf",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Tile group algorithem.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "6da23317b36e268e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tile group algorithem.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "3ae6220a24fd07b5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Large Gameplay Elements.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "1ddb3c162e85066b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Large Gameplay Elements.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -81,6 +122,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Large Gameplay Elements.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +139,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Large Gameplay Elements.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +161,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Large Gameplay Elements.md"
+              }
             }
           }
         ]
@@ -128,6 +173,11 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "ebb74678aefacfdf",
-  "lastOpenFiles": []
+  "active": "1ddb3c162e85066b",
+  "lastOpenFiles": [
+    "ShipTiles Unlock Tech.md",
+    "Large Gameplay Elements.md",
+    "Tile group algorithem.md",
+    "README.md"
+  ]
 }
