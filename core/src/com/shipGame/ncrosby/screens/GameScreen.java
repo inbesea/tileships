@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
             PlayerInput.handleKeyPressed(player, camera);
         }
         PlayerInput.updateCameraOnPlayer(player, camera);
-        asteroidManager.checkForSpawn(); // Handle the
+        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
     }
 
     @Override
