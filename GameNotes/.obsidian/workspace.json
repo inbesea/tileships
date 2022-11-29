@@ -11,24 +11,8 @@
             "id": "ebb74678aefacfdf",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Tile group algorithem.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "6da23317b36e268e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Tile group algorithem.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           },
           {
@@ -55,8 +39,7 @@
               }
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -139,7 +122,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ShipTiles Unlock Tech.md",
+                "file": "Large Gameplay Elements.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -175,8 +158,8 @@
   },
   "active": "1ddb3c162e85066b",
   "lastOpenFiles": [
-    "Large Gameplay Elements.md",
     "ShipTiles Unlock Tech.md",
+    "Large Gameplay Elements.md",
     "Tile group algorithem.md",
     "README.md"
   ]
