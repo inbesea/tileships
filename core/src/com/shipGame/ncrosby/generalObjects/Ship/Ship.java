@@ -163,7 +163,9 @@ public class Ship extends GameObject {
 		else {
 			logRemovedTile(tileToRemove);
 			removeNeighbors(tileToRemove); // Remove references from adjacent tiles
-			this.existingTiles.removeValue(tileToRemove, true);
+			if(!this.existingTiles.removeValue(tileToRemove, true)){
+				System.out.println("tileToRemove was not in the ship!");
+			}
 		}
 		//this.existingTiles.remove(tempTile);
 	}
@@ -233,9 +235,16 @@ public class Ship extends GameObject {
 		if(tile != null && existingTiles.size>1 && tile.numberOfNeighbors()==0){
 			throw new RuntimeException("Tile was placed that has no neighbors despite other tiles existing");
 		}else if(tile != null){
-			if(tile.isEdge && !edgeTiles.contains(tile, true)){
+			boolean tileExistsAndShouldBeEdge = tile.isEdge && !edgeTiles.contains(tile, true) && existingTiles.contains(tile, true); // Gotta confirm the tile exists lol
+
+			if(tileExistsAndShouldBeEdge){
 				edgeTiles.add(tile);
-			} else if (!tile.isEdge && edgeTiles.contains(tile, true)){
+				if(existingTiles.size < edgeTiles.size){
+					throw new RuntimeException("More edgeTiles than existing!" +
+							"\nexistingTiles.size : " + existingTiles.size +
+							"\nedgeTiles.size : " + edgeTiles.size);
+				}
+			} else if (!tile.isEdge && edgeTiles.contains(tile, true) && existingTiles.contains(tile, true)){
 				edgeTiles.removeValue(tile, true);
 			}  else  {
 				// The
@@ -252,18 +261,18 @@ public class Ship extends GameObject {
 	private void removeNeighbors(ShipTile shipTile){
 		AdjacentTiles neighbors = shipTile.getNeighbors();
 
-		// Return if tile has no neighbors
-		if(neighbors.numberOfNeighbors() == 0)return;
-
-		float x = shipTile.getX();
-		float y = shipTile.getY();
-
 		// Remember to remove the tile from the existing tiles
 		if(shipTile.isEdge()){ // If was an edge then try to remove
 			if(!edgeTiles.removeValue(shipTile, true)){
 				throw new RuntimeException("Removed tile was not found in edge");
 			}
 		}
+
+		// Return if tile has no neighbors
+		if(neighbors.numberOfNeighbors() == 0)return;
+
+		float x = shipTile.getX();
+		float y = shipTile.getY();
 
 
 		// Get references
