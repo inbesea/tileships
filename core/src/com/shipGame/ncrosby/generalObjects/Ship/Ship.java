@@ -86,15 +86,16 @@ public class Ship extends GameObject {
 	 *  TODO : Scale tile locations by the ship position to allow ship movement.
 	 */
 	public void render(tileShipGame game) {
+		AssetManager assetManager = game.assetManager;
 
 		for(int i = 0; i < existingTiles.size; i++) {
 			ShipTile tempTile = existingTiles.get(i);
-			game.batch.draw(new Texture(Gdx.files.internal(tempTile.getTexture())),
+			game.batch.draw(assetManager.get(tempTile.getTexture(),Texture.class),
 					tempTile.getX(), tempTile.getY(),
 					tempTile.getSize().x, tempTile.getSize().y);
 		}
 		if(draggedTile != null){
-			game.batch.draw(new Texture(Gdx.files.internal(draggedTile.getTexture())),
+			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
 	}

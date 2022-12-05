@@ -3,6 +3,7 @@ package com.shipGame.ncrosby.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,7 +38,7 @@ public class GameScreen implements Screen {
 
     OrthographicCamera camera;
     SimpleTouch st;
-
+    AssetManager assetManager;
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
     public static final int spawnAreaMax = 300;
@@ -45,6 +46,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
+        this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
@@ -154,7 +156,7 @@ public class GameScreen implements Screen {
         // Handle updates first
 
         if (!Objects.equals(textureString, "none") && !Objects.equals(textureString, "")) { // If ID has associated string
-            Texture texture = new Texture(Gdx.files.internal(textureString));
+            Texture texture = assetManager.get(textureString,Texture.class);
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }

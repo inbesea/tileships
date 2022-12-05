@@ -190,7 +190,8 @@ public class Player extends GameObject {
         // Draw tiny tiles from player stack
         for (int i = 0; i < heldShipTiles.size; i++) {
             ShipTile t = heldShipTiles.get(i);
-            tempTexture = new Texture(Gdx.files.internal(t.getID().getTexture()));
+            tempTexture = null;
+//            tempTexture = new Texture(Gdx.files.internal(t.getID().getTexture()));
 
             game.batch.draw(tempTexture,
                     (heldTileDisplay.x + 32) + (sin((i * (radianFractions)) + circleRotation) * heldTileDisplay.radius),
