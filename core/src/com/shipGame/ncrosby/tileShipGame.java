@@ -45,6 +45,7 @@ public class tileShipGame extends Game {
 	public void dispose () {
 		font.dispose();
 		batch.dispose();
+		assetManager.dispose();
 		gs.dispose();
 	}
 

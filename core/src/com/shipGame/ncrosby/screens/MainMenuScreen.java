@@ -62,7 +62,9 @@ public class MainMenuScreen implements Screen {
         if (Gdx.input.isTouched() && assetManager.update()) {
             mainMenuMusic.setLooping(false);
             mainMenuMusic.dispose();
-            game.setScreen(new GameScreen(game));
+            GameScreen gameScreen = new GameScreen(game);
+            game.setScreen(gameScreen);
+            game.setGameScreen(gameScreen);
             dispose();
         }
     }
