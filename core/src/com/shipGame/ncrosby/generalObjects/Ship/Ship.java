@@ -15,6 +15,8 @@ import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.util.AsteroidManager;
+
 import static com.shipGame.ncrosby.util.generalUtil.*;
 
 import java.util.Stack;
@@ -40,22 +42,38 @@ public class Ship extends GameObject {
 	private ShipTile mouseLocation;
 	private ShipTile draggedTile;
 	private GameScreen screen;
-
+	AsteroidManager asteroidManager;
+	Array<GameObject> gameObjects;
 	private int pointLocation[] = new int[2];
 
 	/**
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (Vector2 position, ID id, OrthographicCamera cam, GameScreen screen) {
+	public Ship (Vector2 position, ID id, OrthographicCamera cam, Array<GameObject> gameObjects, AsteroidManager asteroidManager) {
 		super(position, new Vector2(0,0), id);
 		this.cam = cam;
-//		this.camera = camera;
-		this.screen = screen;
+		this.gameObjects = gameObjects;
+		this.asteroidManager = asteroidManager;
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
+		addTile(position.x, position.y, ID.CoreTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
+	}
+
+	public Ship (Vector2 position, ID id, OrthographicCamera cam, GameScreen screen){
+		super(position, new Vector2(0,0), id);
+		this.cam = cam;
+		this.screen = screen;
+
+		// Give new ship default tiles.
+		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
+		 *   that creates tiles based on a list of tile instances */
 		addTile(position.x, position.y, ID.CoreTile);
 		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
 		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
@@ -570,6 +588,28 @@ public class Ship extends GameObject {
 		}
 
 		// Might could be used? :/ Probably not tho
+	}
+
+	/**
+	 * Finds the game object, removes and returns it from the game screen Array
+	 * @param gameObject
+	 * @return
+	 */
+	public GameObject removeGameObject(GameObject gameObject){
+		int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
+
+		if(i < 0){
+			System.out.println("OH jeez");
+		}
+		if(i < 0){
+			throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
+					" location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " +gameObject.getID());
+		}
+		return gameObjects.removeIndex(i); // Returns the object reference and removes it.
+	}
+
+	public void removeAsteroid(GameObject asteroid) {
+		asteroidManager.removeAsteroid((Asteroid) asteroid);
 	}
 
 	@Override
