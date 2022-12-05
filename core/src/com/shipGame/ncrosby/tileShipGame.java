@@ -26,6 +26,7 @@ public class tileShipGame extends Game {
 	 */
 	@Override
 	public void create () {
+		assetManager = new AssetManager();
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		//legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.

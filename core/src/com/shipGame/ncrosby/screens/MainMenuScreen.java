@@ -2,8 +2,10 @@ package com.shipGame.ncrosby.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.shipGame.ncrosby.tileShipGame;
 
@@ -14,6 +16,7 @@ public class MainMenuScreen implements Screen {
     OrthographicCamera camera;
 
     Music mainMenuMusic;
+    AssetManager assetManager;
 
     /**
      * Constructs the mainmenu object
@@ -22,6 +25,7 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final tileShipGame game) {
         this.game = game;
 
+        assetManager = game.assetManager;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
@@ -43,12 +47,19 @@ public class MainMenuScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        // Call to load textures to asset manager
+        initAssestManager();
+
         game.batch.begin();
-        game.font.draw(game.batch, "Welcome to tileships!!! ", 200, 250);
-        game.font.draw(game.batch, "Tap anywhere to begin!", 200, 200);
+        if(assetManager.update()){
+            game.font.draw(game.batch, "Welcome to tileships!!! ", 200, 250);
+            game.font.draw(game.batch, "Tap anywhere to begin!", 200, 200);
+        } else {
+            game.font.draw(game.batch, "~~~Loading Assets " + assetManager.getProgress() +" ~~~",200,200);
+        }
         game.batch.end();
 
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched() && assetManager.update()) {
             mainMenuMusic.setLooping(false);
             mainMenuMusic.dispose();
             game.setScreen(new GameScreen(game));
@@ -79,5 +90,16 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+
+    /**
+     * Loads in the assets needed to run the game into the asset manager.
+     */
+    private void initAssestManager() {
+        assetManager.load("RobotV2.png", Texture.class);
+        assetManager.load("asteroid_purple.png", Texture.class);
+        assetManager.load("ShipTile_Red.png", Texture.class);
+        assetManager.load("ShipTile_Core.png", Texture.class);
     }
 }
