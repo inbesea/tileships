@@ -1,6 +1,7 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -59,11 +60,7 @@ public class Ship extends GameObject {
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
-		addTile(position.x, position.y, ID.CoreTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTile(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		initShipTiles();
 	}
 
 	public Ship (Vector2 position, ID id, OrthographicCamera cam, GameScreen screen){
@@ -74,11 +71,7 @@ public class Ship extends GameObject {
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		 *   that creates tiles based on a list of tile instances */
-		addTile(position.x, position.y, ID.CoreTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTile(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		initShipTiles();
 	}
 
 	/**
@@ -98,6 +91,17 @@ public class Ship extends GameObject {
 			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
+	}
+
+	/**
+	 * Sets the initial tiles.
+	 */
+	private void initShipTiles() {
+		addTile(position.x, position.y, ID.CoreTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
 	}
 
 	/**
