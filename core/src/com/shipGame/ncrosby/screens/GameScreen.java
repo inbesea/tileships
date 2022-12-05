@@ -149,13 +149,12 @@ public class GameScreen implements Screen {
      */
     private void drawGameObject(GameObject gameObject) {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
-        String t = gameObject.getTexture();
-
+        String textureString = gameObject.getTexture();
 
         // Handle updates first
 
-        if (!Objects.equals(t, "none") && !Objects.equals(t, "")) { // If ID has associated string
-            Texture texture = new Texture(Gdx.files.internal(t));
+        if (!Objects.equals(textureString, "none") && !Objects.equals(textureString, "")) { // If ID has associated string
+            Texture texture = new Texture(Gdx.files.internal(textureString));
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
@@ -255,6 +254,10 @@ public class GameScreen implements Screen {
     }
 
 
+    /**
+     * removes an asteroid instance from the asteroid manager
+     * @param asteroid
+     */
     public void removeAsteroid(GameObject asteroid) {
         asteroidManager.removeAsteroid((Asteroid) asteroid);
     }
