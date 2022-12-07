@@ -10,6 +10,7 @@ import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ncrosby.tileShipGame;
 
 import static com.shipGame.ncrosby.util.generalUtil.returnUnprojectedMousePosition;
 
@@ -48,6 +49,8 @@ public class SimpleTouch implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        System.out.println(amountX + " " + amountY);
+        camera.zoom += ((amountY * tileShipGame.zoomSpeed) * Gdx.graphics.getDeltaTime());
         return false;
     }
 
