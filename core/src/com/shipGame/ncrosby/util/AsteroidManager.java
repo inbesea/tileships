@@ -77,8 +77,8 @@ public class AsteroidManager {
         while(canSpawn()){
             spawnAsteroid();
             Asteroid asteroid = asteroids.get(0);
-            System.out.println("Asteroid 1 : " + asteroid.getX() + ", " + asteroid.getY() + " Velocity : " +
-                    asteroid.getVelX() + ", " + asteroid.getVelY());
+//            System.out.println("Asteroid 1 : " + asteroid.getX() + ", " + asteroid.getY() + " Velocity : " +
+//                    asteroid.getVelX() + ", " + asteroid.getVelY());
 //            if()
         }
     }
@@ -100,7 +100,7 @@ public class AsteroidManager {
                 removeAsteroid(asteroid);
                 screen.removeGameObject(asteroid);
                 numberOfAsteroids = asteroids.size;
-                System.out.println("numberOfAsteroids " + numberOfAsteroids);
+//                System.out.println("numberOfAsteroids " + numberOfAsteroids);
             }
         }
     }
