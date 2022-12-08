@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
 
-        hud = new HUD(game.batch);
+        hud = new HUD(game.batch, game);
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
@@ -144,6 +144,11 @@ public class GameScreen implements Screen {
         if(playerShip.destroyedTileCount > 0){
             stringBuilder.append("\nTiles Destroyed : " + playerShip.destroyedTileCount);
         }
+
+        //Secondly draw the Hud
+        game.batch.setProjectionMatrix(hud.getStage().getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
+        hud.getStage().act(Gdx.graphics.getDeltaTime()); //act the Hud
+        hud.getStage().draw(); //draw the Hud
 
         game.batch.begin();
 
