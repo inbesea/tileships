@@ -46,6 +46,7 @@ public class Ship extends GameObject {
 	AsteroidManager asteroidManager;
 	Array<GameObject> gameObjects;
 	private int pointLocation[] = new int[2];
+	public int destroyedTileCount = 0;
 
 	/**
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
@@ -421,8 +422,16 @@ public class Ship extends GameObject {
 	 	}
 	}
 
+	/**
+	 * Returns number of tiles, taking dragged tile into account.
+	 * @return
+	 */
 	public int numberOfShipTiles(){
-		return existingTiles.size;
+		if(draggedTile != null){
+			return existingTiles.size + 1;
+		} else {
+			return existingTiles.size;
+		}
 	}
 
 	public int numberOfEdgeTiles(){
@@ -578,6 +587,7 @@ public class Ship extends GameObject {
 					} else if (shipTile.getID() == ID.ShipTile) {
 						// Explode tile and asteroid
 						removeTileFromShip(shipTile);
+						increaseDestroyedTile(1);
 
 						removeAsteroid = true;
 					}
@@ -797,5 +807,12 @@ public class Ship extends GameObject {
 
 	public Array<ShipTile> getExistingTiles() {
 		return existingTiles;
+	}
+
+	/**
+	 * Method to count destroyed tiles
+	 */
+	public void increaseDestroyedTile(int destroyedTiles){
+		destroyedTileCount += destroyedTiles;
 	}
 }

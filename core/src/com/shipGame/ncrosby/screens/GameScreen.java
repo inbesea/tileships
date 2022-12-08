@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.PlayerInput;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.HUD;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.player.SimpleTouch;
@@ -29,7 +31,7 @@ import java.util.Objects;
 public class GameScreen implements Screen {
     final tileShipGame game;
     final AsteroidManager asteroidManager;
-
+    private HUD hud;
     ExtendViewport extendViewport;
     private final Player player;
 
@@ -48,6 +50,8 @@ public class GameScreen implements Screen {
         this.game = game;
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
+
+        hud = new HUD(game.batch);
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
@@ -89,6 +93,20 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         extendViewport.apply();
 
+        drawGameObjects();
+
+        // FPS hud
+        drawUI();
+
+        // process user input
+        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            PlayerInput.handleKeyPressed(player, camera);
+        }
+        PlayerInput.updateCameraOnPlayer(player, camera);
+        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
+    }
+
+    private void drawGameObjects() {
         // tell the camera to update its matrices.
         camera.update();
 
@@ -112,13 +130,26 @@ public class GameScreen implements Screen {
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
         game.batch.end();
+    }
 
-        // process user input
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            PlayerInput.handleKeyPressed(player, camera);
+    /**
+     * Draws some basic data during gameplay assumes calling in a start.draw
+     */
+    private void drawUI() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
+                "ShipTile number : " + playerShip.numberOfShipTiles());
+        if(playerShip.destroyedTileCount > 0){
+            stringBuilder.append("\nTiles Destroyed : " + playerShip.destroyedTileCount);
         }
-        PlayerInput.updateCameraOnPlayer(player, camera);
-        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
+
+        game.batch.begin();
+
+        game.font.draw(game.batch, stringBuilder.toString() , camera.position.x - (camera.viewportWidth / 3), camera.position.y - (camera.viewportHeight / 3));
+
+        game.batch.end();
     }
 
     @Override
@@ -228,9 +259,6 @@ public class GameScreen implements Screen {
     public GameObject removeGameObject(GameObject gameObject){
         int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
 
-        if(i < 0){
-            System.out.println("OH jeez");
-        }
         if(i < 0){
             throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
                     " location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " +gameObject.getID());
