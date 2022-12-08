@@ -14,7 +14,7 @@ public class HUD {
     private tileShipGame game;
     private Ship playerShip;
 
-    private boolean showDebugHud;
+    private boolean showDebugHud = true;
 
     public HUD(SpriteBatch spriteBatch, tileShipGame game) {
         this.game = game;
