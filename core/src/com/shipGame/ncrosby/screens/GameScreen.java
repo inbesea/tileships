@@ -51,8 +51,6 @@ public class GameScreen implements Screen {
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
 
-        hud = new HUD(game.batch, game);
-
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
         gameScreenMusic.setLooping(true);
@@ -80,7 +78,8 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(st);
 
         asteroidManager = new AsteroidManager(this);
-//        newGameObject(new Asteroid(new Vector2(195, 195), new Vector2(64,64), new Vector2(0,0), ID.Asteroid));
+        hud = new HUD(game.batch, game);
+
     }
 
     @Override
@@ -96,7 +95,8 @@ public class GameScreen implements Screen {
         drawGameObjects();
 
         // FPS hud
-        drawUI();
+//        drawUI();
+        hud.draw();
 
         // process user input
         if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
