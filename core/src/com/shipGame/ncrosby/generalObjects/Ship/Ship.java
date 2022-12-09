@@ -17,6 +17,7 @@ import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.util.AsteroidManager;
+import com.shipGame.ncrosby.util.ShipStarters;
 
 import static com.shipGame.ncrosby.util.generalUtil.*;
 
@@ -48,6 +49,9 @@ public class Ship extends GameObject {
 	private int pointLocation[] = new int[2];
 	public int destroyedTileCount = 0;
 
+	public boolean collectTiles = false;
+	private Stack<ShipTile> stackedTiles;
+
 	/**
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
@@ -57,6 +61,8 @@ public class Ship extends GameObject {
 		this.cam = cam;
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
+
+		stackedTiles = new Stack<>();
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -68,6 +74,8 @@ public class Ship extends GameObject {
 		super(position, new Vector2(0,0), id);
 		this.cam = cam;
 		this.screen = screen;
+
+		stackedTiles = new Stack<>();
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -814,5 +822,38 @@ public class Ship extends GameObject {
 	 */
 	public void increaseDestroyedTile(int destroyedTiles){
 		destroyedTileCount += destroyedTiles;
+	}
+
+	public boolean isCollectingTiles(){
+		return collectTiles;
+	}
+
+    public void startCollapseCollect() {
+		System.out.println("Begin collecting tiles");
+		collectTiles = true;
+    }
+
+	/**
+	 * Clears and returns a stack of tiles collected during a collapse action
+	 */
+	public Stack<ShipTile> finishCollapseCollect() {
+		Stack<ShipTile> stackedTiles = this.stackedTiles;
+		if(!stackedTiles.empty()){
+			this.stackedTiles.clear();
+		}
+		return stackedTiles;
+	}
+
+	/**
+	 * Adds an element to the CollapseCollection and returns a bool representing success.
+	 * @param shipTile
+	 * @return
+	 */
+	public boolean addTileToCollapseCollection(ShipTile shipTile){
+		if(collectTiles){
+			return stackedTiles.add(shipTile);
+		} else {
+			throw new RuntimeException("CollectTiles is false : " + collectTiles);
+		}
 	}
 }

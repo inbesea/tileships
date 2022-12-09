@@ -12,6 +12,8 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 
+import java.util.Stack;
+
 import static com.shipGame.ncrosby.util.generalUtil.returnUnprojectedMousePosition;
 
 /**
@@ -130,10 +132,26 @@ public class SimpleTouch implements InputProcessor {
     }
 
         @Override public boolean keyDown (int keycode) {
+        System.out.println("Keycode pressed is : " + keycode);
+
+        // Begin collecting tiles for collapse
+        if(!playerShip.isCollectingTiles() && keycode == 59){
+            playerShip.startCollapseCollect(); // Begins ship collecting
+        }
             return false;
         }
 
         @Override public boolean keyUp (int keycode) {
+
+            if(playerShip.isCollectingTiles() && keycode == 59){
+                Stack<ShipTile> shipTileStack =
+                        playerShip.finishCollapseCollect(); // Ends collecting
+                if(shipTileStack.empty()){
+                    System.out.println("Tiles collected : None");
+                }else {
+                    System.out.println("Tiles collected : " + shipTileStack.stream().toString());
+                }
+            }
             return false;
         }
 
