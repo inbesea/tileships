@@ -26,7 +26,8 @@ public class SimpleTouch implements InputProcessor {
         Ship playerShip;
         Player player;
         Vector3 tp = new Vector3();
-        boolean dragging;
+
+    boolean isDragging;
         private ShipTile draggedTile;
 
     /**
@@ -44,6 +45,9 @@ public class SimpleTouch implements InputProcessor {
         }
 
         @Override public boolean mouseMoved (int screenX, int screenY) {
+            if(playerShip.isCollectingTiles() && playerShip.getCollapseCollect().empty()){
+                // Draw placeholder art on tile
+            }
             // we can also handle mouse movement without anything pressed
 //		camera.unproject(tp.set(screenX, screenY, 0));
             return false;
@@ -60,27 +64,29 @@ public class SimpleTouch implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         // ignore if its not left mouse button or first touch pointer
         if (button != Input.Buttons.LEFT || pointer > 0) return false;
-        camera.unproject(tp.set(screenX, screenY, 0));
-        dragging = true;
-        //clickPlayerShipTiles(camera, playerShip, player); // Used to pickup tiles. Unused currently
 
+        // Set init values
+        camera.unproject(tp.set(screenX, screenY, 0));
+        setIsDragging(true);
         Vector3 v = returnUnprojectedMousePosition(camera);
 
-        ShipTile temp = playerShip.returnTile(v.x, v.y);
-        boolean leftCornerOff = playerShip.returnTile(player.getX(),player.getY()) != temp;
-        boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(),player.getY()) != temp;
+        if (playerShip.isCollectingTiles()){
+            playerShip.returnTile(v.x, v.y);
 
-        if(leftCornerOff && rightCornerOff &&// Check if tile is same as tile that is stood on
-        temp != null){// Check if a tile was grabbed
-            draggedTile = temp; // Get the tile clicked on
-            playerShip.removeTileFromShip(temp);
-            playerShip.setDragged(draggedTile); // Set intermediate tile to *remove from existing tiles*
         }
+
+        ShipTile pickedUpTile = playerShip.returnTile(v.x, v.y);
+        boolean canGrabTile = canGrabTile(pickedUpTile);
+
+        if(canGrabTile){
+            pickUpTile(pickedUpTile);
+        }
+
         return true;
         }
 
-        @Override public boolean touchDragged (int screenX, int screenY, int pointer) {
-            if (!dragging) return false;
+    @Override public boolean touchDragged (int screenX, int screenY, int pointer) {
+            if (!isDragging) return false;
             camera.unproject(tp.set(screenX, screenY, 0));
 
             if(draggedTile != null){ // Dragging a tile
@@ -109,7 +115,7 @@ public class SimpleTouch implements InputProcessor {
                 handlePlacingDragged(playerShip, mousePosition);
             }
 
-            dragging = false;
+            setIsDragging(false);
             return true;
         }
 
@@ -136,6 +142,11 @@ public class SimpleTouch implements InputProcessor {
 
         // Begin collecting tiles for collapse
         if(!playerShip.isCollectingTiles() && keycode == 59){
+            if(draggedTile != null){
+                playerShip.addTile(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
+                setDraggedTileToNull();
+                setIsDragging(false);
+            }
             playerShip.startCollapseCollect(); // Begins ship collecting
         }
             return false;
@@ -159,4 +170,37 @@ public class SimpleTouch implements InputProcessor {
             return false;
         }
 
+
+    public boolean isDragging() {
+        return isDragging;
+    }
+
+    public void setIsDragging(boolean isDragging) {
+        this.isDragging = isDragging;
+    }
+
+    /**
+     * Handle moving tiles around while picking up tiles
+     * @param pickedUpTile
+     */
+    private void pickUpTile(ShipTile pickedUpTile) {
+        draggedTile = pickedUpTile; // Get the tile clicked on
+        playerShip.removeTileFromShip(pickedUpTile);
+        playerShip.setDragged(draggedTile); // Set intermediate tile to *remove from existing tiles*
+    }
+
+    private boolean canGrabTile(ShipTile temp) {
+        if(temp == null) return false;// Check if a tile was grabbed
+
+        boolean leftCornerOff = playerShip.returnTile(player.getX(),player.getY()) != temp;
+        boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(),player.getY()) != temp;
+
+        return leftCornerOff && rightCornerOff;// Check if tile is same as tile that is stood on
+    }
+
+    public ShipTile setDraggedTileToNull(){
+        ShipTile shipTile = draggedTile;
+        draggedTile = null;
+        return shipTile;
+    }
 }

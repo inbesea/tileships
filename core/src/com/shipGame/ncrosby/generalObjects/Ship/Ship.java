@@ -845,6 +845,14 @@ public class Ship extends GameObject {
 	}
 
 	/**
+	 * Standard getter
+	 * @return
+	 */
+	public Stack<ShipTile> getCollapseCollect(){
+		return this.stackedTiles;
+	}
+
+	/**
 	 * Adds an element to the CollapseCollection and returns a bool representing success.
 	 * @param shipTile
 	 * @return
