@@ -100,14 +100,14 @@ public class generalUtil {
     }
 
     /**
-     * Returns a negative one or positive one with a 50/50  chance
+     * Creates a random value between min and max
      *
-     * @return int of -1 or 1 value
+     * @param min
+     * @param max
+     * @return
      */
-    public static int getNegativeOneRandomly(){
-        double random = Math.random();
-        if(random < 0.5f)return -1;
-        else return 1;
+    public static float getRandomNumber(float min, float max) {
+        return (float) ((Math.random() * (max - min)) + min);
     }
 
     /**
@@ -119,10 +119,21 @@ public class generalUtil {
      * @param max - lower bounds in absolute value terms
      * @return
      */
-    public static float getRandomlyNegativeNumber(int min, int max){
+    public static float getRandomlyNegativeNumber(float min, float max){
         float value = getRandomNumber(min, max);
         float possiblyNegativeValue = value * getNegativeOneRandomly();
         return possiblyNegativeValue;
+    }
+
+    /**
+     * Returns a negative one or positive one with a 50/50  chance
+     *
+     * @return int of -1 or 1 value
+     */
+    public static int getNegativeOneRandomly(){
+        double random = Math.random();
+        if(random < 0.5f)return -1;
+        else return 1;
     }
 
     /**

@@ -19,7 +19,7 @@ public abstract class GameObject {
 	protected Vector2 size = new Vector2();
 	// From Enum list, needs a type
 	protected ID id;
-	protected int velX, velY;
+	protected float velX, velY;
 
 	// Do we need the texture to be set within each
 	protected String textureRef;
@@ -62,14 +62,14 @@ public abstract class GameObject {
 	public void setVelX(int velX) {
 		this.velX = velX;
 	}
-	public int getVelX() {
+	public float getVelX() {
 		return velX;
 	}
 	
 	public void setVelY(int velY) {
 		this.velY = velY;
 	}
-	public int getVelY() {
+	public float getVelY() {
 		return velY;
 	}
 

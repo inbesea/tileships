@@ -19,8 +19,8 @@ public class Asteroid extends GameObject {
 	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
-		velX = (int)getRandomlyNegativeNumber(1,5);
-		velY = (int)getRandomlyNegativeNumber(1,5);
+		velX = getRandomlyNegativeNumber(0.5f,5);
+		velY = getRandomlyNegativeNumber(0.5f,5);
 		radius = size.y * 0.5f;
 		circle = new Circle(position.x + radius, position.y + radius, radius);
 	}
@@ -35,8 +35,8 @@ public class Asteroid extends GameObject {
 	public Asteroid(Vector2 position, Vector2 size, Vector2 velocity, ID id) {
 		super(position, size, id);
 
-		velX = (int) velocity.x;
-		velY = (int) velocity.y;
+		velX = velocity.x;
+		velY = velocity.y;
 		radius = size.y * 0.5f;
 		circle = new Circle(position.x + radius, position.y + radius, radius);
 	}

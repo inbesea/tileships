@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.PlayerInput;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.HUD;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.player.SimpleTouch;
@@ -29,7 +31,7 @@ import java.util.Objects;
 public class GameScreen implements Screen {
     final tileShipGame game;
     final AsteroidManager asteroidManager;
-
+    private HUD hud;
     ExtendViewport extendViewport;
     private final Player player;
 
@@ -55,7 +57,7 @@ public class GameScreen implements Screen {
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, tileShipGame.defaultViewportSizeX, tileShipGame.defaultViewportSizeY);
         this.extendViewport = new ExtendViewport(650,550, camera);
 
         // init ship
@@ -76,7 +78,8 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(st);
 
         asteroidManager = new AsteroidManager(this);
-//        newGameObject(new Asteroid(new Vector2(195, 195), new Vector2(64,64), new Vector2(0,0), ID.Asteroid));
+        hud = new HUD(game.batch, game);
+
     }
 
     @Override
@@ -89,6 +92,21 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         extendViewport.apply();
 
+        drawGameObjects();
+
+        // FPS hud
+//        drawUI();
+        hud.draw();
+
+        // process user input
+        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            PlayerInput.handleKeyPressed(player, camera);
+        }
+        PlayerInput.updateCameraOnPlayer(player, camera);
+        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
+    }
+
+    private void drawGameObjects() {
         // tell the camera to update its matrices.
         camera.update();
 
@@ -112,13 +130,31 @@ public class GameScreen implements Screen {
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
         game.batch.end();
+    }
 
-        // process user input
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            PlayerInput.handleKeyPressed(player, camera);
+    /**
+     * Draws some basic data during gameplay assumes calling in a start.draw
+     */
+    private void drawUI() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
+                "ShipTile number : " + playerShip.numberOfShipTiles());
+        if(playerShip.destroyedTileCount > 0){
+            stringBuilder.append("\nTiles Destroyed : " + playerShip.destroyedTileCount);
         }
-        PlayerInput.updateCameraOnPlayer(player, camera);
-        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
+
+        //Secondly draw the Hud
+        game.batch.setProjectionMatrix(hud.getStage().getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
+        hud.getStage().act(Gdx.graphics.getDeltaTime()); //act the Hud
+        hud.getStage().draw(); //draw the Hud
+
+        game.batch.begin();
+
+        game.font.draw(game.batch, stringBuilder.toString() , camera.position.x - (camera.viewportWidth / 3), camera.position.y - (camera.viewportHeight / 3));
+
+        game.batch.end();
     }
 
     @Override
@@ -228,9 +264,6 @@ public class GameScreen implements Screen {
     public GameObject removeGameObject(GameObject gameObject){
         int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
 
-        if(i < 0){
-            System.out.println("OH jeez");
-        }
         if(i < 0){
             throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
                     " location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " +gameObject.getID());
