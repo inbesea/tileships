@@ -184,6 +184,18 @@ public class Ship extends GameObject {
 	}
 
 	/**
+	 * Returns a Vector position with respect to the grid.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public Vector2 getGridCorrectedPosition(float x, float y){
+		int[] indexes = returnIndex(x, y);
+		Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexes[0]), getGameSpacePositionFromIndex(indexes[1]));
+		return vector2;
+	}
+
+	/**
 	 * Returns an index scaled up by ShipTile.TILESIZE
 	 * @return
 	 */
