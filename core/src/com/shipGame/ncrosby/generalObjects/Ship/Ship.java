@@ -161,7 +161,7 @@ public class Ship extends GameObject {
 	 * Adds a tile expecting the x,y to be a valid placement location
 	 */
 	private ShipTile placeTile(float x, float y, ID id){
-		float indexXY[];
+		int indexXY[];
 		ShipTile tempTile;
 		Sound tilePlacement;
 		tilePlacement = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/tilePlacementV2.wav"));
@@ -170,7 +170,7 @@ public class Ship extends GameObject {
 		System.out.println("Create tile at " + x + "," + y);
 		System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 		System.out.println("Type of : " + id);
-		tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
+		tempTile = new ShipTile(new Vector2 (getGameSpacePositionFromIndex(indexXY[0]), (int) indexXY[1] * ShipTile.TILESIZE), id);
 		this.existingTiles.add(tempTile);
 		setNeighbors(tempTile); // Setting tile neighbors within ship
 
@@ -181,6 +181,14 @@ public class Ship extends GameObject {
 		}
 		tilePlacement.play();
 		return tempTile;
+	}
+
+	/**
+	 * Returns an index scaled up by ShipTile.TILESIZE
+	 * @return
+	 */
+	public int getGameSpacePositionFromIndex(int index){
+		return index * ShipTile.TILESIZE;
 	}
 
 	/**
@@ -400,7 +408,7 @@ public class Ship extends GameObject {
 	 * @return  - Can return a ShipTile object. Will return null on spaces without tiles.
 	 */
 	private ShipTile findTile(Vector2 position){
-		float indexXY[] = returnIndex(position.x, position.y);
+		int indexXY[] = returnIndex(position.x, position.y);
 
 	 	ShipTile temp;
 	 	Stack<ShipTile> resultTiles = new Stack<>();
@@ -461,10 +469,9 @@ public class Ship extends GameObject {
 	 *
 	 * @param x - The x location in the jframe to adjust by cam
 	 * @param y - The y location in the jframe to adjust by cam
-	 * @return
+	 * @return - int so the index is a whole number
 	 */
-	public float[] returnIndex(float x, float y) {
-
+	public int[] returnIndex(float x, float y) {
 
 		// -1 shifting wont cause issues because the flow will subtract one from it either way
 		// -64 - -1 will return index -1 yayy
@@ -473,7 +480,7 @@ public class Ship extends GameObject {
 		boolean xNegative = x <= -1;
 
 
-		float XYresult[] = new float[2];
+		int XYresult[] = new int[2];
 		if (xNegative) {
 			if(yNegative) {
 				// x, y negative
