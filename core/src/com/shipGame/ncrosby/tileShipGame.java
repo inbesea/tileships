@@ -20,6 +20,7 @@ public class tileShipGame extends Game {
 	private Ship playerShip;
 
 	public static int zoomSpeed = 5;
+	public static int defaultViewportSizeX = 700, defaultViewportSizeY = 500;
 
 	/**
 	 * Initialization of the game stuff

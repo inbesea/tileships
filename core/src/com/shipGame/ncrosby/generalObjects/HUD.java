@@ -20,7 +20,7 @@ public class HUD {
         this.game = game;
         this.playerShip = game.getPlayerShip();
 
-        HUDScreenLayer = new FitViewport(500,500);
+        HUDScreenLayer = new FitViewport(tileShipGame.defaultViewportSizeX,tileShipGame.defaultViewportSizeY);
         stage = new Stage(HUDScreenLayer, spriteBatch); //create stage with the stageViewport and the SpriteBatch given in Constructor
     }
 
