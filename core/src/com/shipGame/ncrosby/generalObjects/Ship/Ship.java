@@ -78,6 +78,7 @@ public class Ship extends GameObject {
 		this.screen = screen;
 
 		stackedTiles = new Stack<>();
+		tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(64,64));
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -862,6 +863,7 @@ public class Ship extends GameObject {
 		if(!stackedTiles.empty()){
 			this.stackedTiles.clear();
 		}
+		collectTiles = false;
 		return stackedTiles;
 	}
 

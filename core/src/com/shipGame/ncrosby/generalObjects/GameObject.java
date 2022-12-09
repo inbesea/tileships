@@ -45,7 +45,6 @@ public abstract class GameObject {
 		this.position.y = position.y;
 		this.size.x = size.x;
 		this.size.y = size.y;
-		this.textureRef = id.getTexture();
 	}
 	
 	public abstract void tick();
