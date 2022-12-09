@@ -170,7 +170,7 @@ public class Ship extends GameObject {
 		System.out.println("Create tile at " + x + "," + y);
 		System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 		System.out.println("Type of : " + id);
-		tempTile = new ShipTile(new Vector2 (getGameSpacePositionFromIndex(indexXY[0]), (int) indexXY[1] * ShipTile.TILESIZE), id);
+		tempTile = new ShipTile(new Vector2 (getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1])), id);
 		this.existingTiles.add(tempTile);
 		setNeighbors(tempTile); // Setting tile neighbors within ship
 
