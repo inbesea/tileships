@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
@@ -48,9 +49,9 @@ public class Ship extends GameObject {
 	Array<GameObject> gameObjects;
 	private int pointLocation[] = new int[2];
 	public int destroyedTileCount = 0;
-
 	public boolean collectTiles = false;
 	private Stack<ShipTile> stackedTiles;
+	private TileHoverIndicator tileHoverIndicator;
 
 	/**
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
@@ -62,6 +63,7 @@ public class Ship extends GameObject {
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
 
+		tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(64,64));
 		stackedTiles = new Stack<>();
 
 		// Give new ship default tiles.
@@ -882,5 +884,14 @@ public class Ship extends GameObject {
 		} else {
 			throw new RuntimeException("CollectTiles is false : " + collectTiles);
 		}
+	}
+
+	public TileHoverIndicator getTileHoverIndicator() {
+		return tileHoverIndicator;
+	}
+
+	public void setHoverIndicator(float x, float y){
+		tileHoverIndicator.setX(x);
+		tileHoverIndicator.setY(y);
 	}
 }
