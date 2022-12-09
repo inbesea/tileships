@@ -894,4 +894,20 @@ public class Ship extends GameObject {
 		tileHoverIndicator.setX(x);
 		tileHoverIndicator.setY(y);
 	}
+
+	/**
+	 * Checks if the hovers should draw
+	 * @return
+	 */
+	public boolean hoverShouldDraw() {
+		return tileHoverIndicator.isDrawHover();
+	}
+
+	/**
+	 * Sets if the hover position should draw.
+	 * @param shouldDraw
+	 */
+	public void setHoverShouldDraw(boolean shouldDraw){
+		tileHoverIndicator.setDrawHover(shouldDraw);
+	}
 }

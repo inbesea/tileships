@@ -134,7 +134,7 @@ public class GameScreen implements Screen {
             drawGameObject(go); // Call helper to draw object
             collisionDetection(go);
         }
-        if(playerShip.isCollectingTiles()){
+        if(playerShip.isCollectingTiles() && playerShip.hoverShouldDraw()){
             drawGameObject(playerShip.getTileHoverIndicator());
         }
         drawGameObject(player);// Draw last to be on top of robot

@@ -8,7 +8,7 @@ import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.tileShipGame;
 
 public class TileHoverIndicator extends GameObject {
-
+    boolean drawHover = false;
     public TileHoverIndicator(Vector2 position, Vector2 size) {
         super(position, size);
 
@@ -40,5 +40,13 @@ public class TileHoverIndicator extends GameObject {
     @Override
     public Circle getCircleBounds() {
         return null;
+    }
+
+    public boolean isDrawHover() {
+        return drawHover;
+    }
+
+    public void setDrawHover(boolean drawHover) {
+        this.drawHover = drawHover;
     }
 }

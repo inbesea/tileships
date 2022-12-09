@@ -48,8 +48,11 @@ public class SimpleTouch implements InputProcessor {
             if(playerShip.isCollectingTiles() && playerShip.getCollapseCollect().empty()){
                 if(!playerShip.isPositionOffShip(new Vector2(screenX, screenY)) ){
                     // Draw placeholder art on tile
+                    playerShip.setHoverShouldDraw(true);
                     Vector2 vector2 = playerShip.getGridCorrectedPosition(screenX, screenY);
                     playerShip.setHoverIndicator(vector2.x, vector2.y);
+                } else {
+                    playerShip.setHoverShouldDraw(false);
                 }
             }
             // we can also handle mouse movement without anything pressed
