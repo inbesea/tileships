@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(st);
 
         asteroidManager = new AsteroidManager(this);
-        hud = new HUD(game.batch, game);
+        hud = new HUD(game.assetManager, game);
 
     }
 
@@ -87,15 +87,19 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * Draw the game
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         extendViewport.apply();
 
+        // Draw game objects
         drawGameObjects();
 
-        // FPS hud
-//        drawUI();
+        // Draws the HUD
         hud.draw();
 
         // process user input
@@ -106,6 +110,9 @@ public class GameScreen implements Screen {
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
     }
 
+    /**
+     * Draws all game objects and calls their render() methods
+     */
     private void drawGameObjects() {
         // tell the camera to update its matrices.
         camera.update();
@@ -132,34 +139,11 @@ public class GameScreen implements Screen {
         game.batch.end();
     }
 
-    /**
-     * Draws some basic data during gameplay assumes calling in a start.draw
-     */
-    private void drawUI() {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
-                "ShipTile number : " + playerShip.numberOfShipTiles());
-        if(playerShip.destroyedTileCount > 0){
-            stringBuilder.append("\nTiles Destroyed : " + playerShip.destroyedTileCount);
-        }
-
-        //Secondly draw the Hud
-        game.batch.setProjectionMatrix(hud.getStage().getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
-        hud.getStage().act(Gdx.graphics.getDeltaTime()); //act the Hud
-        hud.getStage().draw(); //draw the Hud
-
-        game.batch.begin();
-
-        game.font.draw(game.batch, stringBuilder.toString() , camera.position.x - (camera.viewportWidth / 3), camera.position.y - (camera.viewportHeight / 3));
-
-        game.batch.end();
-    }
-
     @Override
     public void resize(int width, int height) {
+
         extendViewport.update(width, height);
+        hud.update(width, height);
     }
 
     @Override
