@@ -889,6 +889,24 @@ public class Ship extends GameObject {
 	}
 
 	/**
+	 * Adds an element to the CollapseCollection using a positional reference
+	 * @param vector3 -  a position in space.
+	 * @return
+	 */
+	public boolean addTileToCollapseCollection(Vector3 vector3){
+		if(collectTiles){
+			ShipTile tile = returnTile(vector3.x, vector3.y);
+			if(tile != null){
+				stackedTiles.add(tile);
+				return true;
+			}
+			return false;
+		} else {
+			throw new RuntimeException("CollectTiles is false : " + collectTiles);
+		}
+	}
+
+	/**
 	 * Returns reference to the hovering indicator reference
 	 * @return
 	 */
