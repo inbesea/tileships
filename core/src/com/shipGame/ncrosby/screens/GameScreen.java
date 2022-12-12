@@ -126,17 +126,14 @@ public class GameScreen implements Screen {
         // Uses the game and camera context to handle drawing properly.
         game.batch.begin();
         GameObject go ;
-//        for(int i = 0 ; i < gameObjects.size ; i++){
-//            go = gameObjects.get(i);
-//        }
+
         for(int i = 0 ; i < gameObjects.size ; i++){
             go = gameObjects.get(i);
             drawGameObject(go); // Call helper to draw object
             collisionDetection(go);
         }
-        System.out.println("isCollectingTiles : " + playerShip.isCollectingTiles() + " hoverShouldDraw : " + playerShip.hoverShouldDraw());
+
         if(playerShip.isCollectingTiles() && playerShip.hoverShouldDraw()){
-            System.out.println("Drawing Hover Indicator!############");
             drawGameObject(playerShip.getTileHoverIndicator());
         }
         drawGameObject(player);// Draw last to be on top of robot
