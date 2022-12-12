@@ -51,6 +51,7 @@ public class Ship extends GameObject {
 	public boolean collectTiles = false;
 	private Stack<ShipTile> stackedTiles;
 	private TileHoverIndicator tileHoverIndicator;
+	private TileStackManager tileStackManager;
 
 	/**
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
@@ -62,8 +63,7 @@ public class Ship extends GameObject {
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
 
-		tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(64,64));
-		stackedTiles = new Stack<>();
+		tileStackManager = new TileStackManager();
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -76,8 +76,7 @@ public class Ship extends GameObject {
 		this.cam = cam;
 		this.screen = screen;
 
-		stackedTiles = new Stack<>();
-		tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(64,64));
+		tileStackManager = new TileStackManager();
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -851,10 +850,10 @@ public class Ship extends GameObject {
 		return collectTiles;
 	}
 
-    public void startCollapseCollect() {
-		System.out.println("Begin collecting tiles");
-		collectTiles = true;
-    }
+	/**
+	 * Kick off collecting tiles in the stack manager
+	 */
+    public void startCollapseCollect() {tileStackManager.startCollect();}
 
 	/**
 	 * Clears and returns a stack of tiles collected during a collapse action
@@ -889,21 +888,24 @@ public class Ship extends GameObject {
 		}
 	}
 
+	/**
+	 * Returns reference to the hovering indicator reference
+	 * @return
+	 */
 	public TileHoverIndicator getTileHoverIndicator() {
-		return tileHoverIndicator;
+		return tileStackManager.getTileHoverIndicator();
 	}
 
 	public void setHoverIndicator(float x, float y){
-		tileHoverIndicator.setX(x);
-		tileHoverIndicator.setY(y);
+		tileStackManager.setHoverIndicator(x,y);
 	}
 
 	/**
 	 * Checks if the hovers should draw
 	 * @return
 	 */
-	public boolean hoverShouldDraw() {
-		return tileHoverIndicator.isDrawHover();
+	public boolean isHoverDrawing() {
+		return tileStackManager.isHoverDrawing();
 	}
 
 	/**
@@ -911,6 +913,14 @@ public class Ship extends GameObject {
 	 * @param shouldDraw
 	 */
 	public void setHoverShouldDraw(boolean shouldDraw){
-		tileHoverIndicator.setDrawHover(shouldDraw);
+		tileStackManager.setDrawHover(shouldDraw);
+	}
+
+	/**
+	 * Check if manager has collected the limit of tiles.
+	 * @return false if more tiles can be collected, else returns false
+	 */
+	public boolean collapseStackIsFull(){
+		return tileStackManager.isFull();
 	}
 }

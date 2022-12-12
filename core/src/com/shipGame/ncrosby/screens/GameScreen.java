@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.PlayerInput;
@@ -133,7 +132,7 @@ public class GameScreen implements Screen {
             collisionDetection(go);
         }
 
-        if(playerShip.isCollectingTiles() && playerShip.hoverShouldDraw()){
+        if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
             drawGameObject(playerShip.getTileHoverIndicator());
         }
         drawGameObject(player);// Draw last to be on top of robot

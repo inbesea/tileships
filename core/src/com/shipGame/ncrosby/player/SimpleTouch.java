@@ -25,6 +25,7 @@ public class SimpleTouch implements InputProcessor {
         OrthographicCamera camera;
         Ship playerShip;
         Player player;
+        // touch point
         Vector3 tp = new Vector3();
 
     boolean isDragging;
@@ -110,8 +111,12 @@ public class SimpleTouch implements InputProcessor {
             camera.unproject(tp.set(screenX, screenY, 0));
 
             // Need to handle dragging to collect more tiles
-
-            if(draggedTile != null){ // Dragging a tile
+            if(playerShip.isCollectingTiles() && !playerShip.collapseStackIsFull()){
+                // is
+//                if(playerShip.returnTile(tp.x, tp.y) )
+                // After get a tile we can check if the stack is complete or not.
+                // if it is then we can turn off collecting tiles.
+            } else if (draggedTile != null){// Dragging a tile
                 // Get mouse location
                 Vector3 mouseLocation = new Vector3();
                 mouseLocation.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -120,6 +125,8 @@ public class SimpleTouch implements InputProcessor {
                 // Drag the tile with mouse
                 draggedTile.setX(mouseLocation.x - ShipTile.TILESIZE/2.0f);
                 draggedTile.setY(mouseLocation.y - ShipTile.TILESIZE/2.0f);
+            } else {
+
             }
 
             return true;
@@ -139,30 +146,12 @@ public class SimpleTouch implements InputProcessor {
             return true;
         }
 
-    /**
-     * Handles placing a dragged tile.
-     * Expects to be used within SimpleTouch context, utilizing a class-scoped "dragged" ShipTile variable
-     *
-     * @param playerShip - The ship the tile can be added to
-     * @param mousePosition - the unprojected mouse position
-     */
-    private void handlePlacingDragged(Ship playerShip, Vector3 mousePosition) {
-
-        Vector2 mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
-
-        playerShip.addTile(mousePosition2.x, mousePosition.y, draggedTile.getID());
-
-        // Dispose of used dragged tile references
-        playerShip.setDragged(null);
-        draggedTile = null; // Dispose of dragged tile
-    }
-
         @Override public boolean keyDown (int keycode) {
         System.out.println("Keycode pressed is : " + keycode);
 
         // Begin collecting tiles for collapse
         if(!playerShip.isCollectingTiles() && keycode == 59){
-            if(draggedTile != null){
+            if(draggedTile != null){ // If holding tile
                 playerShip.addTile(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
                 setDraggedTileToNull();
                 setIsDragging(false);
@@ -222,5 +211,24 @@ public class SimpleTouch implements InputProcessor {
         ShipTile shipTile = draggedTile;
         draggedTile = null;
         return shipTile;
+    }
+
+
+    /**
+     * Handles placing a dragged tile.
+     * Expects to be used within SimpleTouch context, utilizing a class-scoped "dragged" ShipTile variable
+     *
+     * @param playerShip - The ship the tile can be added to
+     * @param mousePosition - the unprojected mouse position
+     */
+    private void handlePlacingDragged(Ship playerShip, Vector3 mousePosition) {
+
+        Vector2 mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
+
+        playerShip.addTile(mousePosition2.x, mousePosition.y, draggedTile.getID());
+
+        // Dispose of used dragged tile references
+        playerShip.setDragged(null);
+        draggedTile = null; // Dispose of dragged tile
     }
 }
