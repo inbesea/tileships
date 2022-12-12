@@ -18,7 +18,6 @@ import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.util.AsteroidManager;
-import com.shipGame.ncrosby.util.ShipStarters;
 
 import static com.shipGame.ncrosby.util.generalUtil.*;
 
@@ -188,11 +187,13 @@ public class Ship extends GameObject {
 
 	/**
 	 * Returns a Vector position with respect to the grid.
+	 *
+	 * TODO : Should update ship so the grid is alligned with the shipposition, allowing us to move the ship and keep grid.
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	public Vector2 getGridCorrectedPosition(float x, float y){
+	public Vector2 getGridAlignedPosition(float x, float y){
 		int[] indexes = returnIndex(x, y);
 		Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexes[0]), getGameSpacePositionFromIndex(indexes[1]));
 		return vector2;

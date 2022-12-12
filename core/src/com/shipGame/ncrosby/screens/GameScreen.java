@@ -178,8 +178,6 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String textureString = gameObject.getTexture();
 
-        // Handle updates first
-
         if (!Objects.equals(textureString, "none") && !Objects.equals(textureString, "")) { // If ID has associated string
             Texture texture = assetManager.get(textureString,Texture.class);
             Vector2 size = gameObject.getSize();
