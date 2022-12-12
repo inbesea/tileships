@@ -48,7 +48,7 @@ public class generalUtil {
      * @param camera - Orthographic camera for context
      * @return - Vector3 of unprojected mouse position based on Gdx.input.getX/Y();
      */
-    public static Vector3 returnUnprojectedMousePosition(OrthographicCamera camera){
+    public static Vector3 returnUnprojectedPosition(OrthographicCamera camera){
         Vector3 position = new Vector3();
         position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(position);

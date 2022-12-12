@@ -14,7 +14,7 @@ import com.shipGame.ncrosby.tileShipGame;
 
 import java.util.Stack;
 
-import static com.shipGame.ncrosby.util.generalUtil.returnUnprojectedMousePosition;
+import static com.shipGame.ncrosby.util.generalUtil.returnUnprojectedPosition;
 
 /**
  * Main user input handling class.
@@ -87,7 +87,7 @@ public class SimpleTouch implements InputProcessor {
         // Set init values
         camera.unproject(tp.set(screenX, screenY, 0));
         setIsDragging(true);
-        Vector3 v = returnUnprojectedMousePosition(camera);
+        Vector3 v = returnUnprojectedPosition(camera);
 
         if (playerShip.isCollectingTiles()){
             ShipTile collectTile = playerShip.returnTile(v.x, v.y);
@@ -109,6 +109,8 @@ public class SimpleTouch implements InputProcessor {
             if (!isDragging) return false;
             camera.unproject(tp.set(screenX, screenY, 0));
 
+            // Need to handle dragging to collect more tiles
+
             if(draggedTile != null){ // Dragging a tile
                 // Get mouse location
                 Vector3 mouseLocation = new Vector3();
@@ -125,13 +127,11 @@ public class SimpleTouch implements InputProcessor {
 
         @Override public boolean touchUp (int screenX, int screenY, int pointer, int button) {
             if (button != Input.Buttons.LEFT || pointer > 0) return false;
-            Vector3 mousePosition = returnUnprojectedMousePosition(camera);
+            Vector3 mousePosition = returnUnprojectedPosition(camera);
+
+            // Need to handle letting go of the mouse to construct.
 
             if(draggedTile != null){ // If there is a tile being dragged
-                // This is a good way to make this dependant on the "playerShip" instead of a weird combo of the handler and ship
-                // It does assume that the  placement always works? Which *may* be true, but is an assumption, not something I've fully decided.
-//                boolean placed = playerShip.placeTile(mousePosition, draggedTile);
-
                 handlePlacingDragged(playerShip, mousePosition);
             }
 
