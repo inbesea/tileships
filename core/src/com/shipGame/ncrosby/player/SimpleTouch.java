@@ -90,15 +90,16 @@ public class SimpleTouch implements InputProcessor {
         Vector3 v = returnUnprojectedMousePosition(camera);
 
         if (playerShip.isCollectingTiles()){
-            playerShip.returnTile(v.x, v.y);
+            ShipTile collectTile = playerShip.returnTile(v.x, v.y);
+            playerShip.addTileToCollapseCollection(collectTile); // Stack should be empty
+        } else {
+            // Get a tile and check if it can be picked up.
+            ShipTile pickedUpTile = playerShip.returnTile(v.x, v.y);
+            boolean canGrabTile = canGrabTile(pickedUpTile);
 
-        }
-
-        ShipTile pickedUpTile = playerShip.returnTile(v.x, v.y);
-        boolean canGrabTile = canGrabTile(pickedUpTile);
-
-        if(canGrabTile){
-            pickUpTile(pickedUpTile);
+            if(canGrabTile){
+                pickUpTile(pickedUpTile);
+            }
         }
 
         return true;
