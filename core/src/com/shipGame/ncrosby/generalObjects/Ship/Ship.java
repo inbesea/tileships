@@ -49,6 +49,7 @@ public class Ship extends GameObject {
 	private int pointLocation[] = new int[2];
 	public int destroyedTileCount = 0;
 	private TileStackManager tileStackManager;
+	private TileCondenser tileCondenser;
 
 	/**
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
@@ -61,6 +62,7 @@ public class Ship extends GameObject {
 		this.asteroidManager = asteroidManager;
 
 		tileStackManager = new TileStackManager();
+		tileCondenser = new TileCondenser();
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -74,6 +76,7 @@ public class Ship extends GameObject {
 		this.screen = screen;
 
 		tileStackManager = new TileStackManager();
+		tileCondenser = new TileCondenser();
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -959,5 +962,9 @@ public class Ship extends GameObject {
 
 	public boolean isTileCollected(ShipTile tile) {
 		return tileStackManager.isTileCollected(tile);
+	}
+
+	public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
+		return tileCondenser.buildNewTile(collectedTileArray);
 	}
 }
