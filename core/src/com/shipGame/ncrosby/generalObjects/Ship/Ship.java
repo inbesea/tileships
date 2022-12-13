@@ -407,7 +407,7 @@ public class Ship extends GameObject {
 	 * Returns reference to a tile
 	 * @param x - horizontal position of tile
 	 * @param y - vertical position of tile
-	 * @return - tile found, if no tile is found it returns null
+	 * @return - tile found, else returns null
 	 */
 	public ShipTile returnTile(float x, float y) {
 		return findTile(new Vector2(x,y));
