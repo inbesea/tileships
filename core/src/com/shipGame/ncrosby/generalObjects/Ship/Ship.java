@@ -952,6 +952,11 @@ public class Ship extends GameObject {
 		return tileStackManager.isFull();
 	}
 
+
+	public void cancelCurrentCollectArray(){
+		tileStackManager.cancelCurrentCollectArray();
+	}
+
 	public boolean isTileCollected(ShipTile tile) {
 		return tileStackManager.isTileCollected(tile);
 	}

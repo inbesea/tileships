@@ -83,6 +83,10 @@ public class SimpleTouch implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        if(playerShip.isCollectingTiles() && button == Input.Buttons.RIGHT){
+            playerShip.cancelCurrentCollectArray(); // Cancel collect action
+        }
         // ignore if its not left mouse button or first touch pointer
         if (button != Input.Buttons.LEFT || pointer > 0) return false;
 
