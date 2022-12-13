@@ -115,8 +115,6 @@ public class SimpleTouch implements InputProcessor {
 
             // Need to handle dragging to collect more tiles
             if(playerShip.isCollectingTiles() && !playerShip.collapseStackIsFull()){
-                // is
-//                if(playerShip.returnTile(tp.x, tp.y) )
                 // After get a tile we can check if the stack is complete or not.
                 // if it is then we can turn off collecting tiles. A fullStack Check is not needed.
                 ShipTile tile = playerShip.returnTile(tp.x, tp.y);
@@ -124,14 +122,9 @@ public class SimpleTouch implements InputProcessor {
                     playerShip.addTileToCollapseCollection(tile);
                 }
             } else if (draggedTile != null){// Dragging a tile
-                // Get mouse location
-                Vector3 mouseLocation = new Vector3();
-                mouseLocation.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(mouseLocation);
-
                 // Drag the tile with mouse
-                draggedTile.setX(mouseLocation.x - ShipTile.TILESIZE/2.0f);
-                draggedTile.setY(mouseLocation.y - ShipTile.TILESIZE/2.0f);
+                draggedTile.setX(tp.x - ShipTile.TILESIZE/2.0f);
+                draggedTile.setY(tp.y - ShipTile.TILESIZE/2.0f);
             } else {
 
             }
