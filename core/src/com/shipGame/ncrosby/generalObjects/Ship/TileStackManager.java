@@ -27,7 +27,7 @@ public class TileStackManager {
      * @return
      */
     public boolean isFull(){
-        if(collectedTiles.size == collectedTileLimit){
+        if(collectedTiles.size >= collectedTileLimit){
             return true;
         } else {
             return false;
@@ -106,7 +106,17 @@ public class TileStackManager {
      * @param shipTile - Tile to stack
      */
     public void addTile(ShipTile shipTile) {
-        collectedTiles.add(shipTile);
+        if(!this.isFull()){ // Confirm the hovered tile is a neighbor
+            if(collectedTiles.isEmpty()){
+                System.out.println("Adding tile to array stack!");
+                collectedTiles.add(shipTile);
+            } else if (shipTile.isNeighbor(collectedTiles.peek())){
+                System.out.println("Adding tile to array stack!");
+                collectedTiles.add(shipTile);
+            }
+        } else {
+            System.out.println("Collapse array is full!");
+        }
     }
 
     /**
@@ -116,5 +126,11 @@ public class TileStackManager {
      */
     public boolean isTileCollected(ShipTile tile) {
         return collectedTiles.contains(tile, true);
+    }
+
+    public void cancelCurrentCollectArray() {
+        if(isCollectingTiles()){
+            collectedTiles.clear();
+        }
     }
 }
