@@ -149,7 +149,7 @@ public class SimpleTouch implements InputProcessor {
                 If the player doesn't make anything then we keep going, but the array is wiped.
                  */
                 Array<ShipTile> collectedTileArray =
-                        playerShip.finishCollapseCollect(); // Ends collecting
+                        playerShip.getCollapseCollect(); // Return collected
                 // Continue collect with clear array?
                 if(collectedTileArray.isEmpty()){
                     System.out.println("Tiles collected : None");
