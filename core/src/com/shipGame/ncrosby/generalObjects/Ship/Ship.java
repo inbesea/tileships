@@ -625,6 +625,7 @@ public class Ship extends GameObject {
 			if(removeAsteroid){
 				screen.removeGameObject(gameObject);
 				screen.removeAsteroid(gameObject);
+				screen.updateMouseMoved();
 			}
 
 		}

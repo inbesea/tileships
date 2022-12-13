@@ -54,12 +54,12 @@ public class SimpleTouch implements InputProcessor {
      */
     @Override public boolean mouseMoved (int screenX, int screenY) {
             if(playerShip.isCollectingTiles()){
-                System.out.println("isCollectingTiles : " + playerShip.isCollectingTiles() + " hoverShouldDraw : " + playerShip.isHoverDrawing());
                 // Fix screen position to camera position
                 Vector3 unprojectedV3 = new Vector3(screenX, screenY, 0);
                 camera.unproject(unprojectedV3);
 
-                if(!playerShip.isPositionOffShip(new Vector2(unprojectedV3.x, unprojectedV3.y)) ){ // Check if on ship
+                ShipTile tile = playerShip.returnTile(unprojectedV3.x, unprojectedV3.y);
+                if(tile != null ){ // Check if on ship
                     // Draw placeholder art on tile
                     playerShip.setHoverShouldDraw(true);
                     Vector2 vector2 = playerShip.getGridAlignedPosition(unprojectedV3.x, unprojectedV3.y);

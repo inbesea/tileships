@@ -279,4 +279,11 @@ public class GameScreen implements Screen {
     public void removeAsteroid(GameObject asteroid) {
         asteroidManager.removeAsteroid((Asteroid) asteroid);
     }
+
+    /**
+     * Update logic for mouseMoved to make sure it's updated
+     */
+    public void updateMouseMoved() {
+        st.mouseMoved(Gdx.input.getX(), Gdx.input.getY());
+    }
 }
