@@ -243,11 +243,22 @@ public class Ship extends GameObject {
 		if(!this.existingTiles.removeValue(tile, true)){
 			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
 		} else {
-			if(isCollectingTiles()){
+			if(isCollectingTiles()){ // Delete tile if being collected.
 				getCollapseCollect().removeValue(tile, true);
 			}
 			removeNeighbors(tile);
 			logRemovedTile(tile);
+		}
+	}
+
+	/**
+	 * Uses removeTileFromShip to remove all instances of an array of tiles in the ship
+	 *
+	 * @param tiles - Tiles to remove from ship
+	 */
+	public void removeTilesFromShip(Array<ShipTile> tiles){
+		for (int i = 0 ; i <= tiles.size ; i++){
+			removeTileFromShip(tiles.get(i));
 		}
 	}
 
@@ -964,7 +975,21 @@ public class Ship extends GameObject {
 		return tileStackManager.isTileCollected(tile);
 	}
 
+	/**
+	 * Returns a tile
+	 * Handles removing tiles from ship instance
+	 * @param collectedTileArray - list of tiles to produce from
+	 * @return - ShipTile resulting from build action.
+	 */
 	public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
-		return tileCondenser.buildNewTile(collectedTileArray);
+		ShipTile producedTile = tileCondenser.buildNewTile(collectedTileArray);
+
+		if(producedTile == null){
+			tileStackManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
+			return null;
+		} else { // if Tile produced then
+			removeTilesFromShip(collectedTileArray);
+			return producedTile;
+		}
 	}
 }
