@@ -48,9 +48,6 @@ public class Ship extends GameObject {
 	Array<GameObject> gameObjects;
 	private int pointLocation[] = new int[2];
 	public int destroyedTileCount = 0;
-	public boolean collectTiles = false;
-	private Stack<ShipTile> stackedTiles;
-	private TileHoverIndicator tileHoverIndicator;
 	private TileStackManager tileStackManager;
 
 	/**
@@ -847,7 +844,7 @@ public class Ship extends GameObject {
 	}
 
 	public boolean isCollectingTiles(){
-		return collectTiles;
+		return tileStackManager.isCollectingTiles();
 	}
 
 	/**
@@ -859,12 +856,7 @@ public class Ship extends GameObject {
 	 * Clears and returns a stack of tiles collected during a collapse action
 	 */
 	public Stack<ShipTile> finishCollapseCollect() {
-		Stack<ShipTile> stackedTiles = this.stackedTiles;
-		if(!stackedTiles.empty()){
-			this.stackedTiles.clear();
-		}
-		collectTiles = false;
-		return stackedTiles;
+		return tileStackManager.endCollect();
 	}
 
 	/**
@@ -872,55 +864,59 @@ public class Ship extends GameObject {
 	 * @return
 	 */
 	public Stack<ShipTile> getCollapseCollect(){
-		return this.stackedTiles;
+		return tileStackManager.getTileStack();
 	}
 
 	/**
 	 * Adds an element to the CollapseCollection and returns a bool representing success.
-	 * @param shipTile
-	 * @return
+	 * @param tile - Tile to add to manager stack
+	 * @return boolean signifying success
 	 */
-	public boolean addTileToCollapseCollection(ShipTile shipTile){
-		if(collectTiles){
-			return stackedTiles.add(shipTile);
+	public boolean addTileToCollapseCollection(ShipTile tile){
+		if(tileStackManager.isCollectingTiles()){
+			return tileStackManager.addTile(tile);
 		} else {
-			throw new RuntimeException("CollectTiles is false : " + collectTiles);
+			throw new RuntimeException("CollectTiles is false : " + tileStackManager.isCollectingTiles());
 		}
 	}
 
 	/**
 	 * Adds an element to the CollapseCollection using a positional reference
 	 * @param vector3 -  a position in space.
-	 * @return
+	 * @return - boolean signifying success
 	 */
 	public boolean addTileToCollapseCollection(Vector3 vector3){
-		if(collectTiles){
+		if(tileStackManager.isCollectingTiles()){
 			ShipTile tile = returnTile(vector3.x, vector3.y);
 			if(tile != null){
-				stackedTiles.add(tile);
-				return true;
+				return tileStackManager.addTile(tile);
 			}
 			return false;
 		} else {
-			throw new RuntimeException("CollectTiles is false : " + collectTiles);
+			throw new RuntimeException("CollectTiles is false : " + tileStackManager.isCollectingTiles());
 		}
 	}
 
 	/**
 	 * Returns reference to the hovering indicator reference
-	 * @return
+	 * @return - Hover indication instance
 	 */
 	public TileHoverIndicator getTileHoverIndicator() {
 		return tileStackManager.getTileHoverIndicator();
 	}
 
+	/**
+	 * Set hover indicator position
+	 * @param x - x-position
+	 * @param y - y-position
+	 */
 	public void setHoverIndicator(float x, float y){
 		tileStackManager.setHoverIndicator(x,y);
 	}
 
 	/**
 	 * Checks if the hovers should draw
-	 * @return
+	 * @return - true if is drawing, false if not drawing
 	 */
 	public boolean isHoverDrawing() {
 		return tileStackManager.isHoverDrawing();
@@ -928,7 +924,7 @@ public class Ship extends GameObject {
 
 	/**
 	 * Sets if the hover position should draw.
-	 * @param shouldDraw
+	 * @param shouldDraw - new boolean value for drawing the hover layover
 	 */
 	public void setHoverShouldDraw(boolean shouldDraw){
 		tileStackManager.setDrawHover(shouldDraw);

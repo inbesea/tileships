@@ -65,6 +65,20 @@ public class TileStackManager {
         collectTiles = true;
     }
 
+    /**
+     * Method to return the collected stack, end collection mode, and wipe the stack.
+     * @return - a Stack object of ShipTiles.
+     */
+    public Stack<ShipTile> endCollect() {
+        Stack<ShipTile> stackedTiles = getTileStack();
+        if(!stackedTiles.empty()){
+            stackedTiles.clear();
+        }
+        System.out.println("End collecting tiles");
+        collectTiles = false;
+        return stackedTiles;
+    }
+
     public void setDrawHover(boolean shouldDraw) {
         tileHoverIndicator.setDrawHover(shouldDraw);
     }
@@ -75,5 +89,26 @@ public class TileStackManager {
      */
     public boolean isHoverDrawing() {
         return tileHoverIndicator.isHoverDrawing();
+    }
+
+    public boolean isCollectingTiles() {
+        return collectTiles;
+    }
+
+    /**
+     * Standard getter
+     * @return - Stack of tiles as Stack Object
+     */
+    public Stack<ShipTile> getTileStack() {
+        return stackedTiles;
+    }
+
+    /**
+     * Add tile to manager stack and returns true if successful
+     * @param shipTile - Tile to stack
+     * @return - boolean signifying success
+     */
+    public boolean addTile(ShipTile shipTile) {
+        return stackedTiles.add(shipTile);
     }
 }

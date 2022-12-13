@@ -53,8 +53,8 @@ public class SimpleTouch implements InputProcessor {
      * @return - boolean
      */
     @Override public boolean mouseMoved (int screenX, int screenY) {
-            if(playerShip.isCollectingTiles() && playerShip.getCollapseCollect().empty()){
-
+            if(playerShip.isCollectingTiles()){
+                System.out.println("isCollectingTiles : " + playerShip.isCollectingTiles() + " hoverShouldDraw : " + playerShip.isHoverDrawing());
                 // Fix screen position to camera position
                 Vector3 unprojectedV3 = new Vector3(screenX, screenY, 0);
                 camera.unproject(unprojectedV3);
