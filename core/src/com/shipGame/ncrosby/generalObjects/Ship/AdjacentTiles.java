@@ -58,4 +58,20 @@ public class AdjacentTiles {
         if(Left != null)result++;
         return result;
     }
+
+    /**
+     * Checks if a tile is present in neighbors.
+     * @param possibleNeighbor
+     * @return
+     */
+    public boolean isNeighbor(ShipTile possibleNeighbor) {
+        if(Up == possibleNeighbor ||
+        Right == possibleNeighbor ||
+        Left == possibleNeighbor ||
+        Down == possibleNeighbor){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
