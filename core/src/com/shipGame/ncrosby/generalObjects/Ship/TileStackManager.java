@@ -108,4 +108,13 @@ public class TileStackManager {
     public void addTile(ShipTile shipTile) {
         collectedTiles.add(shipTile);
     }
+
+    /**
+     * Returns true if tile is present in array
+     * @param tile - tile to check
+     * @return - true if present, else false
+     */
+    public boolean isTileCollected(ShipTile tile) {
+        return collectedTiles.contains(tile, true);
+    }
 }

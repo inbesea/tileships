@@ -240,6 +240,9 @@ public class Ship extends GameObject {
 		if(!this.existingTiles.removeValue(tile, true)){
 			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
 		} else {
+			if(isCollectingTiles()){
+				getCollapseCollect().removeValue(tile, true);
+			}
 			removeNeighbors(tile);
 			logRemovedTile(tile);
 		}
@@ -947,5 +950,9 @@ public class Ship extends GameObject {
 	 */
 	public boolean collapseStackIsFull(){
 		return tileStackManager.isFull();
+	}
+
+	public boolean isTileCollected(ShipTile tile) {
+		return tileStackManager.isTileCollected(tile);
 	}
 }

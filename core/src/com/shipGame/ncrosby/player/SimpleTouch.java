@@ -93,7 +93,9 @@ public class SimpleTouch implements InputProcessor {
 
         if (playerShip.isCollectingTiles()){
             ShipTile collectTile = playerShip.returnTile(v.x, v.y);
-            playerShip.addTileToCollapseCollection(collectTile); // Stack should be empty
+            if(collectTile != null){
+                playerShip.addTileToCollapseCollection(collectTile); // Stack should be empty
+            }
         } else {
             // Get a tile and check if it can be picked up.
             ShipTile pickedUpTile = playerShip.returnTile(v.x, v.y);
@@ -118,7 +120,7 @@ public class SimpleTouch implements InputProcessor {
                 // After get a tile we can check if the stack is complete or not.
                 // if it is then we can turn off collecting tiles. A fullStack Check is not needed.
                 ShipTile tile = playerShip.returnTile(tp.x, tp.y);
-                if(tile != null){
+                if(tile != null && !playerShip.isTileCollected(tile)){
                     playerShip.addTileToCollapseCollection(tile);
                 }
             } else if (draggedTile != null){// Dragging a tile
@@ -142,8 +144,20 @@ public class SimpleTouch implements InputProcessor {
             Vector3 mousePosition = returnUnprojectedPosition(camera);
 
             // Need to handle letting go of the mouse to construct.
-
-            if(draggedTile != null){ // If there is a tile being dragged
+            if(playerShip.isCollectingTiles()){
+                /*
+                Note : This is going to change as we understand how this should work for the player
+                We probably don't want the collapse mode to end if the player releases the mouse button without constructing anything.
+                If the player doesn't make anything then we keep going, but the array is wiped.
+                 */
+                Array<ShipTile> shipTileArray =
+                        playerShip.finishCollapseCollect(); // Ends collecting
+                if(shipTileArray.isEmpty()){
+                    System.out.println("Tiles collected : None");
+                }else {
+                    System.out.println("Tiles collected : " + shipTileArray);
+                }
+            }else if(draggedTile != null){ // If there is a tile being dragged
                 handlePlacingDragged(playerShip, mousePosition);
             }
 
