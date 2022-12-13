@@ -856,7 +856,7 @@ public class Ship extends GameObject {
 	/**
 	 * Clears and returns a stack of tiles collected during a collapse action
 	 */
-	public Stack<ShipTile> finishCollapseCollect() {
+	public Array<ShipTile> finishCollapseCollect() {
 		return tileStackManager.endCollect();
 	}
 
@@ -864,8 +864,8 @@ public class Ship extends GameObject {
 	 * Standard getter
 	 * @return
 	 */
-	public Stack<ShipTile> getCollapseCollect(){
-		return tileStackManager.getTileStack();
+	public Array<ShipTile> getCollapseCollect(){
+		return tileStackManager.getTileArray();
 	}
 
 	/**
@@ -875,7 +875,8 @@ public class Ship extends GameObject {
 	 */
 	public boolean addTileToCollapseCollection(ShipTile tile){
 		if(tileStackManager.isCollectingTiles()){
-			return tileStackManager.addTile(tile);
+			tileStackManager.addTile(tile);
+			return true;
 		} else {
 			throw new RuntimeException("CollectTiles is false : " + tileStackManager.isCollectingTiles());
 		}
@@ -890,7 +891,8 @@ public class Ship extends GameObject {
 		if(tileStackManager.isCollectingTiles()){
 			ShipTile tile = returnTile(vector3.x, vector3.y);
 			if(tile != null){
-				return tileStackManager.addTile(tile);
+				tileStackManager.addTile(tile);
+				return true;
 			}
 			return false;
 		} else {

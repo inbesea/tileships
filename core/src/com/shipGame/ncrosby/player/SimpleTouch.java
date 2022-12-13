@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
@@ -168,12 +169,12 @@ public class SimpleTouch implements InputProcessor {
         @Override public boolean keyUp (int keycode) {
 
             if(playerShip.isCollectingTiles() && keycode == 59){
-                Stack<ShipTile> shipTileStack =
+                Array<ShipTile> shipTileArray =
                         playerShip.finishCollapseCollect(); // Ends collecting
-                if(shipTileStack.empty()){
+                if(shipTileArray.isEmpty()){
                     System.out.println("Tiles collected : None");
                 }else {
-                    System.out.println("Tiles collected : " + shipTileStack.stream().toString());
+                    System.out.println("Tiles collected : " + shipTileArray);
                 }
             }
             return false;

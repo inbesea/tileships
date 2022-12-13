@@ -1,26 +1,25 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
-
-import java.util.Stack;
 
 public class TileStackManager {
 
     public boolean collectTiles = false;
     // Lives in the stack manager
     private TileHoverIndicator tileHoverIndicator;
-    private Stack<ShipTile> stackedTiles;
-    // How many tiles can be grabbed for a stack of tiles.
-    private int stackLimit = 5;
+    private Array<ShipTile> collectedTiles;
+    // How many tiles can be grabbed for an array of tiles.
+    private int collectedTileLimit = 5;
 
     /**
      * Class to handle collecting tiles.
      */
     public TileStackManager(){
         tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(64,64)); // Location doesn't matter
-        stackedTiles = new Stack<>();
+        collectedTiles = new Array<>();
     }
 
     /**
@@ -28,7 +27,7 @@ public class TileStackManager {
      * @return
      */
     public boolean isFull(){
-        if(stackedTiles.size() == stackLimit){
+        if(collectedTiles.size == collectedTileLimit){
             return true;
         } else {
             return false;
@@ -62,21 +61,20 @@ public class TileStackManager {
 
     public void startCollect() {
         System.out.println("Begin collecting tiles");
+        if(!collectedTiles.isEmpty())collectedTiles.clear();
+
         collectTiles = true;
     }
 
     /**
-     * Method to return the collected stack, end collection mode, and wipe the stack.
+     * Method to return the collected stack, and ends collection mode.
      * @return - a Stack object of ShipTiles.
      */
-    public Stack<ShipTile> endCollect() {
-        Stack<ShipTile> stackedTiles = getTileStack();
-        if(!stackedTiles.empty()){
-            stackedTiles.clear();
-        }
+    public Array<ShipTile> endCollect() {
+        Array<ShipTile> shipTileStack = getTileArray();
         System.out.println("End collecting tiles");
         collectTiles = false;
-        return stackedTiles;
+        return shipTileStack;
     }
 
     public void setDrawHover(boolean shouldDraw) {
@@ -99,16 +97,15 @@ public class TileStackManager {
      * Standard getter
      * @return - Stack of tiles as Stack Object
      */
-    public Stack<ShipTile> getTileStack() {
-        return stackedTiles;
+    public Array<ShipTile> getTileArray() {
+        return collectedTiles;
     }
 
     /**
-     * Add tile to manager stack and returns true if successful
+     * Add tile to manager stack
      * @param shipTile - Tile to stack
-     * @return - boolean signifying success
      */
-    public boolean addTile(ShipTile shipTile) {
-        return stackedTiles.add(shipTile);
+    public void addTile(ShipTile shipTile) {
+        collectedTiles.add(shipTile);
     }
 }
