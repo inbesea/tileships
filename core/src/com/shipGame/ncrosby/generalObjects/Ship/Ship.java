@@ -98,6 +98,14 @@ public class Ship extends GameObject {
 			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
+		if(tileStackManager.isCollectingTiles()){
+			Array<ShipTile> tiles = tileStackManager.getTileArray();
+			for(int i = 0 ; tiles.size > i ; i++){
+				ShipTile tile = tiles.get(i);
+				game.batch.draw(assetManager.get("ToBeCollapsed.png", Texture.class),
+						tile.getX(), tile.getY());
+			}
+		}
 	}
 
 	/**
