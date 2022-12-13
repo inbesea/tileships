@@ -227,4 +227,13 @@ public class ShipTile extends GameObject {
 		return neighbors.getLeft();
 	}
 
+	/**
+	 * Checks if possibleNeighbor is a neighbor.
+	 * Returns true if is neighbor, else returns false
+	 * @param possibleNeighbor - tile to check for adjacency  
+	 * @return -  Returns true if is neighbor, else returns false
+	 */
+	public boolean isNeighbor(ShipTile possibleNeighbor) {
+		return getNeighbors().isNeighbor(possibleNeighbor);
+	}
 }
