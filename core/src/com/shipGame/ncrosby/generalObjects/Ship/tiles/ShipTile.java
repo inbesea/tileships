@@ -230,7 +230,7 @@ public class ShipTile extends GameObject {
 	/**
 	 * Checks if possibleNeighbor is a neighbor.
 	 * Returns true if is neighbor, else returns false
-	 * @param possibleNeighbor - tile to check for adjacency  
+	 * @param possibleNeighbor - tile to check for adjacency
 	 * @return -  Returns true if is neighbor, else returns false
 	 */
 	public boolean isNeighbor(ShipTile possibleNeighbor) {

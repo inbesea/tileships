@@ -95,12 +95,13 @@ public class SimpleTouch implements InputProcessor {
         setIsDragging(true);
         Vector3 v = returnUnprojectedPosition(camera);
 
+        // Handle init collect click
         if (playerShip.isCollectingTiles()){
             ShipTile collectTile = playerShip.returnTile(v.x, v.y);
             if(collectTile != null){
                 playerShip.addTileToCollapseCollection(collectTile); // Stack should be empty
             }
-        } else {
+        } else { // Pick up and drag tile
             // Get a tile and check if it can be picked up.
             ShipTile pickedUpTile = playerShip.returnTile(v.x, v.y);
             boolean canGrabTile = canGrabTile(pickedUpTile);
@@ -147,13 +148,15 @@ public class SimpleTouch implements InputProcessor {
                 We probably don't want the collapse mode to end if the player releases the mouse button without constructing anything.
                 If the player doesn't make anything then we keep going, but the array is wiped.
                  */
-                Array<ShipTile> shipTileArray =
+                Array<ShipTile> collectedTileArray =
                         playerShip.finishCollapseCollect(); // Ends collecting
-                if(shipTileArray.isEmpty()){
+                // Continue collect with clear array?
+                if(collectedTileArray.isEmpty()){
                     System.out.println("Tiles collected : None");
                 }else {
-                    System.out.println("Tiles collected : " + shipTileArray);
+                    System.out.println("Tiles collected : " + collectedTileArray + " Size : " + collectedTileArray.size);
                 }
+                ShipTile newTile = playerShip.buildNewTile(collectedTileArray);
             }else if(draggedTile != null){ // If there is a tile being dragged
                 handlePlacingDragged(playerShip, mousePosition);
             }
@@ -179,13 +182,13 @@ public class SimpleTouch implements InputProcessor {
 
         @Override public boolean keyUp (int keycode) {
 
-            if(playerShip.isCollectingTiles() && keycode == 59){
+            if(playerShip.isCollectingTiles() && keycode == 59){ // If user keys up should
                 Array<ShipTile> shipTileArray =
                         playerShip.finishCollapseCollect(); // Ends collecting
                 if(shipTileArray.isEmpty()){
                     System.out.println("Tiles collected : None");
                 }else {
-                    System.out.println("Tiles collected : " + shipTileArray);
+                    System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
                 }
             }
             return false;
