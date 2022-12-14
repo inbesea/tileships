@@ -1,5 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
@@ -23,7 +24,7 @@ public class TileCondenser {
      */
     public ShipTile buildNewTile(Array<ShipTile> tiles){
         if(tiles.isEmpty()){
-            System.out.println("Empty array passed to TileCondenser");
+            Gdx.app.error("BuildingTile","Empty array passed to TileCondenser");
             return null;
         } else {
             Array<TileRecipes> recipes = getAvailableRecipes(); // Array of recipes available to the player.
