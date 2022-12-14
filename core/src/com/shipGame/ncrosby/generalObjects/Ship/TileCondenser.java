@@ -25,9 +25,16 @@ public class TileCondenser {
             System.out.println("Empty array passed to TileCondenser");
             return null;
         } else {
+            Array<TileRecipe> recipes = getAvailableRecipes(); // Array of recipes available to the player.
+            for(int i = 0 ; i < tiles.size ; i++){
 
+            }
         }
         return null;
+    }
+
+    private Array<TileRecipe> getAvailableRecipes() {
+
     }
 
 }
