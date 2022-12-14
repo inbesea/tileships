@@ -3,6 +3,7 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileRecipes;
 
 /**
  * Class to build out new instances of tiles based on ordered arrays of tiles.
@@ -25,7 +26,7 @@ public class TileCondenser {
             System.out.println("Empty array passed to TileCondenser");
             return null;
         } else {
-            Array<TileRecipe> recipes = getAvailableRecipes(); // Array of recipes available to the player.
+            Array<TileRecipes> recipes = getAvailableRecipes(); // Array of recipes available to the player.
             for(int i = 0 ; i < tiles.size ; i++){
 
             }
@@ -33,8 +34,8 @@ public class TileCondenser {
         return null;
     }
 
-    private Array<TileRecipe> getAvailableRecipes() {
-
+    private Array<TileRecipes> getAvailableRecipes() {
+return null;
     }
 
 }
