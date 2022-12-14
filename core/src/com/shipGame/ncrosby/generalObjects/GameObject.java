@@ -33,6 +33,19 @@ public abstract class GameObject {
 		this.id = id;
 		this.textureRef = id.getTexture();
 	}
+
+	/**
+	 * No ID super const.
+	 * @param position
+	 * @param size
+	 */
+	public GameObject(Vector2 position, Vector2 size) {
+		// set location and id to define basics of the game object.
+		this.position.x = position.x;
+		this.position.y = position.y;
+		this.size.x = size.x;
+		this.size.y = size.y;
+	}
 	
 	public abstract void tick();
 	public abstract void render(tileShipGame game);

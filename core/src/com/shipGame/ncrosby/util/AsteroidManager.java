@@ -96,7 +96,7 @@ public class AsteroidManager {
                 throw new RuntimeException("Aw jeez");
             }
             if(outOfBounds(asteroid)){
-                System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
+//                System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
                 removeAsteroid(asteroid);
                 screen.removeGameObject(asteroid);
                 numberOfAsteroids = asteroids.size;

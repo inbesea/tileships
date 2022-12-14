@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.PlayerInput;
@@ -126,13 +125,15 @@ public class GameScreen implements Screen {
         // Uses the game and camera context to handle drawing properly.
         game.batch.begin();
         GameObject go ;
-//        for(int i = 0 ; i < gameObjects.size ; i++){
-//            go = gameObjects.get(i);
-//        }
+
         for(int i = 0 ; i < gameObjects.size ; i++){
             go = gameObjects.get(i);
             drawGameObject(go); // Call helper to draw object
             collisionDetection(go);
+        }
+
+        if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
+            drawGameObject(playerShip.getTileHoverIndicator());
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
@@ -172,8 +173,6 @@ public class GameScreen implements Screen {
     private void drawGameObject(GameObject gameObject) {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String textureString = gameObject.getTexture();
-
-        // Handle updates first
 
         if (!Objects.equals(textureString, "none") && !Objects.equals(textureString, "")) { // If ID has associated string
             Texture texture = assetManager.get(textureString,Texture.class);
@@ -279,5 +278,12 @@ public class GameScreen implements Screen {
      */
     public void removeAsteroid(GameObject asteroid) {
         asteroidManager.removeAsteroid((Asteroid) asteroid);
+    }
+
+    /**
+     * Update logic for mouseMoved to make sure it's updated
+     */
+    public void updateMouseMoved() {
+        st.mouseMoved(Gdx.input.getX(), Gdx.input.getY());
     }
 }

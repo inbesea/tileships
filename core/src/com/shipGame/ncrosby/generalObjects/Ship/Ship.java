@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
@@ -47,6 +48,8 @@ public class Ship extends GameObject {
 	Array<GameObject> gameObjects;
 	private int pointLocation[] = new int[2];
 	public int destroyedTileCount = 0;
+	private TileStackManager tileStackManager;
+	private TileCondenser tileCondenser;
 
 	/**
 	 * ShipHandler keeps track of the tiles of the ship and has methods for
@@ -58,6 +61,9 @@ public class Ship extends GameObject {
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
 
+		tileStackManager = new TileStackManager();
+		tileCondenser = new TileCondenser();
+
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
@@ -68,6 +74,9 @@ public class Ship extends GameObject {
 		super(position, new Vector2(0,0), id);
 		this.cam = cam;
 		this.screen = screen;
+
+		tileStackManager = new TileStackManager();
+		tileCondenser = new TileCondenser();
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -91,6 +100,14 @@ public class Ship extends GameObject {
 		if(draggedTile != null){
 			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
+		}
+		if(tileStackManager.isCollectingTiles()){
+			Array<ShipTile> tiles = tileStackManager.getTileArray();
+			for(int i = 0 ; tiles.size > i ; i++){
+				ShipTile tile = tiles.get(i);
+				game.batch.draw(assetManager.get("ToBeCollapsed.png", Texture.class),
+						tile.getX(), tile.getY());
+			}
 		}
 	}
 
@@ -153,7 +170,7 @@ public class Ship extends GameObject {
 	 * Adds a tile expecting the x,y to be a valid placement location
 	 */
 	private ShipTile placeTile(float x, float y, ID id){
-		float indexXY[];
+		int indexXY[];
 		ShipTile tempTile;
 		Sound tilePlacement;
 		tilePlacement = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/tilePlacementV2.wav"));
@@ -162,7 +179,7 @@ public class Ship extends GameObject {
 		System.out.println("Create tile at " + x + "," + y);
 		System.out.println("Create tile at " + returnIndex(x, y)[0] + ", " + returnIndex(x, y)[1]);
 		System.out.println("Type of : " + id);
-		tempTile = new ShipTile(new Vector2 ((int) indexXY[0] * ShipTile.TILESIZE, (int) indexXY[1] * ShipTile.TILESIZE), id);
+		tempTile = new ShipTile(new Vector2 (getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1])), id);
 		this.existingTiles.add(tempTile);
 		setNeighbors(tempTile); // Setting tile neighbors within ship
 
@@ -173,6 +190,28 @@ public class Ship extends GameObject {
 		}
 		tilePlacement.play();
 		return tempTile;
+	}
+
+	/**
+	 * Returns a Vector position with respect to the grid.
+	 *
+	 * TODO : Should update ship so the grid is alligned with the shipposition, allowing us to move the ship and keep grid.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public Vector2 getGridAlignedPosition(float x, float y){
+		int[] indexes = returnIndex(x, y);
+		Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexes[0]), getGameSpacePositionFromIndex(indexes[1]));
+		return vector2;
+	}
+
+	/**
+	 * Returns an index scaled up by ShipTile.TILESIZE
+	 * @return
+	 */
+	public int getGameSpacePositionFromIndex(int index){
+		return index * ShipTile.TILESIZE;
 	}
 
 	/**
@@ -204,8 +243,22 @@ public class Ship extends GameObject {
 		if(!this.existingTiles.removeValue(tile, true)){
 			throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
 		} else {
+			if(isCollectingTiles()){ // Delete tile if being collected.
+				getCollapseCollect().removeValue(tile, true);
+			}
 			removeNeighbors(tile);
 			logRemovedTile(tile);
+		}
+	}
+
+	/**
+	 * Uses removeTileFromShip to remove all instances of an array of tiles in the ship
+	 *
+	 * @param tiles - Tiles to remove from ship
+	 */
+	public void removeTilesFromShip(Array<ShipTile> tiles){
+		for (int i = 0 ; i <= tiles.size ; i++){
+			removeTileFromShip(tiles.get(i));
 		}
 	}
 
@@ -379,7 +432,7 @@ public class Ship extends GameObject {
 	 * Returns reference to a tile
 	 * @param x - horizontal position of tile
 	 * @param y - vertical position of tile
-	 * @return - tile found, if no tile is found it returns null
+	 * @return - tile found, else returns null
 	 */
 	public ShipTile returnTile(float x, float y) {
 		return findTile(new Vector2(x,y));
@@ -392,7 +445,7 @@ public class Ship extends GameObject {
 	 * @return  - Can return a ShipTile object. Will return null on spaces without tiles.
 	 */
 	private ShipTile findTile(Vector2 position){
-		float indexXY[] = returnIndex(position.x, position.y);
+		int indexXY[] = returnIndex(position.x, position.y);
 
 	 	ShipTile temp;
 	 	Stack<ShipTile> resultTiles = new Stack<>();
@@ -453,10 +506,9 @@ public class Ship extends GameObject {
 	 *
 	 * @param x - The x location in the jframe to adjust by cam
 	 * @param y - The y location in the jframe to adjust by cam
-	 * @return
+	 * @return - int so the index is a whole number
 	 */
-	public float[] returnIndex(float x, float y) {
-
+	public int[] returnIndex(float x, float y) {
 
 		// -1 shifting wont cause issues because the flow will subtract one from it either way
 		// -64 - -1 will return index -1 yayy
@@ -465,7 +517,7 @@ public class Ship extends GameObject {
 		boolean xNegative = x <= -1;
 
 
-		float XYresult[] = new float[2];
+		int XYresult[] = new int[2];
 		if (xNegative) {
 			if(yNegative) {
 				// x, y negative
@@ -598,6 +650,7 @@ public class Ship extends GameObject {
 			if(removeAsteroid){
 				screen.removeGameObject(gameObject);
 				screen.removeAsteroid(gameObject);
+				screen.updateMouseMoved();
 			}
 
 		}
@@ -814,5 +867,129 @@ public class Ship extends GameObject {
 	 */
 	public void increaseDestroyedTile(int destroyedTiles){
 		destroyedTileCount += destroyedTiles;
+	}
+
+	public boolean isCollectingTiles(){
+		return tileStackManager.isCollectingTiles();
+	}
+
+	/**
+	 * Kick off collecting tiles in the stack manager
+	 */
+    public void startCollapseCollect() {tileStackManager.startCollect();}
+
+	/**
+	 * Clears and returns a stack of tiles collected during a collapse action
+	 */
+	public Array<ShipTile> finishCollapseCollect() {
+		return tileStackManager.endCollect();
+	}
+
+	/**
+	 * Standard getter
+	 * @return
+	 */
+	public Array<ShipTile> getCollapseCollect(){
+		return tileStackManager.getTileArray();
+	}
+
+	/**
+	 * Adds an element to the CollapseCollection and returns a bool representing success.
+	 * @param tile - Tile to add to manager stack
+	 * @return boolean signifying success
+	 */
+	public boolean addTileToCollapseCollection(ShipTile tile){
+		if(tileStackManager.isCollectingTiles()){
+			tileStackManager.addTile(tile);
+			return true;
+		} else {
+			throw new RuntimeException("CollectTiles is false : " + tileStackManager.isCollectingTiles());
+		}
+	}
+
+	/**
+	 * Adds an element to the CollapseCollection using a positional reference
+	 * @param vector3 -  a position in space.
+	 * @return - boolean signifying success
+	 */
+	public boolean addTileToCollapseCollection(Vector3 vector3){
+		if(tileStackManager.isCollectingTiles()){
+			ShipTile tile = returnTile(vector3.x, vector3.y);
+			if(tile != null){
+				tileStackManager.addTile(tile);
+				return true;
+			}
+			return false;
+		} else {
+			throw new RuntimeException("CollectTiles is false : " + tileStackManager.isCollectingTiles());
+		}
+	}
+
+	/**
+	 * Returns reference to the hovering indicator reference
+	 * @return - Hover indication instance
+	 */
+	public TileHoverIndicator getTileHoverIndicator() {
+		return tileStackManager.getTileHoverIndicator();
+	}
+
+	/**
+	 * Set hover indicator position
+	 * @param x - x-position
+	 * @param y - y-position
+	 */
+	public void setHoverIndicator(float x, float y){
+		tileStackManager.setHoverIndicator(x,y);
+	}
+
+	/**
+	 * Checks if the hovers should draw
+	 * @return - true if is drawing, false if not drawing
+	 */
+	public boolean isHoverDrawing() {
+		return tileStackManager.isHoverDrawing();
+	}
+
+	/**
+	 * Sets if the hover position should draw.
+	 * @param shouldDraw - new boolean value for drawing the hover layover
+	 */
+	public void setHoverShouldDraw(boolean shouldDraw){
+		tileStackManager.setDrawHover(shouldDraw);
+	}
+
+	/**
+	 * Check if manager has collected the limit of tiles.
+	 * @return false if more tiles can be collected, else returns false
+	 */
+	public boolean collapseStackIsFull(){
+		return tileStackManager.isFull();
+	}
+
+
+	public void cancelCurrentCollectArray(){
+		tileStackManager.cancelCurrentCollectArray();
+	}
+
+	public boolean isTileCollected(ShipTile tile) {
+		return tileStackManager.isTileCollected(tile);
+	}
+
+	/**
+	 * Returns a tile
+	 * Handles removing tiles from ship instance
+	 * @param collectedTileArray - list of tiles to produce from
+	 * @return - ShipTile resulting from build action.
+	 */
+	public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
+		ShipTile producedTile = tileCondenser.buildNewTile(collectedTileArray);
+
+		if(producedTile == null){
+			tileStackManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
+			return null;
+		} else { // if Tile produced then
+			removeTilesFromShip(collectedTileArray);
+			return producedTile;
+		}
 	}
 }

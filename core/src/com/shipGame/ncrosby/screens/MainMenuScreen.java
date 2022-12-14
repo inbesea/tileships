@@ -103,5 +103,7 @@ public class MainMenuScreen implements Screen {
         assetManager.load("asteroid_purple.png", Texture.class);
         assetManager.load("ShipTile_Red.png", Texture.class);
         assetManager.load("ShipTile_Core.png", Texture.class);
+        assetManager.load("HoverIndicator.png", Texture.class);
+        assetManager.load("ToBeCollapsed.png", Texture.class);
     }
 }

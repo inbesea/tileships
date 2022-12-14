@@ -20,7 +20,8 @@ public enum ID {
 	Asteroid("asteroid_purple.png"),
 	ShipTile("ShipTile_Red.png"),
 	CoreTile("ShipTile_Core.png"),
-	Ship("none");
+	Ship("none"),
+	Hover("HoverIndicator.png");
 
 	private String texture;
 
