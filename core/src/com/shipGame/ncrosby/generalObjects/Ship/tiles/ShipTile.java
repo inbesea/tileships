@@ -115,7 +115,7 @@ public class ShipTile extends GameObject {
 	}
 
 	/**
-	 * Delegate method that handles setting the neighbors of a newly placed tile.
+	 * Method that handles setting the neighbors of a newly placed tile.
 	 * Keeps the edge calculations down in the tiles instead of on the ship level to keep the logic cleaner on the ship level
 	 *
 	 * Ship still determines the context by passing the adjacent tiles
