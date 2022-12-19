@@ -8,7 +8,7 @@ import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.tileShipGame;
 
 /**
- * Method to hold reference to the hover indicator so it logically sits in the stack manager during collapse.
+ * Method to hold reference to the hover indicator so it logically sits in the stack manager during the collapse process.
  */
 public class TileHoverIndicator extends GameObject {
     boolean drawHover = false;
