@@ -104,19 +104,23 @@ public class TileStackManager {
     /**
      * Add tile to manager stack
      * @param shipTile - Tile to stack
+     * @return - true if added, false if not.
      */
-    public void addTile(ShipTile shipTile) {
-        if(!this.isFull()){ // Confirm the hovered tile is a neighbor
-            if(collectedTiles.isEmpty()){
-                System.out.println("Adding tile to array stack!");
-                collectedTiles.add(shipTile);
-            } else if (shipTile.isNeighbor(collectedTiles.peek())){
-                System.out.println("Adding tile to array stack!");
-                collectedTiles.add(shipTile);
-            }
-        } else {
-            System.out.println("Collapse array is full!");
+    public boolean addTile(ShipTile shipTile) {
+        if (!isCollectingTiles()) {
+            throw new RuntimeException("Trying to collect tiles while not collecting.");
         }
+        if (!this.isFull()) { // Confirm the hovered tile is a neighbor
+            if (collectedTiles.isEmpty() || shipTile.isNeighbor(collectedTiles.peek())) {
+                System.out.println("Adding tile to array stack!");
+                collectedTiles.add(shipTile);
+                return true;
+            } else {
+                System.out.println("Collapse array is full!");
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

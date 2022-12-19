@@ -413,12 +413,8 @@ public class Ship extends GameObject {
 	 * @return boolean signifying success
 	 */
 	public boolean addTileToCollapseCollection(ShipTile tile){
-		if(tileStackManager.isCollectingTiles()){
-			tileStackManager.addTile(tile);
-			return true;
-		} else {
-			throw new RuntimeException("CollectTiles is false : " + tileStackManager.isCollectingTiles());
-		}
+			boolean result = tileStackManager.addTile(tile);
+			return result;
 	}
 
 	/**
