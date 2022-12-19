@@ -50,7 +50,7 @@ public class TileIO {
         ShipTile closestTile;
         ShipTile tempTile;
 
-        ShipTile destinationTile = ship.returnTile(tileLocation2);
+        ShipTile destinationTile = returnTile(tileLocation2);
         if(destinationTile == null){ // Released on empty space
             if(ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y , id);
 
@@ -167,10 +167,10 @@ public class TileIO {
         float y = tile.getY();
 
         // Get adjacent tile references
-        ShipTile up = returnTile(x,y + ShipTile.TILESIZE*1.5f);
-        ShipTile right = returnTile(x + ShipTile.TILESIZE*1.5f, y);
-        ShipTile down = returnTile(x,y - ShipTile.TILESIZE/2.0f);
-        ShipTile left = returnTile(x - ShipTile.TILESIZE/2.0f, y);
+        ShipTile up = returnTile(new Vector2(x,y + ShipTile.TILESIZE*1.5f));
+        ShipTile right = returnTile(new Vector2(x + ShipTile.TILESIZE*1.5f, y));
+        ShipTile down = returnTile(new Vector2(x,y - ShipTile.TILESIZE/2.0f));
+        ShipTile left = returnTile(new Vector2(x - ShipTile.TILESIZE/2.0f, y));
 
         // tie the tiles together
         int numberOfNeighbors = tile.setNeighbors(up, right, down, left);
@@ -225,16 +225,6 @@ public class TileIO {
      */
     public ShipTile returnTile(Vector2 position){
         return findTile(position);
-    }
-
-    /**
-     * Returns reference to a tile
-     * @param x - horizontal position of tile
-     * @param y - vertical position of tile
-     * @return - tile found, else returns null
-     */
-    public ShipTile returnTile(float x, float y) {
-        return findTile(new Vector2(x,y));
     }
 
     /**
@@ -480,10 +470,10 @@ public class TileIO {
 
 
         // Get references
-        ShipTile up = returnTile(x,y + ShipTile.TILESIZE);
-        ShipTile right = returnTile(x + ShipTile.TILESIZE, y);
-        ShipTile down = returnTile(x,y - ShipTile.TILESIZE);
-        ShipTile left = returnTile(x - ShipTile.TILESIZE, y);
+        ShipTile up = returnTile(new Vector2(x,y + ShipTile.TILESIZE));
+        ShipTile right = returnTile(new Vector2(x + ShipTile.TILESIZE, y));
+        ShipTile down = returnTile(new Vector2(x,y - ShipTile.TILESIZE));
+        ShipTile left = returnTile(new Vector2(x - ShipTile.TILESIZE, y));
 
         // Remove reference to removed tile with null and set each to edge since an adjacent tile is removed
         if(up != null){

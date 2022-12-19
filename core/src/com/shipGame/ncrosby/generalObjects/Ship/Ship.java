@@ -38,7 +38,6 @@ public class Ship extends GameObject {
 	private GameScreen screen;
 	AsteroidManager asteroidManager;
 	Array<GameObject> gameObjects;
-	private int pointLocation[] = new int[2];
 	public int destroyedTileCount = 0;
 	private TileStackManager tileStackManager;
 	private TileCondenser tileCondenser;
@@ -171,7 +170,7 @@ public class Ship extends GameObject {
 	 * @return
 	 */
 	public ShipTile returnTile(Vector2 position){
-		return returnTile(position.x, position.y);
+		return tileIO.returnTile(position);
 	}
 
 	/**
@@ -181,44 +180,7 @@ public class Ship extends GameObject {
 	 * @return - tile found, else returns null
 	 */
 	public ShipTile returnTile(float x, float y) {
-		return findTile(new Vector2(x,y));
-	}
-
-	/**
-	 * Returns reference to a tile based on x, y of Vector2
-	 *
-	 * @param position - click coordinates
-	 * @return  - Can return a ShipTile object. Will return null on spaces without tiles.
-	 */
-	private ShipTile findTile(Vector2 position){
-		int indexXY[] = calculateIndex(position.x, position.y);
-
-	 	ShipTile temp;
-	 	Stack<ShipTile> resultTiles = new Stack<>();
-
-		 // Checking ship tiles for index matches
-	 	for(int i = 0; i < existingTiles.size; i++) {
-	 		//Assign current tile to temp
-	 		temp = existingTiles.get(i);
-	 		// Check if x matches
-			if(temp.getxIndex() == indexXY[0]) {
-				// If yes then check y as well
-				if(temp.getyIndex() == indexXY[1]) {
-					resultTiles.push(temp);
-				}
-			}
-		}
-
-		 // Handle result array
-	 	if(resultTiles.size() > 1) {
-	 		throw new ArithmeticException("Multiple Tiles Found in ReturnTile() for " + position.x + "," + position.y);
-	 	}
-	 	else if (resultTiles.size() <= 0) {
-	 		return null;
-	 	}
-	 	else {
-	 		return resultTiles.pop();
-	 	}
+		return tileIO.returnTile(new Vector2(x,y));
 	}
 
 	/**
@@ -244,63 +206,6 @@ public class Ship extends GameObject {
 	 */
 	public boolean hasNonEdgeTiles(){
 		return existingTiles.size > edgeTiles.size;
-	}
-
-	/**
-	 * Returns the index of a tilelocation from an x,y location.
-	 *
-	 * @param x - The x location
-	 * @param y - The y location
-	 * @return - int array of 2 numbers. Index is a whole number
-	 */
-	public int[] calculateIndex(float x, float y) {
-
-		// -1 shifting wont cause issues because the flow will subtract one from it either way
-		// -64 - -1 will return index -1 yayy
-
-		boolean yNegative = y <= -1;
-		boolean xNegative = x <= -1;
-
-
-		int XYresult[] = new int[2];
-		if (xNegative) {
-			if(yNegative) {
-				// x, y negative
-				// get index and subtract one.
-				XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
-				XYresult[1] = (int) (( (y + 1) / ShipTile.TILESIZE) - 1);
-			}
-			else {
-				// only x negative
-				XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
-				XYresult[1] = (int) ( (y) / ShipTile.TILESIZE);
-			}
-		}
-		else if (yNegative) {
-			// only Y negative
-			XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
-			XYresult[1] = (int) (( (y+ 1) / ShipTile.TILESIZE) - 1);
-		}
-		else {
-			XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
-			XYresult[1] = (int) ((y) / ShipTile.TILESIZE);
-		}
-
-		// TODO : Unit test
-		if(XYresult.length == 2) {
-			return XYresult;
-		}
-		else{
-			throw new ArithmeticException("Unexpected number of indexes : " + XYresult.length );
-		}
-	}
-
-	/**
-	 * Helper method to make Ship aware of mouse location
-	 * @param points
-	 */
-	public void setPointLocation(int[] points) {
-		pointLocation = points;
 	}
 
 	@Override
@@ -459,7 +364,7 @@ public class Ship extends GameObject {
 	 * @return - Boolean true if no tile found - else return false
 	 */
 	public boolean isPositionOffShip(Vector2 position) {
-		ShipTile tile = returnTile(position.x,position.y);
+		ShipTile tile = tileIO.returnTile(position);
 		if(tile == null){
 			return true;
 		} else {
@@ -523,7 +428,7 @@ public class Ship extends GameObject {
 	 */
 	public boolean addTileToCollapseCollection(Vector3 vector3){
 		if(tileStackManager.isCollectingTiles()){
-			ShipTile tile = returnTile(vector3.x, vector3.y);
+			ShipTile tile = tileIO.returnTile(new Vector2(vector3.x, vector3.y));
 			if(tile != null){
 				tileStackManager.addTile(tile);
 				return true;
