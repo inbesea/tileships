@@ -39,9 +39,6 @@ public class Ship extends GameObject {
 	private Array<ShipTile> existingTiles = new Array<>();
 	// Subset of existing tiles
 	private Array<ShipTile> edgeTiles = new Array<>();
-	//	private Camera cam;
-	private OrthographicCamera cam;
-	private ShipTile mouseLocation;
 	private ShipTile draggedTile;
 	private GameScreen screen;
 	AsteroidManager asteroidManager;
@@ -57,7 +54,6 @@ public class Ship extends GameObject {
 	 */
 	public Ship (Vector2 position, ID id, OrthographicCamera cam, Array<GameObject> gameObjects, AsteroidManager asteroidManager) {
 		super(position, new Vector2(0,0), id);
-		this.cam = cam;
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
 
@@ -72,7 +68,6 @@ public class Ship extends GameObject {
 
 	public Ship (Vector2 position, ID id, OrthographicCamera cam, GameScreen screen){
 		super(position, new Vector2(0,0), id);
-		this.cam = cam;
 		this.screen = screen;
 
 		tileStackManager = new TileStackManager();
