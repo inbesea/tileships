@@ -165,7 +165,7 @@ public class Ship extends GameObject {
 	}
 
 	/**
-	 * Lazy bad way to get a tile with a different passed in value, but I don't feel like creating another method for both of these to call.
+	 * Gets a tile with a Vector2 variable
 	 * @param position
 	 * @return
 	 */
