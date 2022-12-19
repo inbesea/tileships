@@ -34,7 +34,7 @@ public class Ship extends GameObject {
 	AsteroidManager asteroidManager;
 	Array<GameObject> gameObjects;
 	public int destroyedTileCount = 0;
-	private TileStackManager tileStackManager;
+	private CollectionManager collectionManager;
 	private TileCondenser tileCondenser;
 	private ShipTilesManager shipTilesManager;
 
@@ -47,8 +47,8 @@ public class Ship extends GameObject {
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
 
-		this.shipTilesManager = new ShipTilesManager(this);
-		tileStackManager = new TileStackManager();
+		shipTilesManager = new ShipTilesManager(this);
+		collectionManager = new CollectionManager();
 		tileCondenser = new TileCondenser();
 
 		// Give new ship default tiles.
@@ -61,8 +61,8 @@ public class Ship extends GameObject {
 		super(position, new Vector2(0,0), id);
 		this.screen = screen;
 
-		this.shipTilesManager = new ShipTilesManager(this);
-		tileStackManager = new TileStackManager();
+		shipTilesManager = new ShipTilesManager(this);
+		collectionManager = new CollectionManager();
 		tileCondenser = new TileCondenser();
 
 		// Give new ship default tiles.
@@ -89,8 +89,8 @@ public class Ship extends GameObject {
 			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
-		if(tileStackManager.isCollectingTiles()){
-			Array<ShipTile> tiles = tileStackManager.getTileArray();
+		if(collectionManager.isCollectingTiles()){
+			Array<ShipTile> tiles = collectionManager.getTileArray();
 			for(int i = 0 ; tiles.size > i ; i++){
 				ShipTile tile = tiles.get(i);
 				game.batch.draw(assetManager.get("ToBeCollapsed.png", Texture.class),
@@ -122,8 +122,7 @@ public class Ship extends GameObject {
 	 * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
 	 */
 	public ShipTile addTile(float x, float y, ID id) {
-		ShipTilesManager placer = new ShipTilesManager(this);
-		ShipTile tile = placer.addTile(x, y, id);
+		ShipTile tile = shipTilesManager.addTile(x, y, id);
 		return tile;
 	}
 
@@ -378,19 +377,20 @@ public class Ship extends GameObject {
 	}
 
 	public boolean isCollectingTiles(){
-		return tileStackManager.isCollectingTiles();
+		return collectionManager.isCollectingTiles();
 	}
 
 	/**
 	 * Kick off collecting tiles in the stack manager
 	 */
-    public void startCollapseCollect() {tileStackManager.startCollect();}
+    public void startCollapseCollect() {
+		collectionManager.startCollect();}
 
 	/**
 	 * Clears and returns a stack of tiles collected during a collapse action
 	 */
 	public Array<ShipTile> finishCollapseCollect() {
-		return tileStackManager.endCollect();
+		return collectionManager.endCollect();
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class Ship extends GameObject {
 	 * @return
 	 */
 	public Array<ShipTile> getCollapseCollect(){
-		return tileStackManager.getTileArray();
+		return collectionManager.getTileArray();
 	}
 
 	/**
@@ -406,8 +406,8 @@ public class Ship extends GameObject {
 	 * @param tile - Tile to add to manager stack
 	 * @return boolean signifying success
 	 */
-	public boolean addTileToCollapseCollection(ShipTile tile){
-			boolean result = tileStackManager.addTile(tile);
+	public boolean updateCollect(ShipTile tile){
+			boolean result = collectionManager.addTile(tile);
 			return result;
 	}
 
@@ -416,16 +416,12 @@ public class Ship extends GameObject {
 	 * @param vector3 -  a position in space.
 	 * @return - boolean signifying success
 	 */
-	public boolean addTileToCollapseCollection(Vector3 vector3){
-		if(tileStackManager.isCollectingTiles()){
+	public boolean updateCollect(Vector3 vector3){
+		if(collectionManager.isCollectingTiles()){
 			ShipTile tile = shipTilesManager.returnTile(new Vector2(vector3.x, vector3.y));
-			if(tile != null){
-				tileStackManager.addTile(tile);
-				return true;
-			}
-			return false;
+			return collectionManager.addTile(tile);
 		} else {
-			throw new RuntimeException("CollectTiles is false : " + tileStackManager.isCollectingTiles());
+			throw new RuntimeException("CollectTiles is false : " + collectionManager.isCollectingTiles());
 		}
 	}
 
@@ -434,7 +430,7 @@ public class Ship extends GameObject {
 	 * @return - Hover indication instance
 	 */
 	public TileHoverIndicator getTileHoverIndicator() {
-		return tileStackManager.getTileHoverIndicator();
+		return collectionManager.getTileHoverIndicator();
 	}
 
 	/**
@@ -443,7 +439,7 @@ public class Ship extends GameObject {
 	 * @param y - y-position
 	 */
 	public void setHoverIndicator(float x, float y){
-		tileStackManager.setHoverIndicator(x,y);
+		collectionManager.setHoverIndicator(x,y);
 	}
 
 	/**
@@ -451,7 +447,7 @@ public class Ship extends GameObject {
 	 * @return - true if is drawing, false if not drawing
 	 */
 	public boolean isHoverDrawing() {
-		return tileStackManager.isHoverDrawing();
+		return collectionManager.isHoverDrawing();
 	}
 
 	/**
@@ -459,7 +455,7 @@ public class Ship extends GameObject {
 	 * @param shouldDraw - new boolean value for drawing the hover layover
 	 */
 	public void setHoverShouldDraw(boolean shouldDraw){
-		tileStackManager.setDrawHover(shouldDraw);
+		collectionManager.setDrawHover(shouldDraw);
 	}
 
 	/**
@@ -467,16 +463,12 @@ public class Ship extends GameObject {
 	 * @return false if more tiles can be collected, else returns false
 	 */
 	public boolean collapseStackIsFull(){
-		return tileStackManager.isFull();
+		return collectionManager.isFull();
 	}
 
 
 	public void cancelCurrentCollectArray(){
-		tileStackManager.cancelCurrentCollectArray();
-	}
-
-	public boolean isTileCollected(ShipTile tile) {
-		return tileStackManager.isTileCollected(tile);
+		collectionManager.cancelCurrentCollectArray();
 	}
 
 	/**
@@ -489,7 +481,7 @@ public class Ship extends GameObject {
 		ShipTile producedTile = tileCondenser.buildNewTile(collectedTileArray);
 
 		if(producedTile == null){
-			tileStackManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
+			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
 			return null;
 		} else { // if Tile produced then
 			removeTilesFromShip(collectedTileArray);

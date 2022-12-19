@@ -13,8 +13,6 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 
-import java.util.Stack;
-
 import static com.shipGame.ncrosby.util.generalUtil.returnUnprojectedPosition;
 
 /**
@@ -97,7 +95,7 @@ public class SimpleTouch implements InputProcessor {
 
         // Handle init collect click
         if (playerShip.isCollectingTiles()){
-                playerShip.addTileToCollapseCollection(vector3);
+                playerShip.updateCollect(vector3);
         } else { // Pick up and drag tile
             // Get a tile and check if it can be picked up.
             ShipTile pickedUpTile = playerShip.returnTile(vector3.x, vector3.y);
@@ -119,10 +117,7 @@ public class SimpleTouch implements InputProcessor {
             if(playerShip.isCollectingTiles() && !playerShip.collapseStackIsFull()){
                 // After get a tile we can check if the stack is complete or not.
                 // if it is then we can turn off collecting tiles. A fullStack Check is not needed.
-                ShipTile tile = playerShip.returnTile(tp.x, tp.y);
-                if(tile != null && !playerShip.isTileCollected(tile)){
-                    playerShip.addTileToCollapseCollection(tile);
-                }
+                playerShip.updateCollect(new Vector3(tp.x, tp.y, 0));
             } else if (draggedTile != null){// Dragging a tile
                 // Drag the tile with mouse
                 draggedTile.setX(tp.x - ShipTile.TILESIZE/2.0f);

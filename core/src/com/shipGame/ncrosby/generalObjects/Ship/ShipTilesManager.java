@@ -16,9 +16,7 @@ import static com.shipGame.ncrosby.util.generalUtil.closestVector2;
  * Class to handle logic for placing/removing tiles to allow the ship to handle holding the pieces together rather than working the logic directly.
  */
 public class ShipTilesManager {
-
     private Array<ShipTile> existingTiles;
-
     private Array<ShipTile> edgeTiles;
     Ship ship;
 
@@ -28,8 +26,8 @@ public class ShipTilesManager {
      */
     public ShipTilesManager(Ship ship) {
         this.ship = ship;
-        this.existingTiles = ship.getExistingTiles();
-        this.edgeTiles = ship.getEdgeTiles();
+        this.existingTiles = new Array<>();
+        this.edgeTiles = new Array<>();
     }
 
     /**
