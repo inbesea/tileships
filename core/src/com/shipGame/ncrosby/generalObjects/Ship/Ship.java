@@ -19,8 +19,6 @@ import com.shipGame.ncrosby.util.AsteroidManager;
 
 import static com.shipGame.ncrosby.util.generalUtil.*;
 
-import java.util.Stack;
-
 public class Ship extends GameObject {
 
 	/**
@@ -31,9 +29,6 @@ public class Ship extends GameObject {
 	 * Edge management happens on I/O of tiles so we have a reference to the tile being updated.
 	 * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
 	 */
-	private Array<ShipTile> existingTiles = new Array<>();
-	// Subset of existing tiles
-	private Array<ShipTile> edgeTiles = new Array<>();
 	private ShipTile draggedTile;
 	private GameScreen screen;
 	AsteroidManager asteroidManager;
@@ -41,7 +36,7 @@ public class Ship extends GameObject {
 	public int destroyedTileCount = 0;
 	private TileStackManager tileStackManager;
 	private TileCondenser tileCondenser;
-	private TileIO tileIO;
+	private ShipTilesManager shipTilesManager;
 
 	/**
 	 * Ship keeps track of the tiles of the ship and has methods for
@@ -52,7 +47,7 @@ public class Ship extends GameObject {
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
 
-		this.tileIO = new TileIO(this);
+		this.shipTilesManager = new ShipTilesManager(this);
 		tileStackManager = new TileStackManager();
 		tileCondenser = new TileCondenser();
 
@@ -66,7 +61,7 @@ public class Ship extends GameObject {
 		super(position, new Vector2(0,0), id);
 		this.screen = screen;
 
-		this.tileIO = new TileIO(this);
+		this.shipTilesManager = new ShipTilesManager(this);
 		tileStackManager = new TileStackManager();
 		tileCondenser = new TileCondenser();
 
@@ -82,9 +77,10 @@ public class Ship extends GameObject {
 	 */
 	public void render(tileShipGame game) {
 		AssetManager assetManager = game.assetManager;
+		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
-		for(int i = 0; i < existingTiles.size; i++) {
-			ShipTile tempTile = existingTiles.get(i);
+		for(int i = 0; i < existing.size; i++) {
+			ShipTile tempTile = existing.get(i);
 			game.batch.draw(assetManager.get(tempTile.getTexture(),Texture.class),
 					tempTile.getX(), tempTile.getY(),
 					tempTile.getSize().x, tempTile.getSize().y);
@@ -126,7 +122,7 @@ public class Ship extends GameObject {
 	 * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
 	 */
 	public ShipTile addTile(float x, float y, ID id) {
-		TileIO placer = new TileIO(this);
+		ShipTilesManager placer = new ShipTilesManager(this);
 		ShipTile tile = placer.addTile(x, y, id);
 		return tile;
 	}
@@ -140,7 +136,7 @@ public class Ship extends GameObject {
 	 * @return - Vector2 that is aligned with the ship's grid.
 	 */
 	public Vector2 getGridAlignedPosition(float x, float y){
-		return tileIO.getGridAlignedPosition(x,y);
+		return shipTilesManager.getGridAlignedPosition(x,y);
 	}
 
 	/**
@@ -150,7 +146,7 @@ public class Ship extends GameObject {
 	 * @param tile - Tile to remove from ship
 	 */
 	public void removeTileFromShip(ShipTile tile){
-		tileIO.removeTileFromShip(tile);
+		shipTilesManager.removeTileFromShip(tile);
 	}
 
 	/**
@@ -170,7 +166,7 @@ public class Ship extends GameObject {
 	 * @return
 	 */
 	public ShipTile returnTile(Vector2 position){
-		return tileIO.returnTile(position);
+		return shipTilesManager.returnTile(position);
 	}
 
 	/**
@@ -180,23 +176,19 @@ public class Ship extends GameObject {
 	 * @return - tile found, else returns null
 	 */
 	public ShipTile returnTile(float x, float y) {
-		return tileIO.returnTile(new Vector2(x,y));
+		return shipTilesManager.returnTile(new Vector2(x,y));
 	}
 
 	/**
 	 * Returns number of tiles, taking dragged tile into account.
 	 * @return
 	 */
-	public int numberOfShipTiles(){
-		if(draggedTile != null){
-			return existingTiles.size + 1;
-		} else {
-			return existingTiles.size;
-		}
+	public int shipSize(){
+		return shipTilesManager.size();
 	}
 
-	public int numberOfEdgeTiles(){
-		return edgeTiles.size;
+	public int sizeOfShipEdge(){
+		return shipTilesManager.getEdgeTiles().size;
 	}
 
 	/**
@@ -204,8 +196,8 @@ public class Ship extends GameObject {
 	 *
 	 * @return - Boolean representing if ship has non-edge tiles
 	 */
-	public boolean hasNonEdgeTiles(){
-		return existingTiles.size > edgeTiles.size;
+	public boolean hasCenterTiles(){
+		return shipTilesManager.hasCenterTiles();
 	}
 
 	@Override
@@ -228,12 +220,14 @@ public class Ship extends GameObject {
 	@Override
 	public void collision(GameObject gameObject) {
 
+		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
+
 		if(gameObject.getID() == ID.Asteroid){ // Object collision was asteroid
 			ShipTile shipTile;
 			boolean removeAsteroid = false;
 
-			for(int i = 0 ; i < existingTiles.size ; i++){
-				shipTile = existingTiles.get(i);
+			for(int i = 0 ; i < existing.size ; i++){
+				shipTile = existing.get(i);
 
 				// Check if asteroid intersects ShipTile
 				Rectangle rectangle = shipTile.getBounds();
@@ -364,7 +358,7 @@ public class Ship extends GameObject {
 	 * @return - Boolean true if no tile found - else return false
 	 */
 	public boolean isPositionOffShip(Vector2 position) {
-		ShipTile tile = tileIO.returnTile(position);
+		ShipTile tile = shipTilesManager.returnTile(position);
 		if(tile == null){
 			return true;
 		} else {
@@ -373,7 +367,7 @@ public class Ship extends GameObject {
 	}
 
 	public Array<ShipTile> getExistingTiles() {
-		return existingTiles;
+		return shipTilesManager.getExistingTiles();
 	}
 
 	/**
@@ -424,7 +418,7 @@ public class Ship extends GameObject {
 	 */
 	public boolean addTileToCollapseCollection(Vector3 vector3){
 		if(tileStackManager.isCollectingTiles()){
-			ShipTile tile = tileIO.returnTile(new Vector2(vector3.x, vector3.y));
+			ShipTile tile = shipTilesManager.returnTile(new Vector2(vector3.x, vector3.y));
 			if(tile != null){
 				tileStackManager.addTile(tile);
 				return true;
@@ -503,11 +497,15 @@ public class Ship extends GameObject {
 		}
 	}
 
-	public TileIO getTileManager() {
-		return tileIO;
+	public ShipTilesManager getTileManager() {
+		return shipTilesManager;
 	}
 
 	public Array<ShipTile> getEdgeTiles() {
-		return this.edgeTiles;
+		return shipTilesManager.getEdgeTiles();
+	}
+
+	public ShipTile getDraggedTile() {
+		return draggedTile;
 	}
 }

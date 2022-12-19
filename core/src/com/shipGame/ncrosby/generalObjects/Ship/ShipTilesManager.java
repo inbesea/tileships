@@ -15,17 +15,18 @@ import static com.shipGame.ncrosby.util.generalUtil.closestVector2;
 /**
  * Class to handle logic for placing/removing tiles to allow the ship to handle holding the pieces together rather than working the logic directly.
  */
-public class TileIO {
+public class ShipTilesManager {
 
-    Array<ShipTile> existingTiles;
-    Array<ShipTile> edgeTiles;
+    private Array<ShipTile> existingTiles;
+
+    private Array<ShipTile> edgeTiles;
     Ship ship;
 
     /**
      * Constructor method
      * @param ship
      */
-    public TileIO(Ship ship) {
+    public ShipTilesManager(Ship ship) {
         this.ship = ship;
         this.existingTiles = ship.getExistingTiles();
         this.edgeTiles = ship.getEdgeTiles();
@@ -534,5 +535,31 @@ public class TileIO {
     private void logRemovedTile(ShipTile tile) {
         System.out.println("Removing tile (" + tile.getxIndex() + ", " +
                 tile.getyIndex() + ") of type " + tile.getID().name() +  " from ship : " + ship.getID());
+    }
+
+    public int size() {
+        if(ship.getDraggedTile() != null){
+            return existingTiles.size + 1;
+        } else {
+            return existingTiles.size;
+        }
+    }
+
+    /**
+     * Returns true if there are more tiles than edge tiles
+     *
+     * @return - Boolean representing if ship has non-edge tiles
+     */
+    public boolean hasCenterTiles() {
+        return existingTiles.size > edgeTiles.size;
+    }
+
+    public Array<ShipTile> getExistingTiles() {
+        return existingTiles;
+    }
+
+
+    public Array<ShipTile> getEdgeTiles() {
+        return edgeTiles;
     }
 }
