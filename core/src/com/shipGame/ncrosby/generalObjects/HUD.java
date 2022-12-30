@@ -2,11 +2,8 @@ package com.shipGame.ncrosby.generalObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.tileShipGame;
 
@@ -58,7 +55,7 @@ public class HUD {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
-                "ShipTile number : " + playerShip.numberOfShipTiles());
+                "ShipTile number : " + playerShip.shipSize());
         if(playerShip.destroyedTileCount > 0){
             stringBuilder.append("\nTiles Destroyed : " + playerShip.destroyedTileCount);
         }

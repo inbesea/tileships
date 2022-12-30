@@ -4,6 +4,7 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 
 /**
  * Manages adjacent ShipTiles to a shiptile
+ * Is a part of the ShipTile class, not the Ship.
  */
 public class AdjacentTiles {
     private ShipTile Up;
