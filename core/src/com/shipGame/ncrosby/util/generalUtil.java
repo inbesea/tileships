@@ -156,4 +156,17 @@ public class generalUtil {
             return false;
         }
     }
+
+    /**
+     * Util to reverse general array with Generic contents.
+     * @param array
+     * @return
+     */
+    public static <T> Array<T> reverseArray(Array<T> array){
+        Array<T> result = new Array<T>();
+        for(int i = array.size - 1 ; i >= 0 ; i--){
+            result.add(array.get(i));
+        }
+        return result;
+    }
 }
