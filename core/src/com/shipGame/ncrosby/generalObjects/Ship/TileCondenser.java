@@ -81,10 +81,23 @@ public class TileCondenser {
         // Check first two
         ShipTile tile0 = tiles.get(0);
         ShipTile tile1 = tiles.get(1);
+
+        // Get the orientation and review the translation procedure
         int orientation = getOrientation(tile0, tile1);
 
-
-
+        switch (orientation) {
+            case 0 :
+                System.out.println("Up Orientation");
+                break;
+            case 1 :
+                System.out.println("Right Orientation");
+                break;
+            case 2 :
+                System.out.println("Down Orientation");
+                break;
+            case 3 :
+                System.out.println("Left Orientation");
+        }
         return null;
     }
 
