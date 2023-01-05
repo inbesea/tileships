@@ -107,6 +107,10 @@ public class TileCondenser {
      * @param tile0 - first tile
      * @param tile1 - second tile
      * @return Returns 0-3 representing orientation between the two tiles. -1 if invalid inputs.
+     * 0 = Up
+     * 1 = Right
+     * 2 = Down
+     * 3 = Left
      */
     private int getOrientation(ShipTile tile0, ShipTile tile1) {
         TileOrienter orienter = new TileOrienter(tile0, tile1);

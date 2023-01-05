@@ -28,15 +28,15 @@ public class TileOrienterTest {
 
     @Test
     public void whenCheckingRightPointingTiles_Return1(){
-        // Before
+        // Before - Add tiles in an upwards facing orientation
         ShipTile tile1 = new ShipTile(new Vector2(0,0), ID.ShipTile);
         ShipTile tile2 = new ShipTile(new Vector2(0,64), ID.ShipTile);
-        TileOrienter orienter = new TileOrienter(tile1, tile2);
+        TileOrienter orienter = new TileOrienter(tile1, tile2); // Init orientation
 
-        // When
+        // When - Getting the orientation value
         int result = orienter.getOrientation();
 
-        // Then
+        // Then - Expect the value is 0 or up, which is the default.
         Assert.assertEquals(0, result);
     }
 

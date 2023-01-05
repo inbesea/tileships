@@ -24,6 +24,10 @@ public class TileOrienter {
      * The result is only meant to be a way to match the shape to a recipe so orientation of the containing ship should not matter.
      *
      * @return Returns 0-3 representing orientation between the two tiles. -1 if invalid inputs.
+     *      * 0 == Up
+     *      * 1 == Right
+     *      * 2 == Down
+     *      * 3 == Left
      */
     public int getOrientation() {
         int result;
