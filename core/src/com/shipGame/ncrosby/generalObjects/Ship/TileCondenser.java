@@ -24,28 +24,43 @@ public class TileCondenser {
 
     /**
      * Returns a tile based on an array of tiles.
+     *
      * @param tiles - array of tiles to condense
      * @return - a single product tile.
      */
     public ShipTile buildNewTile(Array<ShipTile> tiles){
-        if(tiles.isEmpty() || tiles.size < SMALLEST_INPUT){
-            Gdx.app.error("BuildingTile","Empty array passed to TileCondenser");
+        // This initiates a lot of sub-methods to match the passed tile array.
+
+        if(tiles.isEmpty() || tiles.size < SMALLEST_INPUT){ // No tiles, or below minimum array size
+            Gdx.app.debug("BuildingTile","Passed array size too small for TileCondenser");
             return null;
-        } else {
-            ShipTile result;
-
-            // Orient tiles for comparison
-            Array<ShipTile> upTurnedTiles = orientArrayUpwards(tiles);
-
-            // Check against recipes
-            result = attemptArrayMatch(upTurnedTiles);
-            if(result != null)return result;
-
-            // If not returned check if the array needs to be reversed.
-            Array<ShipTile> reverseAndOrientArray = reverseAndOrientArray(tiles);
-            result = attemptArrayMatch(reverseAndOrientArray);
-            if(result != null)return result;
+        } else { // Process array
+            return developTileFromArray(tiles);
         }
+    }
+
+    /**
+     * Runs logic to develop a tile if possible.
+     * Checks the tiles both directions through
+     * @param tiles
+     * @return
+     */
+    private ShipTile developTileFromArray(Array<ShipTile> tiles) {
+        ShipTile result;
+
+        // Orient tiles for comparison
+        Array<ShipTile> upTurnedTiles = orientArrayUpwards(tiles);
+
+        // Check against recipes for match
+        result = attemptArrayMatch(upTurnedTiles);
+        if(result != null)return result;
+
+        // If not matched check if the array's reverse matches.
+        Array<ShipTile> reverseAndOrientArray = reverseAndOrientArray(tiles);
+        result = attemptArrayMatch(reverseAndOrientArray);
+        if(result != null)return result;
+
+        // If all else fails
         return null;
     }
 
@@ -82,13 +97,14 @@ public class TileCondenser {
         ShipTile tile0 = tiles.get(0);
         ShipTile tile1 = tiles.get(1);
 
+        // TODO : have tile Orienter orient the array.
         // Get the orientation and review the translation procedure
         int orientation = getOrientation(tile0, tile1);
 
         switch (orientation) {
             case 0 :
                 System.out.println("Up Orientation");
-                break;
+                return tiles; // No change needed
             case 1 :
                 System.out.println("Right Orientation");
                 break;
