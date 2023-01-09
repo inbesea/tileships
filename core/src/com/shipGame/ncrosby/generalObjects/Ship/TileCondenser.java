@@ -127,7 +127,7 @@ public class TileCondenser {
      */
     private int getOrientation(Array<ShipTile> tiles) {
         TileOrienter orienter = new TileOrienter(tiles);
-        return orienter.getOrientation();
+        return orienter.calculateOrientation();
     }
 
     private Array<TileRecipes> getAvailableRecipes() {

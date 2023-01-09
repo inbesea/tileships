@@ -15,10 +15,14 @@ public class TileOrienter {
     ShipTile tileTwo;
     Array<ShipTile> tileArray;
 
+
+    int currentOrientation;
+
     public TileOrienter(Array<ShipTile> tileArray){
         this.tileArray = tileArray;
         this.tileOne = tileArray.get(0);
         this.tileTwo = tileArray.get(1);
+        currentOrientation = calculateOrientation(); // Init orientation
     }
 
     /**
@@ -33,7 +37,7 @@ public class TileOrienter {
      *      * 2 == Down
      *      * 3 == Left
      */
-    public int getOrientation() {
+    public int calculateOrientation() {
         int result;
         Vector2 tile0Index = new Vector2(tileOne.getxIndex(), tileOne.getyIndex());
         Vector2 tile1Index = new Vector2(tileTwo.getxIndex(), tileTwo.getyIndex());

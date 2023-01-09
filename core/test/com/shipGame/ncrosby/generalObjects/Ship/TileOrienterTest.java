@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileOrienter;
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +32,7 @@ public class TileOrienterTest {
         tile2 = tileArray.get(1);
 
         // When - getting orientation
-        int result = orienter.getOrientation();
+        int result = orienter.calculateOrientation();
 
         // Then
         Assert.assertEquals(0, result);
@@ -51,7 +50,7 @@ public class TileOrienterTest {
         tile2 = tileArray.get(1);
 
         // When - Getting the orientation value
-        int result = orienter.getOrientation();
+        int result = orienter.calculateOrientation();
 
         // Then - Expect the value is 1 or right
         Assert.assertEquals(1, result);
@@ -69,7 +68,7 @@ public class TileOrienterTest {
         tile2 = tileArray.get(1);
 
         // When
-        int result = orienter.getOrientation();
+        int result = orienter.calculateOrientation();
 
         // Then - Assert 2 which is downwards.
         Assert.assertEquals(2, result);
@@ -87,7 +86,7 @@ public class TileOrienterTest {
         tile2 = tileArray.get(1);
 
         // When
-        int result = orienter.getOrientation();
+        int result = orienter.calculateOrientation();
 
         // Then - Return 3 == left
         Assert.assertEquals( 3, result);
