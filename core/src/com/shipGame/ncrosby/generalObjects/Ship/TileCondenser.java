@@ -93,13 +93,11 @@ public class TileCondenser {
      * @return
      */
     private Array<ShipTile> orientArrayUpwards(Array<ShipTile> tiles) {
-        // Check first two
-        ShipTile tile0 = tiles.get(0);
-        ShipTile tile1 = tiles.get(1);
 
+        // Check first two
         // TODO : have tile Orienter orient the array.
         // Get the orientation and review the translation procedure
-        int orientation = getOrientation(tile0, tile1);
+        int orientation = getOrientation(tiles);
 
         switch (orientation) {
             case 0 :
@@ -120,16 +118,15 @@ public class TileCondenser {
     /**
      * Returns the orientation between tile0 and tile1
      *
-     * @param tile0 - first tile
-     * @param tile1 - second tile
+     * @param tiles - Array of tiles to check.
      * @return Returns 0-3 representing orientation between the two tiles. -1 if invalid inputs.
      * 0 = Up
      * 1 = Right
      * 2 = Down
      * 3 = Left
      */
-    private int getOrientation(ShipTile tile0, ShipTile tile1) {
-        TileOrienter orienter = new TileOrienter(tile0, tile1);
+    private int getOrientation(Array<ShipTile> tiles) {
+        TileOrienter orienter = new TileOrienter(tiles);
         return orienter.getOrientation();
     }
 
