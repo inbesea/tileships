@@ -3,6 +3,8 @@ package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 
 /**
  * Class to handle getting the orientation of two tiles.
@@ -11,14 +13,16 @@ public class TileOrienter {
 
     ShipTile tileOne;
     ShipTile tileTwo;
+    Array<ShipTile> tileArray;
 
-    public TileOrienter(ShipTile tileOne, ShipTile tileTwo){
-        this.tileOne = tileOne;
-        this.tileTwo = tileTwo;
+    public TileOrienter(Array<ShipTile> tileArray){
+        this.tileArray = tileArray;
+        this.tileOne = tileArray.get(0);
+        this.tileTwo = tileArray.get(1);
     }
 
     /**
-     * review a pair of tiles to parse their relative orientation and return an int representing orientation.
+     * reviews the first pair of tiles to parse their relative orientation and return an int representing orientation.
      *
      * This is based on the index's relationship to one another, and they must be orthogonally adjacent
      * The result is only meant to be a way to match the shape to a recipe so orientation of the containing ship should not matter.
@@ -52,5 +56,21 @@ public class TileOrienter {
             result = -1;
             return result;
         }
+    }
+
+    /**
+     * Method to rotate the currently set array around it's first tile to point in a direction.
+     * The first two tiles are where the direction is initially.
+     * Rotating them in relationship to one another determines the overall new tile positions.
+     *      * 0 == Up
+     *      * 1 == Right
+     *      * 2 == Down
+     *      * 3 == Left
+     *
+     * @param direction - int describing the new direction to point the tile array
+     * @return - newly oriented array
+     */
+    public Array<ShipTile> orientArray(int direction){
+        return null;
     }
 }
