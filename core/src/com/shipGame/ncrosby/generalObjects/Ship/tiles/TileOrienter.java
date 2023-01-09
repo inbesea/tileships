@@ -4,12 +4,20 @@ package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 
 /**
- * Class to handle getting the orientation of two tiles.
+ * Class to handle orienting an array of tiles.
+ * On init this will take an array to work with.
+ * This class can get orientation, be told to reorient its array, and give the orientation of the array
  */
 public class TileOrienter {
+
+    // No magic numbers!
+    static final int UP = 0;
+    static final int RIGHT = 1;
+    static final int DOWN = 2;
+    static final int LEFT = 3;
+    static final int INVALID = -1;
 
     ShipTile tileOne;
     ShipTile tileTwo;
@@ -36,6 +44,7 @@ public class TileOrienter {
      *      * 1 == Right
      *      * 2 == Down
      *      * 3 == Left
+     *      * -1 == not enough tiles, or invalid
      */
     public int calculateOrientation() {
         int result;
@@ -47,15 +56,14 @@ public class TileOrienter {
 
         // Addition
         if(tile0Index.y + 1 == tile1Index.y && xSame){ // Up
-            result = 0;
-            return result;
+            return setAndReturnCurrentOrientation(UP);
         } else if(tile0Index.x + 1 == tile1Index.x && ySame) { // Right
-            return 1;
+            return setAndReturnCurrentOrientation(RIGHT);
         } else if(tile0Index.y - 1 == tile1Index.y && xSame) { // Down
-            return 2;
+            return setAndReturnCurrentOrientation(DOWN);
         } else if(tile0Index.x - 1 == tile1Index.x && ySame) { // Left
-            return 3;
-        } else {
+            return setAndReturnCurrentOrientation(LEFT);
+        } else { // Is reached if the array is too short
             Gdx.app.debug("CondenserMessage", "Incomparable tiles passed to GetOrientation()" + tile0Index + " " + tile1Index);
             result = -1;
             return result;
@@ -72,9 +80,59 @@ public class TileOrienter {
      *      * 3 == Left
      *
      * @param direction - int describing the new direction to point the tile array
-     * @return - newly oriented array
+     * @return - newly oriented array, null if no orientation can be done.
      */
     public Array<ShipTile> orientArray(int direction){
+        if(4 > currentOrientation && currentOrientation > -1){ // Check that current orientation is valid
+
+            if(currentOrientation == direction)return tileArray; // Check for no rotation needed
+
+            /* If current orientation and direction are valid and do not match then we can begin orientation */
+            else if(direction == UP){ // Check needed direction
+                return orientUpwards();
+            } else if(direction == RIGHT) {
+                return orientRight();
+            } else if (direction == DOWN){
+
+            } else if (direction == LEFT){
+
+            }
+
+        }
         return null;
+    }
+
+    private Array<ShipTile> orientRight() {
+        return null;
+    }
+
+    private Array<ShipTile> orientUpwards() {
+        return null;
+    }
+
+
+    private void flipXYIndexes(){
+
+    }
+
+    /**
+     * Will multiply the x or y indexes to the opposite
+     * @param xOrY
+     */
+    private void switchXYPolarity(int xOrY){
+
+    }
+
+    public int getCurrentOrientation() {
+        return currentOrientation;
+    }
+
+    public void setCurrentOrientation(int currentOrientation) {
+        this.currentOrientation = currentOrientation;
+    }
+
+    public int setAndReturnCurrentOrientation(int currentOrientation) {
+        this.currentOrientation = currentOrientation;
+        return currentOrientation;
     }
 }
