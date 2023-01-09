@@ -20,20 +20,31 @@ public class ShipTile extends GameObject {
 	private int cool = 0;
 	public boolean isEdge;
 	public final static int TILESIZE = 64;
-	private com.badlogic.gdx.math.Rectangle rectangle;
+	private com.badlogic.gdx.math.Rectangle collider;
 	/**
 	 *  These tiles will all need health, and a way to relate to tiles next to them..?
 	 *  But they will need to be stored in a 2d array. 
 	 *  So when the game initializes there will need to be an array of tiles built out.
 	*/
 	public ShipTile(Vector2 position, ID id) {
+		// vector is not adjusted, so tiles can be independently created anywhere
 		super(position, new Vector2(64,64), id);
-		
-		this.xIndex = (int) (position.x / TILESIZE);
-		this.yIndex = (int) (position.y / TILESIZE);
 
-		rectangle = new com.badlogic.gdx.math.Rectangle(position.x, position.y ,ShipTile.TILESIZE, ShipTile.TILESIZE);
+		this.xIndex = determineIndex(position.x);
+		this.yIndex = determineIndex(position.y);
+
+		collider = new com.badlogic.gdx.math.Rectangle(position.x, position.y ,ShipTile.TILESIZE, ShipTile.TILESIZE);
 		// Need to knit together the shiptile to adjacent tiles connectAdjacent();
+	}
+
+	/**
+	 * TODO : This index determination needs to be updated to allow for ship displacement/rotation.
+	 * Determines an index value for the ShipTile based on the float passed in.
+	 * @param position
+	 * @return
+	 */
+	private int determineIndex(float position) {
+		return (int) (position / TILESIZE);
 	}
 
 	public void tick() {
@@ -75,11 +86,19 @@ public class ShipTile extends GameObject {
 //		g.drawRect(xLoc - cam.x, yLoc - cam.y, TILESIZE, TILESIZE);
 	}
 
+	/**
+	 * Returns the collision box for the shipTile
+	 * @return - Rectangle object representing the collision box
+	 */
 	@Override
 	public Rectangle getBounds() {
-		return rectangle;
+		return collider;
 	}
 
+	/**
+	 * Method to handle collisions
+	 * @param gameObject
+	 */
 	@Override
 	public void collision(GameObject gameObject) {
 
@@ -211,6 +230,10 @@ public class ShipTile extends GameObject {
 		return results;
 	}
 
+	/**
+	 * Delegate method to get the directly up neighbor
+	 * @return
+	 */
 	public ShipTile up(){
 		return neighbors.getUp();
 	}
