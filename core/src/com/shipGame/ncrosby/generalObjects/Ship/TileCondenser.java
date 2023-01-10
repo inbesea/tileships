@@ -16,10 +16,8 @@ public class TileCondenser {
 
     // Smallest amount that can be turned into a new tile.
     static int SMALLEST_INPUT = 2;
-    Array<ID> TileIDs;
 
     public TileCondenser(){
-        TileIDs = new Array<>();
     }
 
     /**
