@@ -13,11 +13,11 @@ import com.badlogic.gdx.utils.Array;
 public class TileOrienter {
 
     // No magic numbers!
-    static final int UP = 0;
-    static final int RIGHT = 1;
-    static final int DOWN = 2;
-    static final int LEFT = 3;
-    static final int INVALID = -1;
+    public static final int UP = 0;
+    public static final int RIGHT = 1;
+    public static final int DOWN = 2;
+    public static final int LEFT = 3;
+    public static final int INVALID = -1;
 
     ShipTile tileOne;
     ShipTile tileTwo;
@@ -93,12 +93,22 @@ public class TileOrienter {
             } else if(direction == RIGHT) {
                 return orientRight();
             } else if (direction == DOWN){
-
+                return orientDown();
             } else if (direction == LEFT){
-
+                return orientLeft();
+            } else {
+                return null;
             }
 
         }
+        return null;
+    }
+
+    private Array<ShipTile> orientLeft() {
+        return null;
+    }
+
+    private Array<ShipTile> orientDown() {
         return null;
     }
 
@@ -134,5 +144,9 @@ public class TileOrienter {
     public int setAndReturnCurrentOrientation(int currentOrientation) {
         this.currentOrientation = currentOrientation;
         return currentOrientation;
+    }
+
+    public Array<ShipTile> getTileArray() {
+        return tileArray;
     }
 }
