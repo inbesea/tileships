@@ -15,7 +15,7 @@ import static com.shipGame.ncrosby.util.generalUtil.reverseArray;
 public class TileCondenser {
 
     // Smallest amount that can be turned into a new tile.
-    static int SMALLEST_INPUT = 2;
+    static int SMALLEST_INPUT = 1;
 
     public TileCondenser(){
     }
@@ -45,6 +45,10 @@ public class TileCondenser {
      */
     private ShipTile developTileFromArray(Array<ShipTile> tiles) {
         ShipTile result;
+
+        // Get String for comparison
+        TileArrayToString arrayToString = new TileArrayToString(tiles);
+        String arrayString = arrayToString.toCompareString();
 
         // Orient tiles for comparison
         Array<ShipTile> upTurnedTiles = orientArrayUpwards(tiles);
