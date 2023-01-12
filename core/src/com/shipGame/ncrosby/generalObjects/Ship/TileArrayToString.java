@@ -31,7 +31,7 @@ public class TileArrayToString {
         // We have the orientation now. I want to scribe each tile individually when looping.
         // The orienter may just move the array over and ruin the actual tile in the ship. Can we do that differently.
         // tilea tileB tileC have indexes and the first two point right. Lets make a string out of them.
-        if(orientation != TileOrienter.INVALID){
+        if(orientation != AdjacentTiles.INVALID){
             tileToString(orienter.getTileArray());
         }
         return null;

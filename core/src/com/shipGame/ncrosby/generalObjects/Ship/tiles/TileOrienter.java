@@ -4,6 +4,7 @@ package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.shipGame.ncrosby.generalObjects.Ship.AdjacentTiles;
 
 /**
  * Class to handle orienting an array of tiles.
@@ -11,13 +12,6 @@ import com.badlogic.gdx.utils.Array;
  * This class can get orientation, be told to reorient its array, and give the orientation of the array
  */
 public class TileOrienter {
-
-    // No magic numbers!
-    public static final int UP = 0;
-    public static final int RIGHT = 1;
-    public static final int DOWN = 2;
-    public static final int LEFT = 3;
-    public static final int INVALID = -1;
 
     ShipTile tileOne;
     ShipTile tileTwo;
@@ -56,13 +50,13 @@ public class TileOrienter {
 
         // Addition
         if(tile0Index.y + 1 == tile1Index.y && xSame){ // Up
-            return setAndReturnCurrentOrientation(UP);
+            return setAndReturnCurrentOrientation(AdjacentTiles.UP);
         } else if(tile0Index.x + 1 == tile1Index.x && ySame) { // Right
-            return setAndReturnCurrentOrientation(RIGHT);
+            return setAndReturnCurrentOrientation(AdjacentTiles.RIGHT);
         } else if(tile0Index.y - 1 == tile1Index.y && xSame) { // Down
-            return setAndReturnCurrentOrientation(DOWN);
+            return setAndReturnCurrentOrientation(AdjacentTiles.DOWN);
         } else if(tile0Index.x - 1 == tile1Index.x && ySame) { // Left
-            return setAndReturnCurrentOrientation(LEFT);
+            return setAndReturnCurrentOrientation(AdjacentTiles.LEFT);
         } else { // Is reached if the array is too short
             Gdx.app.debug("CondenserMessage", "Incomparable tiles passed to GetOrientation()" + tile0Index + " " + tile1Index);
             result = -1;
@@ -88,13 +82,13 @@ public class TileOrienter {
             if(currentOrientation == direction)return tileArray; // Check for no rotation needed
 
             /* If current orientation and direction are valid and do not match then we can begin orientation */
-            else if(direction == UP){ // Check needed direction
+            else if(direction == AdjacentTiles.UP){ // Check needed direction
                 return orientUpwards();
-            } else if(direction == RIGHT) {
+            } else if(direction == AdjacentTiles.RIGHT) {
                 return orientRight();
-            } else if (direction == DOWN){
+            } else if (direction == AdjacentTiles.DOWN){
                 return orientDown();
-            } else if (direction == LEFT){
+            } else if (direction == AdjacentTiles.LEFT){
                 return orientLeft();
             } else {
                 return null;
