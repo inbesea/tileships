@@ -43,7 +43,18 @@ public class TileArrayToString {
      * @return
      */
     private String tileToString(Array<ShipTile> tiles) {
+        StringBuilder tileArrayString = new StringBuilder();
+        ShipTile tile;
 
+        // Loop array and build out string
+        for(int i = 0 ; i < tiles.size ; i++){
+            tile = tiles.get(i);
+            tileArrayString.append(tile.getAbbreviation());
+            tileArrayString.append(tile.getxIndex());
+            // Want a way to get a number 0-3 (-1 as no invalid) to
+            // Check for the direction from the last tile.
+            // We can use the neighbor methods in ShipTile to determine this.
+        }
 
         return null;
     }
