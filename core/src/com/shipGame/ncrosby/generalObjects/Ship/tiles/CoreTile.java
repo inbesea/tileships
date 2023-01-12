@@ -18,5 +18,10 @@ public class CoreTile extends ShipTile {
         super(position, id);
     }
 
+    @Override
+    public String getAbbreviation() {
+        return "COR";
+    }
+
 
 }

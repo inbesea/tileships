@@ -52,7 +52,14 @@ public class ShipTile extends GameObject implements ShipTileInterface {
 		
 	}
 
-//	/**
+	/**
+	 * Exposes the interface needs through allowing ShipTile to be called while using an extruded class.
+	 */
+	public String getAbbreviation() {
+		return null;
+	}
+
+	//	/**
 //	 * render creates the square of the tile on the Graphics context.
 //	 * @param g - Context for rendering images
 //	 */
