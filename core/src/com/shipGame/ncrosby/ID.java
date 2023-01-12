@@ -18,10 +18,10 @@ public enum ID {
 	 */
 	Player("RobotV2.png"),
 	Asteroid("asteroid_purple.png"),
-	ShipTile("ShipTile_Red.png"),
 	CoreTile("ShipTile_Core.png"),
 	Ship("none"),
-	Hover("HoverIndicator.png");
+	Hover("HoverIndicator.png"),
+	StandardTile("ShipTile_Red.png");
 
 	private String texture;
 
