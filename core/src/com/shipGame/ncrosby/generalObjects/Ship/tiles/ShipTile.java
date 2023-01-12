@@ -11,7 +11,7 @@ import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
 
-public class ShipTile extends GameObject {
+public class ShipTile extends GameObject implements ShipTileInterface {
 
 	private final AdjacentTiles neighbors = new AdjacentTiles();
 	private final int xIndex, yIndex;

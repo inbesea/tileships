@@ -26,7 +26,7 @@ public class TileOrienterTest {
     public void whenCheckingUpPointingTiles_Return0(){
         // Before - Give values to the objects to test
         tileArray = new Array<>();
-        tileArray.add(new ShipTile(new Vector2(0,0), ID.ShipTile),  new ShipTile(new Vector2(0,64), ID.ShipTile));
+        tileArray.add(new ShipTile(new Vector2(0,0), ID.StandardTile),  new ShipTile(new Vector2(0,64), ID.StandardTile));
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
@@ -44,7 +44,7 @@ public class TileOrienterTest {
     public void whenCheckingRightPointingTiles_Return1(){
         // Before - Add tiles in a right facing orientation
         tileArray = new Array<>();
-        tileArray.add(new ShipTile(new Vector2(0,0), ID.ShipTile),  new ShipTile(new Vector2(64,0), ID.ShipTile));
+        tileArray.add(new ShipTile(new Vector2(0,0), ID.StandardTile),  new ShipTile(new Vector2(64,0), ID.StandardTile));
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
@@ -62,7 +62,7 @@ public class TileOrienterTest {
     public void whenCheckingDownPointingTiles_Return2(){
         // Before
         tileArray = new Array<>();
-        tileArray.add(new ShipTile(new Vector2(0,0), ID.ShipTile),  new ShipTile(new Vector2(0,-64), ID.ShipTile));
+        tileArray.add(new ShipTile(new Vector2(0,0), ID.StandardTile),  new ShipTile(new Vector2(0,-64), ID.StandardTile));
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
@@ -79,8 +79,8 @@ public class TileOrienterTest {
         // Before
         tileArray = new Array<>();
         tileArray.add(
-                new ShipTile(new Vector2(0,0), ID.ShipTile),  // First nutral tile
-                new ShipTile(new Vector2(-64,0), ID.ShipTile)); // Second left tile
+                new ShipTile(new Vector2(0,0), ID.StandardTile),  // First nutral tile
+                new ShipTile(new Vector2(-64,0), ID.StandardTile)); // Second left tile
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
