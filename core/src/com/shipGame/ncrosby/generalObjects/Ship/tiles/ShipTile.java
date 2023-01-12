@@ -266,4 +266,19 @@ public class ShipTile extends GameObject implements ShipTileInterface {
 	public boolean isNeighbor(ShipTile possibleNeighbor) {
 		return getNeighbors().isNeighbor(possibleNeighbor);
 	}
+
+	/**
+	 * Method to return a value representing the spacial relationship between this tile and a second tile.
+	 * @return - A string showing where *nextTile* is in relationship to this tile.
+	 * 0 = UP
+	 * 1 = RIGHT
+	 * 2 = DOWN
+	 * 3 = LEFT
+	 */
+	public int orthoginalRelationship(ShipTile nextTile){
+		if(isNeighbor(nextTile)){
+			// Call to return what side the nexttile is on.
+			return getNeighbors().orthoginalRelationship();
+		}
+	}
 }

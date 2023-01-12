@@ -82,4 +82,11 @@ public class AdjacentTiles {
             return false;
         }
     }
+
+    /**
+     *
+     * @return
+     */
+    public int orthoginalRelationship() {
+    }
 }
