@@ -105,10 +105,10 @@ public class Ship extends GameObject {
 	 */
 	private void initShipTiles() {
 		addTile(position.x, position.y, ID.CoreTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y, ID.ShipTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTile(position.x, position.y + ShipTile.TILESIZE, ID.ShipTile);
-		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.ShipTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y, ID.StandardTile);
+		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		addTile(position.x, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.StandardTile);
 	}
 
 	/**
@@ -243,11 +243,11 @@ public class Ship extends GameObject {
 
 						removeAsteroid = true;
 
-						// New basic tile
+						// New standard tile
 						addTile(x, y,
-								ID.ShipTile);
+								ID.StandardTile);
 						break;
-					} else if (shipTile.getID() == ID.ShipTile) {
+					} else if (shipTile.getID() == ID.StandardTile) {
 						// Explode tile and asteroid
 						removeTileFromShip(shipTile);
 						increaseDestroyedTile(1);
