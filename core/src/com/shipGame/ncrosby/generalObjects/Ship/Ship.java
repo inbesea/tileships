@@ -42,7 +42,7 @@ public class Ship extends GameObject {
 	 * Ship keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (Vector2 position, ID id, OrthographicCamera cam, Array<GameObject> gameObjects, AsteroidManager asteroidManager) {
+	public Ship (Vector2 position, ID id, Array<GameObject> gameObjects, AsteroidManager asteroidManager) {
 		super(position, new Vector2(0,0), id);
 		this.gameObjects = gameObjects;
 		this.asteroidManager = asteroidManager;
@@ -57,7 +57,7 @@ public class Ship extends GameObject {
 		initShipTiles();
 	}
 
-	public Ship (Vector2 position, ID id, OrthographicCamera cam, GameScreen screen){
+	public Ship (Vector2 position, ID id, GameScreen screen){
 		super(position, new Vector2(0,0), id);
 		this.screen = screen;
 
