@@ -84,9 +84,15 @@ public class AdjacentTiles {
     }
 
     /**
-     *
+     * Returns Int representing neighbor status
+     * @param possibleNeighbor
      * @return
      */
-    public int orthoginalRelationship() {
+    public int isWhichNeighbor(ShipTile possibleNeighbor) {
+        if(Up == possibleNeighbor)return UP;
+        else if (Right == possibleNeighbor)return RIGHT;
+        else if(Left == possibleNeighbor)return LEFT;
+        else if(Down == possibleNeighbor)return DOWN;
+        else return INVALID;
     }
 }

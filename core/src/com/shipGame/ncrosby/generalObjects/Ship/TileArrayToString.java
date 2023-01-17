@@ -45,15 +45,21 @@ public class TileArrayToString {
     private String tileToString(Array<ShipTile> tiles) {
         StringBuilder tileArrayString = new StringBuilder();
         ShipTile tile;
+        int nextTileDirection;
 
         // Loop array and build out string
         for(int i = 0 ; i < tiles.size ; i++){
             tile = tiles.get(i);
             tileArrayString.append(tile.getAbbreviation());
-            tileArrayString.append(tile.getxIndex());
+            nextTileDirection = tile.getAdjacency(tiles.get(i+1));
+            tileArrayString.append(nextTileDirection);
             // Want a way to get a number 0-3 (-1 as no invalid) to
             // Check for the direction from the last tile.
             // We can use the neighbor methods in ShipTile to determine this.
+
+            if(i == tiles.size - 1){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
+                tileArrayString.append(tiles.get(i+1).getAbbreviation());
+            }
         }
 
         return null;
