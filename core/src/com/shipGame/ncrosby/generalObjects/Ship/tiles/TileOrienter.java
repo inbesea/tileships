@@ -167,4 +167,120 @@ public class TileOrienter {
     public Array<ShipTile> getTileArray() {
         return tileArray;
     }
+
+    /**
+     * Coordinator function to orient the numbers.
+     * <p>
+     * Tired of this long process to make this work lol
+     * @param aDirectionToChange - number to switch
+     * @param newDirection - direction to orient to
+     * @return - New oriented number if valid, -1 if problem
+     */
+    public int directionRemap(int aDirectionToChange, int newDirection) {
+        int result = -1;
+
+        // Number to change, originalDirection, newDirection
+        // If original direction is opposite from new then just flip the number
+        if(opposites(newDirection, currentOrientation))result = flip(aDirectionToChange);
+        else if(toTheRight(currentOrientation, newDirection)){
+            result = rightRotate(aDirectionToChange);
+        } else if(toTheLeft(currentOrientation, newDirection)){
+            result = leftRotate(aDirectionToChange);
+        }
+
+        if(result == -1) Gdx.app.debug("Orientation","A number did a stupid");
+        return result;
+    }
+
+    /**
+     * Checks if new direction is directly to the left of the current orientation
+     * @param current
+     * @param newOrientation
+     * @return
+     */
+    private boolean toTheLeft(int current, int newOrientation) {
+        boolean toTheLeft =
+                (current == AdjacentTiles.UP && newOrientation == AdjacentTiles.LEFT ||
+                        current == AdjacentTiles.DOWN && newOrientation == AdjacentTiles.RIGHT ||
+                        current == AdjacentTiles.RIGHT && newOrientation == AdjacentTiles.UP ||
+                        current == AdjacentTiles.LEFT && newOrientation == AdjacentTiles.DOWN);
+
+        return toTheLeft;
+    }
+
+    /**
+     * Checks if new direction is directly to the right of the current orientation
+     * @param current
+     * @param newOrientation
+     * @return
+     */
+    private boolean toTheRight(int current, int newOrientation) {
+        boolean toTheRight =
+                (current == AdjacentTiles.UP && newOrientation == AdjacentTiles.RIGHT ||
+                        current == AdjacentTiles.DOWN && newOrientation == AdjacentTiles.LEFT ||
+                        current == AdjacentTiles.RIGHT && newOrientation == AdjacentTiles.DOWN ||
+                        current == AdjacentTiles.LEFT && newOrientation == AdjacentTiles.UP);
+
+        return toTheRight;
+    }
+
+
+    /**
+     * Checks if points are on opposite sides
+     * @param compassPoint1 - direction
+     * @param compassPoint2 - another direction
+     * @return - true if opposites, else false.
+     */
+    private boolean opposites(int compassPoint1, int compassPoint2){
+
+        boolean areOpposite =
+                (compassPoint2 == AdjacentTiles.UP && compassPoint1 == AdjacentTiles.DOWN ||
+                compassPoint2 == AdjacentTiles.DOWN && compassPoint1 == AdjacentTiles.UP ||
+                compassPoint2 == AdjacentTiles.RIGHT && compassPoint1 == AdjacentTiles.LEFT ||
+                compassPoint2 == AdjacentTiles.LEFT && compassPoint1 == AdjacentTiles.RIGHT);
+
+        return areOpposite;
+    }
+
+    /**
+     * Returns nextTileDirection with a 90 degree turn to the right
+     * @param nextTileDirection
+     * @return
+     */
+    private int rightRotate(int nextTileDirection) {
+        if(AdjacentTiles.UP == nextTileDirection)return AdjacentTiles.RIGHT;
+        if(AdjacentTiles.RIGHT == nextTileDirection) return AdjacentTiles.DOWN;
+        if(AdjacentTiles.DOWN == nextTileDirection) return AdjacentTiles.LEFT;
+        if(AdjacentTiles.LEFT == nextTileDirection) return AdjacentTiles.UP;
+
+        return AdjacentTiles.INVALID; // No match
+    }
+
+    /**
+     * returns nextTileDirection with a 90 degree turn to the left
+     * @param nextTileDirection
+     * @return
+     */
+    private int leftRotate(int nextTileDirection) {
+        if(AdjacentTiles.UP == nextTileDirection)return AdjacentTiles.LEFT;
+        if(AdjacentTiles.RIGHT == nextTileDirection) return AdjacentTiles.UP;
+        if(AdjacentTiles.DOWN == nextTileDirection) return AdjacentTiles.RIGHT;
+        if(AdjacentTiles.LEFT == nextTileDirection) return AdjacentTiles.DOWN;
+
+        return AdjacentTiles.INVALID; // No match
+    }
+
+    /**
+     * Flips direction to opposite on the compass directions
+     * @param nextTileDirection - direction to reorient
+     * @return - oriented direction
+     */
+    private int flip(int nextTileDirection) {
+        if(AdjacentTiles.UP == nextTileDirection)return AdjacentTiles.DOWN;
+        if(AdjacentTiles.RIGHT == nextTileDirection) return AdjacentTiles.LEFT;
+        if(AdjacentTiles.DOWN == nextTileDirection) return AdjacentTiles.UP;
+        if(AdjacentTiles.LEFT == nextTileDirection) return AdjacentTiles.RIGHT;
+
+        return AdjacentTiles.INVALID; // No match
+    }
 }

@@ -91,4 +91,24 @@ public class TileOrienterTest {
         // Then - Return 3 == left
         Assert.assertEquals( 3, result);
     }
+
+    @Test
+    public void testWhenOrientingNumbersUpFromRightFacingArray_GetAppropriateNumbers(){
+        // Before - Add tiles in a right facing orientation
+        tileArray = new Array<>();
+        tileArray.add(new ShipTile(new Vector2(0,0), ID.StandardTile),  new ShipTile(new Vector2(64,0), ID.StandardTile));
+        orienter = new TileOrienter(tileArray);
+
+        // When - Getting the orientation value
+        int result0 = orienter.directionRemap(AdjacentTiles.RIGHT, AdjacentTiles.UP);
+        int result1 = orienter.directionRemap(AdjacentTiles.DOWN, AdjacentTiles.UP);
+        int result2 = orienter.directionRemap(AdjacentTiles.LEFT, AdjacentTiles.UP);
+        int result3 = orienter.directionRemap(AdjacentTiles.UP, AdjacentTiles.UP);
+
+        // Then - Expect the value is 1 or right
+        Assert.assertEquals(AdjacentTiles.UP, result0);
+        Assert.assertEquals(AdjacentTiles.RIGHT, result1);
+        Assert.assertEquals(AdjacentTiles.DOWN, result2);
+        Assert.assertEquals(AdjacentTiles.LEFT, result3);
+    }
 }
