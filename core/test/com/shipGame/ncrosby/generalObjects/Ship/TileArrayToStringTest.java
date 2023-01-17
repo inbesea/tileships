@@ -25,12 +25,34 @@ public class TileArrayToStringTest extends TestCase {
         TileArrayToString tileArrayToString = new TileArrayToString(tiles);
 
         // When
-        String result = tileArrayToString.tilesToString(tiles);
+        String result = tileArrayToString.tilesToString();
 
         // Then
         assertEquals("STD0STD1STD", result);
     }
 
-//    @Test
-//    public void whenGive
+    /**
+     * Testing if given a right facing array STD AdjacentTiles.RIGHT STD AT.DOWN then compare string conversion should
+     * turn the orientation.
+     */
+    @Test
+    public void testWhenGiveSTD1STD2STDToCompareString_GetSTD0STD1STDStringBack(){
+        // Before
+        Array<ShipTile> tiles = new Array<>();
+        StandardTile standardTile1 = new StandardTile(new Vector2(0,0));
+        StandardTile standardTile2 = new StandardTile(new Vector2(64,0));
+        StandardTile standardTile3 = new StandardTile(new Vector2(64,-64));
+        // Set neighbors manually
+        standardTile1.setNeighbors(null,standardTile2,null,null);
+        standardTile2.setNeighbors(null,null ,standardTile3,null);
+        // Add tiles to array for passing to stringifyer
+        tiles.add(standardTile1,standardTile2, standardTile3);
+        TileArrayToString tileArrayToString = new TileArrayToString(tiles);
+
+        // When
+        String result = tileArrayToString.toCompareString();
+
+        // Then
+        assertEquals("STD0STD1STD", result);
+    }
 }

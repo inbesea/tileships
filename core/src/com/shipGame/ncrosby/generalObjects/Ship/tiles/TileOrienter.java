@@ -140,6 +140,30 @@ public class TileOrienter {
         return currentOrientation;
     }
 
+//    /**
+//     * Method to create a new array of tiles with different orientation and return it while setting the tileOrienter's
+//     * local array to the new value.
+//     * @param newOrientation
+//     * @return
+//     */
+//    public Array<ShipTile> rotateAndReturnArrayOrientation(int newOrientation) {
+//        this.currentOrientation = newOrientation;
+//        Array<ShipTile> newArray = new Array<>();
+//        ShipTile temp;
+//
+//        for(int i = 0 ; i < tileArray.size ; i++){
+//            temp = tileArray.get(i);
+//            newArray.add(new ShipTile()); // I need to turn each tile's location.
+//            // We are using neighbors to figure out what the relationships are, but that requires the Ship object to do.
+//            // Actually this is a better reason to just rotate each individually. for the string...
+//        }
+//        return null;
+//    }
+
+    /**
+     * Getter for the local tile Array
+     * @return - Array of tiles
+     */
     public Array<ShipTile> getTileArray() {
         return tileArray;
     }
