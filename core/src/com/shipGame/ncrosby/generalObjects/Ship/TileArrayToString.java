@@ -21,7 +21,7 @@ public class TileArrayToString {
 
 
     /**
-     * Generates a string for ShipTile development comparison.
+     * Generates a string for tile development comparison.
      * @return
      */
     public String toCompareString() {
@@ -32,7 +32,7 @@ public class TileArrayToString {
         // The orienter may just move the array over and ruin the actual tile in the ship. Can we do that differently.
         // tilea tileB tileC have indexes and the first two point right. Lets make a string out of them.
         if(orientation != AdjacentTiles.INVALID){
-            tileToString(orienter.getTileArray());
+            tilesToString(orienter.getTileArray());
         }
         return null;
     }
@@ -42,7 +42,7 @@ public class TileArrayToString {
      * @param tiles
      * @return
      */
-    private String tileToString(Array<ShipTile> tiles) {
+    public String tilesToString(Array<ShipTile> tiles) {
         StringBuilder tileArrayString = new StringBuilder();
         ShipTile tile;
         int nextTileDirection;
@@ -57,11 +57,11 @@ public class TileArrayToString {
             // Check for the direction from the last tile.
             // We can use the neighbor methods in ShipTile to determine this.
 
-            if(i == tiles.size - 1){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
+            if(i == tiles.size - 2){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
                 tileArrayString.append(tiles.get(i+1).getAbbreviation());
+                return tileArrayString.toString();
             }
         }
-
         return null;
     }
 }
