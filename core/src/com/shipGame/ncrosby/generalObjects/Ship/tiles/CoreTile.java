@@ -18,6 +18,10 @@ public class CoreTile extends ShipTile {
         super(position, id);
     }
 
+    public CoreTile(Vector2 position) {
+        super(position, ID.CoreTile);
+    }
+
     @Override
     public String getAbbreviation() {
         return "COR";
