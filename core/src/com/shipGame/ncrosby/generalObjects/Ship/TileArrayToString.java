@@ -30,6 +30,7 @@ public class TileArrayToString {
         int orientation = orienter.getCurrentOrientation();
         StringBuilder tileArrayString = new StringBuilder();
         ShipTile tempTile;
+        ShipTile tempTile1;
         int nextTileDirection;
 
         // Default position
@@ -38,8 +39,12 @@ public class TileArrayToString {
         // Loop array and build out string
         for(int i = 0 ; i < tiles.size ; i++){
             tempTile = tiles.get(i);
+            tempTile1 = tiles.get(i + 1);
+
+            // Get abbreviation and adjacency
             tileArrayString.append(tempTile.getAbbreviation());
-            nextTileDirection = tempTile.getAdjacency(tiles.get(i+1));
+            nextTileDirection = tempTile.getAdjacency(tempTile1);
+            // Adjust the
             tileArrayString.append(orienter.directionRemap(nextTileDirection, AdjacentTiles.UP));
             // Want a way to get a number 0-3 (-1 as no invalid) to
             // Check for the direction from the last tile.
@@ -51,12 +56,6 @@ public class TileArrayToString {
             }
         }
         return null;
-
-        // Can we avoid changing the tiles original instances?? :/
-
-        // We have the orientation now. I want to scribe each tile individually when looping.
-        // The orienter may just move the array over and ruin the actual tile in the ship. Can we do that differently.
-        // tilea tileB tileC have indexes and the first two point right. Lets make a string out of them.
     }
 
     /**
@@ -66,23 +65,37 @@ public class TileArrayToString {
     public String tilesToString() {
         StringBuilder tileArrayString = new StringBuilder();
         ShipTile tile;
+        ShipTile tempTile1;
         int nextTileDirection;
 
         // Loop array and build out string
         for(int i = 0 ; i < tiles.size ; i++){
             tile = tiles.get(i);
-            tileArrayString.append(tile.getAbbreviation());
-            nextTileDirection = tile.getAdjacency(tiles.get(i+1));
-            tileArrayString.append(nextTileDirection);
-            // Want a way to get a number 0-3 (-1 as no invalid) to
-            // Check for the direction from the last tile.
-            // We can use the neighbor methods in ShipTile to determine this.
+            tempTile1 = tiles.get(i+1);
+            tileArrayString.append(simpleTileToString(tile, tempTile1));
 
             if(i == tiles.size - 2){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
-                tileArrayString.append(tiles.get(i+1).getAbbreviation());
+                tileArrayString.append(tempTile1.getAbbreviation());
                 return tileArrayString.toString();
             }
         }
         return null;
+    }
+
+    /**
+     * Takes two tiles and builds a string with format (abbreviation)(numberOfDirection) without any reorientation
+     * @param tile0
+     * @param tile1
+     * @return
+     */
+    public String simpleTileToString(ShipTile tile0, ShipTile tile1){
+        StringBuilder tileArrayString = new StringBuilder();
+        int nextTileDirection;
+
+        tileArrayString.append(tile0.getAbbreviation());
+        nextTileDirection = tile0.getAdjacency(tile1);
+        tileArrayString.append(nextTileDirection);
+
+        return tileArrayString.toString();
     }
 }

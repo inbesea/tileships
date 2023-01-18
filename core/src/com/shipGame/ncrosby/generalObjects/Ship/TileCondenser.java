@@ -50,16 +50,13 @@ public class TileCondenser {
         TileArrayToString arrayToString = new TileArrayToString(tiles);
         String arrayString = arrayToString.toCompareString();
 
-        // Orient tiles for comparison
-        Array<ShipTile> upTurnedTiles = orientArrayUpwards(tiles);
-
         // Check against recipes for match
-        result = attemptArrayMatch(upTurnedTiles);
+        result = attemptArrayMatch(arrayString);
         if(result != null)return result;
 
         // If not matched check if the array's reverse matches.
-        Array<ShipTile> reverseAndOrientArray = reverseAndOrientArray(tiles);
-        result = attemptArrayMatch(reverseAndOrientArray);
+        String reverseCompareString = arrayToString.toCompareString();
+        result = attemptArrayMatch(reverseCompareString);
         if(result != null)return result;
 
         // If all else fails
@@ -79,12 +76,12 @@ public class TileCondenser {
         return result;
     }
 
-    private ShipTile attemptArrayMatch(Array<ShipTile> upTurnedTiles) {
+    private ShipTile attemptArrayMatch(String compareString) {
         Array<TileRecipes> recipes = getAvailableRecipes(); // Array of recipes available to the player.
-        for(int i = 0 ; i < upTurnedTiles.size ; i++){
-            // Check turned tiles against the array. If a match is found return that
-            // Else try to reverse the array and run the check again.
-        }
+//        for(int i = 0 ; i < upTurnedTiles.size ; i++){
+//            // Check turned tiles against the array. If a match is found return that
+//            // Else try to reverse the array and run the check again.
+//        }
         return null;
     }
 
