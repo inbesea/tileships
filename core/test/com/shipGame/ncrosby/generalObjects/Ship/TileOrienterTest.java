@@ -111,4 +111,44 @@ public class TileOrienterTest {
         Assert.assertEquals(AdjacentTiles.DOWN, result2);
         Assert.assertEquals(AdjacentTiles.LEFT, result3);
     }
+
+    @Test
+    public void testWhenOrientingNumbersUpFromLeftFacingArray_GetAppropriateNumbers(){
+        // Before - Add tiles in a right facing orientation
+        tileArray = new Array<>();
+        tileArray.add(new ShipTile(new Vector2(0,0), ID.StandardTile),  new ShipTile(new Vector2(-64,0), ID.StandardTile));
+        orienter = new TileOrienter(tileArray); // Give left facing array to orienter
+
+        // When - Getting the new reoriented values (facing up)
+        int result0 = orienter.directionRemap(AdjacentTiles.RIGHT, AdjacentTiles.UP);
+        int result1 = orienter.directionRemap(AdjacentTiles.DOWN, AdjacentTiles.UP);
+        int result2 = orienter.directionRemap(AdjacentTiles.LEFT, AdjacentTiles.UP);
+        int result3 = orienter.directionRemap(AdjacentTiles.UP, AdjacentTiles.UP);
+
+        // Then - Expect the value is 1 or right
+        Assert.assertEquals(AdjacentTiles.DOWN, result0);
+        Assert.assertEquals(AdjacentTiles.LEFT, result1);
+        Assert.assertEquals(AdjacentTiles.UP, result2);
+        Assert.assertEquals(AdjacentTiles.RIGHT, result3);
+    }
+
+    @Test
+    public void testWhenOrientingNumbersUpFromDownFacingArray_GetAppropriateNumbers(){
+        // Before - Add tiles in a right facing orientation
+        tileArray = new Array<>();
+        tileArray.add(new ShipTile(new Vector2(0,0), ID.StandardTile),  new ShipTile(new Vector2(0,-64), ID.StandardTile));
+        orienter = new TileOrienter(tileArray); // Give left facing array to orienter
+
+        // When - Getting the new reoriented values (facing up)
+        int result0 = orienter.directionRemap(AdjacentTiles.RIGHT, AdjacentTiles.UP);
+        int result1 = orienter.directionRemap(AdjacentTiles.DOWN, AdjacentTiles.UP);
+        int result2 = orienter.directionRemap(AdjacentTiles.LEFT, AdjacentTiles.UP);
+        int result3 = orienter.directionRemap(AdjacentTiles.UP, AdjacentTiles.UP);
+
+        // Then - Expect the value is 1 or right
+        Assert.assertEquals(AdjacentTiles.LEFT, result0);
+        Assert.assertEquals(AdjacentTiles.UP, result1);
+        Assert.assertEquals(AdjacentTiles.RIGHT, result2);
+        Assert.assertEquals(AdjacentTiles.DOWN, result3);
+    }
 }
