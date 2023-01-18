@@ -1,5 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileOrienter;
@@ -41,21 +42,62 @@ public class TileArrayToString {
             tempTile = tiles.get(i);
             tempTile1 = tiles.get(i + 1);
 
-            // Get abbreviation and adjacency
-            tileArrayString.append(tempTile.getAbbreviation());
-            nextTileDirection = tempTile.getAdjacency(tempTile1);
-            // Adjust the
-            tileArrayString.append(orienter.directionRemap(nextTileDirection, AdjacentTiles.UP));
-            // Want a way to get a number 0-3 (-1 as no invalid) to
-            // Check for the direction from the last tile.
-            // We can use the neighbor methods in ShipTile to determine this.
+            tileArrayString.append(simpleToCompareString(orientation, tempTile, tempTile1));
 
             if(i == tiles.size - 2){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
-                tileArrayString.append(tiles.get(i+1).getAbbreviation());
+                tileArrayString.append(tempTile1.getAbbreviation());
                 return tileArrayString.toString();
             }
         }
         return null;
+    }
+
+
+    public String reverseToCompareString() {
+        // Create a string representing the array passed to this object, where orientation is up.
+        int orientation = TileOrienter.calculateOrientation(tiles.get(tiles.size - 1), tiles.get(tiles.size - 2));
+        if(orientation == -1){
+            Gdx.app.debug("reverseToCompareString", "Error getting orientation");
+            return "ERROR";
+        }
+        StringBuilder tileArrayString = new StringBuilder();
+        ShipTile tempTile;
+        ShipTile tempTile1;
+        int nextTileDirection;
+
+        // Default position
+        if(orientation == 0) return tilesToString();
+
+        // Loop array backwards and build out string
+        for(int i = tiles.size - 1 ; i > 0 ; i--){ // Start with last, subtrack one each time, stop before index 0
+            tempTile = tiles.get(i);
+            tempTile1 = tiles.get(i - 1);
+
+            tileArrayString.append(simpleToCompareString(orientation, tempTile, tempTile1));
+
+            if(i == 1){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
+                tileArrayString.append(tempTile1.getAbbreviation());
+                return tileArrayString.toString();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns string snippet with respect to the passed reference direction to an updirection.
+     * @param originalOrientation - Direction to move from
+     * @param tile0 - First tile
+     * @param tile1 - Second tile
+     * @return - Short snippet with "ABB0" as the basic format
+     */
+    public String simpleToCompareString(int originalOrientation, ShipTile tile0, ShipTile tile1){
+        StringBuilder stringBuilder = new StringBuilder();
+        TileOrienter orienter = new TileOrienter(originalOrientation);
+
+        stringBuilder.append(tile0.getAbbreviation());
+        stringBuilder.append(orienter.directionRemap(tile0.getAdjacency(tile1), AdjacentTiles.UP));
+
+        return stringBuilder.toString();
     }
 
     /**

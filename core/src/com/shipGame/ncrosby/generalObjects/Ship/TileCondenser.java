@@ -55,7 +55,7 @@ public class TileCondenser {
         if(result != null)return result;
 
         // If not matched check if the array's reverse matches.
-        String reverseCompareString = arrayToString.toCompareString();
+        String reverseCompareString = arrayToString.reverseToCompareString();
         result = attemptArrayMatch(reverseCompareString);
         if(result != null)return result;
 
