@@ -11,6 +11,7 @@ import static com.shipGame.ncrosby.util.generalUtil.reverseArray;
 
 /**
  * Class to build out new instances of tiles based on ordered arrays of tiles.
+ * Used to match up patterns using member classes.
  */
 public class TileCondenser {
 
@@ -63,19 +64,6 @@ public class TileCondenser {
         return null;
     }
 
-    /**
-     * Function to reverse and orient an array upwards.
-     *
-     * @param tiles
-     * @return
-     */
-    private Array<ShipTile> reverseAndOrientArray(Array<ShipTile> tiles) {
-        Array<ShipTile> result = new Array<>();
-        result = reverseArray(tiles);
-        result = orientArrayUpwards(result);
-        return result;
-    }
-
     private ShipTile attemptArrayMatch(String compareString) {
         Array<TileRecipes> recipes = getAvailableRecipes(); // Array of recipes available to the player.
 //        for(int i = 0 ; i < upTurnedTiles.size ; i++){
@@ -83,50 +71,6 @@ public class TileCondenser {
 //            // Else try to reverse the array and run the check again.
 //        }
         return null;
-    }
-
-    /**
-     * Takes array and rotates it to point upwards.
-     *
-     * This is done by looking at the first two and checking the direction.
-     * @return
-     */
-    private Array<ShipTile> orientArrayUpwards(Array<ShipTile> tiles) {
-
-        // Check first two
-        // TODO : have tile Orienter orient the array.
-        // Get the orientation and review the translation procedure
-        int orientation = getOrientation(tiles);
-
-        switch (orientation) {
-            case 0 :
-                System.out.println("Up Orientation");
-                return tiles; // No change needed
-            case 1 :
-                System.out.println("Right Orientation");
-                break;
-            case 2 :
-                System.out.println("Down Orientation");
-                break;
-            case 3 :
-                System.out.println("Left Orientation");
-        }
-        return null;
-    }
-
-    /**
-     * Returns the orientation between tile0 and tile1
-     *
-     * @param tiles - Array of tiles to check.
-     * @return Returns 0-3 representing orientation between the two tiles. -1 if invalid inputs.
-     * 0 = Up
-     * 1 = Right
-     * 2 = Down
-     * 3 = Left
-     */
-    private int getOrientation(Array<ShipTile> tiles) {
-        TileOrienter orienter = new TileOrienter(tiles);
-        return orienter.calculateOrientation();
     }
 
     private Array<TileRecipes> getAvailableRecipes() {
