@@ -1,10 +1,10 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 public class TileRecipes {
+    String recipe;
 
-    static Json redBlock = new Json();
+    ShipTile tile;
 
 }
