@@ -11,7 +11,7 @@ import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
 
-public class ShipTile extends GameObject implements ShipTileInterface {
+public abstract class ShipTile extends GameObject{
 
 	private final AdjacentTiles neighbors = new AdjacentTiles();
 	private final int xIndex, yIndex;
@@ -55,9 +55,7 @@ public class ShipTile extends GameObject implements ShipTileInterface {
 	/**
 	 * Exposes the interface needs through allowing ShipTile to be called while using an extruded class.
 	 */
-	public String getAbbreviation() {
-		return null;
-	}
+	public abstract String getAbbreviation();
 
 	//	/**
 //	 * render creates the square of the tile on the Graphics context.

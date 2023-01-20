@@ -147,7 +147,7 @@ public class SimpleTouch implements InputProcessor {
                 // Continue collect with clear array?
                 if(collectedTileArray.isEmpty()){
                     System.out.println("Tiles collected : None");
-                }else {
+                } else {
                     TileArrayToString tileArrayToString = new TileArrayToString(collectedTileArray);
                     System.out.println("Tiles collected : " + tileArrayToString.tilesToString() + " Size : " + collectedTileArray.size);
                 }
