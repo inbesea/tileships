@@ -154,8 +154,11 @@ public class Ship extends GameObject {
 	 * @param tiles - Tiles to remove from ship
 	 */
 	public void removeTilesFromShip(Array<ShipTile> tiles){
+		ShipTile tile;
 		for (int i = 0 ; i <= tiles.size ; i++){
-			removeTileFromShip(tiles.get(i));
+			tile = tiles.get(i);
+			if(tile.getID() == ID.CoreTile)continue; // Skip Core tile, don't remove core tiles
+			removeTileFromShip(tile);
 		}
 	}
 
@@ -483,7 +486,7 @@ public class Ship extends GameObject {
 		if(producedTile == null){
 			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
 			return null;
-		} else { // if Tile produced then
+		} else { // if Tile produced then swap the tiles used out of existence and return the new one.
 			removeTilesFromShip(collectedTileArray);
 			return producedTile;
 		}
