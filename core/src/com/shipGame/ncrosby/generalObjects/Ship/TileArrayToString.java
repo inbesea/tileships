@@ -7,13 +7,14 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileOrienter;
 
 /**
  * Takes an array of ShipTiles and can return a string representation of said array.
+ * This representation can be backwards or forwards through the array.
  *
- * String example can be : "std0std1std1std2"
+ * String example can be : "STD0STD1STD2STD"
  * This represents four standard tiles at (0,0),(0,1),(1,1),(1,0) going up right down
  */
 public class TileArrayToString {
 
-    private Array<ShipTile> tiles;
+    private final Array<ShipTile> tiles;
 
     public TileArrayToString(Array<ShipTile> tiles){
         this.tiles = tiles;
@@ -92,18 +93,17 @@ public class TileArrayToString {
      * @return - Short snippet with "ABB0" as the basic format
      */
     public String simpleToCompareString(int originalOrientation, ShipTile tile0, ShipTile tile1){
-        StringBuilder stringBuilder = new StringBuilder();
         TileOrienter orienter = new TileOrienter(originalOrientation);
 
-        stringBuilder.append(tile0.getAbbreviation());
-        stringBuilder.append(orienter.directionRemap(tile0.getAdjacency(tile1), AdjacentTiles.UP));
+        String s = tile0.getAbbreviation() +
+                orienter.directionRemap(tile0.getAdjacency(tile1), AdjacentTiles.UP);
 
-        return stringBuilder.toString();
+        return s;
     }
 
     /**
      * Takes arbitrary array of tiles and returns string representation
-     * @return
+     * @return - Direct string representation of this.tiles
      */
     public String tilesToString() {
         StringBuilder tileArrayString = new StringBuilder();
@@ -127,9 +127,9 @@ public class TileArrayToString {
 
     /**
      * Takes two tiles and builds a string with format (abbreviation)(numberOfDirection) without any reorientation
-     * @param tile0
-     * @param tile1
-     * @return
+     * @param tile0 - First tile to get abbreviation from
+     * @param tile1 - Second tile - used to get direction from tile0
+     * @return - String snippet to be in larger string of tiles
      */
     public String simpleTileToString(ShipTile tile0, ShipTile tile1){
         StringBuilder tileArrayString = new StringBuilder();
