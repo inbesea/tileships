@@ -40,7 +40,8 @@ public class TileCondenser {
 
     /**
      * Runs logic to develop a tile if possible.
-     * Checks the tiles both directions through
+     * Runs a lot of background processes to parse the array
+     *
      * @param tiles
      * @return
      */
