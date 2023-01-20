@@ -14,14 +14,15 @@ public enum ID {
 	/**
 	 * ID class to identify and classify different gameobjects.
 	 * Contains reference to asset for sprite texture.
-	 * Sprite selection
+	 * Sprite selection happens here.
 	 */
 	Player("RobotV2.png"),
 	Asteroid("asteroid_purple.png"),
 	CoreTile("ShipTile_Core.png"),
 	Ship("none"),
 	Hover("HoverIndicator.png"),
-	StandardTile("ShipTile_Red.png");
+	StandardTile("ShipTile_Red.png"),
+	StrongTile("StrongTile.png");
 
 	private String texture;
 
