@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileTypeFactory;
 
 import java.util.Stack;
 
@@ -115,7 +116,10 @@ public class ShipTilesManager {
         System.out.println("Create tile at " + x + "," + y);
         System.out.println("Create tile at " + indexXY[0] + ", " + indexXY[1]);
         System.out.println("Type of : " + id);
-        tempTile = new ShipTile(new Vector2 (getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1])), id);
+
+        // Create tile subtype based on ID using factory static call.
+        Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
+        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
 

@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
+import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
+import com.shipGame.ncrosby.generalObjects.Ship.TileArrayToString;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
@@ -146,7 +148,8 @@ public class SimpleTouch implements InputProcessor {
                 if(collectedTileArray.isEmpty()){
                     System.out.println("Tiles collected : None");
                 }else {
-                    System.out.println("Tiles collected : " + collectedTileArray + " Size : " + collectedTileArray.size);
+                    TileArrayToString tileArrayToString = new TileArrayToString(collectedTileArray);
+                    System.out.println("Tiles collected : " + tileArrayToString.tilesToString() + " Size : " + collectedTileArray.size);
                 }
                 ShipTile newTile = playerShip.buildNewTile(collectedTileArray);
             }else if(draggedTile != null){ // If there is a tile being dragged
@@ -181,6 +184,7 @@ public class SimpleTouch implements InputProcessor {
                     System.out.println("Tiles collected : None");
                 }else {
                     System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
+                    ShipTile resultTile = playerShip.buildNewTile(shipTileArray);
                 }
             }
             return false;
