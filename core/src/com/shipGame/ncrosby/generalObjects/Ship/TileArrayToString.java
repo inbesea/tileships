@@ -52,7 +52,10 @@ public class TileArrayToString {
         return null;
     }
 
-
+    /**
+     *  Method to return a compare string representation of the current tile array starting at the end of the array and working backwards.
+     * @return - The array backwards as a string.
+     */
     public String reverseToCompareString() {
         // Create a string representing the array passed to this object, where orientation is up.
         int orientation = TileOrienter.calculateOrientation(tiles.get(tiles.size - 1), tiles.get(tiles.size - 2));
@@ -60,13 +63,11 @@ public class TileArrayToString {
             Gdx.app.debug("reverseToCompareString", "Error getting orientation");
             return "ERROR";
         }
+
+        // Var init
         StringBuilder tileArrayString = new StringBuilder();
         ShipTile tempTile;
         ShipTile tempTile1;
-        int nextTileDirection;
-
-        // Default position
-        if(orientation == 0) return tilesToString();
 
         // Loop array backwards and build out string
         for(int i = tiles.size - 1 ; i > 0 ; i--){ // Start with last, subtrack one each time, stop before index 0

@@ -143,6 +143,7 @@ public class TileOrienter {
      * @return - New oriented number if valid, -1 if problem
      */
     public int directionRemap(int aDirectionToChange, int newDirection) {
+        if(currentOrientation == newDirection)return aDirectionToChange; // If new direction is same as original, then return unchanged
         int result = -1;
 
         // Number to change, originalDirection, newDirection
@@ -154,7 +155,7 @@ public class TileOrienter {
             result = leftRotate(aDirectionToChange);
         }
 
-        if(result == -1) Gdx.app.debug("Orientation","A number did a stupid");
+        if(result == -1) System.out.println("Orientation - A number did a stupid");
         return result;
     }
 

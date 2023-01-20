@@ -81,4 +81,48 @@ public class TileArrayToStringTest extends TestCase {
         // Then
         assertEquals("STD0COR1STD", result);
     }
+
+    @Test
+    public void testWhenGiveSTD3COR0STDToReverseCompareString_GetSTD0COR3STDStringBack(){
+        // Before
+        Array<ShipTile> tiles = new Array<>();
+        StandardTile standardTile1 = new StandardTile(new Vector2(0,0));
+        CoreTile coreTile1 = new CoreTile(new Vector2(-64,0));
+        StandardTile standardTile3 = new StandardTile(new Vector2(-64,64));
+        // Set neighbors manually
+        standardTile1.setNeighbors(null,null,null, coreTile1);
+        coreTile1.setNeighbors(standardTile3,standardTile1,null ,null);
+        standardTile3.setNeighbors(null,null,coreTile1, null);
+        // Add tiles to array for passing to stringifyer
+        tiles.add(standardTile1,coreTile1, standardTile3);
+        TileArrayToString tileArrayToString = new TileArrayToString(tiles);
+
+        // When - Running reverse compare string
+        String result = tileArrayToString.reverseToCompareString();
+
+        // Then
+        assertEquals("STD0COR3STD", result);
+    }
+
+    @Test
+    public void testWhenGiveSTD3COR2STDToReverseCompareString_GetSTD0COR1STDStringBack(){
+        // Before
+        Array<ShipTile> tiles = new Array<>();
+        StandardTile standardTile1 = new StandardTile(new Vector2(0,0));
+        CoreTile coreTile1 = new CoreTile(new Vector2(-64,0));
+        StandardTile standardTile3 = new StandardTile(new Vector2(-64,-64));
+        // Set neighbors manually
+        standardTile1.setNeighbors(null,null,null, coreTile1);
+        coreTile1.setNeighbors(null,standardTile1, standardTile3 ,null);
+        standardTile3.setNeighbors(coreTile1,null,null, null);
+        // Add tiles to array for passing to stringifyer
+        tiles.add(standardTile1,coreTile1, standardTile3);
+        TileArrayToString tileArrayToString = new TileArrayToString(tiles);
+
+        // When - Running reverse compare string
+        String result = tileArrayToString.reverseToCompareString();
+
+        // Then
+        assertEquals("STD0COR1STD", result);
+    }
 }
