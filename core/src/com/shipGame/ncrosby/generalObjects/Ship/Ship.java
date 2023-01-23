@@ -1,7 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -37,6 +36,7 @@ public class Ship extends GameObject {
 	private CollectionManager collectionManager;
 	private TileCondenser tileCondenser;
 	private ShipTilesManager shipTilesManager;
+	private UnlockTracker unlockTracker;
 
 	/**
 	 * Ship keeps track of the tiles of the ship and has methods for
@@ -49,7 +49,9 @@ public class Ship extends GameObject {
 
 		shipTilesManager = new ShipTilesManager(this);
 		collectionManager = new CollectionManager();
-		tileCondenser = new TileCondenser();
+
+		unlockTracker = new UnlockTracker();
+		tileCondenser = new TileCondenser(unlockTracker);
 
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
@@ -63,8 +65,9 @@ public class Ship extends GameObject {
 
 		shipTilesManager = new ShipTilesManager(this);
 		collectionManager = new CollectionManager();
-		tileCondenser = new TileCondenser();
 
+		unlockTracker = new UnlockTracker();
+		tileCondenser = new TileCondenser(unlockTracker);
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		 *   that creates tiles based on a list of tile instances */

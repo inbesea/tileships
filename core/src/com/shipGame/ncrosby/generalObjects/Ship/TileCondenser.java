@@ -17,8 +17,10 @@ public class TileCondenser {
 
     // Smallest amount that can be turned into a new tile.
     static int SMALLEST_INPUT = 1;
+    private UnlockTracker unlockTracker;
 
-    public TileCondenser(){
+    public TileCondenser(UnlockTracker unlockTracker){
+        this.unlockTracker = unlockTracker;
     }
 
     /**
@@ -75,7 +77,7 @@ public class TileCondenser {
     }
 
     private Array<TileRecipes> getAvailableRecipes() {
-return null;
+        return unlockTracker.unlockedRecipes;
     }
 
 }
