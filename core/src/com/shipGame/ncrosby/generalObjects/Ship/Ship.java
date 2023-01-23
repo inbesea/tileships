@@ -158,8 +158,9 @@ public class Ship extends GameObject {
 	 */
 	public void removeTilesFromShip(Array<ShipTile> tiles){
 		ShipTile tile;
-		for (int i = 0 ; i <= tiles.size ; i++){
-			tile = tiles.get(i);
+		int size = tiles.size; // Array shrinks as time goes on, must use var
+		for (int i = 0 ; i < size ; i++){
+			tile = tiles.get(0); // Use first array as values are removed
 			if(tile.getID() == ID.CoreTile)continue; // Skip Core tile, don't remove core tiles
 			removeTileFromShip(tile);
 		}
@@ -246,7 +247,6 @@ public class Ship extends GameObject {
 						// Get middle of Asteroid
 						float x = gameObject.getX() + gameObject.getCircleBounds().radius;
 						float y = gameObject.getY() + gameObject.getCircleBounds().radius;
-
 						removeAsteroid = true;
 
 						// New standard tile
@@ -478,20 +478,23 @@ public class Ship extends GameObject {
 	}
 
 	/**
-	 * Returns a tile
-	 * Handles removing tiles from ship instance
+	 * Attempts to build a new tile.
+	 * If one can be made it adds it to the ship.
 	 * @param collectedTileArray - list of tiles to produce from
 	 * @return - ShipTile resulting from build action.
 	 */
 	public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
-		ShipTile producedTile = tileCondenser.buildNewTile(collectedTileArray);
+		ID newTileID = tileCondenser.buildNewTileID(collectedTileArray);
 
-		if(producedTile == null){
+		if(newTileID == null){
 			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
 			return null;
 		} else { // if Tile produced then swap the tiles used out of existence and return the new one.
+			Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
 			removeTilesFromShip(collectedTileArray);
-			return producedTile;
+			ShipTile result =  addTile(vector2.x, vector2.y, newTileID);
+			System.out.println("Building new tile " + result.getID());
+			return result;
 		}
 	}
 

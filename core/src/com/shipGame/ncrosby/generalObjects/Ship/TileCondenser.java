@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileOrienter;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileRecipes;
-
-import static com.shipGame.ncrosby.util.generalUtil.reverseArray;
 
 /**
  * Class to build out new instances of tiles based on ordered arrays of tiles.
@@ -29,14 +26,14 @@ public class TileCondenser {
      * @param tiles - array of tiles to condense
      * @return - a single product tile.
      */
-    public ShipTile buildNewTile(Array<ShipTile> tiles){
+    public ID buildNewTileID(Array<ShipTile> tiles){
         // This initiates a lot of sub-methods to match the passed tile array.
 
         if(tiles.isEmpty() || tiles.size < SMALLEST_INPUT){ // No tiles, or below minimum array size
             Gdx.app.debug("BuildingTile","Passed array size too small for TileCondenser");
             return null;
         } else { // Process array
-            return developTileFromArray(tiles);
+            return developTileIDFromArray(tiles);
         }
     }
 
@@ -47,8 +44,8 @@ public class TileCondenser {
      * @param tiles
      * @return
      */
-    private ShipTile developTileFromArray(Array<ShipTile> tiles) {
-        ShipTile result;
+    private ID developTileIDFromArray(Array<ShipTile> tiles) {
+        ID result;
 
         // Get String for comparison
         TileArrayToString arrayToString = new TileArrayToString(tiles);
@@ -67,12 +64,19 @@ public class TileCondenser {
         return null;
     }
 
-    private ShipTile attemptArrayMatch(String compareString) {
+    /**
+     * Takes the array of unlocked recipes and returns an ID if a recipe matches an available tile recipe
+     * @param compareString - A string representing an array of tiles.
+     * @return - ID representing a tile to be produced
+     */
+    private ID attemptArrayMatch(String compareString) {
         Array<TileRecipes> recipes = getAvailableRecipes(); // Array of recipes available to the player.
-//        for(int i = 0 ; i < upTurnedTiles.size ; i++){
-//            // Check turned tiles against the array. If a match is found return that
-//            // Else try to reverse the array and run the check again.
-//        }
+        ID id;
+
+        for(int i = 0 ; i < recipes.size ; i++){
+            id = recipes.get(i).tileIfMatch(compareString);
+            if(id != null)return id;
+        }
         return null;
     }
 
