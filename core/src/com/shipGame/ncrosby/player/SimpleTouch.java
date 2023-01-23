@@ -151,7 +151,7 @@ public class SimpleTouch implements InputProcessor {
                     TileArrayToString tileArrayToString = new TileArrayToString(collectedTileArray);
                     System.out.println("Tiles collected : " + tileArrayToString.tilesToString() + " Size : " + collectedTileArray.size);
                 }
-                ShipTile newTile = playerShip.buildNewTile(collectedTileArray);
+                playerShip.buildNewTile(collectedTileArray);
             }else if(draggedTile != null){ // If there is a tile being dragged
                 handlePlacingDragged(playerShip, mousePosition);
             }
@@ -184,7 +184,7 @@ public class SimpleTouch implements InputProcessor {
                     System.out.println("Tiles collected : None");
                 }else {
                     System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
-                    ShipTile resultTile = playerShip.buildNewTile(shipTileArray);
+                    playerShip.buildNewTile(shipTileArray);
                 }
             }
             return false;
