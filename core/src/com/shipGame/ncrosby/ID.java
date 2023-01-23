@@ -22,7 +22,7 @@ public enum ID {
 	Ship("none"),
 	Hover("HoverIndicator.png"),
 	StandardTile("ShipTile_Red.png"),
-	StrongTile("StrongTile.png");
+	StrongTile("ShipTile_Strong.png");
 
 	private String texture;
 
