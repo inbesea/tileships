@@ -259,6 +259,8 @@ public class Ship extends GameObject {
 						increaseDestroyedTile(1);
 
 						removeAsteroid = true;
+					} else if(shipTile.getID() == ID.StrongTile){
+						gameObject.collision(shipTile);
 					}
 				}
 			}
