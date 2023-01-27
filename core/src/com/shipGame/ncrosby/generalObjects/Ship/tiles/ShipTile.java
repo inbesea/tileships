@@ -1,5 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -62,13 +63,9 @@ public abstract class ShipTile extends GameObject{
 //	 * @param g - Context for rendering images
 //	 */
 	public void render(tileShipGame game) {
-		// This function is not needed anymore I think...
-		// The ship is responsible for rendering the tiles it has
-//		// Draw Tile
-//		g.setColor(color);
-//		g.fillRect(xLoc - cam.x, yLoc - cam.y, TILESIZE - 2, TILESIZE - 2);
-//
-//		coolPlacedBlock(g);
+		if(this.debugMode){
+			game.font.draw(game.batch, getxIndex() + ", " + getyIndex(), getX() + 2 , getY() + (size.y/4));
+		}
 	}
 
 	/**

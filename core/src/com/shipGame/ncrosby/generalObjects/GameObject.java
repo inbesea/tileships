@@ -23,7 +23,8 @@ public abstract class GameObject {
 
 	// Do we need the texture to be set within each
 	protected String textureRef;
-	
+	protected boolean debugMode = true; //TODO:move to game object
+
 	public GameObject(Vector2 position, Vector2 size , ID id) {
 		// set location and id to define basics of the game object.
 		this.position.x = position.x;
