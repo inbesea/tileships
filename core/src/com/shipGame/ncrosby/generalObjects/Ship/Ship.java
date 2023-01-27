@@ -1,6 +1,8 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -427,7 +429,15 @@ public class Ship extends GameObject {
 	public boolean updateCollect(Vector3 vector3){
 		if(collectionManager.isCollectingTiles()){
 			ShipTile tile = shipTilesManager.returnTile(new Vector2(vector3.x, vector3.y));
-			return collectionManager.addTile(tile);
+			if(tile != null){
+				Sound collectTileSound;
+//				collectTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
+//				collectTileSound.play();
+				return collectionManager.addTile(tile);
+			} else {
+				System.out.println("updateCollect getting null tile reference");
+				return false;
+			}
 		} else {
 			throw new RuntimeException("CollectTiles is false : " + collectionManager.isCollectingTiles());
 		}
@@ -492,6 +502,9 @@ public class Ship extends GameObject {
 			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
 			return null;
 		} else { // if Tile produced then swap the tiles used out of existence and return the new one.
+			Sound collectTileSound;
+			collectTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
+			collectTileSound.play(0.1f);
 			Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
 			removeTilesFromShip(collectedTileArray);
 			ShipTile result =  addTile(vector2.x, vector2.y, newTileID);
