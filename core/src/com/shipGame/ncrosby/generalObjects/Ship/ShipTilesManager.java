@@ -120,6 +120,7 @@ public class ShipTilesManager {
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
         tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id);
+        validateNewTileIndex(tempTile);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
 
@@ -130,6 +131,18 @@ public class ShipTilesManager {
         }
         tilePlacement.play();
         return tempTile;
+    }
+
+    private void validateNewTileIndex(ShipTile newTile) {
+        ShipTile existingTile;
+        for(int i = 0 ; i < existingTiles.size ; i++){
+            existingTile = existingTiles.get(i);
+            if(newTile.getxIndex() == existingTile.getxIndex() && newTile.getyIndex() == existingTile.getyIndex()){
+                System.out.println();
+                throw new RuntimeException("New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
+                        existingTile.getPositionAsString() + " id : " + existingTile.getID() + Thread.currentThread().getStackTrace().toString());
+            }
+        }
     }
 
     /**

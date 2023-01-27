@@ -89,6 +89,7 @@ public class Ship extends GameObject {
 			game.batch.draw(assetManager.get(tempTile.getTexture(),Texture.class),
 					tempTile.getX(), tempTile.getY(),
 					tempTile.getSize().x, tempTile.getSize().y);
+			tempTile.render(game);
 		}
 		if(draggedTile != null){
 			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),

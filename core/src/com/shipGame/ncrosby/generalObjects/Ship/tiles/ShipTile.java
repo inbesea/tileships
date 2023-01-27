@@ -53,6 +53,10 @@ public abstract class ShipTile extends GameObject{
 		
 	}
 
+	public String getPositionAsString(){
+		return "X index : " + xIndex + " Y index : " + yIndex;
+	}
+
 	/**
 	 * Exposes the interface needs through allowing ShipTile to be called while using an extruded class.
 	 */
