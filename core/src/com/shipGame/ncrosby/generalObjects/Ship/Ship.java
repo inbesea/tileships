@@ -262,6 +262,7 @@ public class Ship extends GameObject {
 
 						removeAsteroid = true;
 					} else if(shipTile.getID() == ID.StrongTile){
+						System.out.println("Attempting to bounce");
 						gameObject.collision(shipTile);
 					}
 				}

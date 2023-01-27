@@ -57,6 +57,7 @@ public class Asteroid extends GameObject {
 	}
 
 	private void bounce(GameObject gameObject) {
+		System.out.println("Bouncing Asteroid , current velocity is " + velY + ", " + velX);
 		if(gameObject instanceof StrongTile){
 			StrongTile strongTile = (StrongTile) gameObject;
 //			strongTile.
