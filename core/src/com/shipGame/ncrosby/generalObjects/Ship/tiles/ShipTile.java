@@ -50,11 +50,14 @@ public abstract class ShipTile extends GameObject{
 
 	public void tick() {
 		// TODO Auto-generated method stub
-		
 	}
 
+	/**
+	 * Returns the indices of the ShipTile as a string
+	 * @return - String of ShipTile location
+	 */
 	public String getPositionAsString(){
-		return "X index : " + xIndex + " Y index : " + yIndex;
+		return "(" + xIndex + ", " + yIndex + ")";
 	}
 
 	/**
@@ -62,10 +65,11 @@ public abstract class ShipTile extends GameObject{
 	 */
 	public abstract String getAbbreviation();
 
-	//	/**
-//	 * render creates the square of the tile on the Graphics context.
-//	 * @param g - Context for rendering images
-//	 */
+	/**
+	 * Renders information specific to the ShipTiles
+	 *
+	 * @param game
+	 */
 	public void render(tileShipGame game) {
 		if(this.debugMode){
 			game.font.draw(game.batch, getxIndex() + ", " + getyIndex(), getX() + 2 , getY() + (size.y/4));
@@ -75,19 +79,18 @@ public abstract class ShipTile extends GameObject{
 	/**
 	 * Method to cool a placed shipTile over time.
 	 *
-	 * @param g - Graphics context
 	 */
-	private void coolPlacedBlock(Graphics g){
-//		long deltaTime = System.currentTimeMillis() - placed;
-//		if(deltaTime  >= 150) {
-//			//System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));
-//
-//			if ( cool <= 200 ) {
-//				cool = cool + 5;
-//				placed = System.currentTimeMillis();
-//			}
-//		}
-//
+	private void coolPlacedBlock(tileShipGame game){
+		long deltaTime = System.currentTimeMillis() - placed;
+		if(deltaTime  >= 150) {
+			//System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));
+
+			if ( cool <= 200 ) {
+				cool = cool + 5;
+				placed = System.currentTimeMillis();
+			}
+		}
+		// If still doing this we need to animate a cooling block possibly? Hmmm idk if LibGDX has good solution here
 //		g.setColor(new Color(255 - cool, cool, cool));
 //		g.drawRect(xLoc - cam.x, yLoc - cam.y, TILESIZE, TILESIZE);
 	}
