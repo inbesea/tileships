@@ -219,18 +219,29 @@ public class Ship extends GameObject {
 		return null;
 	}
 
+	@Override
+	public void collision(GameObject gameObject) {
+
+	}
+
 
 	/**
 	 * Handles collisions between ship and game objects
 	 *
 	 * @param gameObject
 	 */
-	@Override
-	public void collision(GameObject gameObject) {
+	public void collision(GameObject gameObject , GameScreen gameScreen) {
 
 		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
 		if(gameObject.getID() == ID.Asteroid){ // Object collision was asteroid
+			Asteroid asteroid = null;
+			try{
+				asteroid = (Asteroid) gameObject;
+			} catch (ClassCastException classCastException){
+				System.out.println("Issue casting Asteroid ID'ed GameObject : " + gameObject.getClass().toString() +
+						"\n" + classCastException);
+			}
 			ShipTile shipTile;
 			boolean removeAsteroid = false;
 
@@ -239,16 +250,16 @@ public class Ship extends GameObject {
 
 				// Check if asteroid intersects ShipTile
 				Rectangle rectangle = shipTile.getBounds();
-				Circle asteroidCircle = gameObject.getCircleBounds();
-				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle, screen);
+				Circle asteroidCircle = asteroid.getCircleBounds();
+				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle);
 
 				if(isCollision){
 					System.out.println("Collision! with " + shipTile.getID());
 					if(shipTile.getID() == ID.CoreTile){
 
 						// Get middle of Asteroid
-						float x = gameObject.getX() + gameObject.getCircleBounds().radius;
-						float y = gameObject.getY() + gameObject.getCircleBounds().radius;
+						float x = asteroid.getX() + asteroid.getCircleBounds().radius;
+						float y = asteroid.getY() + asteroid.getCircleBounds().radius;
 						removeAsteroid = true;
 
 						// New standard tile
@@ -263,7 +274,13 @@ public class Ship extends GameObject {
 						removeAsteroid = true;
 					} else if(shipTile.getID() == ID.StrongTile){
 						System.out.println("Attempting to bounce");
-						gameObject.collision(shipTile);
+						try{ // Cast to Strong tile to check for type
+							asteroid.collision(shipTile);
+						} catch (ClassCastException cce){
+							System.out.println("Class Cast Exception on " + shipTile.getClass().toString() + " to StrongTile " +
+									"\n" + cce);
+						}
+
 					}
 				}
 			}
