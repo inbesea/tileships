@@ -1,5 +1,7 @@
 package com.shipGame.ncrosby.generalObjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -14,8 +16,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import sun.jvm.hotspot.utilities.Assert;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
 public class ShipTest extends TestCase {
@@ -27,25 +31,21 @@ public class ShipTest extends TestCase {
 
     @Before
     public void setUp() throws Exception{
-//        game = new tileShipGame();
-//        game = mock(tileShipGame.class);
-//        Gdx gdx = mock(Gdx.class);
-//        when(Gdx.graphics.getWidth())
-//        camera.setToOrtho(false, 800, 480);
-//        AsteroidManager asteroidManager = new AsteroidManager();
+        ship = new Ship(new Vector2(0,0), ID.Ship);
+        ship = mock(Ship.class);
+        doNothing().when(ship.playBuildSound());
     }
 
     @Test
     public void whenShipCreated_HasTiles(){
         System.out.println("Running test : whenShipCreated_HasTiles()");
-        // Before
-//        Ship ship = mock(Ship.class);
-//        ship = new Ship(new Vector2(800,480), ID.Ship, camera);
+        // Before - Ship exists
+        Assert.that(ship.id == ID.Ship, "Ship Exists");
 
         // Then
 
         // Therefore
-//        assert(ship.numberOfShipTiles() > 0);
+        assert (ship.getEdgeTiles().size > 0);
         assert true;
     }
 }

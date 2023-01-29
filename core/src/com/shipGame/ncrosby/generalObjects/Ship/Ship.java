@@ -504,15 +504,20 @@ public class Ship extends GameObject {
 			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
 			return null;
 		} else { // if Tile produced then swap the tiles used out of existence and return the new one.
-			Sound collectTileSound;
-			collectTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
-			collectTileSound.play(0.1f);
+			playBuildSound();
 			Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
 			removeTilesFromShip(collectedTileArray);
 			ShipTile result =  addTile(vector2.x, vector2.y, newTileID);
 			System.out.println("Building new tile " + result.getID());
 			return result;
 		}
+	}
+
+	public Void playBuildSound(){
+		Sound collectTileSound;
+		collectTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
+		collectTileSound.play(0.1f);
+		return null;
 	}
 
 	public ShipTilesManager getTileManager() {
