@@ -143,10 +143,9 @@ public class generalUtil {
      * @param rectangle
      * @return
      */
-    public static boolean circleIntersectsRectangle(Circle circle, Rectangle rectangle, GameScreen screen){
+    public static boolean circleIntersectsRectangle(Circle circle, Rectangle rectangle){
         Rectangle bigger = new Rectangle(rectangle.x - (circle.radius*2), rectangle.y - (circle.radius*2),
                 rectangle.width + (circle.radius*4), rectangle.height + (circle.radius*4));
-        tileShipGame game = screen.getGame();
 //        game.batch.begin();
 //        screen.g
         if (bigger.contains(circle)){

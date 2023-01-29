@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
         this.extendViewport = new ExtendViewport(650,550, camera);
 
         // init ship
-        playerShip = new Ship(new Vector2(-1, -1), ID.Ship, this);
+        playerShip = new Ship(new Vector2(-1, -1), ID.Ship);
         game.setPlayerShip(playerShip);
 
         // init player
@@ -197,8 +197,9 @@ public class GameScreen implements Screen {
                 go = gameObjects.get(i); // Get a go from all game objects
 
                 if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){ // If the object checked and the possible collision is
+                    Ship ship = (Ship) go;
                     // with an asteroid then sent the asteroid into method of the ship.
-                    go.collision(gameObject); // Give object to ship to check collision for tiles in ship
+                    ship.collision(gameObject, this); // Give object to ship to check collision for tiles in ship
                     break;
                 } else { // tiles are in ship so we can take that on it's own.
 //                    if(gameObject == go)continue;

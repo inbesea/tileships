@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
@@ -31,7 +32,6 @@ public class Ship extends GameObject {
 	 * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
 	 */
 	private ShipTile draggedTile;
-	private GameScreen screen;
 	AsteroidManager asteroidManager;
 	Array<GameObject> gameObjects;
 	public int destroyedTileCount = 0;
@@ -61,9 +61,8 @@ public class Ship extends GameObject {
 		initShipTiles();
 	}
 
-	public Ship (Vector2 position, ID id, GameScreen screen){
+	public Ship (Vector2 position, ID id){
 		super(position, new Vector2(0,0), id);
-		this.screen = screen;
 
 		shipTilesManager = new ShipTilesManager(this);
 		collectionManager = new CollectionManager();
@@ -271,9 +270,9 @@ public class Ship extends GameObject {
 			//Handles Asteroid destroy.
 			// If this is done in the forloop it can't find the reference
 			if(removeAsteroid){
-				screen.removeGameObject(gameObject);
-				screen.removeAsteroid(gameObject);
-				screen.updateMouseMoved();
+				gameScreen.removeGameObject(gameObject);
+				gameScreen.removeAsteroid(gameObject);
+				gameScreen.updateMouseMoved();
 			}
 
 		}
