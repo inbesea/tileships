@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
 import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
@@ -51,12 +53,19 @@ public class Asteroid extends GameObject {
 
 	@Override
 	public void collision(GameObject gameObject) {
-//		ID id = gameObject.getID();
-//		if(id == ID.CoreTile){
-//
-//		} else if(id == ID.ShipTile){
-//
-//		}
+			bounce(gameObject);
+	}
+
+	private void bounce(GameObject gameObject) {
+		System.out.println("Bouncing Asteroid , current velocity is " + velY + ", " + velX);
+		if(gameObject instanceof StrongTile){
+			StrongTile strongTile = (StrongTile) gameObject;
+//			strongTile.
+			// ToDO : We want the strong tile to bounce the asteroid correctly so it looks nice.
+			// It bounces dumb right now.
+		}
+		velX *= -1;
+		velY *= -1;
 	}
 
 	// TODO : burn this to the ground

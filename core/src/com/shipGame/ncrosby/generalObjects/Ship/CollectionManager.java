@@ -1,11 +1,16 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
 
-public class TileStackManager {
+/**
+ * Essentially an array holder and hover indicator.
+ * This class can be toggled on, and off to control tile addition.
+ */
+public class CollectionManager {
 
     public boolean collectTiles = false;
     // Lives in the stack manager
@@ -17,7 +22,7 @@ public class TileStackManager {
     /**
      * Class to handle collecting tiles.
      */
-    public TileStackManager(){
+    public CollectionManager(){
         tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(64,64)); // Location doesn't matter
         collectedTiles = new Array<>();
     }
@@ -104,19 +109,25 @@ public class TileStackManager {
     /**
      * Add tile to manager stack
      * @param shipTile - Tile to stack
+     * @return - true if added, false if not.
      */
-    public void addTile(ShipTile shipTile) {
-        if(!this.isFull()){ // Confirm the hovered tile is a neighbor
-            if(collectedTiles.isEmpty()){
-                System.out.println("Adding tile to array stack!");
-                collectedTiles.add(shipTile);
-            } else if (shipTile.isNeighbor(collectedTiles.peek())){
-                System.out.println("Adding tile to array stack!");
-                collectedTiles.add(shipTile);
-            }
-        } else {
-            System.out.println("Collapse array is full!");
+    public boolean addTile(ShipTile shipTile) {
+        if (!isCollectingTiles()) {
+            throw new RuntimeException("Trying to collect tiles while not collecting.");
         }
+        if (isTileCollected(shipTile) || shipTile == null){
+            return false;
+        } else if (!this.isFull()) { // Confirm the hovered tile is a neighbor
+            if (collectedTiles.isEmpty() || shipTile.isNeighbor(collectedTiles.peek())) {
+                System.out.println("Adding tile to array stack!");
+                collectedTiles.add(shipTile);
+                return true;
+            } else {
+                System.out.println("Collapse array is full!");
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

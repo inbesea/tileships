@@ -4,8 +4,16 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 
 /**
  * Manages adjacent ShipTiles to a shiptile
+ * Is a part of the ShipTile class, not the Ship.
  */
 public class AdjacentTiles {
+    // Number associated with adjacency.
+    // No magic numbers!
+    public static final int UP = 0;
+    public static final int RIGHT = 1;
+    public static final int DOWN = 2;
+    public static final int LEFT = 3;
+    public static final int INVALID = -1;
     private ShipTile Up;
     private ShipTile Left;
     private ShipTile Right;
@@ -73,5 +81,18 @@ public class AdjacentTiles {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns Int representing neighbor status
+     * @param possibleNeighbor
+     * @return
+     */
+    public int isWhichNeighbor(ShipTile possibleNeighbor) {
+        if(Up == possibleNeighbor)return UP;
+        else if (Right == possibleNeighbor)return RIGHT;
+        else if(Left == possibleNeighbor)return LEFT;
+        else if(Down == possibleNeighbor)return DOWN;
+        else return INVALID;
     }
 }

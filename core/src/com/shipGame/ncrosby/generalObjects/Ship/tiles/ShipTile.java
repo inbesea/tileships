@@ -1,5 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +12,7 @@ import com.shipGame.ncrosby.tileShipGame;
 
 import java.awt.*;
 
-public class ShipTile extends GameObject {
+public abstract class ShipTile extends GameObject{
 
 	private final AdjacentTiles neighbors = new AdjacentTiles();
 	private final int xIndex, yIndex;
@@ -20,66 +21,93 @@ public class ShipTile extends GameObject {
 	private int cool = 0;
 	public boolean isEdge;
 	public final static int TILESIZE = 64;
-	private com.badlogic.gdx.math.Rectangle rectangle;
+	private com.badlogic.gdx.math.Rectangle collider;
 	/**
 	 *  These tiles will all need health, and a way to relate to tiles next to them..?
 	 *  But they will need to be stored in a 2d array. 
 	 *  So when the game initializes there will need to be an array of tiles built out.
 	*/
 	public ShipTile(Vector2 position, ID id) {
+		// vector is not adjusted, so tiles can be independently created anywhere
 		super(position, new Vector2(64,64), id);
-		
-		this.xIndex = (int) (position.x / TILESIZE);
-		this.yIndex = (int) (position.y / TILESIZE);
 
-		rectangle = new com.badlogic.gdx.math.Rectangle(position.x, position.y ,ShipTile.TILESIZE, ShipTile.TILESIZE);
+		this.xIndex = determineIndex(position.x);
+		this.yIndex = determineIndex(position.y);
+
+		collider = new com.badlogic.gdx.math.Rectangle(position.x, position.y ,ShipTile.TILESIZE, ShipTile.TILESIZE);
 		// Need to knit together the shiptile to adjacent tiles connectAdjacent();
+	}
+
+	/**
+	 * TODO : This index determination needs to be updated to allow for ship displacement/rotation.
+	 * Determines an index value for the ShipTile based on the float passed in.
+	 * @param position
+	 * @return
+	 */
+	private int determineIndex(float position) {
+		return (int) (position / TILESIZE);
 	}
 
 	public void tick() {
 		// TODO Auto-generated method stub
-		
 	}
 
-//	/**
-//	 * render creates the square of the tile on the Graphics context.
-//	 * @param g - Context for rendering images
-//	 */
+	/**
+	 * Returns the indices of the ShipTile as a string
+	 * @return - String of ShipTile location
+	 */
+	public String getPositionAsString(){
+		return "(" + xIndex + ", " + yIndex + ")";
+	}
+
+	/**
+	 * Exposes the interface needs through allowing ShipTile to be called while using an extruded class.
+	 */
+	public abstract String getAbbreviation();
+
+	/**
+	 * Renders information specific to the ShipTiles
+	 *
+	 * @param game
+	 */
 	public void render(tileShipGame game) {
-		// This function is not needed anymore I think...
-		// The ship is responsible for rendering the tiles it has
-//		// Draw Tile
-//		g.setColor(color);
-//		g.fillRect(xLoc - cam.x, yLoc - cam.y, TILESIZE - 2, TILESIZE - 2);
-//
-//		coolPlacedBlock(g);
+		if(this.debugMode){
+			game.font.draw(game.batch, getxIndex() + ", " + getyIndex(), getX() + 2 , getY() + (size.y/4));
+		}
 	}
 
 	/**
 	 * Method to cool a placed shipTile over time.
 	 *
-	 * @param g - Graphics context
 	 */
-	private void coolPlacedBlock(Graphics g){
-//		long deltaTime = System.currentTimeMillis() - placed;
-//		if(deltaTime  >= 150) {
-//			//System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));
-//
-//			if ( cool <= 200 ) {
-//				cool = cool + 5;
-//				placed = System.currentTimeMillis();
-//			}
-//		}
-//
+	private void coolPlacedBlock(tileShipGame game){
+		long deltaTime = System.currentTimeMillis() - placed;
+		if(deltaTime  >= 150) {
+			//System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));
+
+			if ( cool <= 200 ) {
+				cool = cool + 5;
+				placed = System.currentTimeMillis();
+			}
+		}
+		// If still doing this we need to animate a cooling block possibly? Hmmm idk if LibGDX has good solution here
 //		g.setColor(new Color(255 - cool, cool, cool));
 //		g.drawRect(xLoc - cam.x, yLoc - cam.y, TILESIZE, TILESIZE);
 	}
 
+	/**
+	 * Returns the collision box for the shipTile
+	 * @return - Rectangle object representing the collision box
+	 */
 	@Override
 	public Rectangle getBounds() {
-		return rectangle;
+		return collider;
 	}
 
+	/**
+	 * Method to handle collisions
+	 * @param gameObject
+	 */
 	@Override
 	public void collision(GameObject gameObject) {
 
@@ -115,7 +143,7 @@ public class ShipTile extends GameObject {
 	}
 
 	/**
-	 * Delegate method that handles setting the neighbors of a newly placed tile.
+	 * Method that handles setting the neighbors of a newly placed tile.
 	 * Keeps the edge calculations down in the tiles instead of on the ship level to keep the logic cleaner on the ship level
 	 *
 	 * Ship still determines the context by passing the adjacent tiles
@@ -211,6 +239,10 @@ public class ShipTile extends GameObject {
 		return results;
 	}
 
+	/**
+	 * Delegate method to get the directly up neighbor
+	 * @return
+	 */
 	public ShipTile up(){
 		return neighbors.getUp();
 	}
@@ -235,5 +267,18 @@ public class ShipTile extends GameObject {
 	 */
 	public boolean isNeighbor(ShipTile possibleNeighbor) {
 		return getNeighbors().isNeighbor(possibleNeighbor);
+	}
+
+	/**
+	 * Returns an int representing the relationship between the passed tile and this tile.
+	 * @param tile
+	 * @return An int showing where tile is in relationship to this tile.
+	 * 	 * 0 = UP
+	 * 	 * 1 = RIGHT
+	 * 	 * 2 = DOWN
+	 * 	 * 3 = LEFT
+	 */
+	public int getAdjacency(ShipTile tile) {
+		return neighbors.isWhichNeighbor(tile);
 	}
 }
