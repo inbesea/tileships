@@ -28,6 +28,7 @@ public class TileArrayToString {
      */
     public String toCompareString() {
         // Create a string representing the array passed to this object, where orientation is up.
+        if(tiles.size == 1)return tiles.get(0).getAbbreviation(); // Return simple abbreviation if passed array has one element
         TileOrienter orienter = new TileOrienter(tiles);
         int orientation = orienter.getCurrentOrientation();
         StringBuilder tileArrayString = new StringBuilder();
@@ -106,22 +107,29 @@ public class TileArrayToString {
      * @return - Direct string representation of this.tiles
      */
     public String tilesToString() {
+        if(tiles.size == 1) return tiles.get(0).getAbbreviation();
         StringBuilder tileArrayString = new StringBuilder();
         ShipTile tile;
         ShipTile tempTile1;
         int nextTileDirection;
+        int i = -1;
 
-        // Loop array and build out string
-        for(int i = 0 ; i < tiles.size ; i++){
-            tile = tiles.get(i);
-            tempTile1 = tiles.get(i+1);
-            tileArrayString.append(simpleTileToString(tile, tempTile1));
+        try{
+            for(i = 0 ; i < tiles.size ; i++){
+                tile = tiles.get(i);
+                tempTile1 = tiles.get(i+1);
+                tileArrayString.append(simpleTileToString(tile, tempTile1));
 
-            if(i == tiles.size - 2){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
-                tileArrayString.append(tempTile1.getAbbreviation());
-                return tileArrayString.toString();
+                if(i == tiles.size - 2){ // When on last iteration (ending before running out of tiles) getAbbreviation() for last tile.
+                    tileArrayString.append(tempTile1.getAbbreviation());
+                    return tileArrayString.toString();
+                }
             }
+        }catch (IndexOutOfBoundsException indexOutOfBoundsException){
+            System.out.println("Index out of bounds on iteration: " + i + " \n" + indexOutOfBoundsException);
         }
+        // Loop array and build out string
+
         return null;
     }
 

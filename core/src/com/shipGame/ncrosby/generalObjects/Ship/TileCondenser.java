@@ -47,6 +47,8 @@ public class TileCondenser {
     private ID developTileIDFromArray(Array<ShipTile> tiles) {
         ID result;
 
+        if(tiles.size == 1)return singleTileHandle(tiles);
+
         // Get String for comparison
         TileArrayToString arrayToString = new TileArrayToString(tiles);
         String arrayString = arrayToString.toCompareString();
@@ -62,6 +64,18 @@ public class TileCondenser {
 
         // If all else fails
         return null;
+    }
+
+    /**
+     * Handles situation where a single tile is passed to condenser
+     * @param tiles - single-tile array
+     * @return - ID for single tile recipe
+     */
+    private ID singleTileHandle(Array<ShipTile> tiles) {
+        TileArrayToString arrayToString = new TileArrayToString(tiles);
+        String arrayString = arrayToString.toCompareString();
+        ID result = attemptArrayMatch(arrayString);
+        return result;
     }
 
     /**
