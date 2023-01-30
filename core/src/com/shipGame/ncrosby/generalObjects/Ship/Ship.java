@@ -1,6 +1,7 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +16,7 @@ import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ncrosby.screens.MainMenuScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.util.AsteroidManager;
@@ -98,7 +100,7 @@ public class Ship extends GameObject {
 			Array<ShipTile> tiles = collectionManager.getTileArray();
 			for(int i = 0 ; tiles.size > i ; i++){
 				ShipTile tile = tiles.get(i);
-				game.batch.draw(assetManager.get("ToBeCollapsed.png", Texture.class),
+				game.batch.draw(assetManager.get( MainMenuScreen.spritePath + "ToBeCollapsed.png", Texture.class),
 						tile.getX(), tile.getY());
 			}
 		}

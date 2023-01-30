@@ -10,7 +10,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.shipGame.ncrosby.tileShipGame;
 
 public class MainMenuScreen implements Screen {
-
+    private final String[] spritesToLoad = {"RobotV2.png","asteroid_purple.png","ShipTile_Red.png",
+            "ShipTile_Core.png","HoverIndicator.png", "ToBeCollapsed.png",
+            "ShipTile_Strong.png"};
+    public static final String spritePath = "Sprites/";
+    public static String ignoreLoad = "Sprites/none";
     final tileShipGame game;
 
     OrthographicCamera camera;
@@ -99,12 +103,8 @@ public class MainMenuScreen implements Screen {
      * Loads in the assets needed to run the game into the asset manager.
      */
     private void initAssestManager() {
-        assetManager.load("RobotV2.png", Texture.class);
-        assetManager.load("asteroid_purple.png", Texture.class);
-        assetManager.load("ShipTile_Red.png", Texture.class);
-        assetManager.load("ShipTile_Core.png", Texture.class);
-        assetManager.load("HoverIndicator.png", Texture.class);
-        assetManager.load("ToBeCollapsed.png", Texture.class);
-        assetManager.load("ShipTile_Strong.png", Texture.class);
+        for (int i = 0 ; i < spritesToLoad.length ; i++){
+            assetManager.load(spritePath + spritesToLoad[i], Texture.class);
+        }
     }
 }
