@@ -532,9 +532,9 @@ public class Ship extends GameObject {
 	}
 
 	public Void playBuildSound(){
-		Sound collectTileSound;
-		collectTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
-		collectTileSound.play(0.1f);
+		Sound buildTileSound;
+		buildTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
+		buildTileSound.play(0.1f);
 		return null;
 	}
 
