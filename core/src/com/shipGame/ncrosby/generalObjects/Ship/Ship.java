@@ -524,6 +524,8 @@ public class Ship extends GameObject {
 		} else { // if Tile produced then swap the tiles used out of existence and return the new one.
 			playBuildSound();
 			Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
+			vector2.y += ShipTile.TILESIZE/2f;
+			vector2.x += ShipTile.TILESIZE/2f;
 			removeTilesFromShip(collectedTileArray);
 			ShipTile result =  addTile(vector2.x, vector2.y, newTileID);
 			System.out.println("Building new tile " + result.getID());

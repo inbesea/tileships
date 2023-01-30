@@ -52,7 +52,7 @@ public class ShipTilesManager {
 
         ShipTile destinationTile = returnTile(tileLocation2);
         if(destinationTile == null){ // Released on empty space
-            if(ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y , id);
+            if(ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y , id); // Can add anywhere
 
             closestTile = closestTile(tileLocation2, ship.getExistingTiles());
             Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation);
