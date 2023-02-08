@@ -8,6 +8,8 @@ import java.util.function.Function;
 
 /**
  * Class to hold lambda expression to compare and produce a tile ID.
+ *
+ * TileRecipes holds a simple matching String. The recipe String assumes the input to match is oriented upwards. F or example : STD0COR
  */
 public class TileRecipes {
     private String recipe;

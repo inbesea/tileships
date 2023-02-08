@@ -88,7 +88,7 @@ public class ShipTilesManager {
         Vector3 location3 = new Vector3(location.x, location.y, 0);
         Vector3 tileP;
 
-        //Loop through ship to find closest tile
+        //Loop through ship to find the closest tile
         for (int i = 0 ; i < tiles.size ; i++){
             tempT = tiles.get(i);
             tileP = new Vector3(tempT.getPosition().x + ShipTile.TILESIZE/2.0f, tempT.getPosition().y  + ShipTile.TILESIZE/2.0f , 0);
