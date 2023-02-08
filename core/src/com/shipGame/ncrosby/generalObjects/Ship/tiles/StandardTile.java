@@ -9,12 +9,7 @@ import com.shipGame.ncrosby.ID;
 public class StandardTile extends ShipTile{
 
     public StandardTile(Vector2 vector2){
-        super(vector2, ID.StandardTile);
+        super(vector2, ID.StandardTile, TileTypeData.StandardTile);
 
-    }
-
-    @Override
-    public String getAbbreviation() {
-        return "STD";
     }
 }
