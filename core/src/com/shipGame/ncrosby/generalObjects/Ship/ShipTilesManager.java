@@ -113,9 +113,7 @@ public class ShipTilesManager {
         tilePlacement = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/tilePlacementV2.wav"));
 
         indexXY = calculateIndex(x, y); // Get index corresponding to that
-        System.out.println("Create tile at " + x + "," + y);
-        System.out.println("Create tile at " + indexXY[0] + ", " + indexXY[1]);
-        System.out.println("Type of : " + id);
+        System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")");
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
