@@ -177,19 +177,23 @@ public class SimpleTouch implements InputProcessor {
         @Override public boolean keyUp (int keycode) {
 
             if(playerShip.isCollectingTiles() && keycode == 59){ // If user keys up should
-                Array<ShipTile> shipTileArray =
-                        playerShip.finishCollapseCollect(); // Ends collecting
-                if(shipTileArray.isEmpty()){
-                    System.out.println("Tiles collected : None");
-                }else {
-                    System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
-                    playerShip.buildNewTile(shipTileArray);
-                }
+                attemptNewTileProduction();
             }
             return false;
         }
 
-        @Override public boolean keyTyped (char character) {
+    private void attemptNewTileProduction() {
+        Array<ShipTile> shipTileArray =
+                playerShip.finishCollapseCollect(); // Ends collecting
+        if(shipTileArray.isEmpty()){
+            System.out.println("Tiles collected : None");
+        }else {
+            System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
+            playerShip.buildNewTile(shipTileArray);
+        }
+    }
+
+    @Override public boolean keyTyped (char character) {
             return false;
         }
 
