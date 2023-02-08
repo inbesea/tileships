@@ -24,9 +24,9 @@ public class TileCondenser {
      * Returns a tile based on an array of tiles.
      *
      * @param tiles - array of tiles to condense
-     * @return - a single product tile.
+     * @return - an ID representing a tile type.
      */
-    public ID buildNewTileID(Array<ShipTile> tiles){
+    public ID determineNewTileID(Array<ShipTile> tiles){
         // This initiates a lot of sub-methods to match the passed tile array.
 
         if(tiles.isEmpty() || tiles.size < SMALLEST_INPUT){ // No tiles, or below minimum array size

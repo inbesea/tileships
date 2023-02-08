@@ -1,7 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
@@ -516,7 +514,7 @@ public class Ship extends GameObject {
 	 * @return - ShipTile resulting from build action.
 	 */
 	public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
-		ID newTileID = tileCondenser.buildNewTileID(collectedTileArray);
+		ID newTileID = tileCondenser.determineNewTileID(collectedTileArray);
 
 		if(newTileID == null){
 			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
