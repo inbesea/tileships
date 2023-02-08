@@ -111,7 +111,8 @@ public class ShipTilesManager {
         ShipTile tempTile;
 
         indexXY = calculateIndex(x, y); // Get index corresponding to that
-        System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")");
+        System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
+                "\nAll tiles, Edge -> " + existingTiles.size + ", " + edgeTiles.size);
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
@@ -191,8 +192,6 @@ public class ShipTilesManager {
         checkIfAdjustEdgeArray(down);
         checkIfAdjustEdgeArray(left);
         checkIfAdjustEdgeArray(tile);
-
-        System.out.println("Added a tile, number of edge tiles : " + edgeTiles.size);
 
         if(existingTiles.size < edgeTiles.size){
             throw new RuntimeException("More edgeTiles than existing!" +
