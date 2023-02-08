@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
         this.extendViewport = new ExtendViewport(650,550, camera);
 
         // init ship
-        playerShip = new Ship(new Vector2(-1, -1), ID.Ship);
+        playerShip = new Ship(new Vector2(-1, -1), assetManager);
         game.setPlayerShip(playerShip);
 
         // init player
