@@ -4,17 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.shipGame.ncrosby.tileShipGame;
 
+import java.io.OptionalDataException;
+
 public class MainMenuScreen implements Screen {
-    private final String[] spritesToLoad = {"RobotV2.png","asteroid_purple.png","ShipTile_Red.png",
+    public static final String[] spritesToLoad = {"RobotV2.png","asteroid_purple.png","ShipTile_Red.png",
             "ShipTile_Core.png","HoverIndicator.png", "ToBeCollapsed.png",
             "ShipTile_Strong.png"};
+
+    public static final String[] soundsToLoad = {
+            "tilePlacement.wav", "collectTileSound.mp3", "buildTileSound.mp3"
+    };
+
+    public static final String soundPath = "Sound Effects/";
     public static final String spritePath = "Sprites/";
-    public static String ignoreLoad = "Sprites/none";
+    public static String ignoreLoad = "Sprites/none"; // Used to ignore IDs without associated sprite references
     final tileShipGame game;
 
     OrthographicCamera camera;
@@ -73,6 +82,19 @@ public class MainMenuScreen implements Screen {
         }
     }
 
+
+    /**
+     * Loads in the assets needed to run the game into the asset manager.
+     */
+    private void initAssestManager() {
+        for (int i = 0 ; i < spritesToLoad.length ; i++){
+            assetManager.load(spritePath + spritesToLoad[i], Texture.class);
+        }
+        for (int i = 0; i < soundsToLoad.length ; i++){
+            assetManager.load(soundPath + soundsToLoad[i], Sound.class);
+        }
+    }
+
     @Override
     public void resize(int width, int height) {
 
@@ -98,13 +120,4 @@ public class MainMenuScreen implements Screen {
 
     }
 
-
-    /**
-     * Loads in the assets needed to run the game into the asset manager.
-     */
-    private void initAssestManager() {
-        for (int i = 0 ; i < spritesToLoad.length ; i++){
-            assetManager.load(spritePath + spritesToLoad[i], Texture.class);
-        }
-    }
 }

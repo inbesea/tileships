@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
-import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
 import com.shipGame.ncrosby.generalObjects.Ship.TileArrayToString;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;

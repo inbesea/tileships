@@ -109,8 +109,6 @@ public class ShipTilesManager {
     private ShipTile gridAlignedxyTilePlacement(float x, float y, ID id){
         int indexXY[];
         ShipTile tempTile;
-        Sound tilePlacement;
-        tilePlacement = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/tilePlacementV2.wav"));
 
         indexXY = calculateIndex(x, y); // Get index corresponding to that
         System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")");
@@ -127,7 +125,6 @@ public class ShipTilesManager {
                     " existingTiles.size : " + existingTiles.size +
                     "edgeTiles.size : " + edgeTiles.size);
         }
-        tilePlacement.play();
         return tempTile;
     }
 
