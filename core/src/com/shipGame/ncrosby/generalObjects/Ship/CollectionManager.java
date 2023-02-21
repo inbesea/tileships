@@ -120,7 +120,7 @@ public class CollectionManager {
             return false;
         } else if (!this.isFull()) { // Confirm the hovered tile is a neighbor
             if (collectedTiles.isEmpty() || shipTile.isNeighbor(collectedTiles.peek())) {
-                Sound collectSound = Gdx.audio.newSound(Gdx.files.internal("Sound Effects/zapsplat_household_blender_lid_pull_remove_like_plunger_001_49297.mp3"));
+                Sound collectSound = Gdx.audio.newSound(Gdx.files.internal("Sound Effects/collectTileSound.mp3"));
                 collectSound.play();
                 System.out.println("Adding tile to array stack!");
                 collectedTiles.add(shipTile);
