@@ -112,7 +112,7 @@ public class ShipTilesManager {
 
         indexXY = calculateIndex(x, y); // Get index corresponding to that
         System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
-                "\nAll tiles, Edge -> " + existingTiles.size + ", " + edgeTiles.size);
+                "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));

@@ -222,15 +222,18 @@ public class Ship extends GameObject {
 
 		if(gameObject.getID() == ID.Asteroid){ // Object collision was asteroid
 			Asteroid asteroid = null;
+
+            // Checking for object casting issues
 			try{
 				asteroid = (Asteroid) gameObject;
 			} catch (ClassCastException classCastException){
-				System.out.println("Issue casting Asteroid ID'ed GameObject : " + gameObject.getClass().toString() +
+				System.out.println("ERROR casting Asteroid ID'ed GameObject : " + gameObject.getClass().toString() +
 						"\n" + classCastException);
 			}
 			ShipTile shipTile;
 			boolean removeAsteroid = false;
 
+            // Checking collisions between asteroid game object and all tiles.
 			for(int i = 0 ; i < existing.size ; i++){
 				shipTile = existing.get(i);
 
@@ -240,7 +243,7 @@ public class Ship extends GameObject {
 				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle);
 
 				if(isCollision){
-					System.out.println("Collision! with " + shipTile.getID());
+					System.out.println("Asteroid collision with " + shipTile.getID());
 					if(shipTile.getID() == ID.CoreTile){
 
 						// Get middle of Asteroid

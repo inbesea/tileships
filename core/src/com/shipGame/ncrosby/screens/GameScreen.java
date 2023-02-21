@@ -179,6 +179,7 @@ public class GameScreen implements Screen {
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
+        // Updates objects here.
         gameObject.render(this.game);
     }
 
