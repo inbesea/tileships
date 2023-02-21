@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 
@@ -167,5 +168,50 @@ public class generalUtil {
             result.add(array.get(i));
         }
         return result;
+    }
+
+    /**
+     * Returns what quadrant the boat is in relative to the anchor.
+     *
+     * @param anchor - The origin of the calculation
+     * @param boat - The point to find the quadrant of
+     * @return - An int representing a quadrant:
+     * 0, 1 ,2 ,3 == North, East, South, West respectively.
+     */
+    public static int getQuadrant(Vector2 anchor, Vector2 boat){
+        float closeX = anchor.x;
+        float closeY = anchor.y;
+
+        // Should return the difference between the placed position and middle of the close tile.
+        float normalX =
+                boat.x -
+                        (closeX + (ShipTile.TILESIZE/2.0f));
+        float normalY =
+                boat.y -
+                        (closeY + (ShipTile.TILESIZE/2.0f));
+
+        // Set vector such that the center of tile is equal to (0,0) and mouse position is a point relative to that
+        Vector2 normalizedMousePosition = new Vector2(normalX,normalY); // Find center of block by adding to the x,y
+
+        // the point is above y = x if the y is larger than x
+        boolean abovexEy = normalizedMousePosition.y > normalizedMousePosition.x;
+        // the point is above y = -x if the y is larger than the negation of x
+        boolean aboveNxEy = normalizedMousePosition.y > (-normalizedMousePosition.x);
+
+        // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
+        // We can use this framing to decide the side to place the tile.
+        if(abovexEy){ // Check at halfway point of tile
+            if(aboveNxEy){ // North = 0
+                return  0;
+            } else { // West = 3
+                return 3;
+            }
+        } else { // location is to the right of the closest tile
+            if(aboveNxEy){ // East = 1
+                return 1;
+            } else { // South = 2
+                return 2;
+            }
+        }
     }
 }

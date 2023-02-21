@@ -12,6 +12,7 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileTypeFactory;
 import java.util.Stack;
 
 import static com.shipGame.ncrosby.util.generalUtil.closestVector2;
+import static com.shipGame.ncrosby.util.generalUtil.getQuadrant;
 
 /**
  * Class to handle logic for placing/removing tiles to allow the ship to handle holding the pieces together rather than working the logic directly.
@@ -331,7 +332,9 @@ public class ShipTilesManager {
      */
     public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector3 mousePosition) {
 
-        int closestSide = getClosestSide(closestTile, new Vector2(mousePosition.x, mousePosition.y));
+        // Get the closest side of the tile from the mouse position
+        int closestSide = getQuadrant(closestTile.getPosition(), new Vector2(mousePosition.x, mousePosition.y));
+
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
         // We can use this framing to decide the side to place the tile.
@@ -345,50 +348,6 @@ public class ShipTilesManager {
             return  new Vector2(closestTile.getX()+(ShipTile.TILESIZE/2.0f), closestTile.getY() - (ShipTile.TILESIZE/2.0f));
         } else {
             throw new RuntimeException("Something went wrong while running setTileOnClosestSide()");
-        }
-    }
-
-    /**
-     * Gets closest side of a tile from a Vector2 point
-     *
-     * @param tileWithSides - tile to find the side of
-     * @param position - position to compare with tile
-     * @return - int representing side of tile as compass - N = 0, E = 1, S = 2, W = 3
-     */
-    private int getClosestSide(ShipTile tileWithSides, Vector2 position){
-        float closeX = tileWithSides.getX();
-        float closeY = tileWithSides.getY();
-
-        // Should return the difference between the placed position and middle of the close tile.
-        float normalX =
-                position.x -
-                        (closeX + (ShipTile.TILESIZE/2.0f));
-        float normalY =
-                position.y -
-                        (closeY + (ShipTile.TILESIZE/2.0f));
-
-        // Set vector such that the center of tile is equal to (0,0) and mouse position is a point relative to that
-        Vector2 normalizedMousePosition = new Vector2(normalX,normalY); // Find center of block by adding to the x,y
-
-        // the point is above y = x if the y is larger than x
-        boolean abovexEy = normalizedMousePosition.y > normalizedMousePosition.x;
-        // the point is above y = -x if the y is larger than the negation of x
-        boolean aboveNxEy = normalizedMousePosition.y > (-normalizedMousePosition.x);
-
-        // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
-        // We can use this framing to decide the side to place the tile.
-        if(abovexEy){ // Check at halfway point of tile
-            if(aboveNxEy){ // North = 0
-                return  0;
-            } else { // West = 3
-                return 3;
-            }
-        } else { // location is to the right of the closest tile
-            if(aboveNxEy){ // East = 1
-                return 1;
-            } else { // South = 2
-                return 2;
-            }
         }
     }
 
