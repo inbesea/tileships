@@ -261,7 +261,11 @@ public class Ship extends GameObject {
 					} else if(shipTile.getID() == ID.StrongTile){
 						System.out.println("Attempting to bounce");
 						try{ // Cast to Strong tile to check for type
+                            Vector2 initSpeed = new Vector2(asteroid.getVelX(), asteroid.getVelY());
 							asteroid.collision(shipTile);
+                            if(new Vector2(asteroid.getVelX(), asteroid.getVelY()).equals(initSpeed)){
+                                System.out.println("Asteroid failed to bounce ");
+                            }
 						} catch (ClassCastException cce){
 							System.out.println("Class Cast Exception on " + shipTile.getClass().toString() + " to StrongTile " +
 									"\n" + cce);
