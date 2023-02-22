@@ -28,6 +28,19 @@ public class generalUtil {
     }
 
     /**
+     *  Checks for out of bounds amounts and returns to inbounds
+     *
+     *  @param var - Variable to check
+     *  @param min - value to return when var is smaller than min
+     *  @param max - value to return when var is larger than max
+     */
+    public static float clamp(float var, float min, float max) {
+        if (var >= max)
+            return max;
+        else return Math.max(var, min);
+    }
+
+    /**
      *
      * Renders a texture at normalized x,y
      *
