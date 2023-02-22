@@ -5,12 +5,6 @@ import com.shipGame.ncrosby.ID;
 
 public class StrongTile extends ShipTile implements ShipTileInterface{
     public StrongTile(Vector2 vector2){
-        super(vector2, ID.StrongTile);
-    }
-
-
-    @Override
-    public String getAbbreviation() {
-        return "STR";
+        super(vector2, ID.StrongTile, TileTypeData.StrongTile);
     }
 }

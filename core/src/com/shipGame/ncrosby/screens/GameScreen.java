@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
         this.extendViewport = new ExtendViewport(650,550, camera);
 
         // init ship
-        playerShip = new Ship(new Vector2(-1, -1), ID.Ship, this);
+        playerShip = new Ship(new Vector2(-1, -1), assetManager);
         game.setPlayerShip(playerShip);
 
         // init player
@@ -174,11 +174,12 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String textureString = gameObject.getTexture();
 
-        if (!Objects.equals(textureString, "none") && !Objects.equals(textureString, "")) { // If ID has associated string
+        if (!Objects.equals(textureString, MainMenuScreen.ignoreLoad) && !Objects.equals(textureString, "")) { // If ID has associated string
             Texture texture = assetManager.get(textureString,Texture.class);
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
+        // Updates objects here.
         gameObject.render(this.game);
     }
 
@@ -197,8 +198,9 @@ public class GameScreen implements Screen {
                 go = gameObjects.get(i); // Get a go from all game objects
 
                 if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){ // If the object checked and the possible collision is
+                    Ship ship = (Ship) go;
                     // with an asteroid then sent the asteroid into method of the ship.
-                    go.collision(gameObject); // Give object to ship to check collision for tiles in ship
+                    ship.collision(gameObject, this); // Give object to ship to check collision for tiles in ship
                     break;
                 } else { // tiles are in ship so we can take that on it's own.
 //                    if(gameObject == go)continue;

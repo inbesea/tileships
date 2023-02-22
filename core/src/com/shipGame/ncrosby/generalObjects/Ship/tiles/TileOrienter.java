@@ -21,6 +21,7 @@ public class TileOrienter {
     int currentOrientation;
 
     public TileOrienter(Array<ShipTile> tileArray){
+        if(tileArray.size == 1 || tileArray.isEmpty())throw new IllegalArgumentException("Illegal argument passed to TileOrienter, size : " + tileArray.size);
         this.tileArray = tileArray;
         this.tileOne = tileArray.get(0);
         this.tileTwo = tileArray.get(1);

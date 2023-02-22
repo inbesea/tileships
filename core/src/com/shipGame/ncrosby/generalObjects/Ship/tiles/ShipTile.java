@@ -1,6 +1,5 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -9,8 +8,6 @@ import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.AdjacentTiles;
 import com.shipGame.ncrosby.tileShipGame;
-
-import java.awt.*;
 
 public abstract class ShipTile extends GameObject{
 
@@ -22,17 +19,20 @@ public abstract class ShipTile extends GameObject{
 	public boolean isEdge;
 	public final static int TILESIZE = 64;
 	private com.badlogic.gdx.math.Rectangle collider;
+	private TileTypeData typeData; // Need for unique platonic form data
 	/**
 	 *  These tiles will all need health, and a way to relate to tiles next to them..?
 	 *  But they will need to be stored in a 2d array. 
 	 *  So when the game initializes there will need to be an array of tiles built out.
 	*/
-	public ShipTile(Vector2 position, ID id) {
+	public ShipTile(Vector2 position, ID id, TileTypeData typeData) {
 		// vector is not adjusted, so tiles can be independently created anywhere
 		super(position, new Vector2(64,64), id);
 
 		this.xIndex = determineIndex(position.x);
 		this.yIndex = determineIndex(position.y);
+
+		this.typeData = typeData;
 
 		collider = new com.badlogic.gdx.math.Rectangle(position.x, position.y ,ShipTile.TILESIZE, ShipTile.TILESIZE);
 		// Need to knit together the shiptile to adjacent tiles connectAdjacent();
@@ -61,9 +61,11 @@ public abstract class ShipTile extends GameObject{
 	}
 
 	/**
-	 * Exposes the interface needs through allowing ShipTile to be called while using an extruded class.
+	 * Gets specific shiptile Abbreviation from unique tile type asserted during construction
 	 */
-	public abstract String getAbbreviation();
+	public String getAbbreviation(){
+		return typeData.getAbbreviation();
+	};
 
 	/**
 	 * Renders information specific to the ShipTiles

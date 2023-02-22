@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
-import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
 import com.shipGame.ncrosby.generalObjects.Ship.TileArrayToString;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
@@ -166,7 +165,7 @@ public class SimpleTouch implements InputProcessor {
         // Begin collecting tiles for collapse
         if(!playerShip.isCollectingTiles() && keycode == 59){
             if(draggedTile != null){ // If holding tile
-                playerShip.addTile(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
+                playerShip.placeTile(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
                 setDraggedTileToNull();
                 setIsDragging(false);
             }
@@ -178,19 +177,23 @@ public class SimpleTouch implements InputProcessor {
         @Override public boolean keyUp (int keycode) {
 
             if(playerShip.isCollectingTiles() && keycode == 59){ // If user keys up should
-                Array<ShipTile> shipTileArray =
-                        playerShip.finishCollapseCollect(); // Ends collecting
-                if(shipTileArray.isEmpty()){
-                    System.out.println("Tiles collected : None");
-                }else {
-                    System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
-                    playerShip.buildNewTile(shipTileArray);
-                }
+                attemptNewTileProduction();
             }
             return false;
         }
 
-        @Override public boolean keyTyped (char character) {
+    private void attemptNewTileProduction() {
+        Array<ShipTile> shipTileArray =
+                playerShip.finishCollapseCollect(); // Ends collecting
+        if(shipTileArray.isEmpty()){
+            System.out.println("Tiles collected : None");
+        }else {
+            System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
+            playerShip.buildNewTile(shipTileArray);
+        }
+    }
+
+    @Override public boolean keyTyped (char character) {
             return false;
         }
 
@@ -240,7 +243,7 @@ public class SimpleTouch implements InputProcessor {
 
         Vector2 mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
 
-        playerShip.addTile(mousePosition2.x, mousePosition.y, draggedTile.getID());
+        playerShip.placeTile(mousePosition2.x, mousePosition.y, draggedTile.getID());
 
         // Dispose of used dragged tile references
         playerShip.setDragged(null);

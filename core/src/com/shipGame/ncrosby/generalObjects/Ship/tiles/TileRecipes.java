@@ -2,12 +2,17 @@ package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
 import com.badlogic.gdx.utils.Json;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Ship.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
+import com.shipGame.ncrosby.generalObjects.Ship.TileCondenser;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
  * Class to hold lambda expression to compare and produce a tile ID.
+ *
+ * TileRecipes holds a simple matching String. The recipe String assumes the input to match is oriented upwards. F or example : STD0COR
  */
 public class TileRecipes {
     private String recipe;
@@ -17,8 +22,22 @@ public class TileRecipes {
     private Function<String, ID> recipeExpression;
 
     public TileRecipes(String recipe, ID id) {
+        initValidation(recipe, id);
         this.id = id;
         this.recipe = recipe;
+    }
+
+    private void initValidation(String recipe, ID id) {
+        try{
+            String firstDirection =  recipe.substring(3,4); // We want to check that the first directional int is 0, example : STD0COR
+            int firstDirectionInt = Integer.parseInt(firstDirection); // To confirm the formatting is followed
+            if(firstDirectionInt != AdjacentTiles.UP){
+                throw new IllegalArgumentException("Cannot init tileRecipe with disoriented recipe");
+            }
+        }catch (ClassCastException classCastException){
+
+        }
+
     }
 
 

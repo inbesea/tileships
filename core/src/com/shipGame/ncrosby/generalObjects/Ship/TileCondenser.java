@@ -6,9 +6,11 @@ import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileRecipes;
 
+import java.util.Arrays;
+
 /**
- * Class to build out new instances of tiles based on ordered arrays of tiles.
- * Used to match up patterns using member classes.
+ * Class to determine IDs based on ordered arrays of tiles.
+ * Matches are made against recipe objects.
  */
 public class TileCondenser {
 
@@ -24,9 +26,9 @@ public class TileCondenser {
      * Returns a tile based on an array of tiles.
      *
      * @param tiles - array of tiles to condense
-     * @return - a single product tile.
+     * @return - an ID representing a tile type.
      */
-    public ID buildNewTileID(Array<ShipTile> tiles){
+    public ID determineNewTileID(Array<ShipTile> tiles){
         // This initiates a lot of sub-methods to match the passed tile array.
 
         if(tiles.isEmpty() || tiles.size < SMALLEST_INPUT){ // No tiles, or below minimum array size
@@ -47,37 +49,55 @@ public class TileCondenser {
     private ID developTileIDFromArray(Array<ShipTile> tiles) {
         ID result;
 
+        if(tiles.size == 1)return singleTileHandle(tiles);
+
         // Get String for comparison
         TileArrayToString arrayToString = new TileArrayToString(tiles);
         String arrayString = arrayToString.toCompareString();
 
         // Check against recipes for match
         result = attemptArrayMatch(arrayString);
-        if(result != null)return result;
 
         // If not matched check if the array's reverse matches.
         String reverseCompareString = arrayToString.reverseToCompareString();
-        result = attemptArrayMatch(reverseCompareString);
-        if(result != null)return result;
+        ID temp = attemptArrayMatch(reverseCompareString);
+        if(result != null && temp != null)throw new RuntimeException("Double recipe match error\n" + Thread.currentThread().getStackTrace().toString());
 
-        // If all else fails
-        return null;
+        return result;
+    }
+
+    /**
+     * Handles situation where a single tile is passed to condenser
+     * @param tiles - single-tile array
+     * @return - ID for single tile recipe
+     */
+    private ID singleTileHandle(Array<ShipTile> tiles) {
+        TileArrayToString arrayToString = new TileArrayToString(tiles);
+        String arrayString = arrayToString.toCompareString();
+        ID result = attemptArrayMatch(arrayString);
+        return result;
     }
 
     /**
      * Takes the array of unlocked recipes and returns an ID if a recipe matches an available tile recipe
      * @param compareString - A string representing an array of tiles.
-     * @return - ID representing a tile to be produced
+     * @return - ID representing a tile to be produced, null if no matches are found
      */
     private ID attemptArrayMatch(String compareString) {
         Array<TileRecipes> recipes = getAvailableRecipes(); // Array of recipes available to the player.
-        ID id;
+        ID temp;
+        ID result = null;
 
         for(int i = 0 ; i < recipes.size ; i++){
-            id = recipes.get(i).tileIfMatch(compareString);
-            if(id != null)return id;
+            temp = recipes.get(i).tileIfMatch(compareString);
+            if(result != null && temp != null){
+                throw new RuntimeException("Multiple matches found for tile matching input : " + compareString + " \n" + Arrays.toString(Thread.currentThread().getStackTrace()));
+            }
+            else {
+                result = temp;
+            };
         }
-        return null;
+        return result;
     }
 
     private Array<TileRecipes> getAvailableRecipes() {

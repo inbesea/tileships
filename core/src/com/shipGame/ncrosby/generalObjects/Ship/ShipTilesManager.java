@@ -12,6 +12,7 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileTypeFactory;
 import java.util.Stack;
 
 import static com.shipGame.ncrosby.util.generalUtil.closestVector2;
+import static com.shipGame.ncrosby.util.generalUtil.getQuadrant;
 
 /**
  * Class to handle logic for placing/removing tiles to allow the ship to handle holding the pieces together rather than working the logic directly.
@@ -52,7 +53,7 @@ public class ShipTilesManager {
 
         ShipTile destinationTile = returnTile(tileLocation2);
         if(destinationTile == null){ // Released on empty space
-            if(ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y , id);
+            if(ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y , id); // Can add anywhere
 
             closestTile = closestTile(tileLocation2, ship.getExistingTiles());
             Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation);
@@ -88,7 +89,7 @@ public class ShipTilesManager {
         Vector3 location3 = new Vector3(location.x, location.y, 0);
         Vector3 tileP;
 
-        //Loop through ship to find closest tile
+        //Loop through ship to find the closest tile
         for (int i = 0 ; i < tiles.size ; i++){
             tempT = tiles.get(i);
             tileP = new Vector3(tempT.getPosition().x + ShipTile.TILESIZE/2.0f, tempT.getPosition().y  + ShipTile.TILESIZE/2.0f , 0);
@@ -109,13 +110,10 @@ public class ShipTilesManager {
     private ShipTile gridAlignedxyTilePlacement(float x, float y, ID id){
         int indexXY[];
         ShipTile tempTile;
-        Sound tilePlacement;
-        tilePlacement = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/tilePlacementV2.wav"));
 
         indexXY = calculateIndex(x, y); // Get index corresponding to that
-        System.out.println("Create tile at " + x + "," + y);
-        System.out.println("Create tile at " + indexXY[0] + ", " + indexXY[1]);
-        System.out.println("Type of : " + id);
+        System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
+                "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
@@ -129,7 +127,6 @@ public class ShipTilesManager {
                     " existingTiles.size : " + existingTiles.size +
                     "edgeTiles.size : " + edgeTiles.size);
         }
-        tilePlacement.play();
         return tempTile;
     }
 
@@ -196,8 +193,6 @@ public class ShipTilesManager {
         checkIfAdjustEdgeArray(down);
         checkIfAdjustEdgeArray(left);
         checkIfAdjustEdgeArray(tile);
-
-        System.out.println("Added a tile, number of edge tiles : " + edgeTiles.size);
 
         if(existingTiles.size < edgeTiles.size){
             throw new RuntimeException("More edgeTiles than existing!" +
@@ -337,7 +332,9 @@ public class ShipTilesManager {
      */
     public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector3 mousePosition) {
 
-        int closestSide = getClosestSide(closestTile, new Vector2(mousePosition.x, mousePosition.y));
+        // Get the closest side of the tile from the mouse position
+        int closestSide = getQuadrant(closestTile.getPosition(), new Vector2(mousePosition.x, mousePosition.y));
+
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
         // We can use this framing to decide the side to place the tile.
@@ -351,50 +348,6 @@ public class ShipTilesManager {
             return  new Vector2(closestTile.getX()+(ShipTile.TILESIZE/2.0f), closestTile.getY() - (ShipTile.TILESIZE/2.0f));
         } else {
             throw new RuntimeException("Something went wrong while running setTileOnClosestSide()");
-        }
-    }
-
-    /**
-     * Gets closest side of a tile from a Vector2 point
-     *
-     * @param tileWithSides - tile to find the side of
-     * @param position - position to compare with tile
-     * @return - int representing side of tile as compass - N = 0, E = 1, S = 2, W = 3
-     */
-    private int getClosestSide(ShipTile tileWithSides, Vector2 position){
-        float closeX = tileWithSides.getX();
-        float closeY = tileWithSides.getY();
-
-        // Should return the difference between the placed position and middle of the close tile.
-        float normalX =
-                position.x -
-                        (closeX + (ShipTile.TILESIZE/2.0f));
-        float normalY =
-                position.y -
-                        (closeY + (ShipTile.TILESIZE/2.0f));
-
-        // Set vector such that the center of tile is equal to (0,0) and mouse position is a point relative to that
-        Vector2 normalizedMousePosition = new Vector2(normalX,normalY); // Find center of block by adding to the x,y
-
-        // the point is above y = x if the y is larger than x
-        boolean abovexEy = normalizedMousePosition.y > normalizedMousePosition.x;
-        // the point is above y = -x if the y is larger than the negation of x
-        boolean aboveNxEy = normalizedMousePosition.y > (-normalizedMousePosition.x);
-
-        // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
-        // We can use this framing to decide the side to place the tile.
-        if(abovexEy){ // Check at halfway point of tile
-            if(aboveNxEy){ // North = 0
-                return  0;
-            } else { // West = 3
-                return 3;
-            }
-        } else { // location is to the right of the closest tile
-            if(aboveNxEy){ // East = 1
-                return 1;
-            } else { // South = 2
-                return 2;
-            }
         }
     }
 

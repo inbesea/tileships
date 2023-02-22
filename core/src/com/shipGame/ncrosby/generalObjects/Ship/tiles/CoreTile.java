@@ -2,7 +2,6 @@ package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 
 public class CoreTile extends ShipTile {
 
@@ -14,18 +13,11 @@ public class CoreTile extends ShipTile {
      * @param position
      * @param id
      */
-    public CoreTile(Vector2 position, ID id) {
-        super(position, id);
+    public CoreTile(Vector2 position, ID id, TileTypeData typeData) {
+        super(position, id, typeData);
     }
 
     public CoreTile(Vector2 position) {
-        super(position, ID.CoreTile);
+        super(position, ID.CoreTile, TileTypeData.CoreTile);
     }
-
-    @Override
-    public String getAbbreviation() {
-        return "COR";
-    }
-
-
 }

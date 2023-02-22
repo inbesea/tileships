@@ -1,5 +1,7 @@
 package com.shipGame.ncrosby;
 
+import com.shipGame.ncrosby.screens.MainMenuScreen;
+
 /**
  * Enums for easy identification of game objects
  * <p></p>
@@ -32,6 +34,10 @@ public enum ID {
 
 	public String getTexture() {
 		return texture;
+	}
+
+	public String getSprite() {
+		return MainMenuScreen.spritePath + texture;
 	}
 
 	public void setTexture(String texture) {

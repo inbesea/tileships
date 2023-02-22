@@ -1,6 +1,7 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
@@ -119,6 +120,8 @@ public class CollectionManager {
             return false;
         } else if (!this.isFull()) { // Confirm the hovered tile is a neighbor
             if (collectedTiles.isEmpty() || shipTile.isNeighbor(collectedTiles.peek())) {
+                Sound collectSound = Gdx.audio.newSound(Gdx.files.internal("Sound Effects/collectTileSound.mp3"));
+                collectSound.play();
                 System.out.println("Adding tile to array stack!");
                 collectedTiles.add(shipTile);
                 return true;

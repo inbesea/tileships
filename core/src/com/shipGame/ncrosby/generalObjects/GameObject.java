@@ -32,7 +32,7 @@ public abstract class GameObject {
 		this.size.x = size.x;
 		this.size.y = size.y;
 		this.id = id;
-		this.textureRef = id.getTexture();
+		this.textureRef = id.getSprite();
 	}
 
 	/**

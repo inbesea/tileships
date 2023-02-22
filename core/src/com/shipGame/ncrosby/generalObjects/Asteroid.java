@@ -51,6 +51,10 @@ public class Asteroid extends GameObject {
 		return circle;
 	}
 
+	/**
+	 * Used to handle asteroid bounces
+	 * @param gameObject
+	 */
 	@Override
 	public void collision(GameObject gameObject) {
 			bounce(gameObject);
@@ -64,6 +68,12 @@ public class Asteroid extends GameObject {
 			// ToDO : We want the strong tile to bounce the asteroid correctly so it looks nice.
 			// It bounces dumb right now.
 		}
+		// Adjust positions to prevent repeat bounces
+		position.x -= velX;
+		position.y -= velY;
+		circle.x -= velX;
+		circle.y -= velY;
+
 		velX *= -1;
 		velY *= -1;
 	}

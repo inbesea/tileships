@@ -17,7 +17,7 @@ public class TileHoverIndicator extends GameObject {
 
         // Hover Indicator will always use the same texture
         this.id = ID.Hover;
-        this.textureRef = id.getTexture();
+        this.textureRef = id.getSprite();
     }
 
     @Override

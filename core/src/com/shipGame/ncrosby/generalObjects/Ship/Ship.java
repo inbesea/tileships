@@ -1,6 +1,5 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +13,7 @@ import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ncrosby.screens.MainMenuScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.util.AsteroidManager;
@@ -31,23 +31,22 @@ public class Ship extends GameObject {
 	 * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
 	 */
 	private ShipTile draggedTile;
-	private GameScreen screen;
 	AsteroidManager asteroidManager;
-	Array<GameObject> gameObjects;
 	public int destroyedTileCount = 0;
 	private CollectionManager collectionManager;
 	private TileCondenser tileCondenser;
 	private ShipTilesManager shipTilesManager;
 	private UnlockTracker unlockTracker;
+	AssetManager assetManager;
+	public boolean mute = true;
 
 	/**
 	 * Ship keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (Vector2 position, ID id, Array<GameObject> gameObjects, AsteroidManager asteroidManager) {
-		super(position, new Vector2(0,0), id);
-		this.gameObjects = gameObjects;
-		this.asteroidManager = asteroidManager;
+	public Ship (Vector2 position, AssetManager assetManager) {
+		super(position, new Vector2(0,0), ID.Ship);
+		this.assetManager = assetManager;
 
 		shipTilesManager = new ShipTilesManager(this);
 		collectionManager = new CollectionManager();
@@ -59,21 +58,7 @@ public class Ship extends GameObject {
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
 		initShipTiles();
-	}
-
-	public Ship (Vector2 position, ID id, GameScreen screen){
-		super(position, new Vector2(0,0), id);
-		this.screen = screen;
-
-		shipTilesManager = new ShipTilesManager(this);
-		collectionManager = new CollectionManager();
-
-		unlockTracker = new UnlockTracker();
-		tileCondenser = new TileCondenser(unlockTracker);
-		// Give new ship default tiles.
-		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
-		 *   that creates tiles based on a list of tile instances */
-		initShipTiles();
+		mute = false;
 	}
 
 	/**
@@ -99,7 +84,7 @@ public class Ship extends GameObject {
 			Array<ShipTile> tiles = collectionManager.getTileArray();
 			for(int i = 0 ; tiles.size > i ; i++){
 				ShipTile tile = tiles.get(i);
-				game.batch.draw(assetManager.get("ToBeCollapsed.png", Texture.class),
+				game.batch.draw(assetManager.get( MainMenuScreen.spritePath + "ToBeCollapsed.png", Texture.class),
 						tile.getX(), tile.getY());
 			}
 		}
@@ -110,11 +95,11 @@ public class Ship extends GameObject {
 	 * TODO : This can be another class that takes an argument to determine what ship will be initialized. MOVE IT OUT
 	 */
 	private void initShipTiles() {
-		addTile(position.x, position.y, ID.CoreTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y, ID.StandardTile);
-		addTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.StandardTile);
-		addTile(position.x, position.y + ShipTile.TILESIZE, ID.StandardTile);
-		addTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		placeTile(position.x, position.y, ID.CoreTile);
+		placeTile(position.x + ShipTile.TILESIZE, position.y, ID.StandardTile);
+		placeTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		placeTile(position.x, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		placeTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.StandardTile);
 	}
 
 	/**
@@ -127,7 +112,7 @@ public class Ship extends GameObject {
 	 * @param id - The ID of the tile
 	 * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
 	 */
-	public ShipTile addTile(float x, float y, ID id) {
+	public ShipTile placeTile(float x, float y, ID id) {
 		ShipTile tile = shipTilesManager.addTile(x, y, id);
 		return tile;
 	}
@@ -220,40 +205,54 @@ public class Ship extends GameObject {
 		return null;
 	}
 
+	@Override
+	public void collision(GameObject gameObject) {
+
+	}
+
 
 	/**
 	 * Handles collisions between ship and game objects
 	 *
 	 * @param gameObject
 	 */
-	@Override
-	public void collision(GameObject gameObject) {
+	public void collision(GameObject gameObject , GameScreen gameScreen) {
 
 		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
 		if(gameObject.getID() == ID.Asteroid){ // Object collision was asteroid
+			Asteroid asteroid = null;
+
+            // Checking for object casting issues
+			try{
+				asteroid = (Asteroid) gameObject;
+			} catch (ClassCastException classCastException){
+				System.out.println("ERROR casting Asteroid ID'ed GameObject : " + gameObject.getClass().toString() +
+						"\n" + classCastException);
+			}
 			ShipTile shipTile;
 			boolean removeAsteroid = false;
 
+            // Checking collisions between asteroid game object and all tiles.
 			for(int i = 0 ; i < existing.size ; i++){
 				shipTile = existing.get(i);
 
 				// Check if asteroid intersects ShipTile
 				Rectangle rectangle = shipTile.getBounds();
-				Circle asteroidCircle = gameObject.getCircleBounds();
-				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle, screen);
+				Circle asteroidCircle = asteroid.getCircleBounds();
+				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle);
 
 				if(isCollision){
-					System.out.println("Collision! with " + shipTile.getID());
+					System.out.println("Asteroid collision with " + shipTile.getID());
 					if(shipTile.getID() == ID.CoreTile){
 
 						// Get middle of Asteroid
-						float x = gameObject.getX() + gameObject.getCircleBounds().radius;
-						float y = gameObject.getY() + gameObject.getCircleBounds().radius;
+						float x = asteroid.getX() + asteroid.getCircleBounds().radius;
+						float y = asteroid.getY() + asteroid.getCircleBounds().radius;
 						removeAsteroid = true;
 
 						// New standard tile
-						addTile(x, y,
+						placeTile(x, y,
 								ID.StandardTile);
 						break;
 					} else if (shipTile.getID() == ID.StandardTile) {
@@ -264,43 +263,31 @@ public class Ship extends GameObject {
 						removeAsteroid = true;
 					} else if(shipTile.getID() == ID.StrongTile){
 						System.out.println("Attempting to bounce");
-						gameObject.collision(shipTile);
+						try{ // Cast to Strong tile to check for type
+                            Vector2 initSpeed = new Vector2(asteroid.getVelX(), asteroid.getVelY());
+							asteroid.collision(shipTile);
+                            if(new Vector2(asteroid.getVelX(), asteroid.getVelY()).equals(initSpeed)){
+                                System.out.println("Asteroid failed to bounce ");
+                            }
+						} catch (ClassCastException cce){
+							System.out.println("Class Cast Exception on " + shipTile.getClass().toString() + " to StrongTile " +
+									"\n" + cce);
+						}
+
 					}
 				}
 			}
 			//Handles Asteroid destroy.
 			// If this is done in the forloop it can't find the reference
 			if(removeAsteroid){
-				screen.removeGameObject(gameObject);
-				screen.removeAsteroid(gameObject);
-				screen.updateMouseMoved();
+				gameScreen.removeGameObject(gameObject);
+				gameScreen.removeAsteroid(gameObject);
+				gameScreen.updateMouseMoved();
 			}
 
 		}
 
 		// Might could be used? :/ Probably not tho
-	}
-
-	/**
-	 * Finds the game object, removes and returns it from the game screen Array
-	 * @param gameObject
-	 * @return
-	 */
-	public GameObject removeGameObject(GameObject gameObject){
-		int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
-
-		if(i < 0){
-			System.out.println("OH jeez");
-		}
-		if(i < 0){
-			throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
-					" location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " +gameObject.getID());
-		}
-		return gameObjects.removeIndex(i); // Returns the object reference and removes it.
-	}
-
-	public void removeAsteroid(GameObject asteroid) {
-		asteroidManager.removeAsteroid((Asteroid) asteroid);
 	}
 
 	@Override
@@ -498,21 +485,31 @@ public class Ship extends GameObject {
 	 * @return - ShipTile resulting from build action.
 	 */
 	public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
-		ID newTileID = tileCondenser.buildNewTileID(collectedTileArray);
+		ID newTileID = tileCondenser.determineNewTileID(collectedTileArray);
 
 		if(newTileID == null){
 			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
 			return null;
 		} else { // if Tile produced then swap the tiles used out of existence and return the new one.
-			Sound collectTileSound;
-			collectTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
-			collectTileSound.play(0.1f);
+			playBuildSound();
 			Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
+			vector2.y += ShipTile.TILESIZE/2f;
+			vector2.x += ShipTile.TILESIZE/2f;
 			removeTilesFromShip(collectedTileArray);
-			ShipTile result =  addTile(vector2.x, vector2.y, newTileID);
+			ShipTile result =  placeTile(vector2.x, vector2.y, newTileID);
 			System.out.println("Building new tile " + result.getID());
 			return result;
 		}
+	}
+
+	/**
+	 * Convinence method to play the build sound
+	 * @return - nothing
+	 */
+	public void playBuildSound(){
+		Sound buildTileSound;
+		buildTileSound = assetManager.get(MainMenuScreen.soundPath + "buildTileSound.mp3", Sound.class);
+		buildTileSound.play(0.1f);
 	}
 
 	public ShipTilesManager getTileManager() {
