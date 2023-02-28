@@ -25,6 +25,7 @@ public class tileShipGame extends Game {
 
 	public static int zoomSpeed = 5;
 	public static int defaultViewportSizeX = 700, defaultViewportSizeY = 500;
+	public static float meterLength = 64f;
 
 	/**
 	 * Initialization of the game stuff
@@ -39,6 +40,15 @@ public class tileShipGame extends Game {
 
 		//legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
 		this.setScreen(new MainMenuScreen(this));
+	}
+
+	/**
+	 * Method to convert a pixel length to meters.
+	 * @param pixelLength - pixels to divide by meterLength as defined in tileShipGame
+	 * @return - float representing meters from passed pixel length
+	 */
+	public float convertPixelsToMeters(float pixelLength){
+		return pixelLength / meterLength; // Gives an easy way to swap pixel lengths for the physics simulation
 	}
 
 	/**
