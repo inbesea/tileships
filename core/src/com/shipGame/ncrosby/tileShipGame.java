@@ -5,6 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.World;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
 
@@ -18,6 +21,7 @@ public class tileShipGame extends Game {
 	public SpriteBatch batch; // Draws the textures and fonts etc.
 	public BitmapFont font;
 	private Ship playerShip;
+	World world;
 
 	public static int zoomSpeed = 5;
 	public static int defaultViewportSizeX = 700, defaultViewportSizeY = 500;
@@ -30,6 +34,9 @@ public class tileShipGame extends Game {
 		assetManager = new AssetManager();
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		Box2D.init();
+		world = new World(new Vector2(0,0), true);
+
 		//legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
 		this.setScreen(new MainMenuScreen(this));
 	}
