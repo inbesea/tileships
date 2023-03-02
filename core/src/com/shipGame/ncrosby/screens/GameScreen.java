@@ -37,14 +37,14 @@ public class GameScreen implements Screen {
     private final Player player;
 
     // Represents each side's size
-    public static final Vector2 playerSize = new Vector2(47,53);
+    public static final Vector2 playerSize = new Vector2(tileShipGame.convertPixelsToMeters(47),tileShipGame.convertPixelsToMeters(53));
 
     OrthographicCamera camera;
     SimpleTouch st;
     AssetManager assetManager;
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
-    public static final int spawnAreaMax = 300;
+    public static final float spawnAreaMax = tileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
     Array<Body> bodies = new Array<Body>();
@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, tileShipGame.defaultViewportSizeX, tileShipGame.defaultViewportSizeY);
-        this.extendViewport = new ExtendViewport(650,550, camera);
+        this.extendViewport = new ExtendViewport(tileShipGame.defaultViewportSizeX,tileShipGame.defaultViewportSizeY, camera);
 
         // init ship
         playerShip = new Ship(new Vector2(-1, -1), assetManager);
