@@ -70,7 +70,7 @@ public class TileOrienter {
         } else if(tile0Index.x - 1 == tile1Index.x && ySame) { // Left
             return setAndReturnCurrentOrientation(AdjacentTiles.LEFT);
         } else { // Is reached if the array is too short
-            Gdx.app.debug("CondenserMessage", "Incomparable tiles passed to calculateOrientation()" + tile0Index + " " + tile1Index);
+            System.out.println("Incomparable tiles passed to calculateOrientation()" + tile0Index + " " + tile1Index);
             result = -1;
             return result;
         }
