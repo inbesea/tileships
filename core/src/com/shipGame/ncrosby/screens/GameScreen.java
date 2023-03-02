@@ -7,7 +7,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -44,11 +46,14 @@ public class GameScreen implements Screen {
     private final Ship playerShip;
     public static final int spawnAreaMax = 300;
     Music gameScreenMusic;
+    CircleShape circle = new CircleShape();
+    Array<Body> bodies = new Array<Body>();
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
+        this.bodies = game.bodies;
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
@@ -87,6 +92,26 @@ public class GameScreen implements Screen {
     }
 
     /**
+     * Method to update game objects with the bodies object position
+     *
+     * Called before drawing
+     */
+    private void updateGameObjectsForPhysics(){
+        for (Body b : bodies) {
+            // Get the body's user data - in this example, our user
+            // data is an instance of the Entity class
+            GameObject gameObject = (GameObject) b.getUserData();
+
+            if (gameObject != null) {
+                // Update the entities/sprites position and angle
+                gameObject.setPosition(new Vector2(b.getPosition().x, b.getPosition().y));
+                // We need to convert our angle from radians to degrees
+                gameObject.setRotation(MathUtils.radiansToDegrees * b.getAngle());
+            }
+        }
+    }
+
+    /**
      * Draw the game
      * @param delta The time in seconds since the last render.
      */
@@ -94,6 +119,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         extendViewport.apply();
+
+        // Update game object positions
+        updateGameObjectsForPhysics();
 
         // Draw game objects
         drawGameObjects();
@@ -138,6 +166,10 @@ public class GameScreen implements Screen {
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
         game.batch.end();
+
+        game.debugRenderer.render(game.world, camera.combined);
+
+        game.stepPhysicsWorld(Gdx.graphics.getDeltaTime());
     }
 
     @Override
@@ -164,6 +196,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        circle.dispose();
     }
 
     /**
