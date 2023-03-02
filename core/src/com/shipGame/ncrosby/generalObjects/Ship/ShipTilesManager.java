@@ -160,7 +160,7 @@ public class ShipTilesManager {
      * Returns an index scaled up by ShipTile.TILESIZE
      * @return
      */
-    public int getGameSpacePositionFromIndex(int index){
+    public float getGameSpacePositionFromIndex(int index){
         return index * ShipTile.TILESIZE;
     }
 
