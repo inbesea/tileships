@@ -236,7 +236,7 @@ public class generalUtil {
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         // Set our body's starting position in the world
-        bodyDef.position.set(5, 10);
+        bodyDef.position.set(x, y);
 
         return bodyDef;
     }
