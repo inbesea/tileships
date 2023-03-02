@@ -1,7 +1,5 @@
 package com.shipGame.ncrosby.generalObjects.Ship;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -11,8 +9,7 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileTypeFactory;
 
 import java.util.Stack;
 
-import static com.shipGame.ncrosby.util.generalUtil.closestVector2;
-import static com.shipGame.ncrosby.util.generalUtil.getQuadrant;
+import static com.shipGame.ncrosby.util.generalUtil.*;
 
 /**
  * Class to handle logic for placing/removing tiles to allow the ship to handle holding the pieces together rather than working the logic directly.
@@ -92,6 +89,7 @@ public class ShipTilesManager {
         //Loop through ship to find the closest tile
         for (int i = 0 ; i < tiles.size ; i++){
             tempT = tiles.get(i);
+            // Get middle of tile to check distance
             tileP = new Vector3(tempT.getPosition().x + ShipTile.TILESIZE/2.0f, tempT.getPosition().y  + ShipTile.TILESIZE/2.0f , 0);
             Float distance = location3.dst(tileP);
 
@@ -135,7 +133,6 @@ public class ShipTilesManager {
         for(int i = 0 ; i < existingTiles.size ; i++){
             existingTile = existingTiles.get(i);
             if(newTile.getxIndex() == existingTile.getxIndex() && newTile.getyIndex() == existingTile.getyIndex()){
-                System.out.println();
                 throw new RuntimeException("New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
                         existingTile.getPositionAsString() + " id : " + existingTile.getID() + Thread.currentThread().getStackTrace().toString());
             }
@@ -287,8 +284,11 @@ public class ShipTilesManager {
         // -1 shifting wont cause issues because the flow will subtract one from it either way
         // -64 - -1 will return index -1 yayy
 
-        boolean yNegative = y <= -1;
-        boolean xNegative = x <= -1;
+//        x = Math.round(x);
+//        y = Math.round(y);
+
+        boolean yNegative = y <= -0.1;
+        boolean xNegative = x <= -0.1;
 
 
         int XYresult[] = new int[2];
@@ -296,23 +296,23 @@ public class ShipTilesManager {
             if(yNegative) {
                 // x, y negative
                 // get index and subtract one.
-                XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
-                XYresult[1] = (int) (( (y + 1) / ShipTile.TILESIZE) - 1);
+                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE) - 1);
+                XYresult[1] = (int) Math.floor(( (y + 1) / ShipTile.TILESIZE) - 1);
             }
             else {
                 // only x negative
-                XYresult[0] = (int) (( (x + 1) / ShipTile.TILESIZE) - 1);
-                XYresult[1] = (int) ( (y) / ShipTile.TILESIZE);
+                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE) - 1);
+                XYresult[1] = (int) Math.floor( (y) / ShipTile.TILESIZE);
             }
         }
         else if (yNegative) {
             // only Y negative
-            XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
-            XYresult[1] = (int) (( (y+ 1) / ShipTile.TILESIZE) - 1);
+            XYresult[0] = (int) Math.floor((x) / ShipTile.TILESIZE);
+            XYresult[1] = (int) Math.floor(( (y+ 1) / ShipTile.TILESIZE) - 1);
         }
         else {
-            XYresult[0] = (int) ((x) / ShipTile.TILESIZE);
-            XYresult[1] = (int) ((y) / ShipTile.TILESIZE);
+            XYresult[0] = (int) Math.floor((x) / ShipTile.TILESIZE);
+            XYresult[1] = (int) Math.floor((y) / ShipTile.TILESIZE);
         }
 
         // TODO : Unit test
