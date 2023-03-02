@@ -41,8 +41,8 @@ public class TileArrayToStringTest extends TestCase {
         // Before
         Array<ShipTile> tiles = new Array<>();
         StandardTile standardTile1 = new StandardTile(new Vector2(0,0));
-        StandardTile standardTile2 = new StandardTile(new Vector2(64,0));
-        StandardTile standardTile3 = new StandardTile(new Vector2(64,-64));
+        StandardTile standardTile2 = new StandardTile(new Vector2(0 + ShipTile.TILESIZE,0));
+        StandardTile standardTile3 = new StandardTile(new Vector2(0 + ShipTile.TILESIZE,0 - ShipTile.TILESIZE));
         // Set neighbors manually
         standardTile1.setNeighbors(null,standardTile2,null,null);
         standardTile2.setNeighbors(null,null ,standardTile3,null);
@@ -66,8 +66,8 @@ public class TileArrayToStringTest extends TestCase {
         // Before
         Array<ShipTile> tiles = new Array<>();
         StandardTile standardTile1 = new StandardTile(new Vector2(0,0));
-        CoreTile coreTile1 = new CoreTile(new Vector2(-64,0));
-        StandardTile standardTile3 = new StandardTile(new Vector2(-64,64));
+        CoreTile coreTile1 = new CoreTile(new Vector2(-ShipTile.TILESIZE,0));
+        StandardTile standardTile3 = new StandardTile(new Vector2(-ShipTile.TILESIZE,ShipTile.TILESIZE));
         // Set neighbors manually
         standardTile1.setNeighbors(null,null,null, coreTile1);
         coreTile1.setNeighbors(standardTile3,null,null ,null);
@@ -87,8 +87,8 @@ public class TileArrayToStringTest extends TestCase {
         // Before
         Array<ShipTile> tiles = new Array<>();
         StandardTile standardTile1 = new StandardTile(new Vector2(0,0));
-        CoreTile coreTile1 = new CoreTile(new Vector2(-64,0));
-        StandardTile standardTile3 = new StandardTile(new Vector2(-64,64));
+        CoreTile coreTile1 = new CoreTile(new Vector2(-ShipTile.TILESIZE,0));
+        StandardTile standardTile3 = new StandardTile(new Vector2(-ShipTile.TILESIZE,ShipTile.TILESIZE));
         // Set neighbors manually
         standardTile1.setNeighbors(null,null,null, coreTile1);
         coreTile1.setNeighbors(standardTile3,standardTile1,null ,null);
@@ -109,8 +109,8 @@ public class TileArrayToStringTest extends TestCase {
         // Before
         Array<ShipTile> tiles = new Array<>();
         StandardTile standardTile1 = new StandardTile(new Vector2(0,0));
-        CoreTile coreTile1 = new CoreTile(new Vector2(-64,0));
-        StandardTile standardTile3 = new StandardTile(new Vector2(-64,-64));
+        CoreTile coreTile1 = new CoreTile(new Vector2(-ShipTile.TILESIZE,0));
+        StandardTile standardTile3 = new StandardTile(new Vector2(-ShipTile.TILESIZE,-ShipTile.TILESIZE));
         // Set neighbors manually
         standardTile1.setNeighbors(null,null,null, coreTile1);
         coreTile1.setNeighbors(null,standardTile1, standardTile3 ,null);
