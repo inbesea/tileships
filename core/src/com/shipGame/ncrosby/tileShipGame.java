@@ -6,8 +6,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
 
@@ -21,11 +21,17 @@ public class tileShipGame extends Game {
 	public SpriteBatch batch; // Draws the textures and fonts etc.
 	public BitmapFont font;
 	private Ship playerShip;
-	World world;
+	public World world;
+	public Box2DDebugRenderer debugRenderer;
 
+	public static final float physicsFrameRate = 1/60f;
+	public static final int velocityIterations = 6;
+	public static final int positionIterations = 2;
+	private float accumulator = 0;
 	public static int zoomSpeed = 5;
-	public static int defaultViewportSizeX = 700, defaultViewportSizeY = 500;
+	public static float defaultViewportSizeX = 12.5f, defaultViewportSizeY = 7.5f;
 	public static float meterLength = 64f;
+	public Array<Body> bodies = new Array<Body>();
 
 	/**
 	 * Initialization of the game stuff
@@ -37,6 +43,7 @@ public class tileShipGame extends Game {
 		font = new BitmapFont();
 		Box2D.init();
 		world = new World(new Vector2(0,0), true);
+		debugRenderer = new Box2DDebugRenderer();
 
 		//legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
 		this.setScreen(new MainMenuScreen(this));
@@ -49,6 +56,21 @@ public class tileShipGame extends Game {
 	 */
 	public float convertPixelsToMeters(float pixelLength){
 		return pixelLength / meterLength; // Gives an easy way to swap pixel lengths for the physics simulation
+	}
+
+	/**
+	 * Steps the physics simulation.
+	 */
+	public void stepPhysicsWorld(float deltaTime){
+//        world.step(game.physicsFrameRate, velocityIterations, positionIterations);
+		// fixed time step
+		// max frame time to avoid spiral of death (on slow devices)
+		float frameTime = Math.min(deltaTime, 0.25f);
+		accumulator += frameTime;
+		while (accumulator >= physicsFrameRate) {
+			world.step(physicsFrameRate, velocityIterations, positionIterations);
+			accumulator -= physicsFrameRate;
+		}
 	}
 
 	/**
@@ -82,5 +104,27 @@ public class tileShipGame extends Game {
 
 	public Ship getPlayerShip() {
 		return playerShip;
+	}
+
+	/**
+	 * Easy way to add bodies to the game
+	 * @param bodyDef
+	 */
+	public void addBodyToWorld(BodyDef bodyDef){
+		Body body = world.createBody(bodyDef);
+		bodies.add(body);
+	}
+
+	/**
+	 * Removes a body from the bodies array
+	 *
+	 * Returns a boolean representing if the body was removed
+	 * @param body
+	 * @return
+	 */
+	public boolean removeBodyFromWorld(Body body){
+		boolean removed = bodies.removeValue(body,true);
+
+		return removed;
 	}
 }
