@@ -34,6 +34,8 @@ public class Player extends GameObject {
     private float circleRotation = 0;
     private final int INIT_HELD_RADIUS = 32; // one Radius
 
+    private float playerSpeed = 3.125f;
+
     public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, tileShipGame game) {
         super(position, size, id);
 
@@ -201,5 +203,14 @@ public class Player extends GameObject {
      */
     public boolean positionIsOffShip(Vector2 possibleUpPosition) {
         return playerShip.isPositionOffShip(possibleUpPosition);
+    }
+
+
+    public float getPlayerSpeed() {
+        return playerSpeed;
+    }
+
+    public void setPlayerSpeed(float playerSpeed) {
+        this.playerSpeed = playerSpeed;
     }
 }
