@@ -55,7 +55,7 @@ public class tileShipGame extends Game {
 	 * @param pixelLength - pixels to divide by meterLength as defined in tileShipGame
 	 * @return - float representing meters from passed pixel length
 	 */
-	public float convertPixelsToMeters(float pixelLength){
+	public static float convertPixelsToMeters(float pixelLength){
 		return pixelLength / meterLength; // Gives an easy way to swap pixel lengths for the physics simulation
 	}
 
