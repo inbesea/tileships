@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
@@ -226,5 +228,16 @@ public class generalUtil {
                 return 2;
             }
         }
+    }
+
+    public static BodyDef newDynamicBodyDef(float x, float y){
+        // First we create a body definition
+        BodyDef bodyDef = new BodyDef();
+        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        // Set our body's starting position in the world
+        bodyDef.position.set(5, 10);
+
+        return bodyDef;
     }
 }
