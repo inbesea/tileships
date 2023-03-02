@@ -31,7 +31,6 @@ public class Ship extends GameObject {
 	 * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
 	 */
 	private ShipTile draggedTile;
-	AsteroidManager asteroidManager;
 	public int destroyedTileCount = 0;
 	private CollectionManager collectionManager;
 	private TileCondenser tileCondenser;
