@@ -23,8 +23,6 @@ public class Player extends GameObject {
     Random r = new Random();
     private tileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
     private OrthographicCamera cam;
-    private int index[] = {0, 0};
-    private int lookAhead = 155;
     public boolean godMode = false;
 
     // Tiles the player holds - This should be reflected on the player's sprite
@@ -102,10 +100,6 @@ public class Player extends GameObject {
     private void rotateCircle(){
         circleRotation += tileCircleRotationSpeed;
         if(circleRotation > PI2) circleRotation = 0;
-    }
-
-    public void mouseover(int[] index) {
-        this.index = index;
     }
 
     /**
