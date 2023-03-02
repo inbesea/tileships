@@ -14,10 +14,10 @@ import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
 public class Asteroid extends GameObject {
 
-	public static float maxSpeed = 0.08f;
-	public static float minSpeed = 0.008f;
+	public static float maxSpeed = 1f;
+	public static float minSpeed = 0.1f;
+	public static float radius = 0.5f;
 	Circle circle;
-	float radius;
 	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
@@ -111,10 +111,13 @@ public class Asteroid extends GameObject {
 	 */
 	public void render(tileShipGame game) {
 
-		position.x += velX;
-		position.y += velY;
-		circle.x += velX;
-		circle.y += velY;
+		position.set(new Vector2(body.getPosition().x - circle.radius, body.getPosition().y - circle.radius));
+		circle.setPosition(body.getPosition());
+
+//		position.x += velX;
+//		position.y += velY;
+//		circle.x += velX;
+//		circle.y += velY;
 //		generalUtil.render(position.x, position.y, new Texture("asteroid_purple.png"));
 		
 	}

@@ -4,10 +4,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ncrosby.tileShipGame;
 
 import java.util.Arrays;
 
@@ -30,6 +32,8 @@ public class AsteroidManager {
     // Keep asteroid references for simplicity
     private Array<Asteroid> asteroids = new Array<>();
     private int numberOfAsteroids = asteroids.size;
+    // Needed for physics simulation
+    World world;
 
     /**
      * Spawns asteroids.
@@ -42,6 +46,7 @@ public class AsteroidManager {
         asteroidLimit = 20;
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
+        this.world = screen.getGame().world;
 //        initSpawn();
     }
 
@@ -50,6 +55,7 @@ public class AsteroidManager {
         this.spawning = spawning;
         asteroidLimit = 30;
         numberOfAsteroids = 0;
+        this.world = screen.getGame().world;
 //        initSpawn();
     }
 
@@ -111,6 +117,7 @@ public class AsteroidManager {
      */
     public void removeAsteroid(Asteroid asteroid){
         asteroids.removeValue(asteroid, true);
+        world.destroyBody(asteroid.getBody());
     }
 
     /**
@@ -135,7 +142,9 @@ public class AsteroidManager {
         if(spawning){
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.Asteroid);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(1f,1f), ID.Asteroid);
+            setAsteroidPhysics(asteroid);
+
             screen.newGameObject(asteroid);
             asteroids.add(asteroid);
             numberOfAsteroids = asteroids.size;
@@ -149,18 +158,51 @@ public class AsteroidManager {
     }
 
     /**
+     * Easy way to add physics attributes to asteroid instance
+     */
+    private void setAsteroidPhysics(Asteroid asteroid) {
+        Vector2 position = asteroid.getPosition();
+        BodyDef bodyDef = generalUtil.newDynamicBodyDef(position.x, position.y);
+        Body body = screen.world.createBody(bodyDef);
+
+        body.setLinearVelocity(generalUtil.getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
+                getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
+
+        // Create circle to add to asteroid
+        CircleShape circle = new CircleShape();
+        circle.setRadius(Asteroid.radius);
+
+        // Create a fixture definition to apply our shape to
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.0f; // Make it bounce a little bit
+
+        // Create our fixture and attach it to the body
+        Fixture fixture = body.createFixture(fixtureDef);
+
+        body.setUserData(asteroid);
+        asteroid.setBody(body);
+
+        // Remember to dispose of any shapes after you're done with them!
+        // BodyDef and FixtureDef don't need disposing, but shapes do.
+        circle.dispose();
+    }
+
+    /**
      * Returns a random point within the non-visible play area
      * @return - Vector outside screen, bound by the spawn area size
      */
     private Vector2 getVectorInValidSpawnArea(){
         OrthographicCamera camera =  screen.getCamera();
 
-        int screenWidthHalf = (int) (camera.viewportWidth* 0.7f);
-        int screenHightHalf = (int) (camera.viewportHeight * 0.7f);
+        float screenWidthHalf = (camera.viewportWidth* 0.7f);
+        float screenHightHalf = (camera.viewportHeight * 0.7f);
 
         // Bad fix for init spawn when worldsize is 0 :/
-        if (screenHightHalf == 0) screenWidthHalf = 400;
-        if (screenWidthHalf == 0) screenWidthHalf = 400;
+        if (screenHightHalf == 0) screenHightHalf = tileShipGame.defaultViewportSizeY * 0.7f;
+        if (screenWidthHalf == 0) screenWidthHalf = tileShipGame.defaultViewportSizeX * 0.7f;
 
         // Get x,y centered on screen, and scaled up to provide band of spawning
         float x = getRandomlyNegativeNumber(screenWidthHalf , screenWidthHalf + GameScreen.spawnAreaMax); // Add to scale with ViewPort
