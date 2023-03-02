@@ -1,9 +1,7 @@
 package com.shipGame.ncrosby.util;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
@@ -13,6 +11,7 @@ import com.shipGame.ncrosby.tileShipGame;
 
 import java.util.Arrays;
 
+import static com.shipGame.ncrosby.util.generalUtil.getRandomNumber;
 import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
 /*
@@ -34,6 +33,8 @@ public class AsteroidManager {
     private int numberOfAsteroids = asteroids.size;
     // Needed for physics simulation
     World world;
+    Circle circle;
+    float spawnRadius;
 
     /**
      * Spawns asteroids.
@@ -47,6 +48,10 @@ public class AsteroidManager {
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
         this.world = screen.getGame().world;
+
+        this.circle = new Circle();
+        spawnRadius = screen.getCamera().viewportWidth;
+        circle.setRadius(spawnRadius);
 //        initSpawn();
     }
 
@@ -56,23 +61,10 @@ public class AsteroidManager {
         asteroidLimit = 30;
         numberOfAsteroids = 0;
         this.world = screen.getGame().world;
-//        initSpawn();
-    }
 
-    /**
-     * Call in constructor to populate the screen with asteroids
-     */
-    private void initSpawn(){
-        // Need an x,y where x,y = x,y of camera - (0.5 * the width of the viewport) and + the same with the height (Y goes up)
-        // The width and  height can grow as the x,y adjust.
-        // This is only a little complex because the x will shrink while the y grows as the box grows, and vice versa when shrinking.
-//        zoneOfPlay = new Rectangle(screen.getCamera().position.x, screen.getCamera().position.y);
-        // If initalized while set to false init will not happen.
-        if(spawning){
-             while(canSpawn()){
-              spawnAsteroid();
-             }
-        }
+        this.circle = new Circle();
+        spawnRadius = screen.getCamera().viewportWidth;
+        circle.setRadius(spawnRadius);
     }
 
     /**
@@ -82,10 +74,6 @@ public class AsteroidManager {
         cleanup();
         while(canSpawn()){
             spawnAsteroid();
-            Asteroid asteroid = asteroids.get(0);
-//            System.out.println("Asteroid 1 : " + asteroid.getX() + ", " + asteroid.getY() + " Velocity : " +
-//                    asteroid.getVelX() + ", " + asteroid.getVelY());
-//            if()
         }
     }
 
@@ -127,10 +115,10 @@ public class AsteroidManager {
      * @return - true if x,y bigger than bounds
      */
     private boolean outOfBounds(Asteroid asteroid) {
-        boolean isOutOfValidArea = (Math.abs(asteroid.getX()) > GameScreen.spawnAreaMax + screen.getCamera().viewportWidth)
-                ||
-                Math.abs(asteroid.getY()) > GameScreen.spawnAreaMax + screen.getCamera().viewportHeight;
-        return isOutOfValidArea;
+        Circle circleBigRadius = new Circle(circle);
+        circleBigRadius.setRadius(circleBigRadius.radius + screen.getCamera().zoom + 3);
+        boolean oob = !asteroid.getCircleBounds().overlaps(circleBigRadius);
+        return oob;
     }
 
     /**
@@ -195,22 +183,13 @@ public class AsteroidManager {
      * @return - Vector outside screen, bound by the spawn area size
      */
     private Vector2 getVectorInValidSpawnArea(){
-        OrthographicCamera camera =  screen.getCamera();
+        // Get a value to use to find a random point on the circle of spawning
+        double betweenZeroAnd2PI = getRandomNumber(0d, 2d * Math.PI);
 
-        float screenWidthHalf = (camera.viewportWidth* 0.7f);
-        float screenHightHalf = (camera.viewportHeight * 0.7f);
-
-        // Bad fix for init spawn when worldsize is 0 :/
-        if (screenHightHalf == 0) screenHightHalf = tileShipGame.defaultViewportSizeY * 0.7f;
-        if (screenWidthHalf == 0) screenWidthHalf = tileShipGame.defaultViewportSizeX * 0.7f;
-
-        // Get x,y centered on screen, and scaled up to provide band of spawning
-        float x = getRandomlyNegativeNumber(screenWidthHalf , screenWidthHalf + GameScreen.spawnAreaMax); // Add to scale with ViewPort
-        float y = getRandomlyNegativeNumber(screenHightHalf, screenHightHalf + GameScreen.spawnAreaMax);
-
-//        if (outOfBounds(new Asteroid(new Vector2(x,y), new Vector2(64,64), ID.Asteroid))){
-//            System.out.println("Creating Asteroid out of bounds lol");
-//        }
+        // Scale up the radius of spawning to hide the spawning.
+        // get x,y
+        float x = (circle.radius + screen.getCamera().zoom) * (float) Math.sin(betweenZeroAnd2PI);
+        float y = (circle.radius + screen.getCamera().zoom) * (float) Math.cos(betweenZeroAnd2PI);
 
         Vector3 position = new Vector3(x,y,0);
         return new Vector2(position.x,position.y);
