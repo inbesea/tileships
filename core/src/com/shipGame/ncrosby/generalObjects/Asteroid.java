@@ -14,15 +14,15 @@ import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
 public class Asteroid extends GameObject {
 
-	int maxSpeed = 5;
-	int minSpeed = 1;
+	public static float maxSpeed = 0.08f;
+	public static float minSpeed = 0.008f;
 	Circle circle;
 	float radius;
 	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
-		velX = getRandomlyNegativeNumber(0.5f,5);
-		velY = getRandomlyNegativeNumber(0.5f,5);
+		velX = getRandomlyNegativeNumber(minSpeed,maxSpeed);
+		velY = getRandomlyNegativeNumber(minSpeed,maxSpeed);
 		radius = size.y * 0.5f;
 		circle = new Circle(position.x + radius, position.y + radius, radius);
 	}
