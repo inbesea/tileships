@@ -45,7 +45,7 @@ public class Player extends GameObject {
     }
 
     public com.badlogic.gdx.math.Rectangle getBounds() {
-        Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, 32, 32);
+        Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, tileShipGame.convertPixelsToMeters(32), tileShipGame.convertPixelsToMeters(32));
         //r.intersects
         return r;
 
