@@ -47,12 +47,14 @@ public class GameScreen implements Screen {
     public static final float spawnAreaMax = tileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
-    Array<Body> bodies = new Array<Body>();
+    public Array<Body> bodies = new Array<Body>();
+    public World world;
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
+        this.world = game.world;
         this.bodies = game.bodies;
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
@@ -97,7 +99,7 @@ public class GameScreen implements Screen {
      * Called before drawing
      */
     private void updateGameObjectsForPhysics(){
-        for (Body b : bodies) {
+        for (Body b : this.bodies) {
             // Get the body's user data - in this example, our user
             // data is an instance of the Entity class
             GameObject gameObject = (GameObject) b.getUserData();
@@ -207,13 +209,13 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String textureString = gameObject.getTexture();
 
+        // Updates objects here.
+        gameObject.render(this.game);
         if (!Objects.equals(textureString, MainMenuScreen.ignoreLoad) && !Objects.equals(textureString, "")) { // If ID has associated string
             Texture texture = assetManager.get(textureString,Texture.class);
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
-        // Updates objects here.
-        gameObject.render(this.game);
     }
 
 
