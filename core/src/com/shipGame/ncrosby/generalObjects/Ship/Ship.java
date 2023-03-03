@@ -68,6 +68,7 @@ public class Ship extends GameObject {
 		AssetManager assetManager = game.assetManager;
 		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
+		// Draw tiles
 		for(int i = 0; i < existing.size; i++) {
 			ShipTile tempTile = existing.get(i);
 			game.batch.draw(assetManager.get(tempTile.getTexture(),Texture.class),
@@ -75,10 +76,12 @@ public class Ship extends GameObject {
 					tempTile.getSize().x, tempTile.getSize().y);
 			tempTile.render(game);
 		}
+		// Draw dragged tile
 		if(draggedTile != null){
 			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
+		// Draw collected tile overlay
 		if(collectionManager.isCollectingTiles()){
 			Array<ShipTile> tiles = collectionManager.getTileArray();
 			for(int i = 0 ; tiles.size > i ; i++){
