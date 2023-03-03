@@ -84,7 +84,8 @@ public class Ship extends GameObject {
 			for(int i = 0 ; tiles.size > i ; i++){
 				ShipTile tile = tiles.get(i);
 				game.batch.draw(assetManager.get( MainMenuScreen.spritePath + "ToBeCollapsed.png", Texture.class),
-						tile.getX(), tile.getY());
+						tile.getX(), tile.getY(),
+						ShipTile.TILESIZE,ShipTile.TILESIZE);
 			}
 		}
 	}
