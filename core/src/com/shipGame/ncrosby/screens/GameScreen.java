@@ -59,6 +59,7 @@ public class GameScreen implements Screen {
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
+        gameScreenMusic.setVolume(0.5f);
         gameScreenMusic.setLooping(true);
 
         // create the camera and the SpriteBatch

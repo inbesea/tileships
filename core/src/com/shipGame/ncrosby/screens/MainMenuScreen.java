@@ -43,6 +43,7 @@ public class MainMenuScreen implements Screen {
         camera.setToOrtho(false, tileShipGame.defaultViewportSizeX, tileShipGame.defaultViewportSizeY);
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
         mainMenuMusic.play();
+        mainMenuMusic.setVolume(0.5f);
         mainMenuMusic.setLooping(true);
     }
 
