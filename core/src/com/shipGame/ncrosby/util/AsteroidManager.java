@@ -106,6 +106,7 @@ public class AsteroidManager {
     public void removeAsteroid(Asteroid asteroid){
         asteroids.removeValue(asteroid, true);
         world.destroyBody(asteroid.getBody());
+        screen.bodies.removeValue(asteroid.getBody(), true);
     }
 
     /**
