@@ -45,6 +45,8 @@ public class MainMenuScreen implements Screen {
         mainMenuMusic.play();
         mainMenuMusic.setVolume(0.5f);
         mainMenuMusic.setLooping(true);
+
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
     }
 
     @Override
