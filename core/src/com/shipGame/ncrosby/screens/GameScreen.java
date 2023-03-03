@@ -348,4 +348,11 @@ public class GameScreen implements Screen {
     public void updateMouseMoved() {
         st.mouseMoved(Gdx.input.getX(), Gdx.input.getY());
     }
+
+    /**
+     * Method to call ending the game execution
+     */
+    public void quitGame() {
+        Gdx.app.exit();
+    }
 }
