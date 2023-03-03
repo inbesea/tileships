@@ -208,6 +208,7 @@ public class SimpleTouch implements InputProcessor {
 
     /**
      * Handle moving tiles around while picking up tiles
+     * Assumes that the pickedup tile is valid to pick up and that it can be removed from the ship.
      * @param pickedUpTile
      */
     private void pickUpTile(ShipTile pickedUpTile) {
