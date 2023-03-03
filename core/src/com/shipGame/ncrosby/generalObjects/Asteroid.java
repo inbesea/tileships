@@ -14,8 +14,8 @@ import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
 public class Asteroid extends GameObject {
 
-	public static float maxSpeed = 1f;
-	public static float minSpeed = 0.1f;
+	public static float maxSpeed = 2f;
+	public static float minSpeed = 0.2f;
 	public static float radius = 0.5f;
 	Circle circle;
 	public Asteroid(Vector2 position, Vector2 size , ID id) {
