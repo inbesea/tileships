@@ -2,10 +2,12 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileTypeFactory;
+import com.shipGame.ncrosby.screens.GameScreen;
 
 import java.util.Stack;
 
@@ -18,6 +20,8 @@ public class ShipTilesManager {
     private Array<ShipTile> existingTiles;
     private Array<ShipTile> edgeTiles;
     Ship ship;
+    World world;
+    GameScreen screen;
 
     /**
      * Constructor method
@@ -120,12 +124,43 @@ public class ShipTilesManager {
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
 
+        setTilePhysics(tempTile);
+
         if(existingTiles.size < edgeTiles.size){
             throw new RuntimeException("More edgeTiles than existing! " +
                     " existingTiles.size : " + existingTiles.size +
                     "edgeTiles.size : " + edgeTiles.size);
         }
         return tempTile;
+    }
+
+    private void setTilePhysics(ShipTile tempTile) {
+        Vector2 position = tempTile.getPosition();
+
+        // Adjust init position to center the box on the tile
+        BodyDef bodyDef = newStaticBodyDef(position.x + ShipTile.TILESIZE/2, position.y + ShipTile.TILESIZE/2);
+        Body body = world.createBody(bodyDef);
+
+        PolygonShape tileShape = new PolygonShape();
+
+        tileShape.setAsBox(ShipTile.TILESIZE/2, ShipTile.TILESIZE/2);
+//        , tempTile.getPosition(), 0
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = tileShape;
+        fixtureDef.density = 0.0f;
+        fixtureDef.friction = 1.0f;
+        fixtureDef.restitution = 0.0f;
+
+        Fixture fixture = body.createFixture(fixtureDef);
+
+        body.setUserData(tempTile);
+        tempTile.setBody(body);
+        screen.bodies.add(body);
+
+        // Remember to dispose of any shapes after you're done with them!
+        // BodyDef and FixtureDef don't need disposing, but shapes do.
+        tileShape.dispose();
     }
 
     private void validateNewTileIndex(ShipTile newTile) {
@@ -401,6 +436,8 @@ public class ShipTilesManager {
             }
             removeNeighbors(tile);
             logRemovedTile(tile);
+            screen.bodies.removeValue(tile.getBody(), true);
+            world.destroyBody(tile.getBody());
         }
     }
 

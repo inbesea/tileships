@@ -108,8 +108,30 @@ public class GameScreen implements Screen {
             GameObject gameObject = (GameObject) b.getUserData();
 
             if (gameObject != null) {
+                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
+                Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
+//                Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
+
+                if(b.getType().equals(BodyDef.BodyType.StaticBody)){
+                    continue;
+                }
                 // Update the entities/sprites position and angle
-                gameObject.setPosition(new Vector2(b.getPosition().x, b.getPosition().y));
+                gameObject.setPosition(gameObjectNewPosition);
+
+                try{
+                    gameObject.getBounds().setPosition(gameObjectNewPosition);
+                }catch (NullPointerException nullPointerException){
+
+                }
+
+                try{
+                    gameObject.getCircleBounds().setPosition(gameObjectNewPosition);
+                } catch (NullPointerException nullPointerException){
+                    // shouldn't do this probably but w/e
+                }
+
+//                Vector2 bodyPosition = new Vector2(gameObject.getX(), gameObject.getY());
+
                 // We need to convert our angle from radians to degrees
                 gameObject.setRotation(MathUtils.radiansToDegrees * b.getAngle());
             }
