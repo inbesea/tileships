@@ -111,15 +111,8 @@ public class Asteroid extends GameObject {
 	 */
 	public void render(tileShipGame game) {
 
-		position.set(new Vector2(body.getPosition().x - circle.radius, body.getPosition().y - circle.radius));
+//		position.set(new Vector2(body.getPosition().x - circle.radius, body.getPosition().y - circle.radius));
 		circle.setPosition(body.getPosition());
-
-//		position.x += velX;
-//		position.y += velY;
-//		circle.x += velX;
-//		circle.y += velY;
-//		generalUtil.render(position.x, position.y, new Texture("asteroid_purple.png"));
-		
 	}
 
 }
