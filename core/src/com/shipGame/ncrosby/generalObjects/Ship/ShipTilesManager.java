@@ -153,6 +153,7 @@ public class ShipTilesManager {
         fixtureDef.restitution = 0.0f;
 
         Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(tempTile);
 
         body.setUserData(tempTile);
         tempTile.setBody(body);

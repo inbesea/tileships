@@ -151,7 +151,8 @@ public class AsteroidManager {
      */
     private void setAsteroidPhysics(Asteroid asteroid) {
         Vector2 position = asteroid.getPosition();
-        BodyDef bodyDef = generalUtil.newDynamicBodyDef(position.x + asteroid.getCircleBounds().radius, position.y + asteroid.getCircleBounds().radius);
+        BodyDef bodyDef = generalUtil.newDynamicBodyDef(position.x + asteroid.getCircleBounds().radius,
+                position.y + asteroid.getCircleBounds().radius);
         Body body = screen.world.createBody(bodyDef);
 
         body.setLinearVelocity(generalUtil.getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
@@ -168,12 +169,13 @@ public class AsteroidManager {
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0.0f; // Make it bounce a little bit
 
-        // Create our fixture and attach it to the body
-        Fixture fixture = body.createFixture(fixtureDef);
-
         body.setUserData(asteroid);
         asteroid.setBody(body);
         screen.bodies.add(body);
+
+        // Create our fixture and attach it to the body
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(asteroid);
 
         // Remember to dispose of any shapes after you're done with them!
         // BodyDef and FixtureDef don't need disposing, but shapes do.
