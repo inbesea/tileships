@@ -27,7 +27,8 @@ public class TileOrienterTest {
     public void whenCheckingUpPointingTiles_Return0(){
         // Before - Give values to the objects to test
         tileArray = new Array<>();
-        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0,64)));
+        // Adding two tiles one above the other
+        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0,ShipTile.TILESIZE)));
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
@@ -45,7 +46,7 @@ public class TileOrienterTest {
     public void whenCheckingRightPointingTiles_Return1(){
         // Before - Add tiles in a right facing orientation
         tileArray = new Array<>();
-        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(64,0)));
+        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(ShipTile.TILESIZE,0)));
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
@@ -63,7 +64,7 @@ public class TileOrienterTest {
     public void whenCheckingDownPointingTiles_Return2(){
         // Before
         tileArray = new Array<>();
-        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0,-64)));
+        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0,0 - ShipTile.TILESIZE)));
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
@@ -81,7 +82,7 @@ public class TileOrienterTest {
         tileArray = new Array<>();
         tileArray.add(
                 new StandardTile(new Vector2(0,0)),  // First nutral tile
-                new StandardTile(new Vector2(-64,0))); // Second left tile
+                new StandardTile(new Vector2(0 - ShipTile.TILESIZE,0))); // Second left tile
         orienter = new TileOrienter(tileArray);
         tile1 = tileArray.get(0);
         tile2 = tileArray.get(1);
@@ -97,7 +98,7 @@ public class TileOrienterTest {
     public void testWhenOrientingNumbersUpFromRightFacingArray_GetAppropriateNumbers(){
         // Before - Add tiles in a right facing orientation
         tileArray = new Array<>();
-        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(64,0)));
+        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0 + ShipTile.TILESIZE,0)));
         orienter = new TileOrienter(tileArray);
 
         // When - Getting the orientation value
@@ -117,7 +118,7 @@ public class TileOrienterTest {
     public void testWhenOrientingNumbersUpFromLeftFacingArray_GetAppropriateNumbers(){
         // Before - Add tiles in a right facing orientation
         tileArray = new Array<>();
-        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(-64,0)));
+        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0 - ShipTile.TILESIZE,0)));
         orienter = new TileOrienter(tileArray); // Give left facing array to orienter
 
         // When - Getting the new reoriented values (facing up)
@@ -137,7 +138,7 @@ public class TileOrienterTest {
     public void testWhenOrientingNumbersUpFromDownFacingArray_GetAppropriateNumbers(){
         // Before - Add tiles in a right facing orientation
         tileArray = new Array<>();
-        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0,-64)));
+        tileArray.add(new StandardTile(new Vector2(0,0)),  new StandardTile(new Vector2(0,0 - ShipTile.TILESIZE)));
         orienter = new TileOrienter(tileArray); // Give left facing array to orienter
 
         // When - Getting the new reoriented values (facing up)

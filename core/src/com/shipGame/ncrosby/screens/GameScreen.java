@@ -7,12 +7,14 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.PlayerInput;
+import com.shipGame.ncrosby.player.PlayerInput;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.HUD;
@@ -35,33 +37,41 @@ public class GameScreen implements Screen {
     private final Player player;
 
     // Represents each side's size
-    public static final Vector2 playerSize = new Vector2(47,53);
+    public static final Vector2 playerSize = new Vector2(tileShipGame.convertPixelsToMeters(47),tileShipGame.convertPixelsToMeters(53));
 
     OrthographicCamera camera;
     SimpleTouch st;
     AssetManager assetManager;
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
-    public static final int spawnAreaMax = 300;
+    public static final float spawnAreaMax = tileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
+    CircleShape circle = new CircleShape();
+    public Array<Body> bodies = new Array<Body>();
+    public World world;
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
+        this.world = game.world;
+        this.bodies = game.bodies;
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
+        gameScreenMusic.setVolume(0.5f);
         gameScreenMusic.setLooping(true);
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, tileShipGame.defaultViewportSizeX, tileShipGame.defaultViewportSizeY);
-        this.extendViewport = new ExtendViewport(650,550, camera);
+        this.extendViewport = new ExtendViewport(tileShipGame.defaultViewportSizeX,tileShipGame.defaultViewportSizeY, camera);
 
         // init ship
         playerShip = new Ship(new Vector2(-1, -1), assetManager);
         game.setPlayerShip(playerShip);
+        playerShip.setScreen(this);
+        playerShip.initialize();
 
         // init player
         // Give player the game reference
@@ -87,6 +97,48 @@ public class GameScreen implements Screen {
     }
 
     /**
+     * Method to update game objects with the bodies object position
+     *
+     * Called before drawing
+     */
+    private void updateGameObjectsForPhysics(){
+        for (Body b : this.bodies) {
+            // Get the body's user data - in this example, our user
+            // data is an instance of the Entity class
+            GameObject gameObject = (GameObject) b.getUserData();
+
+            if (gameObject != null) {
+                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
+                Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
+//                Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
+
+                if(b.getType().equals(BodyDef.BodyType.StaticBody)){
+                    continue;
+                }
+                // Update the entities/sprites position and angle
+                gameObject.setPosition(gameObjectNewPosition);
+
+                try{
+                    gameObject.getBounds().setPosition(gameObjectNewPosition);
+                }catch (NullPointerException nullPointerException){
+
+                }
+
+                try{
+                    gameObject.getCircleBounds().setPosition(gameObjectNewPosition);
+                } catch (NullPointerException nullPointerException){
+                    // shouldn't do this probably but w/e
+                }
+
+//                Vector2 bodyPosition = new Vector2(gameObject.getX(), gameObject.getY());
+
+                // We need to convert our angle from radians to degrees
+                gameObject.setRotation(MathUtils.radiansToDegrees * b.getAngle());
+            }
+        }
+    }
+
+    /**
      * Draw the game
      * @param delta The time in seconds since the last render.
      */
@@ -94,6 +146,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         extendViewport.apply();
+
+        // Update game object positions
+        updateGameObjectsForPhysics();
 
         // Draw game objects
         drawGameObjects();
@@ -138,6 +193,10 @@ public class GameScreen implements Screen {
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
         game.batch.end();
+
+        game.debugRenderer.render(game.world, camera.combined);
+
+        game.stepPhysicsWorld(Gdx.graphics.getDeltaTime());
     }
 
     @Override
@@ -164,6 +223,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        circle.dispose();
     }
 
     /**
@@ -174,13 +234,13 @@ public class GameScreen implements Screen {
         // Get the texture of the game object and draw it based on the GameScreen Camera.
         String textureString = gameObject.getTexture();
 
+        // Updates objects here.
+        gameObject.render(this.game);
         if (!Objects.equals(textureString, MainMenuScreen.ignoreLoad) && !Objects.equals(textureString, "")) { // If ID has associated string
             Texture texture = assetManager.get(textureString,Texture.class);
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
-        // Updates objects here.
-        gameObject.render(this.game);
     }
 
 
@@ -287,5 +347,12 @@ public class GameScreen implements Screen {
      */
     public void updateMouseMoved() {
         st.mouseMoved(Gdx.input.getX(), Gdx.input.getY());
+    }
+
+    /**
+     * Method to call ending the game execution
+     */
+    public void quitGame() {
+        Gdx.app.exit();
     }
 }

@@ -6,11 +6,10 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.screens.GameScreen;
-import com.shipGame.ncrosby.tileShipGame;
 
 public class generalUtil {
 
@@ -125,6 +124,28 @@ public class generalUtil {
     }
 
     /**
+     * Creates a random value between min and max
+     *
+     * @param min
+     * @param max
+     * @return
+     */
+    public static double getRandomNumber(double min, double max) {
+        return ((Math.random() * (max - min)) + min);
+    }
+
+    /**
+     * Creates a random value between min and max
+     *
+     * @param min
+     * @param max
+     * @return
+     */
+    public static long getRandomNumber(long min, long max) {
+        return (long) ((Math.random() * (max - min)) + min);
+    }
+
+    /**
      * Returns float within range  with randomly determined positivity/negativity.
      *
      * NOTE : CAN be given negative values, but will cause possible output space to just flip instead of forming a hole
@@ -192,24 +213,19 @@ public class generalUtil {
      * 0, 1 ,2 ,3 == North, East, South, West respectively.
      */
     public static int getQuadrant(Vector2 anchor, Vector2 boat){
-        float closeX = anchor.x;
-        float closeY = anchor.y;
 
         // Should return the difference between the placed position and middle of the close tile.
-        float normalX =
+        float normalBoatX =
                 boat.x -
-                        (closeX + (ShipTile.TILESIZE/2.0f));
-        float normalY =
+                        (anchor.x + (ShipTile.TILESIZE/2.0f));// Divide here to get center of tile for comparison
+        float normalBoatY =
                 boat.y -
-                        (closeY + (ShipTile.TILESIZE/2.0f));
-
-        // Set vector such that the center of tile is equal to (0,0) and mouse position is a point relative to that
-        Vector2 normalizedMousePosition = new Vector2(normalX,normalY); // Find center of block by adding to the x,y
+                        (anchor.y + (ShipTile.TILESIZE/2.0f));
 
         // the point is above y = x if the y is larger than x
-        boolean abovexEy = normalizedMousePosition.y > normalizedMousePosition.x;
+        boolean abovexEy = normalBoatY > normalBoatX;
         // the point is above y = -x if the y is larger than the negation of x
-        boolean aboveNxEy = normalizedMousePosition.y > (-normalizedMousePosition.x);
+        boolean aboveNxEy = normalBoatY > -normalBoatX;
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
         // We can use this framing to decide the side to place the tile.
@@ -226,5 +242,27 @@ public class generalUtil {
                 return 2;
             }
         }
+    }
+
+    public static BodyDef newDynamicBodyDef(float x, float y){
+        // First we create a body definition
+        BodyDef bodyDef = new BodyDef();
+        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        // Set our body's starting position in the world
+        bodyDef.position.set(x, y);
+
+        return bodyDef;
+    }
+
+    public static BodyDef newStaticBodyDef(float x, float y){
+        // First we create a body definition
+        BodyDef bodyDef = new BodyDef();
+        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        // Set our body's starting position in the world
+        bodyDef.position.set(x, y);
+
+        return bodyDef;
     }
 }

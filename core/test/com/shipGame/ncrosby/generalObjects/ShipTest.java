@@ -15,10 +15,6 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class ShipTest extends TestCase {
-    public tileShipGame game;
-    public GameScreen gameScreen;
-    public OrthographicCamera camera;
-    public ExtendViewport extendViewport;
     public Ship ship;
     public AssetManager assetManager;
 

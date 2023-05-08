@@ -24,7 +24,7 @@ public class CollectionManager {
      * Class to handle collecting tiles.
      */
     public CollectionManager(){
-        tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(64,64)); // Location doesn't matter
+        tileHoverIndicator = new TileHoverIndicator(new Vector2(0,0), new Vector2(ShipTile.TILESIZE,ShipTile.TILESIZE)); // Location doesn't matter
         collectedTiles = new Array<>();
     }
 

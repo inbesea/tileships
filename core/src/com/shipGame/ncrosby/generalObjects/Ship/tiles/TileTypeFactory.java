@@ -9,6 +9,13 @@ import com.shipGame.ncrosby.ID;
  * Used in the ship tile manager to get the specific tile type at tile creation.
  */
 public class TileTypeFactory {
+
+    /**
+     * Returns a specific tile type based on id and position
+     * @param vector2
+     * @param id
+     * @return
+     */
     public static ShipTile getShipTileTypeInstance(Vector2 vector2, ID id){
         switch (id) {
             case StandardTile :

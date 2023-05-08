@@ -1,15 +1,19 @@
-package com.shipGame.ncrosby;
+package com.shipGame.ncrosby.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.tileShipGame;
 
 public class PlayerInput {
+
+    public static float cameraFollow = 0.95f;
 
     /**
      * This handles the player's default action when clicking on the screen.
@@ -80,7 +84,7 @@ public class PlayerInput {
             // Get vector with position of moving up position
             Vector2 possibleUpPosition = new Vector2(
                     (playerPos.x),
-                    playerPos.y  + (200 * Gdx.graphics.getDeltaTime()));
+                    playerPos.y  + (player.getPlayerSpeed() * Gdx.graphics.getDeltaTime()));
             Vector2 possibleRightCorner = new Vector2(possibleUpPosition.x + player.getWidth(),possibleUpPosition.y);
             boolean isOffShip = ship.isHorizontalSpanOffShip(possibleUpPosition, possibleRightCorner);
 
@@ -92,7 +96,7 @@ public class PlayerInput {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             Vector2 possibleLeftPosition = new Vector2(
-                    (playerPos.x) - (200 * Gdx.graphics.getDeltaTime()),
+                    (playerPos.x) - (player.getPlayerSpeed() * Gdx.graphics.getDeltaTime()),
                     playerPos.y);
             Vector2 possibleRightCorner = new Vector2(possibleLeftPosition.x + player.getWidth(),possibleLeftPosition.y);
             boolean isOffShip = ship.isHorizontalSpanOffShip(possibleLeftPosition, possibleRightCorner);
@@ -107,7 +111,7 @@ public class PlayerInput {
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             // Lets check if the new position is off the ship. Get possible position and opposite corner
             Vector2 possibleRightPosition = new Vector2(
-                    (playerPos.x) + (200 * Gdx.graphics.getDeltaTime()),
+                    (playerPos.x) + (player.getPlayerSpeed() * Gdx.graphics.getDeltaTime()),
                     playerPos.y);
             Vector2 possibleRightCorner = new Vector2(possibleRightPosition.x + player.getWidth(),possibleRightPosition.y);
             boolean isOffShip = ship.isHorizontalSpanOffShip(possibleRightPosition, possibleRightCorner);
@@ -120,7 +124,7 @@ public class PlayerInput {
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            Vector2 possibleDownPosition = new Vector2(playerPos.x,playerPos.y - 200 * Gdx.graphics.getDeltaTime());
+            Vector2 possibleDownPosition = new Vector2(playerPos.x,playerPos.y - player.getPlayerSpeed() * Gdx.graphics.getDeltaTime());
             Vector2 possibleDownCorner = new Vector2(possibleDownPosition.x + player.getWidth(),possibleDownPosition.y); //
             boolean isOffShip = ship.isHorizontalSpanOffShip(possibleDownPosition, possibleDownCorner);
 
@@ -157,11 +161,11 @@ public class PlayerInput {
         Vector3 diff2 = new Vector3(cameraPos);
         diff = diff.sub(diff2);
 
-        if(Math.abs(diff.x) > 60){
+        if(Math.abs(diff.x) > cameraFollow){
             cameraPos.x += (playerPos.x - cameraPos.x) *
                     lerp * Gdx.graphics.getDeltaTime();
         }
-        if(Math.abs(diff.y) > 60) {
+        if(Math.abs(diff.y) > cameraFollow) {
             cameraPos.y += (playerPos.y - cameraPos.y) *
                     lerp * Gdx.graphics.getDeltaTime();
         }

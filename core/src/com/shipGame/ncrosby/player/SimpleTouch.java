@@ -27,6 +27,7 @@ public class SimpleTouch implements InputProcessor {
         Player player;
         // touch point
         Vector3 tp = new Vector3();
+        GameScreen screen;
 
     boolean isDragging;
         private ShipTile draggedTile;
@@ -43,6 +44,7 @@ public class SimpleTouch implements InputProcessor {
             // A future change could be to add a way to update the player ship.
             this.playerShip = gameScreen.getPlayerShip();
             this.player = gameScreen.getPlayer();
+            this.screen = gameScreen;
         }
 
     /**
@@ -171,6 +173,10 @@ public class SimpleTouch implements InputProcessor {
             }
             playerShip.startCollapseCollect(); // Begins ship collecting
         }
+        if(keycode == 111){
+            screen.quitGame();
+        }
+
             return false;
         }
 
@@ -208,6 +214,7 @@ public class SimpleTouch implements InputProcessor {
 
     /**
      * Handle moving tiles around while picking up tiles
+     * Assumes that the pickedup tile is valid to pick up and that it can be removed from the ship.
      * @param pickedUpTile
      */
     private void pickUpTile(ShipTile pickedUpTile) {

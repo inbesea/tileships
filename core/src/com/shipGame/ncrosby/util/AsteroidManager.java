@@ -1,16 +1,17 @@
 package com.shipGame.ncrosby.util;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ncrosby.tileShipGame;
 
 import java.util.Arrays;
 
+import static com.shipGame.ncrosby.util.generalUtil.getRandomNumber;
 import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
 /*
@@ -30,6 +31,10 @@ public class AsteroidManager {
     // Keep asteroid references for simplicity
     private Array<Asteroid> asteroids = new Array<>();
     private int numberOfAsteroids = asteroids.size;
+    // Needed for physics simulation
+    World world;
+    Circle circle;
+    float spawnRadius;
 
     /**
      * Spawns asteroids.
@@ -42,6 +47,11 @@ public class AsteroidManager {
         asteroidLimit = 20;
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
+        this.world = screen.getGame().world;
+
+        this.circle = new Circle();
+        spawnRadius = screen.getCamera().viewportWidth;
+        circle.setRadius(spawnRadius);
 //        initSpawn();
     }
 
@@ -50,23 +60,11 @@ public class AsteroidManager {
         this.spawning = spawning;
         asteroidLimit = 30;
         numberOfAsteroids = 0;
-//        initSpawn();
-    }
+        this.world = screen.getGame().world;
 
-    /**
-     * Call in constructor to populate the screen with asteroids
-     */
-    private void initSpawn(){
-        // Need an x,y where x,y = x,y of camera - (0.5 * the width of the viewport) and + the same with the height (Y goes up)
-        // The width and  height can grow as the x,y adjust.
-        // This is only a little complex because the x will shrink while the y grows as the box grows, and vice versa when shrinking.
-//        zoneOfPlay = new Rectangle(screen.getCamera().position.x, screen.getCamera().position.y);
-        // If initalized while set to false init will not happen.
-        if(spawning){
-             while(canSpawn()){
-              spawnAsteroid();
-             }
-        }
+        this.circle = new Circle();
+        spawnRadius = screen.getCamera().viewportWidth;
+        circle.setRadius(spawnRadius);
     }
 
     /**
@@ -76,10 +74,6 @@ public class AsteroidManager {
         cleanup();
         while(canSpawn()){
             spawnAsteroid();
-            Asteroid asteroid = asteroids.get(0);
-//            System.out.println("Asteroid 1 : " + asteroid.getX() + ", " + asteroid.getY() + " Velocity : " +
-//                    asteroid.getVelX() + ", " + asteroid.getVelY());
-//            if()
         }
     }
 
@@ -111,6 +105,8 @@ public class AsteroidManager {
      */
     public void removeAsteroid(Asteroid asteroid){
         asteroids.removeValue(asteroid, true);
+        world.destroyBody(asteroid.getBody());
+        screen.bodies.removeValue(asteroid.getBody(), true);
     }
 
     /**
@@ -120,10 +116,10 @@ public class AsteroidManager {
      * @return - true if x,y bigger than bounds
      */
     private boolean outOfBounds(Asteroid asteroid) {
-        boolean isOutOfValidArea = (Math.abs(asteroid.getX()) > GameScreen.spawnAreaMax + screen.getCamera().viewportWidth)
-                ||
-                Math.abs(asteroid.getY()) > GameScreen.spawnAreaMax + screen.getCamera().viewportHeight;
-        return isOutOfValidArea;
+        Circle circleBigRadius = new Circle(circle);
+        circleBigRadius.setRadius(circleBigRadius.radius + screen.getCamera().zoom + 3);
+        boolean oob = !asteroid.getCircleBounds().overlaps(circleBigRadius);
+        return oob;
     }
 
     /**
@@ -135,7 +131,9 @@ public class AsteroidManager {
         if(spawning){
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(64,64), ID.Asteroid);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(1f,1f), ID.Asteroid);
+            setAsteroidPhysics(asteroid);
+
             screen.newGameObject(asteroid);
             asteroids.add(asteroid);
             numberOfAsteroids = asteroids.size;
@@ -149,26 +147,53 @@ public class AsteroidManager {
     }
 
     /**
+     * Easy way to add physics attributes to asteroid instance
+     */
+    private void setAsteroidPhysics(Asteroid asteroid) {
+        Vector2 position = asteroid.getPosition();
+        BodyDef bodyDef = generalUtil.newDynamicBodyDef(position.x + asteroid.getCircleBounds().radius,
+                position.y + asteroid.getCircleBounds().radius);
+        Body body = screen.world.createBody(bodyDef);
+
+        body.setLinearVelocity(generalUtil.getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
+                getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
+
+        // Create circle to add to asteroid
+        CircleShape circle = new CircleShape();
+        circle.setRadius(Asteroid.radius);
+
+        // Create a fixture definition to apply our shape to
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.0f; // Make it bounce a little bit
+
+        body.setUserData(asteroid);
+        asteroid.setBody(body);
+        screen.bodies.add(body);
+
+        // Create our fixture and attach it to the body
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(asteroid);
+
+        // Remember to dispose of any shapes after you're done with them!
+        // BodyDef and FixtureDef don't need disposing, but shapes do.
+        circle.dispose();
+    }
+
+    /**
      * Returns a random point within the non-visible play area
      * @return - Vector outside screen, bound by the spawn area size
      */
     private Vector2 getVectorInValidSpawnArea(){
-        OrthographicCamera camera =  screen.getCamera();
+        // Get a value to use to find a random point on the circle of spawning
+        double betweenZeroAnd2PI = getRandomNumber(0d, 2d * Math.PI);
 
-        int screenWidthHalf = (int) (camera.viewportWidth* 0.7f);
-        int screenHightHalf = (int) (camera.viewportHeight * 0.7f);
-
-        // Bad fix for init spawn when worldsize is 0 :/
-        if (screenHightHalf == 0) screenWidthHalf = 400;
-        if (screenWidthHalf == 0) screenWidthHalf = 400;
-
-        // Get x,y centered on screen, and scaled up to provide band of spawning
-        float x = getRandomlyNegativeNumber(screenWidthHalf , screenWidthHalf + GameScreen.spawnAreaMax); // Add to scale with ViewPort
-        float y = getRandomlyNegativeNumber(screenHightHalf, screenHightHalf + GameScreen.spawnAreaMax);
-
-//        if (outOfBounds(new Asteroid(new Vector2(x,y), new Vector2(64,64), ID.Asteroid))){
-//            System.out.println("Creating Asteroid out of bounds lol");
-//        }
+        // Scale up the radius of spawning to hide the spawning.
+        // get x,y
+        float x = (circle.radius + screen.getCamera().zoom) * (float) Math.sin(betweenZeroAnd2PI);
+        float y = (circle.radius + screen.getCamera().zoom) * (float) Math.cos(betweenZeroAnd2PI);
 
         Vector3 position = new Vector3(x,y,0);
         return new Vector2(position.x,position.y);

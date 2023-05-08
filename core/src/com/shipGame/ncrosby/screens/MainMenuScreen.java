@@ -40,10 +40,13 @@ public class MainMenuScreen implements Screen {
 
         assetManager = game.assetManager;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, tileShipGame.defaultViewportSizeX, tileShipGame.defaultViewportSizeY);
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
         mainMenuMusic.play();
+        mainMenuMusic.setVolume(0.5f);
         mainMenuMusic.setLooping(true);
+
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
     }
 
     @Override
@@ -65,10 +68,11 @@ public class MainMenuScreen implements Screen {
 
         game.batch.begin();
         if(assetManager.update()){
-            game.font.draw(game.batch, "Welcome to tileships!!! ", 200, 250);
-            game.font.draw(game.batch, "Tap anywhere to begin!", 200, 200);
+            game.font.getData().setScale(0.04f, 0.04f);
+            game.font.draw(game.batch, "Welcome to tileships!!! ", 0, 3.9f);
+            game.font.draw(game.batch, "Tap anywhere to begin!", 3.125f, 3.125f);
         } else {
-            game.font.draw(game.batch, "~~~Loading Assets " + assetManager.getProgress() +" ~~~",200,200);
+            game.font.draw(game.batch, "~~~Loading Assets " + assetManager.getProgress() +" ~~~",3.125f,3.125f);
         }
         game.batch.end();
 

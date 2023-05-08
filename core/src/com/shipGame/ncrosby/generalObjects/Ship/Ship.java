@@ -31,7 +31,6 @@ public class Ship extends GameObject {
 	 * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
 	 */
 	private ShipTile draggedTile;
-	AsteroidManager asteroidManager;
 	public int destroyedTileCount = 0;
 	private CollectionManager collectionManager;
 	private TileCondenser tileCondenser;
@@ -39,6 +38,7 @@ public class Ship extends GameObject {
 	private UnlockTracker unlockTracker;
 	AssetManager assetManager;
 	public boolean mute = true;
+	GameScreen screen;
 
 	/**
 	 * Ship keeps track of the tiles of the ship and has methods for
@@ -57,7 +57,6 @@ public class Ship extends GameObject {
 		// Give new ship default tiles.
 		/* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
 		*   that creates tiles based on a list of tile instances */
-		initShipTiles();
 		mute = false;
 	}
 
@@ -69,6 +68,7 @@ public class Ship extends GameObject {
 		AssetManager assetManager = game.assetManager;
 		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
+		// Draw tiles
 		for(int i = 0; i < existing.size; i++) {
 			ShipTile tempTile = existing.get(i);
 			game.batch.draw(assetManager.get(tempTile.getTexture(),Texture.class),
@@ -76,16 +76,19 @@ public class Ship extends GameObject {
 					tempTile.getSize().x, tempTile.getSize().y);
 			tempTile.render(game);
 		}
+		// Draw dragged tile
 		if(draggedTile != null){
 			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
+		// Draw collected tile overlay
 		if(collectionManager.isCollectingTiles()){
 			Array<ShipTile> tiles = collectionManager.getTileArray();
 			for(int i = 0 ; tiles.size > i ; i++){
 				ShipTile tile = tiles.get(i);
 				game.batch.draw(assetManager.get( MainMenuScreen.spritePath + "ToBeCollapsed.png", Texture.class),
-						tile.getX(), tile.getY());
+						tile.getX(), tile.getY(),
+						ShipTile.TILESIZE,ShipTile.TILESIZE);
 			}
 		}
 	}
@@ -94,7 +97,7 @@ public class Ship extends GameObject {
 	 * Sets the initial tiles.
 	 * TODO : This can be another class that takes an argument to determine what ship will be initialized. MOVE IT OUT
 	 */
-	private void initShipTiles() {
+	public void initialize() {
 		placeTile(position.x, position.y, ID.CoreTile);
 		placeTile(position.x + ShipTile.TILESIZE, position.y, ID.StandardTile);
 		placeTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.StandardTile);
@@ -522,5 +525,15 @@ public class Ship extends GameObject {
 
 	public ShipTile getDraggedTile() {
 		return draggedTile;
+	}
+
+	/**
+	 * Hacky way to hand over the variables for physics damn it
+	 * @param gameScreen
+	 */
+	public void setScreen(GameScreen gameScreen) {
+		this.screen = screen;
+		this.shipTilesManager.screen = gameScreen;
+		this.shipTilesManager.world = gameScreen.world;
 	}
 }

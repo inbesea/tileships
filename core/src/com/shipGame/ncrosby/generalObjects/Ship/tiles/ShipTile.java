@@ -17,7 +17,7 @@ public abstract class ShipTile extends GameObject{
 	private long placed = System.currentTimeMillis();
 	private int cool = 0;
 	public boolean isEdge;
-	public final static int TILESIZE = 64;
+	public final static float TILESIZE = 1f;
 	private com.badlogic.gdx.math.Rectangle collider;
 	private TileTypeData typeData; // Need for unique platonic form data
 	/**
@@ -27,7 +27,7 @@ public abstract class ShipTile extends GameObject{
 	*/
 	public ShipTile(Vector2 position, ID id, TileTypeData typeData) {
 		// vector is not adjusted, so tiles can be independently created anywhere
-		super(position, new Vector2(64,64), id);
+		super(position, new Vector2(TILESIZE,TILESIZE), id);
 
 		this.xIndex = determineIndex(position.x);
 		this.yIndex = determineIndex(position.y);

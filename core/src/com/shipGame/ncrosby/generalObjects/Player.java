@@ -23,8 +23,6 @@ public class Player extends GameObject {
     Random r = new Random();
     private tileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
     private OrthographicCamera cam;
-    private int index[] = {0, 0};
-    private int lookAhead = 155;
     public boolean godMode = false;
 
     // Tiles the player holds - This should be reflected on the player's sprite
@@ -35,6 +33,8 @@ public class Player extends GameObject {
     private float tileCircleRotationSpeed = 0.01f;
     private float circleRotation = 0;
     private final int INIT_HELD_RADIUS = 32; // one Radius
+
+    private float playerSpeed = 3.125f;
 
     public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, tileShipGame game) {
         super(position, size, id);
@@ -47,7 +47,7 @@ public class Player extends GameObject {
     }
 
     public com.badlogic.gdx.math.Rectangle getBounds() {
-        Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, 32, 32);
+        Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, tileShipGame.convertPixelsToMeters(32), tileShipGame.convertPixelsToMeters(32));
         //r.intersects
         return r;
 
@@ -102,10 +102,6 @@ public class Player extends GameObject {
     private void rotateCircle(){
         circleRotation += tileCircleRotationSpeed;
         if(circleRotation > PI2) circleRotation = 0;
-    }
-
-    public void mouseover(int[] index) {
-        this.index = index;
     }
 
     /**
@@ -207,5 +203,14 @@ public class Player extends GameObject {
      */
     public boolean positionIsOffShip(Vector2 possibleUpPosition) {
         return playerShip.isPositionOffShip(possibleUpPosition);
+    }
+
+
+    public float getPlayerSpeed() {
+        return playerSpeed;
+    }
+
+    public void setPlayerSpeed(float playerSpeed) {
+        this.playerSpeed = playerSpeed;
     }
 }

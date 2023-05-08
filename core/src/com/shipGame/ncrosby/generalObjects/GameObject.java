@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.tileShipGame;
 
@@ -24,6 +25,8 @@ public abstract class GameObject {
 	// Do we need the texture to be set within each
 	protected String textureRef;
 	protected boolean debugMode = true; //TODO:move to game object
+	protected Body body;
+	protected float rotation;
 
 	public GameObject(Vector2 position, Vector2 size , ID id) {
 		// set location and id to define basics of the game object.
@@ -128,4 +131,20 @@ public abstract class GameObject {
 	}
 
 	public abstract Circle getCircleBounds();
+
+	public Body getBody() {
+		return body;
+	}
+
+	public void setBody(Body body) {
+		this.body = body;
+	}
+
+	public float getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
 }
