@@ -134,6 +134,10 @@ public class ShipTilesManager {
         return tempTile;
     }
 
+    /**
+     * Gives tiles their physics attributes and hands the body values to the game screen list.
+     * @param tempTile
+     */
     private void setTilePhysics(ShipTile tempTile) {
         Vector2 position = tempTile.getPosition();
 
@@ -157,6 +161,8 @@ public class ShipTilesManager {
 
         body.setUserData(tempTile);
         tempTile.setBody(body);
+
+        // This step makes the body available to use on the screen level.
         screen.bodies.add(body);
 
         // Remember to dispose of any shapes after you're done with them!
