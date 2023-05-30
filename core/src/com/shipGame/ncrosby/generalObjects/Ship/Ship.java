@@ -32,10 +32,10 @@ public class Ship extends GameObject {
 	 */
 	private ShipTile draggedTile;
 	public int destroyedTileCount = 0;
-	private CollectionManager collectionManager;
-	private TileCondenser tileCondenser;
-	private ShipTilesManager shipTilesManager;
-	private UnlockTracker unlockTracker;
+	private final CollectionManager collectionManager;
+	private final TileCondenser tileCondenser;
+	private final ShipTilesManager shipTilesManager;
+	private final UnlockTracker unlockTracker;
 	AssetManager assetManager;
 	public boolean mute = true;
 	GameScreen screen;
@@ -360,11 +360,7 @@ public class Ship extends GameObject {
 	 */
 	public boolean isPositionOffShip(Vector2 position) {
 		ShipTile tile = shipTilesManager.returnTile(position);
-		if(tile == null){
-			return true;
-		} else {
-			return false;
-		}
+		return tile == null;
 	}
 
 	public Array<ShipTile> getExistingTiles() {
