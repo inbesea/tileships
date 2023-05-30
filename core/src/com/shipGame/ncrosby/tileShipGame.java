@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
+import com.shipGame.ncrosby.util.CollisionListener;
 
 /**
  * Entry point for libGDX framework to run the game.
@@ -33,6 +35,8 @@ public class tileShipGame extends Game {
 	public static float meterLength = 64f;
 	public Array<Body> bodies = new Array<Body>();
 
+	private Array<GameObject> gameObjects = new Array<>();
+
 	/**
 	 * Initialization of the game stuff
 	 */
@@ -43,11 +47,22 @@ public class tileShipGame extends Game {
 		font = new BitmapFont();
 		Box2D.init();
 		world = new World(new Vector2(0,0), true);
+		createCollisionListener();
 		debugRenderer = new Box2DDebugRenderer();
 
 		//legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
 		this.setScreen(new MainMenuScreen(this));
 		setGameScreen(this.getScreen());
+	}
+
+	/**
+	 * Init the collision listener
+	 * Listener should coordinate collisions, but other object would facilitate what they do. 
+	 */
+	private void createCollisionListener() {
+		// TODO : Create this listener and give it access to all game objects.
+		// To allow collisions to have a game-wide effect we will need a list of game objects we can work on.
+//		world.setContactListener(new CollisionListener(gameObjects));
 	}
 
 	/**
@@ -127,5 +142,13 @@ public class tileShipGame extends Game {
 		boolean removed = bodies.removeValue(body,true);
 
 		return removed;
+	}
+
+	public Array<GameObject> getGameObjects() {
+		return gameObjects;
+	}
+
+	public void setGameObjects(Array<GameObject> gameObjects) {
+		this.gameObjects = gameObjects;
 	}
 }
