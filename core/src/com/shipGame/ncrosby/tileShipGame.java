@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
-import com.shipGame.ncrosby.util.CollisionListener;
 
 /**
  * Entry point for libGDX framework to run the game.

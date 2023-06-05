@@ -2,12 +2,11 @@ package com.shipGame.ncrosby.util;
 
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.collisions.Collision;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.StandardTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
 import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CollisionTest extends TestCase {

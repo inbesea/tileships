@@ -167,7 +167,7 @@ public class SimpleTouch implements InputProcessor {
         // Begin collecting tiles for collapse
         if(!playerShip.isCollectingTiles() && keycode == 59){
             if(draggedTile != null){ // If holding tile
-                playerShip.placeTile(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
+                playerShip.addTileToShip(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
                 setDraggedTileToNull();
                 setIsDragging(false);
             }
@@ -250,7 +250,7 @@ public class SimpleTouch implements InputProcessor {
 
         Vector2 mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
 
-        playerShip.placeTile(mousePosition2.x, mousePosition.y, draggedTile.getID());
+        playerShip.addTileToShip(mousePosition2.x, mousePosition.y, draggedTile.getID());
 
         // Dispose of used dragged tile references
         playerShip.setDragged(null);

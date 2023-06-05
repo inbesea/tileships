@@ -16,7 +16,6 @@ import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.util.AsteroidManager;
 
 import static com.shipGame.ncrosby.util.generalUtil.*;
 
@@ -29,6 +28,10 @@ public class Ship extends GameObject {
 	 * Ship has many methods to manage tiles internally.
 	 * Edge management happens on I/O of tiles so we have a reference to the tile being updated.
 	 * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
+	 *
+	 * SOLID
+	 * S - Represents the ship and it's underlying systems.
+	 * O -
 	 */
 	private ShipTile draggedTile;
 	public int destroyedTileCount = 0;
@@ -98,11 +101,11 @@ public class Ship extends GameObject {
 	 * TODO : This can be another class that takes an argument to determine what ship will be initialized. MOVE IT OUT
 	 */
 	public void initialize() {
-		placeTile(position.x, position.y, ID.CoreTile);
-		placeTile(position.x + ShipTile.TILESIZE, position.y, ID.StandardTile);
-		placeTile(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.StandardTile);
-		placeTile(position.x, position.y + ShipTile.TILESIZE, ID.StandardTile);
-		placeTile(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		addTileToShip(position.x, position.y, ID.CoreTile);
+		addTileToShip(position.x + ShipTile.TILESIZE, position.y, ID.StandardTile);
+		addTileToShip(position.x + ShipTile.TILESIZE, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		addTileToShip(position.x, position.y + ShipTile.TILESIZE, ID.StandardTile);
+		addTileToShip(position.x  + ShipTile.TILESIZE * 2, position.y + ShipTile.TILESIZE, ID.StandardTile);
 	}
 
 	/**
@@ -115,13 +118,13 @@ public class Ship extends GameObject {
 	 * @param id - The ID of the tile
 	 * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
 	 */
-	public ShipTile placeTile(float x, float y, ID id) {
+	public ShipTile addTileToShip(float x, float y, ID id) {
 		ShipTile tile = shipTilesManager.addTile(x, y, id);
 		return tile;
 	}
 
 	/**
-	 * Returns a Vector position with respect to the grid.
+	 * Rounds an x/y position to align with the ships' tile grid
 	 * <p>
 	 * TODO : Should update ship so the grid is alligned with the shipposition, allowing us to move the ship and keep grid.
 	 * @param x - Coordinate to align with ship's grid
@@ -134,7 +137,7 @@ public class Ship extends GameObject {
 
 	/**
 	 * Removes a tile by reference to the tile instance
-	 * Should only be used when a tile instance is found. Handles flushing the adjacency relationships between tiles.
+	 * Should only be used when a tile instance is found. Tile manager handles flushing the adjacency relationships between tiles.
 	 *
 	 * @param tile - Tile to remove from ship
 	 */
@@ -158,7 +161,7 @@ public class Ship extends GameObject {
 	}
 
 	/**
-	 * Gets a tile with a Vector2 variable
+	 * Attempts to return a tile using a Vector2 position
 	 * @param position
 	 * @return
 	 */
@@ -255,7 +258,7 @@ public class Ship extends GameObject {
 						removeAsteroid = true;
 
 						// New standard tile
-						placeTile(x, y,
+						addTileToShip(x, y,
 								ID.StandardTile);
 						break;
 					} else if (shipTile.getID() == ID.StandardTile) {
@@ -495,7 +498,7 @@ public class Ship extends GameObject {
 			vector2.y += ShipTile.TILESIZE/2f;
 			vector2.x += ShipTile.TILESIZE/2f;
 			removeTilesFromShip(collectedTileArray);
-			ShipTile result =  placeTile(vector2.x, vector2.y, newTileID);
+			ShipTile result =  addTileToShip(vector2.x, vector2.y, newTileID);
 			System.out.println("Building new tile " + result.getID());
 			return result;
 		}

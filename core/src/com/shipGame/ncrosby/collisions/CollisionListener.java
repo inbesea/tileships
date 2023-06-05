@@ -1,12 +1,16 @@
-package com.shipGame.ncrosby.util;
+package com.shipGame.ncrosby.collisions;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.Ship.Ship;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.StandardTile;
 
 /**
- * Collision listener is used to handle collision events based on
+ * Collision listener gets collisions and passes the collision object to a handler
  */
 public class CollisionListener implements ContactListener {
 

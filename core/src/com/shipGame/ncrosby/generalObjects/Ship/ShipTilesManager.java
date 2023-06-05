@@ -289,7 +289,7 @@ public class ShipTilesManager {
         ShipTile temp;
         Stack<ShipTile> resultTiles = new Stack<>();
 
-        // Checking ship tiles for index matches
+        // Searching ship tiles for matches based on position
         for(int i = 0; i < existingTiles.size; i++) {
             //Assign current tile to temp
             temp = existingTiles.get(i);
@@ -306,7 +306,7 @@ public class ShipTilesManager {
         if(resultTiles.size() > 1) {
             throw new ArithmeticException("Multiple Tiles Found in ReturnTile() for " + position.x + "," + position.y);
         }
-        else if (resultTiles.size() <= 0) {
+        else if (resultTiles.size() == 0) {
             return null;
         }
         else {

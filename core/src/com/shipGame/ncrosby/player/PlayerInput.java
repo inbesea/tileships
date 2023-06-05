@@ -44,7 +44,7 @@ public class PlayerInput {
                 // Remove tile from held tiles
                 ShipTile placedTile = player.popTile();
                 // Add tile to location giving tile ID
-                playerShip.placeTile(touchPos.x, touchPos.y, placedTile.getID());
+                playerShip.addTileToShip(touchPos.x, touchPos.y, placedTile.getID());
                 return placedTile;
             } else { // No tiles to place
                 System.out.println("Not holding any tiles to place!");
