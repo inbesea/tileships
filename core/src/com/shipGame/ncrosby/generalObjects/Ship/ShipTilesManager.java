@@ -114,6 +114,7 @@ public class ShipTilesManager {
         ShipTile tempTile;
 
         indexXY = calculateIndex(x, y); // Get index corresponding to that
+
         System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
                 "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
 
