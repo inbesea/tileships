@@ -6,9 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.TileTypeData;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeData;
 import com.shipGame.ncrosby.tileShipGame;
 
 public abstract class ShipTile extends GameObject{

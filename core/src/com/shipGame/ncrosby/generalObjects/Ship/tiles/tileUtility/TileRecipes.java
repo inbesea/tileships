@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility;
 
 import com.shipGame.ncrosby.ID;
 

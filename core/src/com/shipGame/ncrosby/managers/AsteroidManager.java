@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.util;
+package com.shipGame.ncrosby.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.*;
@@ -8,6 +8,7 @@ import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
+import com.shipGame.ncrosby.util.generalUtil;
 
 import java.util.Arrays;
 

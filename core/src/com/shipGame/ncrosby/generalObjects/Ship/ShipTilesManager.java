@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.TileTypeFactory;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
 import com.shipGame.ncrosby.screens.GameScreen;
 
 import java.util.Stack;

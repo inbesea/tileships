@@ -2,10 +2,10 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.StandardTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.TileOrienter;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileOrienter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
