@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility;
 
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;

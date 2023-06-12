@@ -8,7 +8,9 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
 
 /**
- * Essentially an array holder and hover indicator.
+ * Essentially an array and hover indicator.
+ * Used to track when tiles are being collected, to hold collected tiles and return the stack of tiles after
+ * the collect action finishes.
  * This class can be toggled on, and off to control tile addition.
  */
 public class CollectionManager {

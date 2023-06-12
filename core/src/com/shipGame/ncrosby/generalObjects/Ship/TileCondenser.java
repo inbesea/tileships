@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.TileRecipes;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileRecipes;
 
 import java.util.Arrays;
 

@@ -22,7 +22,7 @@ import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.player.SimpleTouch;
 import com.shipGame.ncrosby.tileShipGame;
-import com.shipGame.ncrosby.util.AsteroidManager;
+import com.shipGame.ncrosby.managers.AsteroidManager;
 
 import java.util.Objects;
 
