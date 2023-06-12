@@ -2,7 +2,7 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileRecipes;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.TileRecipes;
 
 /**
  * Class to check if criteria for building a tile recipe is met.

@@ -10,9 +10,8 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.tileShipGame;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
 

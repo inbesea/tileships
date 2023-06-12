@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers;
 
 /**
  * Used to hold unique data about tileable types of shiptiles.

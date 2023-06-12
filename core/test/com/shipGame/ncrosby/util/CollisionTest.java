@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.collisions.Collision;
 import com.shipGame.ncrosby.generalObjects.GameObject;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.StandardTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.StandardTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.StrongTile;
 import junit.framework.TestCase;
 import org.junit.Test;
 

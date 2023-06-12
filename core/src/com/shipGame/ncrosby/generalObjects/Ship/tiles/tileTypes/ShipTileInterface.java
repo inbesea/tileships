@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes;
 
 /**
  * Interface to specify methods used with all tiles.

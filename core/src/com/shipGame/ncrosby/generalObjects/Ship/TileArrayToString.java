@@ -2,8 +2,9 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileOrienter;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.TileOrienter;
 
 /**
  * Takes an array of ShipTiles and can return a string representation of said array.

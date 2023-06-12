@@ -1,7 +1,9 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes;
 
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileManagers.TileTypeData;
 
 public class CoreTile extends ShipTile {
 

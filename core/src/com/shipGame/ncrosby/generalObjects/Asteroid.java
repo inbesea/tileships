@@ -4,11 +4,8 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.StrongTile;
 import com.shipGame.ncrosby.tileShipGame;
-
-import java.awt.*;
 
 import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 

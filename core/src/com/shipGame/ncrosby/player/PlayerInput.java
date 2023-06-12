@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.tileShipGame;
 
 public class PlayerInput {

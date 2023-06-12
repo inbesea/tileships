@@ -15,7 +15,7 @@ import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
 import com.shipGame.ncrosby.tileShipGame;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 
 import static com.shipGame.ncrosby.util.generalUtil.*;
 

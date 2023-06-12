@@ -1,5 +1,10 @@
 package com.shipGame.ncrosby.collisions;
 
+import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Asteroid;
+import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+
 public class CollisionHandler {
     GameObject a;
     GameObject b;

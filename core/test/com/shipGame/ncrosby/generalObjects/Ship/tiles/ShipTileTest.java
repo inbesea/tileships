@@ -1,6 +1,8 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles;
 
 import com.badlogic.gdx.math.Vector2;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.StandardTile;
 import junit.framework.TestCase;
 import org.junit.Test;
 
