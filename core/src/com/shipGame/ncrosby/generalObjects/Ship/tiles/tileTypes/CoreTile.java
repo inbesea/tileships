@@ -15,8 +15,8 @@ public class CoreTile extends ShipTile {
      * @param position
      * @param id
      */
-    public CoreTile(Vector2 position, ID id, TileTypeData typeData) {
-        super(position, id, typeData);
+    public CoreTile(Vector2 position, ID id, TileTypeData typeData, ShipTilesManager manager) {
+        super(position, id, typeData, manager);
     }
 
     @Override
