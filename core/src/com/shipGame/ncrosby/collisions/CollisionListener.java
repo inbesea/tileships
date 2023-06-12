@@ -27,6 +27,7 @@ public class CollisionListener implements ContactListener {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
 
+        // We can cast to gameObjects because all collisions will extend from gameObjects.
         GameObject GameObjectA = (GameObject) fixtureA.getUserData();
         GameObject GameObjectB = (GameObject) fixtureB.getUserData();
 
