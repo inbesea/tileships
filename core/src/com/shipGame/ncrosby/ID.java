@@ -18,22 +18,30 @@ public enum ID {
 	 * Contains reference to asset for sprite texture.
 	 * Sprite selection happens here.
 	 */
-	Player("RobotV2.png"),
-	Asteroid("asteroid_purple.png"),
-	CoreTile("ShipTile_Core.png"),
-	Ship("none"),
-	Hover("HoverIndicator.png"),
-	StandardTile("ShipTile_Red.png"),
-	StrongTile("ShipTile_Strong.png");
+	Player("RobotV2.png", false),
+	Asteroid("asteroid_purple.png", false),
+	CoreTile("ShipTile_Core.png", true),
+	Ship("none", false),
+	Hover("HoverIndicator.png", false),
+	StandardTile("ShipTile_Red.png", true),
+	StrongTile("ShipTile_Strong.png", true);
 
 	private String texture;
 
-	ID(String texture){
+	//Easy way to check if an object is a tile or not.
+	private boolean isTileType;
+
+	ID(String texture, boolean isTileType){
 		this.texture = texture;
+		this.isTileType = isTileType;
 	}
 
 	public String getTexture() {
 		return texture;
+	}
+
+	public boolean isTileType(){
+		return isTileType;
 	}
 
 	public String getSprite() {
