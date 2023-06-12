@@ -12,4 +12,9 @@ public class StandardTile extends ShipTile{
         super(vector2, ID.StandardTile, TileTypeData.StandardTile);
 
     }
+
+    @Override
+    public boolean isInvulnerable(){
+        return false;
+    }
 }

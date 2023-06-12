@@ -17,6 +17,11 @@ public class CoreTile extends ShipTile {
         super(position, id, typeData);
     }
 
+    @Override
+    public boolean isInvulnerable() {
+        return true;
+    }
+
     public CoreTile(Vector2 position) {
         super(position, ID.CoreTile, TileTypeData.CoreTile);
     }

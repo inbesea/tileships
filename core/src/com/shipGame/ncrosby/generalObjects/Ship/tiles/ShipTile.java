@@ -283,4 +283,6 @@ public abstract class ShipTile extends GameObject{
 	public int getAdjacency(ShipTile tile) {
 		return neighbors.isWhichNeighbor(tile);
 	}
+
+	public abstract boolean isInvulnerable();
 }

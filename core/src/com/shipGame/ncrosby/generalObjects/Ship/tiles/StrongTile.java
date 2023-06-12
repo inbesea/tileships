@@ -7,4 +7,9 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
     public StrongTile(Vector2 vector2){
         super(vector2, ID.StrongTile, TileTypeData.StrongTile);
     }
+
+    @Override
+    public boolean isInvulnerable(){
+        return true;
+    }
 }
