@@ -295,4 +295,17 @@ public abstract class ShipTile extends GameObject{
 		return manager;
 	}
 	public abstract boolean isInvulnerable();
+
+	/**
+	 * Call to remove this tile from it's manager.
+	 */
+	public void destroyThisTile() {
+		boolean tileBelongsToItsManager = manager.returnTile(this.getPosition()) != null;
+
+		if(tileBelongsToItsManager){
+			manager.removeTileFromShip(this);
+		} else {
+			throw new RuntimeException("Tile " + getPositionAsString() + ", " + getAbbreviation() + " does not belong to its' manager reference.");
+		}
+	}
 }
