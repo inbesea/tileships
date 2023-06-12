@@ -75,7 +75,7 @@ public abstract class ShipTile extends GameObject{
 	};
 
 	/**
-	 * Renders information specific to the ShipTiles
+	 * Renders text specifying the shipTile's indices
 	 *
 	 * @param game
 	 */

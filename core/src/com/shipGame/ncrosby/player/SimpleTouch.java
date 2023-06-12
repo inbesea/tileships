@@ -223,9 +223,15 @@ public class SimpleTouch implements InputProcessor {
         playerShip.setDragged(draggedTile); // Set intermediate tile to *remove from existing tiles*
     }
 
+    /**
+     * Checks if a tile is valid to pick up.
+     * @param temp
+     * @return
+     */
     private boolean canGrabTile(ShipTile temp) {
         if(temp == null) return false;// Check if a tile was grabbed
 
+        // Is player on the tile in question?
         boolean leftCornerOff = playerShip.returnTile(player.getX(),player.getY()) != temp;
         boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(),player.getY()) != temp;
 
