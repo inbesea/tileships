@@ -8,8 +8,8 @@ import com.shipGame.ncrosby.ID;
  */
 public class StandardTile extends ShipTile{
 
-    public StandardTile(Vector2 vector2){
-        super(vector2, ID.StandardTile, TileTypeData.StandardTile);
+    public StandardTile(Vector2 vector2, ShipTilesManager manager){
+        super(vector2, ID.StandardTile, TileTypeData.StandardTile, manager);
 
     }
 

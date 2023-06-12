@@ -22,7 +22,7 @@ public class CoreTile extends ShipTile {
         return true;
     }
 
-    public CoreTile(Vector2 position) {
-        super(position, ID.CoreTile, TileTypeData.CoreTile);
+    public CoreTile(Vector2 position, ShipTilesManager manager) {
+        super(position, ID.CoreTile, TileTypeData.CoreTile, manager);
     }
 }

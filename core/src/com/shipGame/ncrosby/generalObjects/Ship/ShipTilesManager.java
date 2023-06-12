@@ -120,7 +120,7 @@ public class ShipTilesManager {
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
-        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id);
+        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id, this);
         validateNewTileIndex(tempTile);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
