@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.collisions;
+package com.shipGame.ncrosby.physics.collisions;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.shipGame.ncrosby.ID;

@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.collisions;
+package com.shipGame.ncrosby.physics.collisions;
 
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
