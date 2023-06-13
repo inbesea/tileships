@@ -193,7 +193,7 @@ public class GameScreen implements Screen {
         for(int i = 0 ; i < gameObjects.size ; i++){
             go = gameObjects.get(i);
             drawGameObject(go); // Call helper to draw object
-            collisionDetection(go);
+            //collisionDetection(go);
         }
 
         if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
