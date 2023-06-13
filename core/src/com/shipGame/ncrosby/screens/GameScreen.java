@@ -95,7 +95,7 @@ public class GameScreen implements Screen {
         hud = new HUD(game.assetManager, game);
 
         // Create collision listener
-        collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
+        collisionHandler = new CollisionHandler(asteroidManager, world);// Handler has manager to manage stuff
         collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         world.setContactListener(collisionListener);
     }
@@ -207,7 +207,9 @@ public class GameScreen implements Screen {
 
         game.stepPhysicsWorld(Gdx.graphics.getDeltaTime());
 
+        // Call collision handling first and then sweep as objects are marked during this step lol
         collisionHandler.handleCollisions();
+        collisionHandler.sweepForDeadBodies(this.bodies);
         sweepForDeadBodies();
     }
 

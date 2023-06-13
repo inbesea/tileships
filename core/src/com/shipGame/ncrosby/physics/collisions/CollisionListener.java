@@ -1,7 +1,6 @@
 package com.shipGame.ncrosby.collisions;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 

@@ -1,5 +1,8 @@
 package com.shipGame.ncrosby.collisions;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 public class CollisionHandler {
 
     AsteroidManager asteroidManager;
+    World world;
     GameObject a;
     GameObject b;
     ArrayList<Collision> collisions = new ArrayList<>();
@@ -19,8 +23,9 @@ public class CollisionHandler {
      * Collision Handler will need a lot of access to other managers to control what happens in the game.
      * @param asteroidManager
      */
-    public CollisionHandler(AsteroidManager asteroidManager){
+    public CollisionHandler(AsteroidManager asteroidManager, World world){
         this.asteroidManager = asteroidManager;
+        this.world = world;
     }
 
     public void handleCollision(Collision collision){
@@ -96,5 +101,23 @@ public class CollisionHandler {
 
     public void push(Collision newCollision) {
         collisions.add(newCollision);
+    }
+
+    /**
+     * Reviews and removes dead physics bodies
+     * */
+    public void sweepForDeadBodies(Array<Body> bodies) {
+        for (Body body : bodies) {
+            if (body != null) {
+                GameObject gameObject = (GameObject) body.getUserData();
+                if (gameObject.isDead()) {
+                    // We have not removed the object from the game.
+                    // We might need to just bite the bullet and create a gameobject call for deleting the object from an agnostic point of view.
+                    world.destroyBody(body);
+                    body.setUserData(null);
+                    body = null;
+                }
+            }
+        }
     }
 }
