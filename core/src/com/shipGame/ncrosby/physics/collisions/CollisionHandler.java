@@ -64,8 +64,10 @@ public class CollisionHandler {
      * @param b
      */
     private void asteroidTileCollision(GameObject a, GameObject b) {
+
         Asteroid asteroid;
         ShipTile tile;
+
         // Assign based on what the classes are
         if(a.getID() == ID.Asteroid){
             asteroid = (Asteroid) a;
@@ -81,11 +83,11 @@ public class CollisionHandler {
             // remove the asteroid and add a tile.
             System.out.println("CoreTile/Asteroid creation event. ~~~ Creating new tile "+ asteroid.getPosition().toString() +" and marking Asteroid for deletion!");
             asteroid.physicsDelete();
-            System.out.println("Skipping tile creation");
             tile.getManager().addTile(asteroid.getX(), asteroid.getY(), ID.StandardTile);
         } else if (tile.isInvulnerable()){
             return; // Do nothing, the tile cannot be destroyed
         } else {
+            tile.destroySelf();
             // destroy the tile
             // This means the tile is not a core tile or a invulnerable tile.
             // We will then conclude it can be destroyed.
