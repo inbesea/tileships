@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.collisions.CollisionHandler;
+import com.shipGame.ncrosby.collisions.CollisionListener;
 import com.shipGame.ncrosby.player.PlayerInput;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
@@ -49,6 +51,9 @@ public class GameScreen implements Screen {
     CircleShape circle = new CircleShape();
     public Array<Body> bodies = new Array<Body>();
     public World world;
+
+    private CollisionListener collisionListener;
+    private CollisionHandler collisionHandler;
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
@@ -89,6 +94,10 @@ public class GameScreen implements Screen {
         asteroidManager = new AsteroidManager(this);
         hud = new HUD(game.assetManager, game);
 
+        // Create collision listener
+        collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
+        collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
+        world.setContactListener(collisionListener);
     }
 
     @Override
@@ -197,6 +206,25 @@ public class GameScreen implements Screen {
         game.debugRenderer.render(game.world, camera.combined);
 
         game.stepPhysicsWorld(Gdx.graphics.getDeltaTime());
+
+        collisionHandler.handleCollisions();
+        sweepForDeadBodies();
+    }
+
+    /**
+     * Reviews and removes dead physics bodies
+     * */
+    public void sweepForDeadBodies() {
+        for (Body body : this.bodies) {
+            if (body != null) {
+                GameObject gameObject = (GameObject) body.getUserData();
+                if (gameObject.isDead()) {
+                    world.destroyBody(body);
+                    body.setUserData(null);
+                    body = null;
+                }
+            }
+        }
     }
 
     @Override

@@ -10,11 +10,10 @@ import com.shipGame.ncrosby.generalObjects.GameObject;
  */
 public class CollisionListener implements ContactListener {
 
-    // We need this to give us access to all game objects. Without this we cannot properly affect all game objects.
-    Array<GameObject> gameObjects;
+    private CollisionHandler collisionHandler;
 
-    public CollisionListener(Array<GameObject> gameObjects){
-        this.gameObjects = gameObjects;
+    public CollisionListener(CollisionHandler collisionHandler){
+        this.collisionHandler = collisionHandler;
         System.out.println("~ Collision Listener created ~");
     }
 
@@ -24,22 +23,21 @@ public class CollisionListener implements ContactListener {
         Fixture fixtureB = contact.getFixtureB();
 
         // We can cast to gameObjects because all collisions will extend from gameObjects.
-        GameObject GameObjectA = (GameObject) fixtureA.getUserData();
-        GameObject GameObjectB = (GameObject) fixtureB.getUserData();
+        GameObject gameObjectA = (GameObject) fixtureA.getUserData();
+        GameObject gameObjectB = (GameObject) fixtureB.getUserData();
 
-        System.out.println("Begin contact between " + fixtureA.toString() + " and " + fixtureB.toString());
-        if(matchID(fixtureA, fixtureB, ID.StandardTile, ID.Asteroid)){
+        System.out.println("Begin contact between " + gameObjectA.getID().toString() + " and " + gameObjectB.getID().toString());
 
-        } else if (matchID(fixtureA, fixtureB, ID.CoreTile, ID.Asteroid)){
-            // Unsorted values. We need to be able to know which is which to work with these fucking fixtures.
-        }
+        // Add collision object to list to resolve after the physics-simulation step.
+        Collision collision = new Collision(gameObjectA, gameObjectB);
+        collisionHandler.push(collision);
     }
 
     @Override
     public void endContact(Contact contact) {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-        System.out.println( "between " + fixtureA.toString() + " and " + fixtureB.toString());
+        GameObject gameObjectA = (GameObject) contact.getFixtureA().getUserData();
+        GameObject gameObjectB = (GameObject) contact.getFixtureB().getUserData();
+        System.out.println( "End contact between " + gameObjectA.getID().toString() + " and " + gameObjectB.getID().toString());
     }
 
     @Override
