@@ -164,4 +164,10 @@ public abstract class GameObject {
 	public boolean isDead(){
 		return physicsDeletable;
 	}
+
+	/**
+	 * This should be implemented to use whatever means available to delete the object at hand.
+	 * @return
+	 */
+	public abstract boolean deleteFromGame();
 }

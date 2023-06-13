@@ -192,6 +192,10 @@ public class GameScreen implements Screen {
 
         for(int i = 0 ; i < gameObjects.size ; i++){
             go = gameObjects.get(i);
+
+            // This render should happen after a sweep attempt
+            if(go.isDead())throw new RuntimeException("Game Object was not swept " + go.getID().toString());
+
             drawGameObject(go); // Call helper to draw object
             //collisionDetection(go);
         }
@@ -210,23 +214,6 @@ public class GameScreen implements Screen {
         // Call collision handling first and then sweep as objects are marked during this step lol
         collisionHandler.handleCollisions();
         collisionHandler.sweepForDeadBodies(this.bodies);
-        sweepForDeadBodies();
-    }
-
-    /**
-     * Reviews and removes dead physics bodies
-     * */
-    public void sweepForDeadBodies() {
-        for (Body body : this.bodies) {
-            if (body != null) {
-                GameObject gameObject = (GameObject) body.getUserData();
-                if (gameObject.isDead()) {
-                    world.destroyBody(body);
-                    body.setUserData(null);
-                    body = null;
-                }
-            }
-        }
     }
 
     @Override
@@ -369,7 +356,7 @@ public class GameScreen implements Screen {
      * @param asteroid
      */
     public void removeAsteroid(GameObject asteroid) {
-        asteroidManager.removeAsteroid((Asteroid) asteroid);
+        asteroidManager.deleteMember(asteroid);
     }
 
     /**

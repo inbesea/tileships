@@ -10,6 +10,7 @@ import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
 import com.shipGame.ncrosby.screens.GameScreen;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 import static com.shipGame.ncrosby.util.generalUtil.*;
@@ -114,7 +115,7 @@ public class ShipTilesManager {
         int indexXY[];
         ShipTile tempTile;
 
-        indexXY = calculateIndex(x, y); // Get index corresponding to that
+        indexXY = calculateIndex(x, y); // Get index corresponding to x, y position
 
         System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
                 "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
@@ -178,7 +179,7 @@ public class ShipTilesManager {
             existingTile = existingTiles.get(i);
             if(newTile.getxIndex() == existingTile.getxIndex() && newTile.getyIndex() == existingTile.getyIndex()){
                 throw new RuntimeException("New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
-                        existingTile.getPositionAsString() + " id : " + existingTile.getID() + Thread.currentThread().getStackTrace().toString());
+                        existingTile.getPositionAsString() + " id : " + existingTile.getID() + Arrays.toString(Thread.currentThread().getStackTrace()));
             }
         }
     }
@@ -438,7 +439,7 @@ public class ShipTilesManager {
      */
     public void removeTileFromShip(ShipTile tile){
         if(!this.existingTiles.removeValue(tile, true)){ // If not in existing tiles
-            throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
+            throw new RuntimeException("Error: Tile was not present in ship - \n" + Arrays.toString(Thread.currentThread().getStackTrace()));
         } else {
             if(ship.isCollectingTiles()){ // Delete tile if being collected. Has to use the ship reference here.
                 ship.getCollapseCollect().removeValue(tile, true);
@@ -575,5 +576,13 @@ public class ShipTilesManager {
 
     public Array<ShipTile> getEdgeTiles() {
         return edgeTiles;
+    }
+
+    public void deleteSelf() {
+        this.existingTiles.clear();
+    }
+
+    private void removeAllTilesFromGame(){
+
     }
 }

@@ -19,4 +19,10 @@ public class StandardTile extends ShipTile{
     public boolean isInvulnerable(){
         return false;
     }
+
+    @Override
+    public boolean deleteFromGame() {
+        destroySelf();
+        return true;
+    }
 }

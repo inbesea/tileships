@@ -14,7 +14,6 @@ public class TileRecipes {
 
     private ID id;
     // Lambda that returns an ID based on a recipe string
-    private Function<String, ID> recipeExpression;
 
     public TileRecipes(String recipe, ID id) {
         initValidation(recipe, id);

@@ -62,6 +62,15 @@ public class Player extends GameObject {
         return null;
     }
 
+    /**
+     * Player should not be removed from game.
+     * @return
+     */
+    @Override
+    public boolean deleteFromGame() {
+        return false;
+    }
+
     public void tick() {
     }
 

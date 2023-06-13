@@ -301,6 +301,12 @@ public class Ship extends GameObject {
 		return null;
 	}
 
+	@Override
+	public boolean deleteFromGame() {
+		shipTilesManager.deleteSelf();
+		return true;
+	}
+
 	public void setDragged(ShipTile draggedTile) {
 		this.draggedTile = draggedTile;
 	}

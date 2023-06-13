@@ -33,7 +33,7 @@ public class CollisionHandler {
         b = collision.colliderB;
         if(numberOfCollisionsTiles(a,b) > 0){ //
             if(numberOfAsteroidsInCollision(a,b) > 0){
-                asteroidTileBounce(a, b);
+                asteroidTileCollision(a, b);
             }
         } else { // there are no tiles
 
@@ -63,7 +63,7 @@ public class CollisionHandler {
      * @param a
      * @param b
      */
-    private void asteroidTileBounce(GameObject a, GameObject b) {
+    private void asteroidTileCollision(GameObject a, GameObject b) {
         Asteroid asteroid;
         ShipTile tile;
         // Assign based on what the classes are
@@ -79,7 +79,9 @@ public class CollisionHandler {
         if(tile.getID() == ID.CoreTile){
             // Turn the asteroid into a standardTile.
             // remove the asteroid and add a tile.
+            System.out.println("CoreTile/Asteroid creation event. ~~~ Creating new tile "+ asteroid.getPosition().toString() +" and marking Asteroid for deletion!");
             asteroid.physicsDelete();
+            System.out.println("Skipping tile creation");
             tile.getManager().addTile(asteroid.getX(), asteroid.getY(), ID.StandardTile);
         } else if (tile.isInvulnerable()){
             return; // Do nothing, the tile cannot be destroyed
@@ -113,11 +115,26 @@ public class CollisionHandler {
                 if (gameObject.isDead()) {
                     // We have not removed the object from the game.
                     // We might need to just bite the bullet and create a gameobject call for deleting the object from an agnostic point of view.
-                    world.destroyBody(body);
-                    body.setUserData(null);
-                    body = null;
+                    System.out.println("Removing a " + gameObject.getID().toString() + " instance from the game.");
+                    attemptGameObjectRemoval(gameObject);
                 }
             }
+        }
+    }
+
+    /**
+     * Meant to filter out the possible use of
+     * @param gameObject
+     */
+    private void attemptGameObjectRemoval(GameObject gameObject) {
+        ID id = gameObject.getID();
+        if(id.isTileType()) {
+            System.out.println("Deleting a tile");
+            ShipTile tile = (ShipTile) gameObject;
+            tile.destroySelf();
+        } else {
+            System.out.println("Deleting not a tile");
+            gameObject.deleteFromGame();
         }
     }
 }

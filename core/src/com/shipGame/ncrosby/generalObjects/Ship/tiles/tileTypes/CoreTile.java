@@ -27,4 +27,10 @@ public class CoreTile extends ShipTile {
     public CoreTile(Vector2 position, ShipTilesManager manager) {
         super(position, ID.CoreTile, TileTypeData.CoreTile, manager);
     }
+
+    @Override
+    public boolean deleteFromGame() {
+        destroySelf();
+        return true;
+    }
 }

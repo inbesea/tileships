@@ -14,4 +14,10 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
     public boolean isInvulnerable(){
         return true;
     }
+
+    @Override
+    public boolean deleteFromGame() {
+        destroySelf();
+        return true;
+    }
 }

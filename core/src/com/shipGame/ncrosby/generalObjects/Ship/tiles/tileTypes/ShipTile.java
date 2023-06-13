@@ -299,7 +299,7 @@ public abstract class ShipTile extends GameObject{
 	/**
 	 * Call to remove this tile from it's manager.
 	 */
-	public void destroyThisTile() {
+	public void destroySelf() {
 		boolean tileBelongsToItsManager = manager.returnTile(this.getPosition()) != null;
 
 		if(tileBelongsToItsManager){

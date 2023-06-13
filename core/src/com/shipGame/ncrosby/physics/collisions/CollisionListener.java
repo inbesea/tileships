@@ -25,7 +25,7 @@ public class CollisionListener implements ContactListener {
         GameObject gameObjectA = (GameObject) fixtureA.getUserData();
         GameObject gameObjectB = (GameObject) fixtureB.getUserData();
 
-        System.out.println("Begin contact between " + gameObjectA.getID().toString() + " and " + gameObjectB.getID().toString());
+        //System.out.println("Begin contact between " + gameObjectA.getID().toString() + " and " + gameObjectB.getID().toString());
 
         // Add collision object to list to resolve after the physics-simulation step.
         Collision collision = new Collision(gameObjectA, gameObjectB);
@@ -36,7 +36,7 @@ public class CollisionListener implements ContactListener {
     public void endContact(Contact contact) {
         GameObject gameObjectA = (GameObject) contact.getFixtureA().getUserData();
         GameObject gameObjectB = (GameObject) contact.getFixtureB().getUserData();
-        System.out.println( "End contact between " + gameObjectA.getID().toString() + " and " + gameObjectB.getID().toString());
+        //System.out.println( "End contact between " + gameObjectA.getID().toString() + " and " + gameObjectB.getID().toString());
     }
 
     @Override
