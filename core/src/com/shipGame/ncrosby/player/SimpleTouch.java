@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.generalObjects.Ship.TileArrayToString;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
 
@@ -167,7 +167,7 @@ public class SimpleTouch implements InputProcessor {
         // Begin collecting tiles for collapse
         if(!playerShip.isCollectingTiles() && keycode == 59){
             if(draggedTile != null){ // If holding tile
-                playerShip.placeTile(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
+                playerShip.addTileToShip(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
                 setDraggedTileToNull();
                 setIsDragging(false);
             }
@@ -223,9 +223,15 @@ public class SimpleTouch implements InputProcessor {
         playerShip.setDragged(draggedTile); // Set intermediate tile to *remove from existing tiles*
     }
 
+    /**
+     * Checks if a tile is valid to pick up.
+     * @param temp
+     * @return
+     */
     private boolean canGrabTile(ShipTile temp) {
         if(temp == null) return false;// Check if a tile was grabbed
 
+        // Is player on the tile in question?
         boolean leftCornerOff = playerShip.returnTile(player.getX(),player.getY()) != temp;
         boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(),player.getY()) != temp;
 
@@ -250,7 +256,7 @@ public class SimpleTouch implements InputProcessor {
 
         Vector2 mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
 
-        playerShip.placeTile(mousePosition2.x, mousePosition.y, draggedTile.getID());
+        playerShip.addTileToShip(mousePosition2.x, mousePosition.y, draggedTile.getID());
 
         // Dispose of used dragged tile references
         playerShip.setDragged(null);

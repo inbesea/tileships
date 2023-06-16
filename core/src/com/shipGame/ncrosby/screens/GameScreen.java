@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.physics.collisions.CollisionHandler;
+import com.shipGame.ncrosby.physics.collisions.CollisionListener;
 import com.shipGame.ncrosby.player.PlayerInput;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
@@ -22,7 +24,7 @@ import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.player.SimpleTouch;
 import com.shipGame.ncrosby.tileShipGame;
-import com.shipGame.ncrosby.util.AsteroidManager;
+import com.shipGame.ncrosby.managers.AsteroidManager;
 
 import java.util.Objects;
 
@@ -49,6 +51,9 @@ public class GameScreen implements Screen {
     CircleShape circle = new CircleShape();
     public Array<Body> bodies = new Array<Body>();
     public World world;
+
+    private CollisionListener collisionListener;
+    private CollisionHandler collisionHandler;
 
     public GameScreen(final tileShipGame game) {
         this.game = game;
@@ -89,6 +94,10 @@ public class GameScreen implements Screen {
         asteroidManager = new AsteroidManager(this);
         hud = new HUD(game.assetManager, game);
 
+        // Create collision listener
+        collisionHandler = new CollisionHandler(asteroidManager, world);// Handler has manager to manage stuff
+        collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
+        world.setContactListener(collisionListener);
     }
 
     @Override
@@ -183,8 +192,12 @@ public class GameScreen implements Screen {
 
         for(int i = 0 ; i < gameObjects.size ; i++){
             go = gameObjects.get(i);
+
+            // This render should happen after a sweep attempt
+            if(go.isDead())throw new RuntimeException("Game Object was not swept " + go.getID().toString());
+
             drawGameObject(go); // Call helper to draw object
-            collisionDetection(go);
+            //collisionDetection(go);
         }
 
         if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
@@ -197,6 +210,10 @@ public class GameScreen implements Screen {
         game.debugRenderer.render(game.world, camera.combined);
 
         game.stepPhysicsWorld(Gdx.graphics.getDeltaTime());
+
+        // Call collision handling first and then sweep as objects are marked during this step lol
+        collisionHandler.handleCollisions();
+        collisionHandler.sweepForDeadBodies(this.bodies);
     }
 
     @Override
@@ -339,7 +356,7 @@ public class GameScreen implements Screen {
      * @param asteroid
      */
     public void removeAsteroid(GameObject asteroid) {
-        asteroidManager.removeAsteroid((Asteroid) asteroid);
+        asteroidManager.deleteMember(asteroid);
     }
 
     /**

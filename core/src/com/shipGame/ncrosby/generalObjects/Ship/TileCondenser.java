@@ -3,8 +3,8 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileRecipes;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileRecipes;
 
 import java.util.Arrays;
 
@@ -61,7 +61,7 @@ public class TileCondenser {
         // If not matched check if the array's reverse matches.
         String reverseCompareString = arrayToString.reverseToCompareString();
         ID temp = attemptArrayMatch(reverseCompareString);
-        if(result != null && temp != null)throw new RuntimeException("Double recipe match error\n" + Thread.currentThread().getStackTrace().toString());
+        if(result != null && temp != null)throw new RuntimeException("Double recipe match error\n" + Arrays.toString(Thread.currentThread().getStackTrace()));
 
         return result;
     }

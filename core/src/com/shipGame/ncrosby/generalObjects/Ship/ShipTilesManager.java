@@ -5,10 +5,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.TileTypeFactory;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
 import com.shipGame.ncrosby.screens.GameScreen;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 import static com.shipGame.ncrosby.util.generalUtil.*;
@@ -113,13 +115,14 @@ public class ShipTilesManager {
         int indexXY[];
         ShipTile tempTile;
 
-        indexXY = calculateIndex(x, y); // Get index corresponding to that
+        indexXY = calculateIndex(x, y); // Get index corresponding to x, y position
+
         System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
                 "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
-        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id);
+        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id, this);
         validateNewTileIndex(tempTile);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
@@ -134,6 +137,10 @@ public class ShipTilesManager {
         return tempTile;
     }
 
+    /**
+     * Gives tiles their physics attributes and hands the body values to the game screen list.
+     * @param tempTile
+     */
     private void setTilePhysics(ShipTile tempTile) {
         Vector2 position = tempTile.getPosition();
 
@@ -157,6 +164,8 @@ public class ShipTilesManager {
 
         body.setUserData(tempTile);
         tempTile.setBody(body);
+
+        // This step makes the body available to use on the screen level.
         screen.bodies.add(body);
 
         // Remember to dispose of any shapes after you're done with them!
@@ -170,7 +179,7 @@ public class ShipTilesManager {
             existingTile = existingTiles.get(i);
             if(newTile.getxIndex() == existingTile.getxIndex() && newTile.getyIndex() == existingTile.getyIndex()){
                 throw new RuntimeException("New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
-                        existingTile.getPositionAsString() + " id : " + existingTile.getID() + Thread.currentThread().getStackTrace().toString());
+                        existingTile.getPositionAsString() + " id : " + existingTile.getID() + Arrays.toString(Thread.currentThread().getStackTrace()));
             }
         }
     }
@@ -283,7 +292,7 @@ public class ShipTilesManager {
         ShipTile temp;
         Stack<ShipTile> resultTiles = new Stack<>();
 
-        // Checking ship tiles for index matches
+        // Searching ship tiles for matches based on position
         for(int i = 0; i < existingTiles.size; i++) {
             //Assign current tile to temp
             temp = existingTiles.get(i);
@@ -300,7 +309,7 @@ public class ShipTilesManager {
         if(resultTiles.size() > 1) {
             throw new ArithmeticException("Multiple Tiles Found in ReturnTile() for " + position.x + "," + position.y);
         }
-        else if (resultTiles.size() <= 0) {
+        else if (resultTiles.size() == 0) {
             return null;
         }
         else {
@@ -430,7 +439,7 @@ public class ShipTilesManager {
      */
     public void removeTileFromShip(ShipTile tile){
         if(!this.existingTiles.removeValue(tile, true)){ // If not in existing tiles
-            throw new RuntimeException("Error: Tile was not present in ship - \n" + Thread.currentThread().getStackTrace());
+            throw new RuntimeException("Error: Tile was not present in ship - \n" + Arrays.toString(Thread.currentThread().getStackTrace()));
         } else {
             if(ship.isCollectingTiles()){ // Delete tile if being collected. Has to use the ship reference here.
                 ship.getCollapseCollect().removeValue(tile, true);
@@ -567,5 +576,13 @@ public class ShipTilesManager {
 
     public Array<ShipTile> getEdgeTiles() {
         return edgeTiles;
+    }
+
+    public void deleteSelf() {
+        this.existingTiles.clear();
+    }
+
+    private void removeAllTilesFromGame(){
+
     }
 }

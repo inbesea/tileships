@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
-import com.shipGame.ncrosby.generalObjects.Ship.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
+import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeData;
 import com.shipGame.ncrosby.tileShipGame;
 
 public abstract class ShipTile extends GameObject{
@@ -20,12 +22,15 @@ public abstract class ShipTile extends GameObject{
 	public final static float TILESIZE = 1f;
 	private com.badlogic.gdx.math.Rectangle collider;
 	private TileTypeData typeData; // Need for unique platonic form data
+
+	private ShipTilesManager manager;
+
 	/**
 	 *  These tiles will all need health, and a way to relate to tiles next to them..?
 	 *  But they will need to be stored in a 2d array. 
 	 *  So when the game initializes there will need to be an array of tiles built out.
 	*/
-	public ShipTile(Vector2 position, ID id, TileTypeData typeData) {
+	public ShipTile(Vector2 position, ID id, TileTypeData typeData, ShipTilesManager manager) {
 		// vector is not adjusted, so tiles can be independently created anywhere
 		super(position, new Vector2(TILESIZE,TILESIZE), id);
 
@@ -33,6 +38,8 @@ public abstract class ShipTile extends GameObject{
 		this.yIndex = determineIndex(position.y);
 
 		this.typeData = typeData;
+
+		this.manager = manager;
 
 		collider = new com.badlogic.gdx.math.Rectangle(position.x, position.y ,ShipTile.TILESIZE, ShipTile.TILESIZE);
 		// Need to knit together the shiptile to adjacent tiles connectAdjacent();
@@ -68,7 +75,7 @@ public abstract class ShipTile extends GameObject{
 	};
 
 	/**
-	 * Renders information specific to the ShipTiles
+	 * Renders text specifying the shipTile's indices
 	 *
 	 * @param game
 	 */
@@ -282,5 +289,23 @@ public abstract class ShipTile extends GameObject{
 	 */
 	public int getAdjacency(ShipTile tile) {
 		return neighbors.isWhichNeighbor(tile);
+	}
+
+	public ShipTilesManager getManager(){
+		return manager;
+	}
+	public abstract boolean isInvulnerable();
+
+	/**
+	 * Call to remove this tile from it's manager.
+	 */
+	public void destroySelf() {
+		boolean tileBelongsToItsManager = manager.returnTile(this.getPosition()) != null;
+
+		if(tileBelongsToItsManager){
+			manager.removeTileFromShip(this);
+		} else {
+			throw new RuntimeException("Tile " + getPositionAsString() + ", " + getAbbreviation() + " does not belong to its' manager reference.");
+		}
 	}
 }

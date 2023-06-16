@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.tileShipGame;
 
 public class PlayerInput {
@@ -44,7 +44,7 @@ public class PlayerInput {
                 // Remove tile from held tiles
                 ShipTile placedTile = player.popTile();
                 // Add tile to location giving tile ID
-                playerShip.placeTile(touchPos.x, touchPos.y, placedTile.getID());
+                playerShip.addTileToShip(touchPos.x, touchPos.y, placedTile.getID());
                 return placedTile;
             } else { // No tiles to place
                 System.out.println("Not holding any tiles to place!");

@@ -4,11 +4,9 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.StrongTile;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.StrongTile;
+import com.shipGame.ncrosby.managers.AsteroidManager;
 import com.shipGame.ncrosby.tileShipGame;
-
-import java.awt.*;
 
 import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
@@ -18,13 +16,15 @@ public class Asteroid extends GameObject {
 	public static float minSpeed = 0.2f;
 	public static float radius = 0.5f;
 	Circle circle;
-	public Asteroid(Vector2 position, Vector2 size , ID id) {
+	AsteroidManager asteroidManager;
+	public Asteroid(Vector2 position, Vector2 size , ID id, AsteroidManager asteroidManager) {
 		super(position, size, id);
 
 		velX = getRandomlyNegativeNumber(minSpeed,maxSpeed);
 		velY = getRandomlyNegativeNumber(minSpeed,maxSpeed);
 		radius = size.y * 0.5f;
 		circle = new Circle(position.x + radius, position.y + radius, radius);
+		this.asteroidManager = asteroidManager;
 	}
 
 	/**
@@ -34,13 +34,14 @@ public class Asteroid extends GameObject {
 	 * @param velocity
 	 * @param id
 	 */
-	public Asteroid(Vector2 position, Vector2 size, Vector2 velocity, ID id) {
+	public Asteroid(Vector2 position, Vector2 size, Vector2 velocity, ID id, AsteroidManager asteroidManager) {
 		super(position, size, id);
 
 		velX = velocity.x;
 		velY = velocity.y;
 		radius = size.y * 0.5f;
 		circle = new Circle(position.x + radius, position.y + radius, radius);
+		this.asteroidManager = asteroidManager;
 	}
 
 	public Rectangle getBounds(){
@@ -49,6 +50,14 @@ public class Asteroid extends GameObject {
 
 	public Circle getCircleBounds() {
 		return circle;
+	}
+
+	@Override
+	public boolean deleteFromGame() {
+		System.out.println("Asteroid is deleting itself from the manager");
+		asteroidManager.deleteMember(this);
+		System.out.println("Returning true after deleting asteroid");
+		return true;
 	}
 
 	/**

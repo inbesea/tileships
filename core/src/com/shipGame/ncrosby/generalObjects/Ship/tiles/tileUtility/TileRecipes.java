@@ -1,12 +1,7 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles;
+package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility;
 
-import com.badlogic.gdx.utils.Json;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.AdjacentTiles;
-import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
-import com.shipGame.ncrosby.generalObjects.Ship.TileCondenser;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -19,7 +14,6 @@ public class TileRecipes {
 
     private ID id;
     // Lambda that returns an ID based on a recipe string
-    private Function<String, ID> recipeExpression;
 
     public TileRecipes(String recipe, ID id) {
         initValidation(recipe, id);

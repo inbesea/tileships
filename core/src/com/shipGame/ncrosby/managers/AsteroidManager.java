@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.util;
+package com.shipGame.ncrosby.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.*;
@@ -6,8 +6,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
+import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.tileShipGame;
+import com.shipGame.ncrosby.util.generalUtil;
 
 import java.util.Arrays;
 
@@ -23,7 +25,7 @@ import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
  * Handles the creation and upkeep of a gameobject type.
  * Is a way to move the responsibilities of spawning to an object outside of the Gamescreen
  */
-public class AsteroidManager {
+public class AsteroidManager implements Manager {
     private boolean spawning;
     private GameScreen screen;
     private int asteroidLimit;
@@ -91,8 +93,7 @@ public class AsteroidManager {
             }
             if(outOfBounds(asteroid)){
 //                System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
-                removeAsteroid(asteroid);
-                screen.removeGameObject(asteroid);
+                deleteMember(asteroid);
                 numberOfAsteroids = asteroids.size;
 //                System.out.println("numberOfAsteroids " + numberOfAsteroids);
             }
@@ -107,6 +108,28 @@ public class AsteroidManager {
         asteroids.removeValue(asteroid, true);
         world.destroyBody(asteroid.getBody());
         screen.bodies.removeValue(asteroid.getBody(), true);
+    }
+
+    /**
+     * Removes asteroid instance by identity.
+     * Meant to be called from an agnostic point of view allowing us to remove objects from a generic GameObject call.
+     * @param gameObject
+     * @return
+     */
+    @Override
+    public boolean deleteMember(GameObject gameObject) {
+        if(gameObject.getID() != ID.Asteroid)return false;
+        try{
+            Asteroid asteroid = (Asteroid) gameObject;
+            asteroids.removeValue(asteroid, true);
+            world.destroyBody(asteroid.getBody());
+            screen.bodies.removeValue(asteroid.getBody(), true);
+            screen.removeGameObject(asteroid);
+            return true;
+        } catch (ClassCastException cce){
+            System.out.println(cce);
+            return false;
+        }
     }
 
     /**
@@ -131,7 +154,7 @@ public class AsteroidManager {
         if(spawning){
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(1f,1f), ID.Asteroid);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(1f,1f), ID.Asteroid, this);
             setAsteroidPhysics(asteroid);
 
             screen.newGameObject(asteroid);

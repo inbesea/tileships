@@ -45,6 +45,15 @@ public class TileHoverIndicator extends GameObject {
         return null;
     }
 
+    /**
+     * Belongs to the tileManager, cannot be directly removed from the game.
+     * @return
+     */
+    @Override
+    public boolean deleteFromGame() {
+        return false;
+    }
+
     public boolean isHoverDrawing() {
         return drawHover;
     }
