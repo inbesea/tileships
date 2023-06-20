@@ -115,12 +115,15 @@ public class GameScreen implements Screen {
             // Get the body's user data - in this example, our user
             // data is an instance of the Entity class
             GameObject gameObject = (GameObject) b.getUserData();
+            Vector2 gameObjectNewPosition;
 
             if (gameObject != null) {
-                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
-                Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
-//                Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
 
+                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
+                gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
+                // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
+
+                //
                 if(b.getType().equals(BodyDef.BodyType.StaticBody)){
                     continue;
                 }
@@ -139,7 +142,6 @@ public class GameScreen implements Screen {
                     // shouldn't do this probably but w/e
                 }
 
-//                Vector2 bodyPosition = new Vector2(gameObject.getX(), gameObject.getY());
 
                 // We need to convert our angle from radians to degrees
                 gameObject.setRotation(MathUtils.radiansToDegrees * b.getAngle());
