@@ -6,16 +6,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.physics.collisions.CollisionListener;
+import com.shipGame.ncrosby.util.generalUtil;
 
+import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 import static com.shipGame.ncrosby.util.generalUtil.newStaticBodyDef;
 
 // Handles drawing debug,
 public class Box2DWrapper implements Box2DWrapperInterface{
 
-    private boolean drawDebug = false;
+    private boolean drawDebug = true;
     public static final float physicsFrameRate = 1/60f;
     public static final int velocityIterations = 6;
     public static final int positionIterations = 2;
@@ -144,6 +147,11 @@ public class Box2DWrapper implements Box2DWrapperInterface{
      * @param object
      */
     public void setObjectPhysics(GameObject object) {
+        if(object.getID() == ID.Asteroid){
+            Asteroid asteroid = (Asteroid) object;
+            setAsteroidPhysics(asteroid);
+            return;
+        }
         Vector2 position = object.getPosition();
 
         // Adjust init position to center the box on the tile
@@ -173,6 +181,42 @@ public class Box2DWrapper implements Box2DWrapperInterface{
         // Remember to dispose of any shapes after you're done with them!
         // BodyDef and FixtureDef don't need disposing, but shapes do.
         tileShape.dispose();
+    }
+
+    /**
+
+     * Easy way to add physics attributes to asteroid instance
+
+     */
+
+    private void setAsteroidPhysics(Asteroid asteroid) {
+
+        Vector2 position = asteroid.getPosition();
+        BodyDef bodyDef = generalUtil.newDynamicBodyDef(position.x + asteroid.getCircleBounds().radius,
+                position.y + asteroid.getCircleBounds().radius);
+        Body body = world.createBody(bodyDef);
+        body.setLinearVelocity(getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
+                getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
+        // Create circle to add to asteroid
+        CircleShape circle = new CircleShape();
+        circle.setRadius(Asteroid.radius);
+        // Create a fixture definition to apply our shape to
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.0f; // Make it bounce a little bit
+        body.setUserData(asteroid);
+        asteroid.setBody(body);
+        bodies.add(body);
+
+        // Create our fixture and attach it to the body
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(asteroid);
+
+        // Remember to dispose of any shapes after you're done with them!
+        // BodyDef and FixtureDef don't need disposing, but shapes do.
+        circle.dispose();
     }
 
     /**
