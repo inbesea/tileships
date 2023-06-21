@@ -46,7 +46,6 @@ public class tileShipGame extends Game {
 		font = new BitmapFont();
 		Box2D.init();
 		world = new World(new Vector2(0,0), true);
-		createCollisionListener();
 		debugRenderer = new Box2DDebugRenderer();
 
 		//legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
@@ -54,15 +53,7 @@ public class tileShipGame extends Game {
 		setGameScreen(this.getScreen());
 	}
 
-	/**
-	 * Init the collision listener
-	 * Listener should coordinate collisions, but other object would facilitate what they do. 
-	 */
-	private void createCollisionListener() {
-		// TODO : Create this listener and give it access to all game objects.
-		// To allow collisions to have a game-wide effect we will need a list of game objects we can work on.
-//		world.setContactListener(new CollisionListener(gameObjects));
-	}
+
 
 	/**
 	 * Method to convert a pixel length to meters.
