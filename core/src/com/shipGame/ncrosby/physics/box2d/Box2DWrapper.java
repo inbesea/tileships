@@ -34,6 +34,13 @@ public class Box2DWrapper implements Box2DWrapperInterface{
         INSTANCE = this;
     }
 
+    public static Box2DWrapper getInstance(){
+        if(INSTANCE == null) {
+            INSTANCE = new Box2DWrapper(new Vector2(0,0), true);
+        }
+        return INSTANCE;
+    }
+
     /**
      * Removes body from simulation
      * @param body
@@ -167,12 +174,6 @@ public class Box2DWrapper implements Box2DWrapperInterface{
         // BodyDef and FixtureDef don't need disposing, but shapes do.
         tileShape.dispose();
     }
-
-    public static Box2DWrapper getInstance(){
-        if(INSTANCE == null)throw new RuntimeException("Box2DWrapper not initialized!");
-        else return INSTANCE;
-    }
-
 
     /**
      * Reviews and removes dead physics bodies
