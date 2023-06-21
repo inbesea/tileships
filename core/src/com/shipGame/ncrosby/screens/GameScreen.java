@@ -50,7 +50,6 @@ public class GameScreen implements Screen {
     public static final float spawnAreaMax = tileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
-    public Array<Body> bodies = new Array<Body>();
     public World world;
 
     private CollisionListener collisionListener;
@@ -61,7 +60,6 @@ public class GameScreen implements Screen {
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
         this.world = game.world;
-        this.bodies = game.bodies;
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();

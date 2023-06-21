@@ -459,6 +459,5 @@ public class Ship extends GameObject {
 	public void setScreen(GameScreen gameScreen) {
 		this.screen = screen;
 		this.shipTilesManager.screen = gameScreen;
-		this.shipTilesManager.world = gameScreen.world;
 	}
 }

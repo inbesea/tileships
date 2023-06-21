@@ -93,27 +93,6 @@ public class tileShipGame extends Game {
 		return playerShip;
 	}
 
-	/**
-	 * Easy way to add bodies to the game
-	 * @param bodyDef
-	 */
-	public void addBodyToWorld(BodyDef bodyDef){
-		Body body = world.createBody(bodyDef);
-		bodies.add(body);
-	}
-
-	/**
-	 * Removes a body from the bodies array
-	 *
-	 * Returns a boolean representing if the body was removed
-	 * @param body
-	 * @return
-	 */
-	public boolean removeBodyFromWorld(Body body){
-		boolean removed = bodies.removeValue(body,true);
-
-		return removed;
-	}
 
 	public Array<GameObject> getGameObjects() {
 		return gameObjects;

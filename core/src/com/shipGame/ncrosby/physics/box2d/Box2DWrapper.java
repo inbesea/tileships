@@ -37,7 +37,7 @@ public class Box2DWrapper implements Box2DWrapperInterface{
      * Removes body from simulation
      * @param body
      */
-    public void removeObject(Body body) {
+    public void removeObjectBody(Body body) {
         bodies.removeValue(body, true);
         world.destroyBody(body);
     }
@@ -53,7 +53,7 @@ public class Box2DWrapper implements Box2DWrapperInterface{
     }
 
     @Override
-    public void newBody() {
+    public void newBody(GameObject gameObject) {
 
     }
 

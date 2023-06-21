@@ -8,6 +8,7 @@ import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
+import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 import com.shipGame.ncrosby.screens.GameScreen;
 
 import java.util.Arrays;
@@ -22,7 +23,6 @@ public class ShipTilesManager {
     private Array<ShipTile> existingTiles;
     private Array<ShipTile> edgeTiles;
     Ship ship;
-    World world;
     GameScreen screen;
 
     /**
@@ -127,50 +127,16 @@ public class ShipTilesManager {
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
 
-        setTilePhysics(tempTile);
+        Box2DWrapper.getInstance().setObjectPhysics(tempTile);
 
+
+        //setTilePhysics(tempTile);
         if(existingTiles.size < edgeTiles.size){
             throw new RuntimeException("More edgeTiles than existing! " +
                     " existingTiles.size : " + existingTiles.size +
                     "edgeTiles.size : " + edgeTiles.size);
         }
         return tempTile;
-    }
-
-    /**
-     * Gives tiles their physics attributes and hands the body values to the game screen list.
-     * @param tempTile
-     */
-    private void setTilePhysics(ShipTile tempTile) {
-        Vector2 position = tempTile.getPosition();
-
-        // Adjust init position to center the box on the tile
-        BodyDef bodyDef = newStaticBodyDef(position.x + ShipTile.TILESIZE/2, position.y + ShipTile.TILESIZE/2);
-        Body body = world.createBody(bodyDef);
-
-        PolygonShape tileShape = new PolygonShape();
-
-        tileShape.setAsBox(ShipTile.TILESIZE/2, ShipTile.TILESIZE/2);
-//        , tempTile.getPosition(), 0
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = tileShape;
-        fixtureDef.density = 0.0f;
-        fixtureDef.friction = 1.0f;
-        fixtureDef.restitution = 0.0f;
-
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(tempTile);
-
-        body.setUserData(tempTile);
-        tempTile.setBody(body);
-
-        // This step makes the body available to use on the screen level.
-        screen.bodies.add(body);
-
-        // Remember to dispose of any shapes after you're done with them!
-        // BodyDef and FixtureDef don't need disposing, but shapes do.
-        tileShape.dispose();
     }
 
     private void validateNewTileIndex(ShipTile newTile) {
@@ -446,8 +412,9 @@ public class ShipTilesManager {
             }
             removeNeighbors(tile);
             logRemovedTile(tile);
-            screen.bodies.removeValue(tile.getBody(), true);
-            world.destroyBody(tile.getBody());
+
+            // Remove from simulation
+            Box2DWrapper.getInstance().removeObjectBody(tile.getBody());
         }
     }
 
