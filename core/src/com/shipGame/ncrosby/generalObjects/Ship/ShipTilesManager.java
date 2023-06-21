@@ -23,7 +23,6 @@ public class ShipTilesManager {
     private Array<ShipTile> existingTiles;
     private Array<ShipTile> edgeTiles;
     Ship ship;
-    GameScreen screen;
 
     /**
      * Constructor method

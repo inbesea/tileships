@@ -452,12 +452,4 @@ public class Ship extends GameObject {
 		return draggedTile;
 	}
 
-	/**
-	 * Hacky way to hand over the variables for physics damn it
-	 * @param gameScreen
-	 */
-	public void setScreen(GameScreen gameScreen) {
-		this.screen = screen;
-		this.shipTilesManager.screen = gameScreen;
-	}
 }

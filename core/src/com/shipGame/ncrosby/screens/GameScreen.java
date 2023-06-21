@@ -71,7 +71,6 @@ public class GameScreen implements Screen {
         // init ship
         playerShip = new Ship(new Vector2(-1, -1), assetManager);
         game.setPlayerShip(playerShip);
-        playerShip.setScreen(this);
         playerShip.initialize();
 
         // init player
