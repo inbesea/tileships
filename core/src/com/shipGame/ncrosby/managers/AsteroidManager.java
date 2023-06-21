@@ -29,7 +29,6 @@ public class AsteroidManager implements Manager {
     private Array<Asteroid> asteroids = new Array<>();
     private int numberOfAsteroids = asteroids.size;
     // Needed for physics simulation
-    World world;
     Circle circle;
     float spawnRadius;
 
@@ -44,7 +43,6 @@ public class AsteroidManager implements Manager {
         asteroidLimit = 20;
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
-        this.world = screen.getGame().world;
 
         this.circle = new Circle();
         spawnRadius = screen.getCamera().viewportWidth;
@@ -57,7 +55,6 @@ public class AsteroidManager implements Manager {
         this.spawning = spawning;
         asteroidLimit = 30;
         numberOfAsteroids = 0;
-        this.world = screen.getGame().world;
 
         this.circle = new Circle();
         spawnRadius = screen.getCamera().viewportWidth;
