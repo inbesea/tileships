@@ -156,7 +156,6 @@ public class GameScreen implements Screen {
             if(go.isDead())throw new RuntimeException("Game Object was not swept " + go.getID().toString());
 
             drawGameObject(go); // Call helper to draw object
-            //collisionDetection(go);
         }
 
         if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
@@ -217,37 +216,6 @@ public class GameScreen implements Screen {
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
-    }
-
-
-    /**
-     * Routes game objects to be checked against other game objects for collisions
-     * @param gameObject
-     */
-    private void collisionDetection(GameObject gameObject) {
-        if(gameObject.getID() == ID.Ship){ // Is GO Ship object?
-            // Ships don't directly have collision with anything. Things check if they collide with tiles in the ship
-        }else{ // All other objects
-            GameObject go;
-            for(int i = 0 ; i < gameObjects.size ; i++){ // Pass by reference for loop
-
-                go = gameObjects.get(i); // Get a go from all game objects
-
-                if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){ // If the object checked and the possible collision is
-                    Ship ship = (Ship) go;
-                    // with an asteroid then sent the asteroid into method of the ship.
-                    ship.collision(gameObject, this); // Give object to ship to check collision for tiles in ship
-                    break;
-                } else { // tiles are in ship so we can take that on it's own.
-//                    if(gameObject == go)continue;
-//                    if(gameObject.getBounds().contains(go.getBounds())){
-//                        gameObject.collision(go);
-//                        go.collision(gameObject);
-//                    }
-                }
-            }
-        }
-
     }
 
     public OrthographicCamera getCamera() {
