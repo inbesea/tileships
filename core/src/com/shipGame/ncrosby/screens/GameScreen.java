@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 import com.shipGame.ncrosby.physics.collisions.CollisionHandler;
 import com.shipGame.ncrosby.physics.collisions.CollisionListener;
 import com.shipGame.ncrosby.player.PlayerInput;
@@ -95,7 +96,7 @@ public class GameScreen implements Screen {
         hud = new HUD(game.assetManager, game);
 
         // Create collision listener
-        collisionHandler = new CollisionHandler(asteroidManager, world);// Handler has manager to manage stuff
+        collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
         collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         world.setContactListener(collisionListener);
     }
@@ -103,50 +104,6 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
-    }
-
-    /**
-     * Method to update game objects with the bodies object position
-     *
-     * Called before drawing
-     */
-    private void updateGameObjectsForPhysics(){
-        for (Body b : this.bodies) {
-            // Get the body's user data - in this example, our user
-            // data is an instance of the Entity class
-            GameObject gameObject = (GameObject) b.getUserData();
-            Vector2 gameObjectNewPosition;
-
-            if (gameObject != null) {
-
-                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
-                gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
-                // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
-
-                //
-                if(b.getType().equals(BodyDef.BodyType.StaticBody)){
-                    continue;
-                }
-                // Update the entities/sprites position and angle
-                gameObject.setPosition(gameObjectNewPosition);
-
-                try{
-                    gameObject.getBounds().setPosition(gameObjectNewPosition);
-                }catch (NullPointerException nullPointerException){
-
-                }
-
-                try{
-                    gameObject.getCircleBounds().setPosition(gameObjectNewPosition);
-                } catch (NullPointerException nullPointerException){
-                    // shouldn't do this probably but w/e
-                }
-
-
-                // We need to convert our angle from radians to degrees
-                gameObject.setRotation(MathUtils.radiansToDegrees * b.getAngle());
-            }
-        }
     }
 
     /**
@@ -159,7 +116,7 @@ public class GameScreen implements Screen {
         extendViewport.apply();
 
         // Update game object positions
-        updateGameObjectsForPhysics();
+        Box2DWrapper.getInstance().updateGameObjectsToPhysicsSimulation();
 
         // Draw game objects
         drawGameObjects();
@@ -209,13 +166,13 @@ public class GameScreen implements Screen {
         // Draw hud at this step
         game.batch.end();
 
-        game.debugRenderer.render(game.world, camera.combined);
+        Box2DWrapper.getInstance().drawDebug(camera);
 
-        game.stepPhysicsWorld(Gdx.graphics.getDeltaTime());
+        Box2DWrapper.getInstance().stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
         // Call collision handling first and then sweep as objects are marked during this step lol
         collisionHandler.handleCollisions();
-        collisionHandler.sweepForDeadBodies(this.bodies);
+        Box2DWrapper.getInstance().sweepForDeadBodies();
     }
 
     @Override
