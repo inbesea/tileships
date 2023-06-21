@@ -66,7 +66,7 @@ public class AsteroidManager implements Manager {
      */
     public void checkForSpawn(){
         cleanup();
-        while(canSpawn()){
+        while(canSpawn() && spawning){
             spawnAsteroid();
         }
     }
@@ -141,7 +141,6 @@ public class AsteroidManager implements Manager {
     public void spawnAsteroid(){
 
         // Check if active
-        if(spawning){
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
             Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(1f,1f), ID.Asteroid, this);
@@ -156,7 +155,6 @@ public class AsteroidManager implements Manager {
                 throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + screen.getGameObjects().size +
                         " location of gameObject " + asteroid.getX() + ", " + asteroid.getY() + " GameObject ID : " +asteroid.getID());
             }
-        }
 //        System.out.println("Spawned Asteroid : asteroids.size " + asteroids.size);
     }
 
