@@ -144,7 +144,7 @@ public class ShipTilesManager {
             existingTile = existingTiles.get(i);
             if(newTile.getxIndex() == existingTile.getxIndex() && newTile.getyIndex() == existingTile.getyIndex()){
                 throw new RuntimeException("New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
-                        existingTile.getPositionAsString() + " id : " + existingTile.getID() + Arrays.toString(Thread.currentThread().getStackTrace()));
+                        existingTile.getPositionAsString() + " id : " + existingTile.getID());
             }
         }
     }
