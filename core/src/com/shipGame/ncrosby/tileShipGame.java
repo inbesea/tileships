@@ -24,13 +24,9 @@ public class tileShipGame extends Game {
 	public BitmapFont font;
 	private Ship playerShip;
 	public Box2DWrapper physicsWrapper;
-	public World world;
-
 	public static int zoomSpeed = 5;
 	public static float defaultViewportSizeX = 12.5f, defaultViewportSizeY = 7.5f;
 	public static float meterLength = 64f;
-	public Array<Body> bodies = new Array<Body>();
-
 	private Array<GameObject> gameObjects = new Array<>();
 
 	/**

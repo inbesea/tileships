@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.physics.collisions.CollisionListener;
 
 import static com.shipGame.ncrosby.util.generalUtil.newStaticBodyDef;
 
@@ -116,6 +117,11 @@ public class Box2DWrapper implements Box2DWrapperInterface{
                 world.step(physicsFrameRate, velocityIterations, positionIterations);
                 accumulator -= physicsFrameRate;
             }
+    }
+
+    @Override
+    public void setWorldContactListener(CollisionListener collisionListener) {
+        world.setContactListener(collisionListener);
     }
 
     public void drawDebug(){

@@ -50,8 +50,6 @@ public class GameScreen implements Screen {
     public static final float spawnAreaMax = tileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
-    public World world;
-
     private CollisionListener collisionListener;
     private CollisionHandler collisionHandler;
 
@@ -59,7 +57,6 @@ public class GameScreen implements Screen {
         this.game = game;
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
-        this.world = game.world;
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
@@ -96,7 +93,7 @@ public class GameScreen implements Screen {
         // Create collision listener
         collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
         collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
-        world.setContactListener(collisionListener);
+        Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
     }
 
     @Override
