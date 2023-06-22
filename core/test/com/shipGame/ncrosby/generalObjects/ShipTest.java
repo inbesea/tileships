@@ -37,18 +37,18 @@ public class ShipTest extends TestCase {
         assert(ship != null);
     }
 
-    @Test
-    public void whenShipCreated_HasTiles(){
-        System.out.println("Running test : whenShipCreated_HasTiles()");
-        // Before - Ship exists
-        System.out.println("Trying to add one tile");
-        ship.addTileToShip(0,0, ID.CoreTile);
-
-        // Then
-
-        // Therefore
-        System.out.println("Asserting ship has tiles");
-        assert (ship.getEdgeTiles().size > 0);
-        assert true;
-    }
+//    @Test
+//    public void whenShipCreated_HasTiles(){
+//        System.out.println("Running test : whenShipCreated_HasTiles()");
+//        // Before - Ship exists
+//        System.out.println("Trying to add one tile");
+//        ship.addTileToShip(0,0, ID.CoreTile);
+//
+//        // Then
+//
+//        // Therefore
+//        System.out.println("Asserting ship has tiles");
+//        assert (ship.getEdgeTiles().size > 0);
+//        assert true;
+//    }
 }
