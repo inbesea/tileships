@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 import com.shipGame.ncrosby.screens.GameScreen;
 
@@ -42,7 +43,7 @@ public class AsteroidManager implements Manager {
         this.screen = screen;
         asteroidLimit = 20;
         numberOfAsteroids = 0;
-        spawning = true; // Assume spawning if using this constructor.
+        spawning = false; // Assume spawning if using this constructor.
 
         this.circle = new Circle();
         spawnRadius = screen.getCamera().viewportWidth;
@@ -143,7 +144,7 @@ public class AsteroidManager implements Manager {
         // Check if active
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(1f,1f), ID.Asteroid, this);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILESIZE,ShipTile.TILESIZE), ID.Asteroid, this);
             Box2DWrapper.getInstance().setObjectPhysics(asteroid);
             //setAsteroidPhysics(asteroid);
 
