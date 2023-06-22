@@ -25,7 +25,7 @@ public class tileShipGame extends Game {
 	private Ship playerShip;
 	public Box2DWrapper physicsWrapper;
 	public static int zoomSpeed = 5;
-	public static float defaultViewportSizeX = 12.5f, defaultViewportSizeY = 7.5f;
+	public static float defaultViewportSizeX = 700f, defaultViewportSizeY = 500f;
 	public static float meterLength = 64f;
 	private Array<GameObject> gameObjects = new Array<>();
 

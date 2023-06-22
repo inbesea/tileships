@@ -19,7 +19,7 @@ public abstract class ShipTile extends GameObject{
 	private long placed = System.currentTimeMillis();
 	private int cool = 0;
 	public boolean isEdge;
-	public final static float TILESIZE = 1f;
+	public final static float TILESIZE = 64f;
 	private com.badlogic.gdx.math.Rectangle collider;
 	private TileTypeData typeData; // Need for unique platonic form data
 
