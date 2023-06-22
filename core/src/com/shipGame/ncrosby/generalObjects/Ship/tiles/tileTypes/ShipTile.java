@@ -81,7 +81,7 @@ public abstract class ShipTile extends GameObject{
 	 */
 	public void render(tileShipGame game) {
 		if(this.debugMode){
-			game.font.draw(game.batch, getxIndex() + ", " + getyIndex(), getX() + 2 , getY() + (size.y/4));
+			game.font.draw(game.batch, getPositionAsString(), getX() + 2 , getY() + (size.y/4));
 		}
 	}
 

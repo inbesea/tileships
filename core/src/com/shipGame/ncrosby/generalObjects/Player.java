@@ -53,7 +53,6 @@ public class Player extends GameObject {
         Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, ShipTile.TILESIZE*.33f, ShipTile.TILESIZE * 0.5f);
         //r.intersects
         return r;
-
     }
 
     @Override

@@ -155,6 +155,7 @@ public class GameScreen implements Screen {
 
         if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
             drawGameObject(playerShip.getTileHoverIndicator());
+            drawGameObject(playerShip);
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
@@ -205,12 +206,13 @@ public class GameScreen implements Screen {
         String textureString = gameObject.getTexture();
 
         // Updates objects here.
-        gameObject.render(this.game);
+
         if (!Objects.equals(textureString, MainMenuScreen.ignoreLoad) && !Objects.equals(textureString, "")) { // If ID has associated string
             Texture texture = assetManager.get(textureString,Texture.class);
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
+        gameObject.render(this.game);
     }
 
     public OrthographicCamera getCamera() {
