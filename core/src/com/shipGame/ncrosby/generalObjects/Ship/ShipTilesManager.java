@@ -2,14 +2,12 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
 import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
-import com.shipGame.ncrosby.screens.GameScreen;
 
 import java.util.Arrays;
 import java.util.Stack;
@@ -376,17 +374,19 @@ public class ShipTilesManager {
             // Get all Shiptiles that are on edge
             ShipTile nearestEdge = closestTile(centerOfSearch, edgeTiles);
 
-            Array<Vector2> nullSidesLocs = nearestEdge.emptySideVectors();
-            int nullSidesCount = nullSidesLocs.size;
+            Array<Vector2> emptySideVectors = nearestEdge.emptySideVectors();
+            emptySideVectors.addAll(getConnectedEmptyDiagonalPositions(nearestEdge));
+
+            int nullSidesCount = emptySideVectors.size;
             // We have the closest tile (yay!) We need to act differently depending on the number of null sides.
             // or do we? Can we just add a vector to a list and the check which is closest?
             if(nullSidesCount == 0) {
                 throw new RuntimeException("Something went wrong when getting nearest edge vectors, None Found");
             } else if (nullSidesCount == 1) {
-                System.out.println("Only one side : " + nullSidesLocs.peek().x + ", " + nullSidesLocs.peek().y);
-                return nullSidesLocs.pop();
-            } else if (5 > nullSidesCount) {
-                Vector2 vector2 = closestVector2(centerOfSearch, nullSidesLocs);
+                System.out.println("Only one side : " + emptySideVectors.peek().x + ", " + emptySideVectors.peek().y);
+                return emptySideVectors.pop();
+            } else if (8 > nullSidesCount) {
+                Vector2 vector2 = closestVector2(centerOfSearch, emptySideVectors);
                 return vector2;
             } else {
                 throw new RuntimeException("Too many null sides!");
@@ -394,6 +394,60 @@ public class ShipTilesManager {
         } else {// Handle trivial case - vector is on vacancy
             return centerOfSearch;
         }
+    }
+
+    /**
+     * Takes a tile and returns the positions for adjacent corners that are empty and adjacent to the tile's neighbors
+     * @param nearestEdge
+     * @return
+     */
+    private Array<Vector2> getConnectedEmptyDiagonalPositions(ShipTile nearestEdge) {
+        Array<Vector2> results = new Array<>();
+
+        // Check if corners are adjacent to a neighbor.
+        boolean UR_isConnected = false, UL_isConnected = false, DR_isConnected = false, DL_isConnected = false;
+        if(nearestEdge.up() != null){
+            UR_isConnected = UL_isConnected = true;
+        }
+        if(nearestEdge.right() != null){
+            UR_isConnected = DR_isConnected = true;
+        }
+        if(nearestEdge.down() != null){
+            DR_isConnected = DL_isConnected = true;
+        }
+        if(nearestEdge.left() != null){
+            DL_isConnected = UL_isConnected = true;
+        }
+
+        // get diagonal locations
+        // Get tilesize dependant offsets
+        float bigOffset = ShipTile.TILESIZE * 1.5f;
+        float smallOffset = ShipTile.TILESIZE/2f;
+
+        Vector2 upRight;
+        Vector2 upLeft;
+        Vector2 downRight;
+        Vector2 downLeft;
+
+        // Take connected and empty spaces and add to the results.
+        if(UR_isConnected){ // If space is connecected add to list if empty
+            upRight = new Vector2(nearestEdge.getX() + bigOffset, nearestEdge.getY() + bigOffset);
+            if(returnTile(upRight) == null) results.add(upRight);
+        }
+        if(UL_isConnected){
+            upLeft = new Vector2(nearestEdge.getX() - smallOffset, nearestEdge.getY() + bigOffset);
+            if(returnTile(upLeft) == null) results.add(upLeft);
+        }
+        if(DR_isConnected){
+            downRight = new Vector2(nearestEdge.getX() + bigOffset, nearestEdge.getY() - smallOffset);
+            if(returnTile(downRight) == null) results.add(downRight);
+        }
+        if(DL_isConnected){
+            downLeft = new Vector2(nearestEdge.getX() - smallOffset, nearestEdge.getY() - smallOffset);
+            if(returnTile(downLeft) == null) results.add(downLeft);
+        }
+
+        return results;
     }
 
     /**

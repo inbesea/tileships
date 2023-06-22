@@ -97,7 +97,7 @@ public class AdjacentTiles {
         else return INVALID;
     }
 
-    /**'
+    /**
      * Returns all non-null neighbor values.
      * @return
      */

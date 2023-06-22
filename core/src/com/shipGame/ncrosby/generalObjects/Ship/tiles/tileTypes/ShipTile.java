@@ -233,6 +233,7 @@ public abstract class ShipTile extends GameObject{
 
 	/**
 	 * Returns a list of Vectors corresponding to the null sides.
+	 * Should give center of the side being referenced
 	 *
 	 * @return - array of vectors corresponding to null sides
 	 */
@@ -240,10 +241,10 @@ public abstract class ShipTile extends GameObject{
 		Array<Vector2> results = new Array<>();
 
 		// Get each
-		if(up() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() + ShipTile.TILESIZE));
-		if(right() == null)results.add(new Vector2(getX() + ShipTile.TILESIZE , getY() + (ShipTile.TILESIZE/2.0f)));
-		if(down() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() - 1));
-		if(left() == null)results.add(new Vector2(getX() - 1 , getY() + (ShipTile.TILESIZE/2.0f)));
+		if(up() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() + ShipTile.TILESIZE * 1.5f));
+		if(right() == null)results.add(new Vector2(getX() + ShipTile.TILESIZE * 1.5f, getY() + (ShipTile.TILESIZE/2.0f)));
+		if(down() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() - (ShipTile.TILESIZE / 2.0f)));
+		if(left() == null)results.add(new Vector2(getX() - (ShipTile.TILESIZE / 2.0f), getY() + (ShipTile.TILESIZE/2.0f)));
 
 		return results;
 	}
