@@ -341,7 +341,7 @@ public class ShipTilesManager {
     public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector3 mousePosition) {
 
         // Get the closest side of the tile from the mouse position
-        int closestSide = getQuadrant(closestTile.getPosition(), new Vector2(mousePosition.x, mousePosition.y));
+        int closestSide = getQuadrant(closestTile.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
 
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"

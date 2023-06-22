@@ -309,4 +309,12 @@ public abstract class ShipTile extends GameObject{
 			throw new RuntimeException("Tile " + getPositionAsString() + ", " + getAbbreviation() + " does not belong to its' manager reference.");
 		}
 	}
+
+	/**
+	 * Returns center of tile based on this.size
+	 * @return
+	 */
+	public Vector2 getCenter(){
+		return new Vector2(position.x + this.size.x / 2, position.y + this.size.y / 2);
+	}
 }

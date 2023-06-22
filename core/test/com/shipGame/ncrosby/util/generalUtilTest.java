@@ -1,6 +1,7 @@
 package com.shipGame.ncrosby.util;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,5 +50,11 @@ public class generalUtilTest extends TestCase {
 
         // Then
         Assert.assertEquals(3, quadrant);
+    }
+
+    @Test
+    public void testWhenTwoNegativeVectors_ReturnCorrectClosestVector(){
+        Array<Vector2> vector2Array = new Array<>();
+//        vector2Array.add(new Vector2(), new Vector2(-1.0));
     }
 }
