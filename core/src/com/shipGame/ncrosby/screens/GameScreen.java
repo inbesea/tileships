@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 import com.shipGame.ncrosby.physics.collisions.CollisionHandler;
 import com.shipGame.ncrosby.physics.collisions.CollisionListener;
@@ -40,7 +41,7 @@ public class GameScreen implements Screen {
     private final Player player;
 
     // Represents each side's size
-    public static final Vector2 playerSize = new Vector2(tileShipGame.convertPixelsToMeters(47),tileShipGame.convertPixelsToMeters(53));
+    public static final Vector2 playerSize = new Vector2(ShipTile.TILESIZE*.33f, ShipTile.TILESIZE*.45f);
 
     OrthographicCamera camera;
     SimpleTouch st;
