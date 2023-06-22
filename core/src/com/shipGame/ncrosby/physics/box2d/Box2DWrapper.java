@@ -85,6 +85,8 @@ public class Box2DWrapper implements Box2DWrapperInterface{
 
                 // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
                 gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
+                gameObjectNewPosition.x = gameObjectNewPosition.x * ShipTile.TILESIZE;
+                gameObjectNewPosition.y = gameObjectNewPosition.y * ShipTile.TILESIZE;
                 // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
 
                 //
@@ -155,12 +157,18 @@ public class Box2DWrapper implements Box2DWrapperInterface{
         Vector2 position = object.getPosition();
 
         // Adjust init position to center the box on the tile
-        BodyDef bodyDef = newStaticBodyDef(position.x + ShipTile.TILESIZE/2, position.y + ShipTile.TILESIZE/2);
+        BodyDef bodyDef = newStaticBodyDef(
+                (position.x / ShipTile.TILESIZE) + ShipTile.TILESIZE/2, // Position and size scaled up to game size.
+                (position.y / ShipTile.TILESIZE) + ShipTile.TILESIZE/2
+        );
         Body body = world.createBody(bodyDef);
 
         PolygonShape tileShape = new PolygonShape();
 
-        tileShape.setAsBox(ShipTile.TILESIZE/2, ShipTile.TILESIZE/2);
+        tileShape.setAsBox(
+                (ShipTile.TILESIZE / ShipTile.TILESIZE)/2,
+                (ShipTile.TILESIZE / ShipTile.TILESIZE)/2
+        );
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = tileShape;
@@ -192,14 +200,18 @@ public class Box2DWrapper implements Box2DWrapperInterface{
     private void setAsteroidPhysics(Asteroid asteroid) {
 
         Vector2 position = asteroid.getPosition();
-        BodyDef bodyDef = generalUtil.newDynamicBodyDef(position.x + asteroid.getCircleBounds().radius,
-                position.y + asteroid.getCircleBounds().radius);
+
+        BodyDef bodyDef = generalUtil.newDynamicBodyDef(
+                (position.x / ShipTile.TILESIZE) + asteroid.getCircleBounds().radius,
+                (position.y / ShipTile.TILESIZE) + asteroid.getCircleBounds().radius
+        );
         Body body = world.createBody(bodyDef);
+
         body.setLinearVelocity(getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
                 getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
         // Create circle to add to asteroid
         CircleShape circle = new CircleShape();
-        circle.setRadius(Asteroid.radius);
+        circle.setRadius(Asteroid.radius / ShipTile.TILESIZE);
         // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
