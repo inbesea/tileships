@@ -216,86 +216,6 @@ public class Ship extends GameObject {
 
 	}
 
-
-	/**
-	 * Handles collisions between ship and game objects
-	 *
-	 * @param gameObject
-	 */
-	public void collision(GameObject gameObject , GameScreen gameScreen) {
-
-		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
-
-		if(gameObject.getID() == ID.Asteroid){ // Object collision was asteroid
-			Asteroid asteroid = null;
-
-            // Checking for object casting issues
-			try{
-				asteroid = (Asteroid) gameObject;
-			} catch (ClassCastException classCastException){
-				System.out.println("ERROR casting Asteroid ID'ed GameObject : " + gameObject.getClass().toString() +
-						"\n" + classCastException);
-			}
-			ShipTile shipTile;
-			boolean removeAsteroid = false;
-
-            // Checking collisions between asteroid game object and all tiles.
-			for(int i = 0 ; i < existing.size ; i++){
-				shipTile = existing.get(i);
-
-				// Check if asteroid intersects ShipTile
-				Rectangle rectangle = shipTile.getBounds();
-				Circle asteroidCircle = asteroid.getCircleBounds();
-				boolean isCollision = circleIntersectsRectangle(asteroidCircle,rectangle);
-
-				if(isCollision){
-					System.out.println("Asteroid collision with " + shipTile.getID());
-					if(shipTile.getID() == ID.CoreTile){
-
-						// Get middle of Asteroid
-						float x = asteroid.getX() + asteroid.getCircleBounds().radius;
-						float y = asteroid.getY() + asteroid.getCircleBounds().radius;
-						removeAsteroid = true;
-
-						// New standard tile
-						addTileToShip(x, y,
-								ID.StandardTile);
-						break;
-					} else if (shipTile.getID() == ID.StandardTile) {
-						// Explode tile and asteroid
-						removeTileFromShip(shipTile);
-						increaseDestroyedTile(1);
-
-						removeAsteroid = true;
-					} else if(shipTile.getID() == ID.StrongTile){
-						System.out.println("Attempting to bounce");
-						try{ // Cast to Strong tile to check for type
-                            Vector2 initSpeed = new Vector2(asteroid.getVelX(), asteroid.getVelY());
-							asteroid.collision(shipTile);
-                            if(new Vector2(asteroid.getVelX(), asteroid.getVelY()).equals(initSpeed)){
-                                System.out.println("Asteroid failed to bounce ");
-                            }
-						} catch (ClassCastException cce){
-							System.out.println("Class Cast Exception on " + shipTile.getClass().toString() + " to StrongTile " +
-									"\n" + cce);
-						}
-
-					}
-				}
-			}
-			//Handles Asteroid destroy.
-			// If this is done in the forloop it can't find the reference
-			if(removeAsteroid){
-				gameScreen.removeGameObject(gameObject);
-				gameScreen.removeAsteroid(gameObject);
-				gameScreen.updateMouseMoved();
-			}
-
-		}
-
-		// Might could be used? :/ Probably not tho
-	}
-
 	@Override
 	public Circle getCircleBounds() {
 		return null;
@@ -532,13 +452,4 @@ public class Ship extends GameObject {
 		return draggedTile;
 	}
 
-	/**
-	 * Hacky way to hand over the variables for physics damn it
-	 * @param gameScreen
-	 */
-	public void setScreen(GameScreen gameScreen) {
-		this.screen = screen;
-		this.shipTilesManager.screen = gameScreen;
-		this.shipTilesManager.world = gameScreen.world;
-	}
 }

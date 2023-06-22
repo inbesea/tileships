@@ -217,10 +217,10 @@ public class generalUtil {
         // Should return the difference between the placed position and middle of the close tile.
         float normalBoatX =
                 boat.x -
-                        (anchor.x + (ShipTile.TILESIZE/2.0f));// Divide here to get center of tile for comparison
+                        (anchor.x);// Divide here to get center of tile for comparison
         float normalBoatY =
                 boat.y -
-                        (anchor.y + (ShipTile.TILESIZE/2.0f));
+                        (anchor.y);
 
         // the point is above y = x if the y is larger than x
         boolean abovexEy = normalBoatY > normalBoatX;

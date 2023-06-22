@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ncrosby.ID;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 import com.shipGame.ncrosby.physics.collisions.CollisionHandler;
 import com.shipGame.ncrosby.physics.collisions.CollisionListener;
 import com.shipGame.ncrosby.player.PlayerInput;
@@ -39,7 +41,7 @@ public class GameScreen implements Screen {
     private final Player player;
 
     // Represents each side's size
-    public static final Vector2 playerSize = new Vector2(tileShipGame.convertPixelsToMeters(47),tileShipGame.convertPixelsToMeters(53));
+    public static final Vector2 playerSize = new Vector2(ShipTile.TILESIZE*.33f, ShipTile.TILESIZE*.45f);
 
     OrthographicCamera camera;
     SimpleTouch st;
@@ -49,9 +51,6 @@ public class GameScreen implements Screen {
     public static final float spawnAreaMax = tileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
-    public Array<Body> bodies = new Array<Body>();
-    public World world;
-
     private CollisionListener collisionListener;
     private CollisionHandler collisionHandler;
 
@@ -59,8 +58,6 @@ public class GameScreen implements Screen {
         this.game = game;
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
-        this.world = game.world;
-        this.bodies = game.bodies;
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
         gameScreenMusic.play();
@@ -75,7 +72,6 @@ public class GameScreen implements Screen {
         // init ship
         playerShip = new Ship(new Vector2(-1, -1), assetManager);
         game.setPlayerShip(playerShip);
-        playerShip.setScreen(this);
         playerShip.initialize();
 
         // init player
@@ -95,58 +91,14 @@ public class GameScreen implements Screen {
         hud = new HUD(game.assetManager, game);
 
         // Create collision listener
-        collisionHandler = new CollisionHandler(asteroidManager, world);// Handler has manager to manage stuff
+        collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
         collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
-        world.setContactListener(collisionListener);
+        Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
     }
 
     @Override
     public void show() {
 
-    }
-
-    /**
-     * Method to update game objects with the bodies object position
-     *
-     * Called before drawing
-     */
-    private void updateGameObjectsForPhysics(){
-        for (Body b : this.bodies) {
-            // Get the body's user data - in this example, our user
-            // data is an instance of the Entity class
-            GameObject gameObject = (GameObject) b.getUserData();
-            Vector2 gameObjectNewPosition;
-
-            if (gameObject != null) {
-
-                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
-                gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
-                // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
-
-                //
-                if(b.getType().equals(BodyDef.BodyType.StaticBody)){
-                    continue;
-                }
-                // Update the entities/sprites position and angle
-                gameObject.setPosition(gameObjectNewPosition);
-
-                try{
-                    gameObject.getBounds().setPosition(gameObjectNewPosition);
-                }catch (NullPointerException nullPointerException){
-
-                }
-
-                try{
-                    gameObject.getCircleBounds().setPosition(gameObjectNewPosition);
-                } catch (NullPointerException nullPointerException){
-                    // shouldn't do this probably but w/e
-                }
-
-
-                // We need to convert our angle from radians to degrees
-                gameObject.setRotation(MathUtils.radiansToDegrees * b.getAngle());
-            }
-        }
     }
 
     /**
@@ -159,7 +111,7 @@ public class GameScreen implements Screen {
         extendViewport.apply();
 
         // Update game object positions
-        updateGameObjectsForPhysics();
+        Box2DWrapper.getInstance().updateGameObjectsToPhysicsSimulation();
 
         // Draw game objects
         drawGameObjects();
@@ -199,23 +151,23 @@ public class GameScreen implements Screen {
             if(go.isDead())throw new RuntimeException("Game Object was not swept " + go.getID().toString());
 
             drawGameObject(go); // Call helper to draw object
-            //collisionDetection(go);
         }
 
         if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
             drawGameObject(playerShip.getTileHoverIndicator());
+            drawGameObject(playerShip);
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
         game.batch.end();
 
-        game.debugRenderer.render(game.world, camera.combined);
+        Box2DWrapper.getInstance().drawDebug(camera);
 
-        game.stepPhysicsWorld(Gdx.graphics.getDeltaTime());
+        Box2DWrapper.getInstance().stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
         // Call collision handling first and then sweep as objects are marked during this step lol
         collisionHandler.handleCollisions();
-        collisionHandler.sweepForDeadBodies(this.bodies);
+        Box2DWrapper.getInstance().sweepForDeadBodies();
     }
 
     @Override
@@ -254,43 +206,13 @@ public class GameScreen implements Screen {
         String textureString = gameObject.getTexture();
 
         // Updates objects here.
-        gameObject.render(this.game);
+
         if (!Objects.equals(textureString, MainMenuScreen.ignoreLoad) && !Objects.equals(textureString, "")) { // If ID has associated string
             Texture texture = assetManager.get(textureString,Texture.class);
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
-    }
-
-
-    /**
-     * Routes game objects to be checked against other game objects for collisions
-     * @param gameObject
-     */
-    private void collisionDetection(GameObject gameObject) {
-        if(gameObject.getID() == ID.Ship){ // Is GO Ship object?
-            // Ships don't directly have collision with anything. Things check if they collide with tiles in the ship
-        }else{ // All other objects
-            GameObject go;
-            for(int i = 0 ; i < gameObjects.size ; i++){ // Pass by reference for loop
-
-                go = gameObjects.get(i); // Get a go from all game objects
-
-                if(go.getID() == ID.Ship && gameObject.getID() == ID.Asteroid){ // If the object checked and the possible collision is
-                    Ship ship = (Ship) go;
-                    // with an asteroid then sent the asteroid into method of the ship.
-                    ship.collision(gameObject, this); // Give object to ship to check collision for tiles in ship
-                    break;
-                } else { // tiles are in ship so we can take that on it's own.
-//                    if(gameObject == go)continue;
-//                    if(gameObject.getBounds().contains(go.getBounds())){
-//                        gameObject.collision(go);
-//                        go.collision(gameObject);
-//                    }
-                }
-            }
-        }
-
+        gameObject.render(this.game);
     }
 
     public OrthographicCamera getCamera() {

@@ -19,7 +19,7 @@ public abstract class ShipTile extends GameObject{
 	private long placed = System.currentTimeMillis();
 	private int cool = 0;
 	public boolean isEdge;
-	public final static float TILESIZE = 1f;
+	public final static float TILESIZE = 64f;
 	private com.badlogic.gdx.math.Rectangle collider;
 	private TileTypeData typeData; // Need for unique platonic form data
 
@@ -81,7 +81,7 @@ public abstract class ShipTile extends GameObject{
 	 */
 	public void render(tileShipGame game) {
 		if(this.debugMode){
-			game.font.draw(game.batch, getxIndex() + ", " + getyIndex(), getX() + 2 , getY() + (size.y/4));
+			game.font.draw(game.batch, getPositionAsString(), getX() + 2 , getY() + (size.y/4));
 		}
 	}
 
@@ -233,6 +233,7 @@ public abstract class ShipTile extends GameObject{
 
 	/**
 	 * Returns a list of Vectors corresponding to the null sides.
+	 * Should give center of the side being referenced
 	 *
 	 * @return - array of vectors corresponding to null sides
 	 */
@@ -240,10 +241,10 @@ public abstract class ShipTile extends GameObject{
 		Array<Vector2> results = new Array<>();
 
 		// Get each
-		if(up() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() + ShipTile.TILESIZE));
-		if(right() == null)results.add(new Vector2(getX() + ShipTile.TILESIZE , getY() + (ShipTile.TILESIZE/2.0f)));
-		if(down() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() - 1));
-		if(left() == null)results.add(new Vector2(getX() - 1 , getY() + (ShipTile.TILESIZE/2.0f)));
+		if(up() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() + ShipTile.TILESIZE * 1.5f));
+		if(right() == null)results.add(new Vector2(getX() + ShipTile.TILESIZE * 1.5f, getY() + (ShipTile.TILESIZE/2.0f)));
+		if(down() == null)results.add(new Vector2(getX() + (ShipTile.TILESIZE/2.0f) , getY() - (ShipTile.TILESIZE / 2.0f)));
+		if(left() == null)results.add(new Vector2(getX() - (ShipTile.TILESIZE / 2.0f), getY() + (ShipTile.TILESIZE/2.0f)));
 
 		return results;
 	}
@@ -307,5 +308,13 @@ public abstract class ShipTile extends GameObject{
 		} else {
 			throw new RuntimeException("Tile " + getPositionAsString() + ", " + getAbbreviation() + " does not belong to its' manager reference.");
 		}
+	}
+
+	/**
+	 * Returns center of tile based on this.size
+	 * @return
+	 */
+	public Vector2 getCenter(){
+		return new Vector2(position.x + this.size.x / 2, position.y + this.size.y / 2);
 	}
 }

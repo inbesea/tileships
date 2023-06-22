@@ -1,20 +1,16 @@
 package com.shipGame.ncrosby.managers;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 import com.shipGame.ncrosby.screens.GameScreen;
-import com.shipGame.ncrosby.tileShipGame;
-import com.shipGame.ncrosby.util.generalUtil;
-
-import java.util.Arrays;
 
 import static com.shipGame.ncrosby.util.generalUtil.getRandomNumber;
-import static com.shipGame.ncrosby.util.generalUtil.getRandomlyNegativeNumber;
 
 /*
 * Have a way to call this during render that will handle adding more asteroids.
@@ -34,7 +30,6 @@ public class AsteroidManager implements Manager {
     private Array<Asteroid> asteroids = new Array<>();
     private int numberOfAsteroids = asteroids.size;
     // Needed for physics simulation
-    World world;
     Circle circle;
     float spawnRadius;
 
@@ -48,8 +43,7 @@ public class AsteroidManager implements Manager {
         this.screen = screen;
         asteroidLimit = 20;
         numberOfAsteroids = 0;
-        spawning = true; // Assume spawning if using this constructor.
-        this.world = screen.getGame().world;
+        spawning = false; // Assume spawning if using this constructor.
 
         this.circle = new Circle();
         spawnRadius = screen.getCamera().viewportWidth;
@@ -62,7 +56,6 @@ public class AsteroidManager implements Manager {
         this.spawning = spawning;
         asteroidLimit = 30;
         numberOfAsteroids = 0;
-        this.world = screen.getGame().world;
 
         this.circle = new Circle();
         spawnRadius = screen.getCamera().viewportWidth;
@@ -74,7 +67,7 @@ public class AsteroidManager implements Manager {
      */
     public void checkForSpawn(){
         cleanup();
-        while(canSpawn()){
+        while(canSpawn() && spawning){
             spawnAsteroid();
         }
     }
@@ -106,8 +99,7 @@ public class AsteroidManager implements Manager {
      */
     public void removeAsteroid(Asteroid asteroid){
         asteroids.removeValue(asteroid, true);
-        world.destroyBody(asteroid.getBody());
-        screen.bodies.removeValue(asteroid.getBody(), true);
+        Box2DWrapper.getInstance().removeObjectBody(asteroid.getBody());
     }
 
     /**
@@ -122,8 +114,7 @@ public class AsteroidManager implements Manager {
         try{
             Asteroid asteroid = (Asteroid) gameObject;
             asteroids.removeValue(asteroid, true);
-            world.destroyBody(asteroid.getBody());
-            screen.bodies.removeValue(asteroid.getBody(), true);
+            Box2DWrapper.getInstance().removeObjectBody(asteroid.getBody());
             screen.removeGameObject(asteroid);
             return true;
         } catch (ClassCastException cce){
@@ -151,11 +142,11 @@ public class AsteroidManager implements Manager {
     public void spawnAsteroid(){
 
         // Check if active
-        if(spawning){
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(1f,1f), ID.Asteroid, this);
-            setAsteroidPhysics(asteroid);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILESIZE,ShipTile.TILESIZE), ID.Asteroid, this);
+            Box2DWrapper.getInstance().setObjectPhysics(asteroid);
+            //setAsteroidPhysics(asteroid);
 
             screen.newGameObject(asteroid);
             asteroids.add(asteroid);
@@ -165,44 +156,7 @@ public class AsteroidManager implements Manager {
                 throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + screen.getGameObjects().size +
                         " location of gameObject " + asteroid.getX() + ", " + asteroid.getY() + " GameObject ID : " +asteroid.getID());
             }
-        }
 //        System.out.println("Spawned Asteroid : asteroids.size " + asteroids.size);
-    }
-
-    /**
-     * Easy way to add physics attributes to asteroid instance
-     */
-    private void setAsteroidPhysics(Asteroid asteroid) {
-        Vector2 position = asteroid.getPosition();
-        BodyDef bodyDef = generalUtil.newDynamicBodyDef(position.x + asteroid.getCircleBounds().radius,
-                position.y + asteroid.getCircleBounds().radius);
-        Body body = screen.world.createBody(bodyDef);
-
-        body.setLinearVelocity(generalUtil.getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
-                getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
-
-        // Create circle to add to asteroid
-        CircleShape circle = new CircleShape();
-        circle.setRadius(Asteroid.radius);
-
-        // Create a fixture definition to apply our shape to
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.0f; // Make it bounce a little bit
-
-        body.setUserData(asteroid);
-        asteroid.setBody(body);
-        screen.bodies.add(body);
-
-        // Create our fixture and attach it to the body
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(asteroid);
-
-        // Remember to dispose of any shapes after you're done with them!
-        // BodyDef and FixtureDef don't need disposing, but shapes do.
-        circle.dispose();
     }
 
     /**
@@ -250,10 +204,14 @@ public class AsteroidManager implements Manager {
      */
     public void removeAllAsteroids(){
         // Go through the asteroids and remove their reference from the local list and the screen object list
-        for(int i = 0 ; i < asteroids.size ; i++){
-            screen.removeGameObject(asteroids.removeIndex(i)); // Compact method to remove locally and in GameScreen
-        }
-        if(asteroids.size == 0) throw new RuntimeException("Did not remove all asteroids in removeAllAsteroids() : \n"
-                + Arrays.toString(Thread.currentThread().getStackTrace()));
+
+        System.out.println("REMOVE ALL ASTEROIDS NOT IMPLEMENTED");
+        return;
+
+//        for(int i = 0 ; i < asteroids.size ; i++){
+//            screen.removeGameObject(asteroids.removeIndex(i)); // Compact method to remove locally and in GameScreen
+//        }
+//        if(asteroids.size == 0) throw new RuntimeException("Did not remove all asteroids in removeAllAsteroids() : \n"
+//                + Arrays.toString(Thread.currentThread().getStackTrace()));
     }
 }

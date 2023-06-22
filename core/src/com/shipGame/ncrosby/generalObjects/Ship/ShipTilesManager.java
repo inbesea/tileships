@@ -2,13 +2,12 @@ package com.shipGame.ncrosby.generalObjects.Ship;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
-import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 
 import java.util.Arrays;
 import java.util.Stack;
@@ -22,8 +21,6 @@ public class ShipTilesManager {
     private Array<ShipTile> existingTiles;
     private Array<ShipTile> edgeTiles;
     Ship ship;
-    World world;
-    GameScreen screen;
 
     /**
      * Constructor method
@@ -127,8 +124,10 @@ public class ShipTilesManager {
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
 
-        setTilePhysics(tempTile);
+        Box2DWrapper.getInstance().setObjectPhysics(tempTile);
 
+
+        //setTilePhysics(tempTile);
         if(existingTiles.size < edgeTiles.size){
             throw new RuntimeException("More edgeTiles than existing! " +
                     " existingTiles.size : " + existingTiles.size +
@@ -137,49 +136,13 @@ public class ShipTilesManager {
         return tempTile;
     }
 
-    /**
-     * Gives tiles their physics attributes and hands the body values to the game screen list.
-     * @param tempTile
-     */
-    private void setTilePhysics(ShipTile tempTile) {
-        Vector2 position = tempTile.getPosition();
-
-        // Adjust init position to center the box on the tile
-        BodyDef bodyDef = newStaticBodyDef(position.x + ShipTile.TILESIZE/2, position.y + ShipTile.TILESIZE/2);
-        Body body = world.createBody(bodyDef);
-
-        PolygonShape tileShape = new PolygonShape();
-
-        tileShape.setAsBox(ShipTile.TILESIZE/2, ShipTile.TILESIZE/2);
-//        , tempTile.getPosition(), 0
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = tileShape;
-        fixtureDef.density = 0.0f;
-        fixtureDef.friction = 1.0f;
-        fixtureDef.restitution = 0.0f;
-
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(tempTile);
-
-        body.setUserData(tempTile);
-        tempTile.setBody(body);
-
-        // This step makes the body available to use on the screen level.
-        screen.bodies.add(body);
-
-        // Remember to dispose of any shapes after you're done with them!
-        // BodyDef and FixtureDef don't need disposing, but shapes do.
-        tileShape.dispose();
-    }
-
     private void validateNewTileIndex(ShipTile newTile) {
         ShipTile existingTile;
         for(int i = 0 ; i < existingTiles.size ; i++){
             existingTile = existingTiles.get(i);
             if(newTile.getxIndex() == existingTile.getxIndex() && newTile.getyIndex() == existingTile.getyIndex()){
                 throw new RuntimeException("New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
-                        existingTile.getPositionAsString() + " id : " + existingTile.getID() + Arrays.toString(Thread.currentThread().getStackTrace()));
+                        existingTile.getPositionAsString() + " id : " + existingTile.getID());
             }
         }
     }
@@ -326,6 +289,8 @@ public class ShipTilesManager {
      */
     public int[] calculateIndex(float x, float y) {
 
+        // A locations' index is determined by a range of 0 == x where x is between tilesize*0 -> tilesize*1 - 0.01
+
         // -1 shifting wont cause issues because the flow will subtract one from it either way
         // -64 - -1 will return index -1 yayy
 
@@ -341,19 +306,19 @@ public class ShipTilesManager {
             if(yNegative) {
                 // x, y negative
                 // get index and subtract one.
-                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE) - 1);
-                XYresult[1] = (int) Math.floor(( (y + 1) / ShipTile.TILESIZE) - 1);
+                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE));
+                XYresult[1] = (int) Math.floor(( (y + 1) / ShipTile.TILESIZE));
             }
             else {
                 // only x negative
-                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE) - 1);
+                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE));
                 XYresult[1] = (int) Math.floor( (y) / ShipTile.TILESIZE);
             }
         }
         else if (yNegative) {
             // only Y negative
             XYresult[0] = (int) Math.floor((x) / ShipTile.TILESIZE);
-            XYresult[1] = (int) Math.floor(( (y+ 1) / ShipTile.TILESIZE) - 1);
+            XYresult[1] = (int) Math.floor(( (y+ 1) / ShipTile.TILESIZE));
         }
         else {
             XYresult[0] = (int) Math.floor((x) / ShipTile.TILESIZE);
@@ -378,7 +343,7 @@ public class ShipTilesManager {
     public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector3 mousePosition) {
 
         // Get the closest side of the tile from the mouse position
-        int closestSide = getQuadrant(closestTile.getPosition(), new Vector2(mousePosition.x, mousePosition.y));
+        int closestSide = getQuadrant(closestTile.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
 
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
@@ -411,17 +376,19 @@ public class ShipTilesManager {
             // Get all Shiptiles that are on edge
             ShipTile nearestEdge = closestTile(centerOfSearch, edgeTiles);
 
-            Array<Vector2> nullSidesLocs = nearestEdge.emptySideVectors();
-            int nullSidesCount = nullSidesLocs.size;
+            Array<Vector2> emptySideVectors = nearestEdge.emptySideVectors();
+            emptySideVectors.addAll(getConnectedEmptyDiagonalPositions(nearestEdge));
+
+            int nullSidesCount = emptySideVectors.size;
             // We have the closest tile (yay!) We need to act differently depending on the number of null sides.
             // or do we? Can we just add a vector to a list and the check which is closest?
             if(nullSidesCount == 0) {
                 throw new RuntimeException("Something went wrong when getting nearest edge vectors, None Found");
             } else if (nullSidesCount == 1) {
-                System.out.println("Only one side : " + nullSidesLocs.peek().x + ", " + nullSidesLocs.peek().y);
-                return nullSidesLocs.pop();
-            } else if (5 > nullSidesCount) {
-                Vector2 vector2 = closestVector2(centerOfSearch, nullSidesLocs);
+                System.out.println("Only one side : " + emptySideVectors.peek().x + ", " + emptySideVectors.peek().y);
+                return emptySideVectors.pop();
+            } else if (8 > nullSidesCount) {
+                Vector2 vector2 = closestVector2(centerOfSearch, emptySideVectors);
                 return vector2;
             } else {
                 throw new RuntimeException("Too many null sides!");
@@ -429,6 +396,60 @@ public class ShipTilesManager {
         } else {// Handle trivial case - vector is on vacancy
             return centerOfSearch;
         }
+    }
+
+    /**
+     * Takes a tile and returns the positions for adjacent corners that are empty and adjacent to the tile's neighbors
+     * @param nearestEdge
+     * @return
+     */
+    private Array<Vector2> getConnectedEmptyDiagonalPositions(ShipTile nearestEdge) {
+        Array<Vector2> results = new Array<>();
+
+        // Check if corners are adjacent to a neighbor.
+        boolean UR_isConnected = false, UL_isConnected = false, DR_isConnected = false, DL_isConnected = false;
+        if(nearestEdge.up() != null){
+            UR_isConnected = UL_isConnected = true;
+        }
+        if(nearestEdge.right() != null){
+            UR_isConnected = DR_isConnected = true;
+        }
+        if(nearestEdge.down() != null){
+            DR_isConnected = DL_isConnected = true;
+        }
+        if(nearestEdge.left() != null){
+            DL_isConnected = UL_isConnected = true;
+        }
+
+        // get diagonal locations
+        // Get tilesize dependant offsets
+        float bigOffset = ShipTile.TILESIZE * 1.5f;
+        float smallOffset = ShipTile.TILESIZE/2f;
+
+        Vector2 upRight;
+        Vector2 upLeft;
+        Vector2 downRight;
+        Vector2 downLeft;
+
+        // Take connected and empty spaces and add to the results.
+        if(UR_isConnected){ // If space is connecected add to list if empty
+            upRight = new Vector2(nearestEdge.getX() + bigOffset, nearestEdge.getY() + bigOffset);
+            if(returnTile(upRight) == null) results.add(upRight);
+        }
+        if(UL_isConnected){
+            upLeft = new Vector2(nearestEdge.getX() - smallOffset, nearestEdge.getY() + bigOffset);
+            if(returnTile(upLeft) == null) results.add(upLeft);
+        }
+        if(DR_isConnected){
+            downRight = new Vector2(nearestEdge.getX() + bigOffset, nearestEdge.getY() - smallOffset);
+            if(returnTile(downRight) == null) results.add(downRight);
+        }
+        if(DL_isConnected){
+            downLeft = new Vector2(nearestEdge.getX() - smallOffset, nearestEdge.getY() - smallOffset);
+            if(returnTile(downLeft) == null) results.add(downLeft);
+        }
+
+        return results;
     }
 
     /**
@@ -446,8 +467,9 @@ public class ShipTilesManager {
             }
             removeNeighbors(tile);
             logRemovedTile(tile);
-            screen.bodies.removeValue(tile.getBody(), true);
-            world.destroyBody(tile.getBody());
+
+            // Remove from simulation
+            Box2DWrapper.getInstance().removeObjectBody(tile.getBody());
         }
     }
 

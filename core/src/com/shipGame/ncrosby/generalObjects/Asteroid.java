@@ -119,8 +119,6 @@ public class Asteroid extends GameObject {
 	 * Draws basic enemy on screen relative to the camera
 	 */
 	public void render(tileShipGame game) {
-
-//		position.set(new Vector2(body.getPosition().x - circle.radius, body.getPosition().y - circle.radius));
 		circle.setPosition(body.getPosition());
 	}
 
