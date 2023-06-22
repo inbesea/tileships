@@ -289,6 +289,8 @@ public class ShipTilesManager {
      */
     public int[] calculateIndex(float x, float y) {
 
+        // A locations' index is determined by a range of 0 == x where x is between tilesize*0 -> tilesize*1 - 0.01
+
         // -1 shifting wont cause issues because the flow will subtract one from it either way
         // -64 - -1 will return index -1 yayy
 
@@ -304,19 +306,19 @@ public class ShipTilesManager {
             if(yNegative) {
                 // x, y negative
                 // get index and subtract one.
-                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE) - 1);
-                XYresult[1] = (int) Math.floor(( (y + 1) / ShipTile.TILESIZE) - 1);
+                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE));
+                XYresult[1] = (int) Math.floor(( (y + 1) / ShipTile.TILESIZE));
             }
             else {
                 // only x negative
-                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE) - 1);
+                XYresult[0] = (int) Math.floor(( (x + 1) / ShipTile.TILESIZE));
                 XYresult[1] = (int) Math.floor( (y) / ShipTile.TILESIZE);
             }
         }
         else if (yNegative) {
             // only Y negative
             XYresult[0] = (int) Math.floor((x) / ShipTile.TILESIZE);
-            XYresult[1] = (int) Math.floor(( (y+ 1) / ShipTile.TILESIZE) - 1);
+            XYresult[1] = (int) Math.floor(( (y+ 1) / ShipTile.TILESIZE));
         }
         else {
             XYresult[0] = (int) Math.floor((x) / ShipTile.TILESIZE);
