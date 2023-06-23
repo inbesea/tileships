@@ -18,6 +18,8 @@ import com.shipGame.ncrosby.screens.MainMenuScreen;
  * We need the logic to be referenced from this point.
  */
 public class tileShipGame extends Game {
+	public static float zoomMax = 5;
+	public static float zoomMin = 0.5f;
 	public AssetManager assetManager; // Assetmanager vital for optimization of reused art assets!
 	Screen gs;
 	public SpriteBatch batch; // Draws the textures and fonts etc.

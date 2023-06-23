@@ -43,7 +43,7 @@ public class AsteroidManager implements Manager {
         this.screen = screen;
         asteroidLimit = 20;
         numberOfAsteroids = 0;
-        spawning = false; // Assume spawning if using this constructor.
+        spawning = true; // Assume spawning if using this constructor.
 
         this.circle = new Circle();
         spawnRadius = screen.getCamera().viewportWidth;

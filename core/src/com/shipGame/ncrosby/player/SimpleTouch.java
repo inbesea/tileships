@@ -77,9 +77,17 @@ public class SimpleTouch implements InputProcessor {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        System.out.println(amountX + " " + amountY);
-        camera.zoom += ((amountY * tileShipGame.zoomSpeed) * Gdx.graphics.getDeltaTime());
-        return false;
+        //System.out.println("Zooming camera : old amount " + camera.zoom + " scrolled number : " + amountX + " " + amountY);
+        // Check the final value you would have based on the new calculation.
+        float newValue = camera.zoom + ((amountY * tileShipGame.zoomSpeed) * Gdx.graphics.getDeltaTime());
+
+        if (newValue >= tileShipGame.zoomMax)
+            newValue = tileShipGame.zoomMax;
+        else newValue = Math.max(newValue, tileShipGame.zoomMin);
+
+        camera.zoom = newValue;
+
+        return false; // Unused bool
     }
 
     @Override
