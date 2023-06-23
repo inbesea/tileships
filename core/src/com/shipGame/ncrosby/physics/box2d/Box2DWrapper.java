@@ -146,23 +146,19 @@ public class Box2DWrapper implements Box2DWrapperInterface{
     }
 
     /**
-     * Gives objects their physics attributes and hands the body values to the wrapper list.
-     * @param object
+     * Gives physicsObjects their physics attributes and hands the body values to the wrapper list.
+     * @param physicsObject
      */
-    public void setObjectPhysics(PhysicsObject object) {
+    public void setObjectPhysics(PhysicsObject physicsObject) {
 
-        // Set unique object properties
-        Body body = object.setPhysics(world);
+        // Set unique physicsObject properties
+        Body body = physicsObject.setPhysics(world);
 
-        body.setUserData(object);
-        object.setBody(body);
+        body.setUserData(physicsObject);
+        physicsObject.setBody(body);
 
         // This step makes the body available to use on the screen level.
-        this.bodies.add(body); // This need to be eliminated so the calls can be done elsewhere.
-        // This means we need to create the replacement and then remove the old system.
-
-        // Remember to dispose of any shapes after you're done with them!
-        // BodyDef and FixtureDef don't need disposing, but shapes do.
+        this.bodies.add(body);
     }
 
     /**
