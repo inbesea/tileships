@@ -1,5 +1,6 @@
 package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility;
 
+import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 
 /**
@@ -94,5 +95,18 @@ public class AdjacentTiles {
         else if(Left == possibleNeighbor)return LEFT;
         else if(Down == possibleNeighbor)return DOWN;
         else return INVALID;
+    }
+
+    /**
+     * Returns all non-null neighbor values.
+     * @return
+     */
+    public Array<ShipTile> allNeighbors(){
+        Array<ShipTile> results = new Array<ShipTile>();
+        if(Up != null) results.add(Up);
+        if(Down != null)results.add(Down);
+        if(Right != null)results.add(Right);
+        if(Left != null)results.add(Left);
+        return results;
     }
 }

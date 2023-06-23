@@ -33,7 +33,7 @@ public class Player extends GameObject {
     private float circleRotation = 0;
     private final int INIT_HELD_RADIUS = 32; // one Radius
 
-    private float playerSpeed = 3.125f;
+    private float playerSpeed = ShipTile.TILESIZE * 1.5f;
 
     public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, tileShipGame game) {
         super(position, size, id);
@@ -45,11 +45,14 @@ public class Player extends GameObject {
         this.playerShip =  game.getPlayerShip();
     }
 
+    /**
+     * Returns a rectangle for updating for physics simulation
+     * @return
+     */
     public com.badlogic.gdx.math.Rectangle getBounds() {
-        Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, tileShipGame.convertPixelsToMeters(32), tileShipGame.convertPixelsToMeters(32));
+        Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, ShipTile.TILESIZE*.33f, ShipTile.TILESIZE * 0.5f);
         //r.intersects
         return r;
-
     }
 
     @Override

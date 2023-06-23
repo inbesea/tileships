@@ -10,6 +10,7 @@ import com.shipGame.ncrosby.generalObjects.Player;
 import com.shipGame.ncrosby.generalObjects.Ship.Ship;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.tileShipGame;
+import com.shipGame.ncrosby.util.generalUtil;
 
 public class PlayerInput {
 
@@ -136,13 +137,32 @@ public class PlayerInput {
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.Q)){
-            camera.zoom += tileShipGame.zoomSpeed * Gdx.graphics.getDeltaTime();
+            localZoomClamp(false, camera);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.E)){
-            camera.zoom -= tileShipGame.zoomSpeed * Gdx.graphics.getDeltaTime();
+            localZoomClamp(true, camera);
         }
     }
 
+    /**
+     * Updates zoom level and clamps within acceptable clamp levels
+     * Meant for player use
+     * @param zoomIn
+     * @param camera
+     */
+    private static void localZoomClamp(boolean zoomIn, OrthographicCamera camera){
+        int zoomAmount;
+        if(zoomIn){zoomAmount = tileShipGame.zoomSpeed * -1;}
+        else{zoomAmount = tileShipGame.zoomSpeed;}
+
+        float newValue = camera.zoom + (zoomAmount * Gdx.graphics.getDeltaTime());
+
+        if (newValue >= tileShipGame.zoomMax)
+            newValue = tileShipGame.zoomMax;
+        else newValue = Math.max(newValue, tileShipGame.zoomMin);
+
+        camera.zoom = newValue;
+    }
 
     /**
      * This algo updates the camera on the player based on the difference between

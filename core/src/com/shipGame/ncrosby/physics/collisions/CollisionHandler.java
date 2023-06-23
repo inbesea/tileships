@@ -8,13 +8,13 @@ import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.ncrosby.managers.AsteroidManager;
+import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
 
 import java.util.ArrayList;
 
 public class CollisionHandler {
 
     AsteroidManager asteroidManager;
-    World world;
     GameObject a;
     GameObject b;
     ArrayList<Collision> collisions = new ArrayList<>();
@@ -23,9 +23,8 @@ public class CollisionHandler {
      * Collision Handler will need a lot of access to other managers to control what happens in the game.
      * @param asteroidManager
      */
-    public CollisionHandler(AsteroidManager asteroidManager, World world){
+    public CollisionHandler(AsteroidManager asteroidManager){
         this.asteroidManager = asteroidManager;
-        this.world = world;
     }
 
     public void handleCollision(Collision collision){
@@ -107,36 +106,4 @@ public class CollisionHandler {
         collisions.add(newCollision);
     }
 
-    /**
-     * Reviews and removes dead physics bodies
-     * */
-    public void sweepForDeadBodies(Array<Body> bodies) {
-        for (Body body : bodies) {
-            if (body != null) {
-                GameObject gameObject = (GameObject) body.getUserData();
-                if (gameObject.isDead()) {
-                    // We have not removed the object from the game.
-                    // We might need to just bite the bullet and create a gameobject call for deleting the object from an agnostic point of view.
-                    System.out.println("Removing a " + gameObject.getID().toString() + " instance from the game.");
-                    attemptGameObjectRemoval(gameObject);
-                }
-            }
-        }
-    }
-
-    /**
-     * Meant to filter out the possible use of
-     * @param gameObject
-     */
-    private void attemptGameObjectRemoval(GameObject gameObject) {
-        ID id = gameObject.getID();
-        if(id.isTileType()) {
-            System.out.println("Deleting a tile");
-            ShipTile tile = (ShipTile) gameObject;
-            tile.destroySelf();
-        } else {
-            System.out.println("Deleting not a tile");
-            gameObject.deleteFromGame();
-        }
-    }
 }
