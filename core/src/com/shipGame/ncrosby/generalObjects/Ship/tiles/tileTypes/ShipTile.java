@@ -3,15 +3,19 @@ package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeData;
+import com.shipGame.ncrosby.physics.PhysicsObject;
 import com.shipGame.ncrosby.tileShipGame;
 
-public abstract class ShipTile extends GameObject{
+import static com.shipGame.ncrosby.util.generalUtil.newStaticBodyDef;
+
+public abstract class ShipTile extends GameObject implements PhysicsObject {
 
 	private final AdjacentTiles neighbors = new AdjacentTiles();
 	private final int xIndex, yIndex;
@@ -316,5 +320,47 @@ public abstract class ShipTile extends GameObject{
 	 */
 	public Vector2 getCenter(){
 		return new Vector2(position.x + this.size.x / 2, position.y + this.size.y / 2);
+	}
+
+	public Body setPhysics(World world){
+		// Adjust init position to center the box on the tile
+		BodyDef bodyDef = newStaticBodyDef(
+				(position.x / ShipTile.TILESIZE) + ShipTile.TILESIZE/2, // Position and size scaled up to game size.
+				(position.y / ShipTile.TILESIZE) + ShipTile.TILESIZE/2
+		);
+		Body body = world.createBody(bodyDef);
+
+		PolygonShape tileShape = new PolygonShape();
+
+		// Specific to tiles. This is too specific.
+		tileShape.setAsBox(
+				(ShipTile.TILESIZE / ShipTile.TILESIZE)/2,
+				(ShipTile.TILESIZE / ShipTile.TILESIZE)/2
+		);
+
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = tileShape;
+		fixtureDef.density = 0.0f;
+		fixtureDef.friction = 1.0f;
+		fixtureDef.restitution = 0.0f;
+
+		Fixture fixture = body.createFixture(fixtureDef);
+		fixture.setUserData(this);
+
+		// Remember to dispose of any shapes after you're done with them!
+		// BodyDef and FixtureDef don't need disposing, but shapes do.
+		tileShape.dispose();
+
+		return body;
+	}
+
+	@Override
+	public void setBody(Body body) {
+		this.body = body;
+	}
+
+	@Override
+	public Body getBody() {
+		return body;
 	}
 }

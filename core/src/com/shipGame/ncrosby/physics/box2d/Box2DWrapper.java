@@ -9,6 +9,7 @@ import com.shipGame.ncrosby.ID;
 import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.ncrosby.physics.PhysicsObject;
 import com.shipGame.ncrosby.physics.collisions.CollisionListener;
 import com.shipGame.ncrosby.util.generalUtil;
 
@@ -148,36 +149,10 @@ public class Box2DWrapper implements Box2DWrapperInterface{
      * Gives objects their physics attributes and hands the body values to the wrapper list.
      * @param object
      */
-    public void setObjectPhysics(GameObject object) {
-        if(object.getID() == ID.Asteroid){
-            Asteroid asteroid = (Asteroid) object;
-            setAsteroidPhysics(asteroid);
-            return;
-        }
-        Vector2 position = object.getPosition();
+    public void setObjectPhysics(PhysicsObject object) {
 
-        // Adjust init position to center the box on the tile
-        BodyDef bodyDef = newStaticBodyDef(
-                (position.x / ShipTile.TILESIZE) + ShipTile.TILESIZE/2, // Position and size scaled up to game size.
-                (position.y / ShipTile.TILESIZE) + ShipTile.TILESIZE/2
-        );
-        Body body = world.createBody(bodyDef);
-
-        PolygonShape tileShape = new PolygonShape();
-
-        tileShape.setAsBox(
-                (ShipTile.TILESIZE / ShipTile.TILESIZE)/2,
-                (ShipTile.TILESIZE / ShipTile.TILESIZE)/2
-        );
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = tileShape;
-        fixtureDef.density = 0.0f;
-        fixtureDef.friction = 1.0f;
-        fixtureDef.restitution = 0.0f;
-
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(object);
+        // Set unique object properties
+        Body body = object.setPhysics(world);
 
         body.setUserData(object);
         object.setBody(body);
@@ -188,47 +163,6 @@ public class Box2DWrapper implements Box2DWrapperInterface{
 
         // Remember to dispose of any shapes after you're done with them!
         // BodyDef and FixtureDef don't need disposing, but shapes do.
-        tileShape.dispose();
-    }
-
-    /**
-
-     * Easy way to add physics attributes to asteroid instance
-
-     */
-
-    private void setAsteroidPhysics(Asteroid asteroid) {
-
-        Vector2 position = asteroid.getPosition();
-
-        BodyDef bodyDef = generalUtil.newDynamicBodyDef(
-                (position.x / ShipTile.TILESIZE) + asteroid.getCircleBounds().radius,
-                (position.y / ShipTile.TILESIZE) + asteroid.getCircleBounds().radius
-        );
-        Body body = world.createBody(bodyDef);
-
-        body.setLinearVelocity(getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
-                getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
-        // Create circle to add to asteroid
-        CircleShape circle = new CircleShape();
-        circle.setRadius(Asteroid.radius / ShipTile.TILESIZE);
-        // Create a fixture definition to apply our shape to
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.0f; // Make it bounce a little bit
-        body.setUserData(asteroid);
-        asteroid.setBody(body);
-        bodies.add(body);
-
-        // Create our fixture and attach it to the body
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(asteroid);
-
-        // Remember to dispose of any shapes after you're done with them!
-        // BodyDef and FixtureDef don't need disposing, but shapes do.
-        circle.dispose();
     }
 
     /**

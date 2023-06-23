@@ -9,15 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Asteroid;
 import com.shipGame.ncrosby.generalObjects.GameObject;
 import com.shipGame.ncrosby.player.TileHoverIndicator;
 import com.shipGame.ncrosby.screens.GameScreen;
 import com.shipGame.ncrosby.screens.MainMenuScreen;
 import com.shipGame.ncrosby.tileShipGame;
 import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
-
-import static com.shipGame.ncrosby.util.generalUtil.*;
 
 public class Ship extends GameObject {
 

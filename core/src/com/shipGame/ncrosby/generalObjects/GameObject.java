@@ -133,13 +133,6 @@ public abstract class GameObject {
 
 	public abstract Circle getCircleBounds();
 
-	public Body getBody() {
-		return body;
-	}
-
-	public void setBody(Body body) {
-		this.body = body;
-	}
 
 	public float getRotation() {
 		return rotation;
