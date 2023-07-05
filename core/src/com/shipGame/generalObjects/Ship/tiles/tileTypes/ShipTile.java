@@ -324,7 +324,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 
 	public Body setPhysics(World world){
 		// Adjust init position to center the box on the tile
-		BodyDef bodyDef = newStaticBodyDef(
+		BodyDef bodyDef = generalUtil.newStaticBodyDef(
 				(position.x / ShipTile.TILESIZE) + ShipTile.TILESIZE/2, // Position and size scaled up to game size.
 				(position.y / ShipTile.TILESIZE) + ShipTile.TILESIZE/2
 		);

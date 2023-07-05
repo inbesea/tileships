@@ -165,7 +165,7 @@ public class AsteroidManager implements Manager {
      */
     private Vector2 getVectorInValidSpawnArea(){
         // Get a value to use to find a random point on the circle of spawning
-        double betweenZeroAnd2PI = getRandomNumber(0d, 2d * Math.PI);
+        double betweenZeroAnd2PI = generalUtil.getRandomNumber(0d, 2d * Math.PI);
 
         // Scale up the radius of spawning to hide the spawning.
         // get x,y
