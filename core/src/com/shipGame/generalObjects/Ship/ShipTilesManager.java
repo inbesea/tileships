@@ -1,18 +1,18 @@
-package com.shipGame.ncrosby.generalObjects.Ship;
+package com.shipGame.generalObjects.Ship;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
-import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
+import com.shipGame.ID;
+import com.shipGame.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
+import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
+import com.shipGame.physics.box2d.Box2DWrapper;
 
 import java.util.Arrays;
 import java.util.Stack;
 
-import static com.shipGame.ncrosby.util.generalUtil.*;
+import static com.shipGame.util.generalUtil.*;
 
 /**
  * Class to handle logic for placing/removing tiles to allow the ship to handle holding the pieces together rather than working the logic directly.

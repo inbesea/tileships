@@ -1,4 +1,4 @@
-package com.shipGame.ncrosby.generalObjects;
+package com.shipGame.generalObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -7,10 +7,10 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Ship.Ship;
-import com.shipGame.ncrosby.tileShipGame;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.generalObjects.Ship.Ship;
+import com.shipGame.ID;
+import com.shipGame.tileShipGame;
+import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 
 import java.util.Arrays;
 import java.util.Random;

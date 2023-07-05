@@ -1,19 +1,18 @@
-package com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes;
+package com.shipGame.generalObjects.Ship.tiles.tileTypes;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.GameObject;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
-import com.shipGame.ncrosby.generalObjects.Ship.ShipTilesManager;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileUtility.TileTypeData;
-import com.shipGame.ncrosby.physics.PhysicsObject;
-import com.shipGame.ncrosby.tileShipGame;
-
-import static com.shipGame.ncrosby.util.generalUtil.newStaticBodyDef;
+import com.shipGame.ID;
+import com.shipGame.generalObjects.GameObject;
+import com.shipGame.generalObjects.Ship.ShipTilesManager;
+import com.shipGame.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
+import com.shipGame.generalObjects.Ship.tiles.tileUtility.TileTypeData;
+import com.shipGame.physics.PhysicsObject;
+import com.shipGame.tileShipGame;
+import com.shipGame.util.generalUtil;
 
 public abstract class ShipTile extends GameObject implements PhysicsObject {
 

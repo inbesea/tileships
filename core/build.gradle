@@ -1,4 +1,4 @@
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 repositories{
     maven { url "https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api/5.9.0"}

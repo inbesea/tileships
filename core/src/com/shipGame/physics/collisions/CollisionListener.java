@@ -1,8 +1,8 @@
-package com.shipGame.ncrosby.physics.collisions;
+package com.shipGame.physics.collisions;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.GameObject;
+import com.shipGame.ID;
+import com.shipGame.generalObjects.GameObject;
 
 /**
  * Collision listener gets collisions and passes the collision object to a handler

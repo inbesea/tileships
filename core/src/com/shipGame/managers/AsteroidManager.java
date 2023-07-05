@@ -1,16 +1,16 @@
-package com.shipGame.ncrosby.managers;
+package com.shipGame.managers;
 
 import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.shipGame.ncrosby.ID;
-import com.shipGame.ncrosby.generalObjects.Asteroid;
-import com.shipGame.ncrosby.generalObjects.GameObject;
-import com.shipGame.ncrosby.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import com.shipGame.ncrosby.physics.box2d.Box2DWrapper;
-import com.shipGame.ncrosby.screens.GameScreen;
+import com.shipGame.ID;
+import com.shipGame.generalObjects.Asteroid;
+import com.shipGame.generalObjects.GameObject;
+import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.physics.box2d.Box2DWrapper;
+import com.shipGame.screens.GameScreen;
+import com.shipGame.util.generalUtil;
 
-import static com.shipGame.ncrosby.util.generalUtil.getRandomNumber;
+import static com.shipGame.util.generalUtil.getRandomNumber;
 
 /*
 * Have a way to call this during render that will handle adding more asteroids.
