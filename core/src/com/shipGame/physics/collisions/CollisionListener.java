@@ -81,15 +81,4 @@ public class CollisionListener implements ContactListener {
         return (a.getID() == firstID && b.getID() == secondID) ||
                 (a.getID() == secondID && b.getID() == firstID);
     }
-
-    /**
-     * Takes two mystery game objects and returns the game object that matches the type checked for
-     * @param type
-     * @return
-     * @param <T>
-     */
-    private static <T> T returnValue(GameObject gameObject, Class<T> type){
-        return (type.cast(gameObject));
-    }
-
 }
