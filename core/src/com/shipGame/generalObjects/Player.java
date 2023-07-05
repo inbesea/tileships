@@ -155,8 +155,8 @@ public class Player extends GameObject {
             System.out.println("Held tiles at limit!");
             return false;
         } else if (heldShipTiles.size > heldTileLimit) {
-            throw new RuntimeException("Holding more tiles than is possible to hold : " +
-                    Arrays.toString(Thread.currentThread().getStackTrace()));
+            throw new RuntimeException("Holding more tiles than is possible to hold! HeldTilesSize : " + heldShipTiles.size
+                    + ", limit : " + heldTileLimit);
         } else {
             heldShipTiles.add(st);
             return true;
@@ -177,7 +177,7 @@ public class Player extends GameObject {
                     " Returning tile with ID : " + heldShipTiles.peek().getID());
             return heldShipTiles.pop();
         } else {
-            throw new RuntimeException("Error with placeTile" + Arrays.toString(Thread.currentThread().getStackTrace()));
+            throw new RuntimeException("Stack of tiles has negative size!");
         }
     }
 

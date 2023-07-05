@@ -61,7 +61,7 @@ public class TileCondenser {
         // If not matched check if the array's reverse matches.
         String reverseCompareString = arrayToString.reverseToCompareString();
         ID temp = attemptArrayMatch(reverseCompareString);
-        if(result != null && temp != null)throw new RuntimeException("Double recipe match error\n" + Arrays.toString(Thread.currentThread().getStackTrace()));
+        if(result != null && temp != null)throw new RuntimeException("Double recipe match error\n");
 
         return result;
     }
@@ -91,7 +91,7 @@ public class TileCondenser {
         for(int i = 0 ; i < recipes.size ; i++){
             temp = recipes.get(i).tileIfMatch(compareString);
             if(result != null && temp != null){
-                throw new RuntimeException("Multiple matches found for tile matching input : " + compareString + " \n" + Arrays.toString(Thread.currentThread().getStackTrace()));
+                throw new RuntimeException("Multiple matches found for tile matching input : " + compareString + " \n");
             }
             else {
                 result = temp;

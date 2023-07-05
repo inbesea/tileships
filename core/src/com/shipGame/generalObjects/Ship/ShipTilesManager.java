@@ -460,7 +460,8 @@ public class ShipTilesManager {
      */
     public void removeTileFromShip(ShipTile tile){
         if(!this.existingTiles.removeValue(tile, true)){ // If not in existing tiles
-            throw new RuntimeException("Error: Tile was not present in ship - \n" + Arrays.toString(Thread.currentThread().getStackTrace()));
+            throw new RuntimeException("Error: Tile was not present in ship!\n-> " + tile.getAbbreviation() +
+                    " - " + tile.getPositionAsString());
         } else {
             if(ship.isCollectingTiles()){ // Delete tile if being collected. Has to use the ship reference here.
                 ship.getCollapseCollect().removeValue(tile, true);

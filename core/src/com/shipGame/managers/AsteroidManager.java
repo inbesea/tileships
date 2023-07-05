@@ -211,7 +211,6 @@ public class AsteroidManager implements Manager {
 //        for(int i = 0 ; i < asteroids.size ; i++){
 //            screen.removeGameObject(asteroids.removeIndex(i)); // Compact method to remove locally and in GameScreen
 //        }
-//        if(asteroids.size == 0) throw new RuntimeException("Did not remove all asteroids in removeAllAsteroids() : \n"
-//                + Arrays.toString(Thread.currentThread().getStackTrace()));
+//        if(asteroids.size == 0) throw new RuntimeException("Did not remove all asteroids in removeAllAsteroids() : \n";
     }
 }
