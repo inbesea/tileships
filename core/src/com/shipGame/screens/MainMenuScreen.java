@@ -62,7 +62,7 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         // Call to load textures to asset manager
-        initAssestManager();
+        initAssetManager();
 
         game.batch.begin();
         if(assetManager.update()){
@@ -88,7 +88,7 @@ public class MainMenuScreen implements Screen {
     /**
      * Loads in the assets needed to run the game into the asset manager.
      */
-    private void initAssestManager() {
+    private void initAssetManager() {
         for (int i = 0 ; i < spritesToLoad.length ; i++){
             assetManager.load(spritePath + spritesToLoad[i], Texture.class);
         }
