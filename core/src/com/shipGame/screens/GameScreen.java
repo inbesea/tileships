@@ -9,23 +9,27 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.ID;
+import com.shipGame.TileShipGame;
 import com.shipGame.generalObjects.GameObject;
+import com.shipGame.generalObjects.HUD;
 import com.shipGame.generalObjects.Player;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.input.DebugInputHandler;
+import com.shipGame.input.InputPreProcessor;
+import com.shipGame.input.TileCollectHandler;
+import com.shipGame.input.TileDragHandler;
+import com.shipGame.managers.AsteroidManager;
 import com.shipGame.physics.box2d.Box2DWrapper;
 import com.shipGame.physics.collisions.CollisionHandler;
 import com.shipGame.physics.collisions.CollisionListener;
 import com.shipGame.player.PlayerInput;
-import com.shipGame.generalObjects.HUD;
 import com.shipGame.player.SimpleTouch;
-import com.shipGame.tileShipGame;
-import com.shipGame.managers.AsteroidManager;
 
 import java.util.Objects;
 
@@ -33,27 +37,27 @@ import java.util.Objects;
  * Main game screen - where the game happens
  */
 public class GameScreen implements Screen {
-    final tileShipGame game;
+    final TileShipGame game;
     final AsteroidManager asteroidManager;
     private HUD hud;
     ExtendViewport extendViewport;
     private final Player player;
 
     // Represents each side's size
-    public static final Vector2 playerSize = new Vector2(ShipTile.TILESIZE*.33f, ShipTile.TILESIZE*.45f);
+    public static final Vector2 playerSize = new Vector2(ShipTile.TILESIZE * .33f, ShipTile.TILESIZE * .45f);
 
     OrthographicCamera camera;
     SimpleTouch st;
     AssetManager assetManager;
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
-    public static final float spawnAreaMax = tileShipGame.convertPixelsToMeters(300);
+    public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
     private CollisionListener collisionListener;
     private CollisionHandler collisionHandler;
 
-    public GameScreen(final tileShipGame game) {
+    public GameScreen(final TileShipGame game) {
         this.game = game;
         this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
@@ -65,8 +69,8 @@ public class GameScreen implements Screen {
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, tileShipGame.defaultViewportSizeX, tileShipGame.defaultViewportSizeY);
-        this.extendViewport = new ExtendViewport(tileShipGame.defaultViewportSizeX,tileShipGame.defaultViewportSizeY, camera);
+        camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+        this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
 
         // init ship
         playerShip = new Ship(new Vector2(-1, -1), assetManager);
@@ -83,8 +87,13 @@ public class GameScreen implements Screen {
         gameObjects.add(playerShip);
 
         // Add input event handling
-        st = new SimpleTouch(this);
-        Gdx.input.setInputProcessor(st);
+        // st = new SimpleTouch(this);
+        InputPreProcessor input = new InputPreProcessor(camera);
+        input.addProcessor(new TileCollectHandler(playerShip));
+        TileDragHandler tileDragHandler = new TileDragHandler(player);
+        input.addProcessor(tileDragHandler);
+        input.addProcessor(new DebugInputHandler(playerShip, tileDragHandler));
+        Gdx.input.setInputProcessor(input);
 
         asteroidManager = new AsteroidManager(this);
         hud = new HUD(game.assetManager, game);
@@ -102,6 +111,7 @@ public class GameScreen implements Screen {
 
     /**
      * Draw the game
+     *
      * @param delta The time in seconds since the last render.
      */
     @Override
@@ -142,18 +152,18 @@ public class GameScreen implements Screen {
         // Loops through the game objects and draws them.
         // Uses the game and camera context to handle drawing properly.
         game.batch.begin();
-        GameObject go ;
+        GameObject go;
 
-        for(int i = 0 ; i < gameObjects.size ; i++){
+        for (int i = 0; i < gameObjects.size; i++) {
             go = gameObjects.get(i);
 
             // This render should happen after a sweep attempt
-            if(go.isDead())throw new RuntimeException("Game Object was not swept " + go.getID().toString());
+            if (go.isDead()) throw new RuntimeException("Game Object was not swept " + go.getID().toString());
 
             drawGameObject(go); // Call helper to draw object
         }
 
-        if(playerShip.isCollectingTiles() && playerShip.isHoverDrawing()){
+        if (playerShip.isCollectingTiles() && playerShip.isHoverDrawing()) {
             drawGameObject(playerShip.getTileHoverIndicator());
             drawGameObject(playerShip);
         }
@@ -208,7 +218,7 @@ public class GameScreen implements Screen {
         // Updates objects here.
 
         if (!Objects.equals(textureString, MainMenuScreen.ignoreLoad) && !Objects.equals(textureString, "")) { // If ID has associated string
-            Texture texture = assetManager.get(textureString,Texture.class);
+            Texture texture = assetManager.get(textureString, Texture.class);
             Vector2 size = gameObject.getSize();
             game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
@@ -236,36 +246,39 @@ public class GameScreen implements Screen {
     /**
      * Add new game object to game.
      * New object will be renderered based on position and its own render method.
+     *
      * @param go
      */
-    public void newGameObject(GameObject go){
+    public void newGameObject(GameObject go) {
         gameObjects.add(go);
     }
 
     /**
      * Finds the game object, removes and returns it from the game screen Array
+     *
      * @param gameObject
      * @return
      */
-    public GameObject removeGameObject(GameObject gameObject){
+    public GameObject removeGameObject(GameObject gameObject) {
         int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
 
-        if(i < 0){
+        if (i < 0) {
             throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
-                    " location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " +gameObject.getID());
+                    " location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " + gameObject.getID());
         }
         return gameObjects.removeIndex(i); // Returns the object reference and removes it.
     }
 
     /**
      * Returns a reference to the screens extended viewport
+     *
      * @return
      */
     public ExtendViewport getExtendViewport() {
         return extendViewport;
     }
 
-    public tileShipGame getGame() {
+    public TileShipGame getGame() {
         return game;
     }
 
@@ -277,6 +290,7 @@ public class GameScreen implements Screen {
 
     /**
      * removes an asteroid instance from the asteroid manager
+     *
      * @param asteroid
      */
     public void removeAsteroid(GameObject asteroid) {

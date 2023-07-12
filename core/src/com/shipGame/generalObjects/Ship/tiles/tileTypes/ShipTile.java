@@ -11,7 +11,7 @@ import com.shipGame.generalObjects.Ship.ShipTilesManager;
 import com.shipGame.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import com.shipGame.generalObjects.Ship.tiles.tileUtility.TileTypeData;
 import com.shipGame.physics.PhysicsObject;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 import com.shipGame.util.generalUtil;
 
 public abstract class ShipTile extends GameObject implements PhysicsObject {
@@ -82,7 +82,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 	 *
 	 * @param game
 	 */
-	public void render(tileShipGame game) {
+	public void render(TileShipGame game) {
 		if(this.debugMode){
 			game.font.draw(game.batch, getPositionAsString(), getX() + 2 , getY() + (size.y/4));
 		}
@@ -92,7 +92,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 	 * Method to cool a placed shipTile over time.
 	 *
 	 */
-	private void coolPlacedBlock(tileShipGame game){
+	private void coolPlacedBlock(TileShipGame game){
 		long deltaTime = System.currentTimeMillis() - placed;
 		if(deltaTime  >= 150) {
 			//System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));

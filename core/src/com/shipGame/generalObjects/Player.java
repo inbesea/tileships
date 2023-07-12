@@ -9,10 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.ID;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import static com.badlogic.gdx.math.MathUtils.*;
@@ -20,7 +19,7 @@ import static com.badlogic.gdx.math.MathUtils.*;
 public class Player extends GameObject {
     Ship playerShip;
     Random r = new Random();
-    private tileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
+    private TileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
     private OrthographicCamera cam;
     public boolean godMode = false;
 
@@ -35,7 +34,7 @@ public class Player extends GameObject {
 
     private float playerSpeed = ShipTile.TILESIZE * 1.5f;
 
-    public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, tileShipGame game) {
+    public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, TileShipGame game) {
         super(position, size, id);
 
         heldTileDisplay = new Circle(position.x, position.y, INIT_HELD_RADIUS);
@@ -82,7 +81,7 @@ public class Player extends GameObject {
      *
      * @param game - reference to the game context
      */
-    public void render(tileShipGame game) {
+    public void render(TileShipGame game) {
         renderCircleOfHeldTiles(); // Moved this logic out to allow render to be more flexible
     }
 

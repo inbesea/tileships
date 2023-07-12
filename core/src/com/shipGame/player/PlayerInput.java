@@ -9,7 +9,7 @@ import com.shipGame.ID;
 import com.shipGame.generalObjects.Player;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 
 public class PlayerInput {
 
@@ -151,14 +151,14 @@ public class PlayerInput {
      */
     private static void localZoomClamp(boolean zoomIn, OrthographicCamera camera){
         int zoomAmount;
-        if(zoomIn){zoomAmount = tileShipGame.zoomSpeed * -1;}
-        else{zoomAmount = tileShipGame.zoomSpeed;}
+        if(zoomIn){zoomAmount = TileShipGame.zoomSpeed * -1;}
+        else{zoomAmount = TileShipGame.zoomSpeed;}
 
         float newValue = camera.zoom + (zoomAmount * Gdx.graphics.getDeltaTime());
 
-        if (newValue >= tileShipGame.zoomMax)
-            newValue = tileShipGame.zoomMax;
-        else newValue = Math.max(newValue, tileShipGame.zoomMin);
+        if (newValue >= TileShipGame.zoomMax)
+            newValue = TileShipGame.zoomMax;
+        else newValue = Math.max(newValue, TileShipGame.zoomMin);
 
         camera.zoom = newValue;
     }

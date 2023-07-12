@@ -9,7 +9,7 @@ import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.StrongTile;
 import com.shipGame.managers.AsteroidManager;
 import com.shipGame.physics.PhysicsObject;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 import com.shipGame.util.generalUtil;
 
 import static com.shipGame.util.generalUtil.getRandomlyNegativeNumber;
@@ -164,7 +164,7 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	/**
 	 * Draws basic enemy on screen relative to the camera
 	 */
-	public void render(tileShipGame game) {
+	public void render(TileShipGame game) {
 		circle.setPosition(body.getPosition());
 	}
 

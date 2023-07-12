@@ -12,7 +12,7 @@ import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.generalObjects.Ship.TileArrayToString;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.screens.GameScreen;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 
 import static com.shipGame.util.generalUtil.returnUnprojectedPosition;
 
@@ -79,11 +79,11 @@ public class SimpleTouch implements InputProcessor {
     public boolean scrolled(float amountX, float amountY) {
         //System.out.println("Zooming camera : old amount " + camera.zoom + " scrolled number : " + amountX + " " + amountY);
         // Check the final value you would have based on the new calculation.
-        float newValue = camera.zoom + ((amountY * tileShipGame.zoomSpeed) * Gdx.graphics.getDeltaTime());
+        float newValue = camera.zoom + ((amountY * TileShipGame.zoomSpeed) * Gdx.graphics.getDeltaTime());
 
-        if (newValue >= tileShipGame.zoomMax)
-            newValue = tileShipGame.zoomMax;
-        else newValue = Math.max(newValue, tileShipGame.zoomMin);
+        if (newValue >= TileShipGame.zoomMax)
+            newValue = TileShipGame.zoomMax;
+        else newValue = Math.max(newValue, TileShipGame.zoomMin);
 
         camera.zoom = newValue;
 
@@ -228,7 +228,7 @@ public class SimpleTouch implements InputProcessor {
     private void pickUpTile(ShipTile pickedUpTile) {
         draggedTile = pickedUpTile; // Get the tile clicked on
         playerShip.removeTileFromShip(pickedUpTile);
-        playerShip.setDragged(draggedTile); // Set intermediate tile to *remove from existing tiles*
+        playerShip.setDraggedTile(draggedTile); // Set intermediate tile to *remove from existing tiles*
     }
 
     /**
@@ -267,7 +267,7 @@ public class SimpleTouch implements InputProcessor {
         playerShip.addTileToShip(mousePosition2.x, mousePosition.y, draggedTile.getID());
 
         // Dispose of used dragged tile references
-        playerShip.setDragged(null);
+        playerShip.setDraggedTile(null);
         draggedTile = null; // Dispose of dragged tile
     }
 }

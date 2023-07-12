@@ -5,23 +5,23 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.shipGame.generalObjects.Ship.Ship;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 
 /**
  * Layer of HUD elements. Is on a FitViewport to keep hud elements scaled correctly.
  */
 public class HUD {
     private ExtendViewport HUDScreenLayer;
-    private tileShipGame game;
+    private TileShipGame game;
     private Ship playerShip;
 
     private boolean showDebugHud = true;
 
-    public HUD(AssetManager assetManager, tileShipGame game) {
+    public HUD(AssetManager assetManager, TileShipGame game) {
         this.game = game;
         this.playerShip = game.getPlayerShip();
 
-        HUDScreenLayer = new ExtendViewport(tileShipGame.defaultViewportSizeX,tileShipGame.defaultViewportSizeY);
+        HUDScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
     }
 
     /**
