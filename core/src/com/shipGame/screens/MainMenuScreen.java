@@ -8,7 +8,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 
 public class MainMenuScreen implements Screen {
     public static final String[] spritesToLoad = {"RobotV2.png","asteroid_purple.png","ShipTile_Red.png",
@@ -22,7 +22,7 @@ public class MainMenuScreen implements Screen {
     public static final String soundPath = "Sound Effects/";
     public static final String spritePath = "Sprites/";
     public static String ignoreLoad = "Sprites/none"; // Used to ignore IDs without associated sprite references
-    final tileShipGame game;
+    final TileShipGame game;
 
     OrthographicCamera camera;
 
@@ -33,12 +33,12 @@ public class MainMenuScreen implements Screen {
      * Constructs the mainmenu object
      * @param game - Game instance for screen to have context 
      */
-    public MainMenuScreen(final tileShipGame game) {
+    public MainMenuScreen(final TileShipGame game) {
         this.game = game;
 
         assetManager = game.assetManager;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, tileShipGame.defaultViewportSizeX, tileShipGame.defaultViewportSizeY);
+        camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
         mainMenuMusic.play();
         mainMenuMusic.setVolume(0.5f);

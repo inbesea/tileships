@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.ID;
 import com.shipGame.generalObjects.GameObject;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 
 /**
  * Method to hold reference to the hover indicator so it logically sits in the stack manager during the collapse process.
@@ -26,7 +26,7 @@ public class TileHoverIndicator extends GameObject {
     }
 
     @Override
-    public void render(tileShipGame game) {
+    public void render(TileShipGame game) {
 
     }
 

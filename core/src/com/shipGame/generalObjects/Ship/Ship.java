@@ -13,7 +13,7 @@ import com.shipGame.generalObjects.GameObject;
 import com.shipGame.player.TileHoverIndicator;
 import com.shipGame.screens.GameScreen;
 import com.shipGame.screens.MainMenuScreen;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 
 public class Ship extends GameObject {
@@ -64,7 +64,7 @@ public class Ship extends GameObject {
 	 *  Loops the list of existing tiles and renders them
 	 *  TODO : Scale tile locations by the ship position to allow ship movement.
 	 */
-	public void render(tileShipGame game) {
+	public void render(TileShipGame game) {
 		AssetManager assetManager = game.assetManager;
 		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
@@ -224,7 +224,7 @@ public class Ship extends GameObject {
 		return true;
 	}
 
-	public void setDragged(ShipTile draggedTile) {
+	public void setDraggedTile(ShipTile draggedTile) {
 		this.draggedTile = draggedTile;
 	}
 

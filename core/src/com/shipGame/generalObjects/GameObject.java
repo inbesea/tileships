@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.shipGame.ID;
-import com.shipGame.tileShipGame;
+import com.shipGame.TileShipGame;
 
 /**
  * Class to handle the basic game object needs.
@@ -50,7 +50,7 @@ public abstract class GameObject {
 	}
 	
 	public abstract void tick();
-	public abstract void render(tileShipGame game);
+	public abstract void render(TileShipGame game);
 	public abstract Rectangle getBounds();
 	public abstract void collision(GameObject gameObject);
 	public void setX(float x) {
