@@ -24,6 +24,7 @@ import com.shipGame.input.DebugInputHandler;
 import com.shipGame.input.InputPreProcessor;
 import com.shipGame.input.TileCollectHandler;
 import com.shipGame.input.TileDragHandler;
+import com.shipGame.input.ZoomHandler;
 import com.shipGame.managers.AsteroidManager;
 import com.shipGame.physics.box2d.Box2DWrapper;
 import com.shipGame.physics.collisions.CollisionHandler;
@@ -93,6 +94,7 @@ public class GameScreen implements Screen {
         TileDragHandler tileDragHandler = new TileDragHandler(player);
         input.addProcessor(tileDragHandler);
         input.addProcessor(new DebugInputHandler(playerShip, tileDragHandler));
+        input.addProcessor(new ZoomHandler(camera));
         Gdx.input.setInputProcessor(input);
 
         asteroidManager = new AsteroidManager(this);
