@@ -2,7 +2,7 @@ sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../assets"]
 
-project.ext.mainClassName = "com.game.DesktopLauncher"
+project.ext.mainClassName = "com.javapoet.automation.GenerateResources"
 project.ext.assetsDir = new File("../assets")
 
 import org.gradle.internal.os.OperatingSystem
@@ -29,19 +29,4 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
-task dist(type: Jar) {
-    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-    manifest {
-        attributes 'Main-Class': project.mainClassName
-    }
-    dependsOn configurations.runtimeClasspath
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
-}
-
-
-dist.dependsOn classes
-
-eclipse.project.name = appName + "-desktop"
+eclipse.project.name = appName + "-automation"

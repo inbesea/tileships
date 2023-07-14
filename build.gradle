@@ -54,18 +54,15 @@ project(":desktop") {
     }
 
     dependencies {
-        // https://mavenlibs.com/maven/dependency/org.lwjgl/lwjgl
         implementation 'org.lwjgl:lwjgl:3.3.1'
         implementation project(":core")
         implementation 'org.lwjgl:lwjgl-glfw:3.3.1'
-//        implementation("com.github.tommyettinger:gdx-backend-lwjgl3:1.100.1")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         api "org.junit.jupiter:junit-jupiter:5.9.0"
         api ("org.junit.jupiter:junit-jupiter-api:5.9.0")
-//        url "https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api/5.9.0"
     }
 }
 
@@ -132,11 +129,25 @@ project(":core") {
         api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         testImplementation 'junit:junit:4.13.2'
         testImplementation 'org.mockito:mockito-all:1.10.19'
-//        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-//        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-//        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-//        api "org.junit.jupiter:junit-jupiter:5.9.0"
-//        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-//        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    }
+}
+
+project(":automation") {
+    apply plugin: "java-library"
+
+    repositories{
+        maven { url "https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api/5.9.0"}
+    }
+
+    dependencies {
+        implementation 'org.lwjgl:lwjgl:3.3.1'
+        implementation 'org.lwjgl:lwjgl-glfw:3.3.1'
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+        api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        api "org.junit.jupiter:junit-jupiter:5.9.0"
+        api ("org.junit.jupiter:junit-jupiter-api:5.9.0")
+        api 'com.squareup:javapoet:1.13.0'
     }
 }
