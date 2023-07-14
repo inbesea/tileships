@@ -7,16 +7,27 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Resources {
     public static AssetManager assetManager;
+
     public static Sound sfxBuildTileSound;
+
     public static Sound sfxCollectTileSound;
+
     public static Sound sfxRain;
+
     public static Sprite AsteroidPurpleSprite;
+
     public static Sprite HoverIndicatorSprite;
+
     public static Sprite RobotV1Sprite;
+
     public static Sprite RobotV2Sprite;
+
     public static Sprite ShipTileCoreSprite;
+
     public static Sprite ShipTileRedSprite;
+
     public static Sprite ShipTileStrongSprite;
+
     public static Sprite ToBeCollapsedSprite;
 
     public static void loadAssets() {

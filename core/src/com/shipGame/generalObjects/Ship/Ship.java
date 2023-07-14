@@ -3,6 +3,7 @@ package com.shipGame.generalObjects.Ship;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -211,6 +212,11 @@ public class Ship extends GameObject {
 	@Override
 	public void collision(GameObject gameObject) {
 
+	}
+
+	@Override
+	public Sprite getSprite() {
+		return null;
 	}
 
 	@Override
