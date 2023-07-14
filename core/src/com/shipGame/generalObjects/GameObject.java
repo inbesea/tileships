@@ -1,5 +1,6 @@
 package com.shipGame.generalObjects;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -103,6 +104,8 @@ public abstract class GameObject {
 	public String getTexture() {
 		return textureRef;
 	}
+
+	public abstract Sprite getSprite();
 
 	public void setTexture(String textureRef) {
 		this.textureRef = textureRef;
