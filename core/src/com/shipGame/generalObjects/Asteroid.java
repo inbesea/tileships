@@ -70,8 +70,8 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	public Body setPhysics(World world) {
 
 		BodyDef bodyDef = generalUtil.newDynamicBodyDef(
-				(position.x / ShipTile.TILESIZE) + this.getCircleBounds().radius,
-				(position.y / ShipTile.TILESIZE) + this.getCircleBounds().radius
+				(position.x / ShipTile.TILE_SIZE) + this.getCircleBounds().radius,
+				(position.y / ShipTile.TILE_SIZE) + this.getCircleBounds().radius
 		);
 		Body body = world.createBody(bodyDef);
 
@@ -79,7 +79,7 @@ public class Asteroid extends GameObject implements PhysicsObject {
 				getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
 		// Create circle to add to asteroid
 		CircleShape circle = new CircleShape();
-		circle.setRadius(Asteroid.radius / ShipTile.TILESIZE);
+		circle.setRadius(Asteroid.radius / ShipTile.TILE_SIZE);
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circle;

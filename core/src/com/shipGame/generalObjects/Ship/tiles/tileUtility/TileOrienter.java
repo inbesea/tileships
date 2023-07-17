@@ -54,8 +54,8 @@ public class TileOrienter {
      */
     public int calculateOrientation() {
         int result;
-        Vector2 tile0Index = new Vector2(tileOne.getxIndex(), tileOne.getyIndex());
-        Vector2 tile1Index = new Vector2(tileTwo.getxIndex(), tileTwo.getyIndex());
+        Vector2 tile0Index = new Vector2(tileOne.getXIndex(), tileOne.getYIndex());
+        Vector2 tile1Index = new Vector2(tileTwo.getXIndex(), tileTwo.getYIndex());
 
         boolean xSame = tile0Index.x == tile1Index.x;
         boolean ySame = tile0Index.y == tile1Index.y;
@@ -91,8 +91,8 @@ public class TileOrienter {
      */
     public static int calculateOrientation(ShipTile tileOne, ShipTile tileTwo) {
         int result;
-        Vector2 tile0Index = new Vector2(tileOne.getxIndex(), tileOne.getyIndex());
-        Vector2 tile1Index = new Vector2(tileTwo.getxIndex(), tileTwo.getyIndex());
+        Vector2 tile0Index = new Vector2(tileOne.getXIndex(), tileOne.getYIndex());
+        Vector2 tile1Index = new Vector2(tileTwo.getXIndex(), tileTwo.getYIndex());
 
         boolean xSame = tile0Index.x == tile1Index.x;
         boolean ySame = tile0Index.y == tile1Index.y;

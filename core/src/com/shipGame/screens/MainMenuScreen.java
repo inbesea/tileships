@@ -1,19 +1,16 @@
 package com.shipGame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javapoet.Resources;
 import com.shipGame.TileShipGame;
 
-public class MainMenuScreen implements Screen {
-    public static final String[] spritesToLoad = {"RobotV2.png","asteroid_purple.png","ShipTile_Red.png",
-            "ShipTile_Core.png","HoverIndicator.png", "ToBeCollapsed.png",
+public class MainMenuScreen extends ScreenAdapter {
+    public static final String[] spritesToLoad = {"RobotV2.png", "asteroid_purple.png", "ShipTile_Red.png",
+            "ShipTile_Core.png", "HoverIndicator.png", "ToBeCollapsed.png",
             "ShipTile_Strong.png"};
 
     public static final String[] soundsToLoad = {
@@ -30,8 +27,9 @@ public class MainMenuScreen implements Screen {
     Music mainMenuMusic;
 
     /**
-     * Constructs the mainmenu object
-     * @param game - Game instance for screen to have context 
+     * Constructs a MainMenu object
+     *
+     * @param game - Game instance for screen to have context
      */
     public MainMenuScreen(final TileShipGame game) {
         this.game = game;
@@ -47,11 +45,9 @@ public class MainMenuScreen implements Screen {
         Resources.loadAssets();
     }
 
-    @Override
-    public void show() {}
-
     /**
-     * Renders out the data for the mainmenu
+     * Renders out the data for the MainMenu
+     *
      * @param delta The time in seconds since the last render.
      */
     @Override
@@ -65,11 +61,11 @@ public class MainMenuScreen implements Screen {
         Resources.updateAssets();
 
         TileShipGame.batch.begin();
-        if(Resources.assetManager.update()){
+        if (Resources.assetManager.update()) {
             game.font.draw(TileShipGame.batch, "Welcome to tileships!!! ", 100, 300);
             game.font.draw(TileShipGame.batch, "Tap anywhere to begin!", 150, 250);
         } else {
-            game.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() +" ~~~",175,275);
+            game.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 175, 275);
         }
         TileShipGame.batch.end();
 
@@ -82,30 +78,4 @@ public class MainMenuScreen implements Screen {
             dispose();
         }
     }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
-
 }

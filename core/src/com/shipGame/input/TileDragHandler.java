@@ -54,8 +54,8 @@ public class TileDragHandler extends InputAdapter {
             playerShip.updateCollect(new Vector3(screenX, screenY, 0));
         } else if (draggedTile != null) { // Dragging a tile
             // Drag the tile with mouse
-            draggedTile.setX(screenX - ShipTile.TILESIZE / 2.0f);
-            draggedTile.setY(screenY - ShipTile.TILESIZE / 2.0f);
+            draggedTile.setX(screenX - ShipTile.TILE_SIZE / 2.0f);
+            draggedTile.setY(screenY - ShipTile.TILE_SIZE / 2.0f);
         }
         return true;
     }

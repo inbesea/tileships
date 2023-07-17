@@ -3,11 +3,9 @@ package com.shipGame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.utils.Array;
@@ -32,20 +30,18 @@ import com.shipGame.physics.collisions.CollisionListener;
 import com.shipGame.player.PlayerInput;
 import com.shipGame.player.SimpleTouch;
 
-import java.util.Objects;
-
 /**
  * Main game screen - where the game happens
  */
 public class GameScreen implements Screen {
     final TileShipGame game;
     final AsteroidManager asteroidManager;
-    private HUD hud;
+    private final HUD hud;
     ExtendViewport extendViewport;
     private final Player player;
 
     // Represents each side's size
-    public static final Vector2 playerSize = new Vector2(ShipTile.TILESIZE * .33f, ShipTile.TILESIZE * .45f);
+    public static final Vector2 playerSize = new Vector2(ShipTile.TILE_SIZE * .33f, ShipTile.TILE_SIZE * .45f);
 
     OrthographicCamera camera;
     SimpleTouch st;
@@ -54,8 +50,7 @@ public class GameScreen implements Screen {
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
-    private CollisionListener collisionListener;
-    private CollisionHandler collisionHandler;
+    private final CollisionHandler collisionHandler;
 
     public GameScreen(final TileShipGame game) {
         this.game = game;
@@ -100,7 +95,7 @@ public class GameScreen implements Screen {
 
         // Create collision listener
         collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
-        collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
+        CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
     }
 
@@ -146,12 +141,12 @@ public class GameScreen implements Screen {
 
         // tell the SpriteBatch to render in the
         // coordinate system specified by the camera.
-        game.batch.setProjectionMatrix(extendViewport.getCamera().combined);
+        TileShipGame.batch.setProjectionMatrix(extendViewport.getCamera().combined);
 
         // begin a new batch
         // Loops through the game objects and draws them.
         // Uses the game and camera context to handle drawing properly.
-        game.batch.begin();
+        TileShipGame.batch.begin();
         GameObject go;
 
         for (int i = 0; i < gameObjects.size; i++) {
@@ -169,7 +164,7 @@ public class GameScreen implements Screen {
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
-        game.batch.end();
+        TileShipGame.batch.end();
 
         Box2DWrapper.getInstance().drawDebug(camera);
 
@@ -214,7 +209,7 @@ public class GameScreen implements Screen {
     private void drawGameObject(GameObject gameObject) {
         if (gameObject.getTexture() != null) {
             Vector2 size = gameObject.getSize();
-            game.batch.draw(gameObject.getTexture(), gameObject.getX(), gameObject.getY(), size.x, size.y);
+            TileShipGame.batch.draw(gameObject.getTexture(), gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
         gameObject.render(this.game);
     }
@@ -241,7 +236,7 @@ public class GameScreen implements Screen {
      * Add new game object to game.
      * New object will be renderered based on position and its own render method.
      *
-     * @param go
+     * @param go the game object to add
      */
     public void newGameObject(GameObject go) {
         gameObjects.add(go);
@@ -250,8 +245,8 @@ public class GameScreen implements Screen {
     /**
      * Finds the game object, removes and returns it from the game screen Array
      *
-     * @param gameObject
-     * @return
+     * @param gameObject the game object to remove
+     * @return the removed game object
      */
     public GameObject removeGameObject(GameObject gameObject) {
         int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
@@ -263,11 +258,6 @@ public class GameScreen implements Screen {
         return gameObjects.removeIndex(i); // Returns the object reference and removes it.
     }
 
-    /**
-     * Returns a reference to the screens extended viewport
-     *
-     * @return
-     */
     public ExtendViewport getExtendViewport() {
         return extendViewport;
     }
@@ -281,11 +271,10 @@ public class GameScreen implements Screen {
         return gameObjects;
     }
 
-
     /**
      * removes an asteroid instance from the asteroid manager
      *
-     * @param asteroid
+     * @param asteroid the asteroid to remove
      */
     public void removeAsteroid(GameObject asteroid) {
         asteroidManager.deleteMember(asteroid);
@@ -298,9 +287,6 @@ public class GameScreen implements Screen {
         st.mouseMoved(Gdx.input.getX(), Gdx.input.getY());
     }
 
-    /**
-     * Method to call ending the game execution
-     */
     public void quitGame() {
         Gdx.app.exit();
     }
