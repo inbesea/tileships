@@ -3,7 +3,11 @@ package com.shipGame.physics.box2d;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ID;
 import com.shipGame.generalObjects.GameObject;
@@ -12,37 +16,38 @@ import com.shipGame.physics.PhysicsObject;
 import com.shipGame.physics.collisions.CollisionListener;
 
 // Handles drawing debug,
-public class Box2DWrapper implements Box2DWrapperInterface{
+public class Box2DWrapper implements Box2DWrapperInterface {
 
     private boolean drawDebug = true;
-    public static final float physicsFrameRate = 1/60f;
+    public static final float physicsFrameRate = 1 / 60f;
     public static final int velocityIterations = 6;
     public static final int positionIterations = 2;
     private float accumulator = 0;
 
     private static Box2DWrapper INSTANCE;
-    private World world;
-    private Box2DDebugRenderer box2DDebugRenderer;
-    private Array<Body> bodies = new Array<>();
+    private final World world;
+    private final Box2DDebugRenderer box2DDebugRenderer;
+    private final Array<Body> bodies = new Array<>();
 
-    public Box2DWrapper(Vector2 gravity, boolean doSleep){
-        if(INSTANCE != null) throw new RuntimeException("Box2DWrapper already exists!");
+    public Box2DWrapper(Vector2 gravity, boolean doSleep) {
+        if (INSTANCE != null) throw new RuntimeException("Box2DWrapper already exists!");
         Box2D.init();
         this.world = new World(gravity, doSleep);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         INSTANCE = this;
     }
 
-    public static Box2DWrapper getInstance(){
-        if(INSTANCE == null) {
-            INSTANCE = new Box2DWrapper(new Vector2(0,0), true);
+    public static Box2DWrapper getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Box2DWrapper(new Vector2(0, 0), true);
         }
         return INSTANCE;
     }
 
     /**
      * Removes body from simulation
-     * @param body
+     *
+     * @param body The body to remove
      */
     public void removeObjectBody(Body body) {
         bodies.removeValue(body, true);
@@ -51,12 +56,13 @@ public class Box2DWrapper implements Box2DWrapperInterface{
 
     /**
      * Draws the debug shapes.
-     * @param orthoCamera
+     *
+     * @param orthoCamera gives the projection matrix
      */
     @Override
     public void drawDebug(OrthographicCamera orthoCamera) {
         // Need to scale this lol. This will not work on the scale we are drawing.
-        if(drawDebug)box2DDebugRenderer.render(world, orthoCamera.combined);
+        if (drawDebug) box2DDebugRenderer.render(world, orthoCamera.combined);
     }
 
     @Override
@@ -71,7 +77,8 @@ public class Box2DWrapper implements Box2DWrapperInterface{
 
     @Override
     public void updateGameObjectsToPhysicsSimulation() {
-        for (Body b : this.bodies) {
+        for (int i = 0; i < bodies.size; i++) {
+            Body b = bodies.get(i);
             // Get the body's user data - in this example, our user
             // data is an instance of the Entity class
             GameObject gameObject = (GameObject) b.getUserData();
@@ -80,27 +87,27 @@ public class Box2DWrapper implements Box2DWrapperInterface{
             if (gameObject != null) {
 
                 // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
-                gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x/2, b.getPosition().y - gameObject.getSize().y/2);
-                gameObjectNewPosition.x = gameObjectNewPosition.x * ShipTile.TILESIZE;
-                gameObjectNewPosition.y = gameObjectNewPosition.y * ShipTile.TILESIZE;
+                gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x / 2, b.getPosition().y - gameObject.getSize().y / 2);
+                gameObjectNewPosition.x = gameObjectNewPosition.x * ShipTile.TILE_SIZE;
+                gameObjectNewPosition.y = gameObjectNewPosition.y * ShipTile.TILE_SIZE;
                 // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
 
                 //
-                if(b.getType().equals(BodyDef.BodyType.StaticBody)){
+                if (b.getType().equals(BodyDef.BodyType.StaticBody)) {
                     continue;
                 }
                 // Update the entities/sprites position and angle
                 gameObject.setPosition(gameObjectNewPosition);
 
-                try{
+                try {
                     gameObject.getBounds().setPosition(gameObjectNewPosition);
-                }catch (NullPointerException nullPointerException){
-
+                } catch (NullPointerException nullPointerException) {
+                    nullPointerException.printStackTrace();
                 }
 
-                try{
+                try {
                     gameObject.getCircleBounds().setPosition(gameObjectNewPosition);
-                } catch (NullPointerException nullPointerException){
+                } catch (NullPointerException nullPointerException) {
                     // shouldn't do this probably but w/e
                 }
 
@@ -111,20 +118,20 @@ public class Box2DWrapper implements Box2DWrapperInterface{
         }
     }
 
+    /**
+     * Steps the physics simulation.
+     */
     @Override
     public void stepPhysicsSimulation(float deltaTime) {
-        /**
-         * Steps the physics simulation.
-         */
-//        world.step(game.physicsFrameRate, velocityIterations, positionIterations);
-            // fixed time step
-            // max frame time to avoid spiral of death (on slow devices)
-            float frameTime = Math.min(deltaTime, 0.25f);
-            accumulator += frameTime;
-            while (accumulator >= physicsFrameRate) {
-                world.step(physicsFrameRate, velocityIterations, positionIterations);
-                accumulator -= physicsFrameRate;
-            }
+        // world.step(game.physicsFrameRate, velocityIterations, positionIterations);
+        // fixed time step
+        // max frame time to avoid spiral of death (on slow devices)
+        float frameTime = Math.min(deltaTime, 0.25f);
+        accumulator += frameTime;
+        while (accumulator >= physicsFrameRate) {
+            world.step(physicsFrameRate, velocityIterations, positionIterations);
+            accumulator -= physicsFrameRate;
+        }
     }
 
     @Override
@@ -132,20 +139,20 @@ public class Box2DWrapper implements Box2DWrapperInterface{
         world.setContactListener(collisionListener);
     }
 
-    public void drawDebug(){
+    public void drawDebug() {
         drawDebug = true;
     }
 
-    public void stopDrawDebug(){
+    public void stopDrawDebug() {
         drawDebug = false;
     }
 
     /**
      * Gives physicsObjects their physics attributes and hands the body values to the wrapper list.
-     * @param physicsObject
+     *
+     * @param physicsObject the PhysicsObject to set
      */
     public void setObjectPhysics(PhysicsObject physicsObject) {
-
         // Set unique physicsObject properties
         Body body = physicsObject.setPhysics(world);
 
@@ -158,14 +165,15 @@ public class Box2DWrapper implements Box2DWrapperInterface{
 
     /**
      * Reviews and removes dead physics bodies
-     * */
+     */
     public void sweepForDeadBodies() {
-        for (Body body : this.bodies) {
+        for (int i = 0; i < bodies.size; i++) {
+            Body body = bodies.get(i);
             if (body != null) {
                 GameObject gameObject = (GameObject) body.getUserData();
                 if (gameObject.isDead()) {
                     // We have not removed the object from the game.
-                    // We might need to just bite the bullet and create a gameobject call for deleting the object from an agnostic point of view.
+                    // We might need to just bite the bullet and create a GameObject call for deleting the object from an agnostic point of view.
                     System.out.println("Removing a " + gameObject.getID().toString() + " instance from the game.");
                     attemptGameObjectRemoval(gameObject);
                 }
@@ -175,11 +183,12 @@ public class Box2DWrapper implements Box2DWrapperInterface{
 
     /**
      * Meant to filter out the possible use of
-     * @param gameObject
+     *
+     * @param gameObject the game object to remove
      */
     private void attemptGameObjectRemoval(GameObject gameObject) {
         ID id = gameObject.getID();
-        if(id.isTileType()) {
+        if (id.isTileType()) {
             System.out.println("Deleting a tile");
             ShipTile tile = (ShipTile) gameObject;
             tile.destroySelf();

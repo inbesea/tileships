@@ -144,7 +144,7 @@ public class AsteroidManager implements Manager {
         // Check if active
             Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILESIZE,ShipTile.TILESIZE), ID.Asteroid, this);
+            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
             Box2DWrapper.getInstance().setObjectPhysics(asteroid);
             //setAsteroidPhysics(asteroid);
 

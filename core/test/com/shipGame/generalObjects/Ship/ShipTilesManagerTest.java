@@ -18,16 +18,16 @@ public class ShipTilesManagerTest extends TestCase {
     @Test
     public void testWhenGettingClosestSide_GetExpectedResult(){
         // Before
-        ship = new Ship(new Vector2(0,0), new AssetManager());
+        ship = new Ship(new Vector2(0,0));
         tilesManager = new ShipTilesManager(ship);
         tile = new StandardTile(new Vector2(0,0),tilesManager);
-        westMousePosition = new Vector3(0, ShipTile.TILESIZE/2f,0);
+        westMousePosition = new Vector3(0, ShipTile.TILE_SIZE /2f,0);
 
         // When
         Vector2 closestSide = tilesManager.getVectorOfClosestSide(tile, westMousePosition);
 
         // Then
-        assertEquals(new Vector2(tile.getX() - (ShipTile.TILESIZE/2.0f), tile.getY()+(ShipTile.TILESIZE/2.0f)),
+        assertEquals(new Vector2(tile.getX() - (ShipTile.TILE_SIZE /2.0f), tile.getY()+(ShipTile.TILE_SIZE /2.0f)),
                     closestSide);
     }
 

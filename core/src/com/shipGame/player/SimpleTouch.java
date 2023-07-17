@@ -131,8 +131,8 @@ public class SimpleTouch implements InputProcessor {
                 playerShip.updateCollect(new Vector3(tp.x, tp.y, 0));
             } else if (draggedTile != null){// Dragging a tile
                 // Drag the tile with mouse
-                draggedTile.setX(tp.x - ShipTile.TILESIZE/2.0f);
-                draggedTile.setY(tp.y - ShipTile.TILESIZE/2.0f);
+                draggedTile.setX(tp.x - ShipTile.TILE_SIZE /2.0f);
+                draggedTile.setY(tp.y - ShipTile.TILE_SIZE /2.0f);
             } else {
 
             }
