@@ -1,6 +1,6 @@
 package com.shipGame.generalObjects;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -18,8 +18,6 @@ public abstract class GameObject {
 	protected ID id;
 	protected float velX, velY;
 
-	// Do we need the texture to be set within each
-	protected String textureRef;
 	protected boolean debugMode = true; //TODO:move to game object
 	protected Body body;
 	protected float rotation;
@@ -32,7 +30,6 @@ public abstract class GameObject {
 		this.size.x = size.x;
 		this.size.y = size.y;
 		this.id = id;
-		this.textureRef = id.getSprite();
 
 		physicsDeletable = false;
 	}
@@ -98,18 +95,12 @@ public abstract class GameObject {
 	}
 
 	/**
-	 * Returns a texture used for drawing/rendering object...
-	 * @return
+	 * Returns a texture used for drawing/rendering object
+	 * can be implemented to return null
+	 *
+	 * @return - Texture of relevant concrete type
 	 */
-	public String getTexture() {
-		return textureRef;
-	}
-
-	public abstract Sprite getSprite();
-
-	public void setTexture(String textureRef) {
-		this.textureRef = textureRef;
-	}
+	public abstract Texture getTexture();
 	public Vector2 getSize() {
 		return size;
 	}

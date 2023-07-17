@@ -2,8 +2,7 @@ package com.javapoet;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.Texture;
 
 public class Resources {
     public static AssetManager assetManager;
@@ -14,47 +13,48 @@ public class Resources {
 
     public static Sound sfxRain;
 
-    public static Sprite AsteroidPurpleSprite;
+    public static Texture AsteroidPurpleTexture;
 
-    public static Sprite HoverIndicatorSprite;
+    public static Texture HoverIndicatorTexture;
 
-    public static Sprite RobotV1Sprite;
+    public static Texture RobotV1Texture;
 
-    public static Sprite RobotV2Sprite;
+    public static Texture RobotV2Texture;
 
-    public static Sprite ShipTileCoreSprite;
+    public static Texture ShipTileCoreTexture;
 
-    public static Sprite ShipTileRedSprite;
+    public static Texture ShipTileRedTexture;
 
-    public static Sprite ShipTileStrongSprite;
+    public static Texture ShipTileStrongTexture;
 
-    public static Sprite ToBeCollapsedSprite;
+    public static Texture ToBeCollapsedTexture;
 
     public static void loadAssets() {
         assetManager = new AssetManager();
-        assetManager.load("sfx/buildTileSound.mp3", Sound.class);
-        assetManager.load("sfx/collectTileSound.mp3", Sound.class);
-        assetManager.load("sfx/rain.mp3", Sound.class);
-        sfxBuildTileSound = assetManager.get("sfx/buildTileSound.mp3");
-        sfxCollectTileSound = assetManager.get("sfx/collectTileSound.mp3");
-        sfxRain = assetManager.get("sfx/rain.mp3");
-        assetManager.load("sfx/asteroid_purple.png", Sprite.class);
-        assetManager.load("sfx/HoverIndicator.png", Sprite.class);
-        assetManager.load("sfx/RobotV1.png", Sprite.class);
-        assetManager.load("sfx/RobotV2.png", Sprite.class);
-        assetManager.load("sfx/ShipTile_Core.png", Sprite.class);
-        assetManager.load("sfx/ShipTile_Red.png", Sprite.class);
-        assetManager.load("sfx/ShipTile_Strong.png", Sprite.class);
-        assetManager.load("sfx/ToBeCollapsed.png", Sprite.class);
-        AsteroidPurpleSprite = assetManager.get("Sprites/asteroid_purple.png");
-        HoverIndicatorSprite = assetManager.get("Sprites/HoverIndicator.png");
-        RobotV1Sprite = assetManager.get("Sprites/RobotV1.png");
-        RobotV2Sprite = assetManager.get("Sprites/RobotV2.png");
-        ShipTileCoreSprite = assetManager.get("Sprites/ShipTile_Core.png");
-        ShipTileRedSprite = assetManager.get("Sprites/ShipTile_Red.png");
-        ShipTileStrongSprite = assetManager.get("Sprites/ShipTile_Strong.png");
-        ToBeCollapsedSprite = assetManager.get("Sprites/ToBeCollapsed.png");
-        assetManager.load("Atlas/textures.Atlas", TextureAtlas.class);
+        assetManager.load("Sound Effects/buildTileSound.mp3", Sound.class);
+        assetManager.load("Sound Effects/collectTileSound.mp3", Sound.class);
+        assetManager.load("Sound Effects/rain.mp3", Sound.class);
+        assetManager.finishLoading();
+        sfxBuildTileSound = assetManager.get("Sound Effects/buildTileSound.mp3");
+        sfxCollectTileSound = assetManager.get("Sound Effects/collectTileSound.mp3");
+        sfxRain = assetManager.get("Sound Effects/rain.mp3");
+        assetManager.load("Textures/asteroid_purple.png", Texture.class);
+        assetManager.load("Textures/HoverIndicator.png", Texture.class);
+        assetManager.load("Textures/RobotV1.png", Texture.class);
+        assetManager.load("Textures/RobotV2.png", Texture.class);
+        assetManager.load("Textures/ShipTile_Core.png", Texture.class);
+        assetManager.load("Textures/ShipTile_Red.png", Texture.class);
+        assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
+        assetManager.load("Textures/ToBeCollapsed.png", Texture.class);
+        assetManager.finishLoading();
+        AsteroidPurpleTexture = assetManager.get("Textures/asteroid_purple.png");
+        HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
+        RobotV1Texture = assetManager.get("Textures/RobotV1.png");
+        RobotV2Texture = assetManager.get("Textures/RobotV2.png");
+        ShipTileCoreTexture = assetManager.get("Textures/ShipTile_Core.png");
+        ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
+        ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
+        ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
         assetManager.finishLoading();
     }
 }

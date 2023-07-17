@@ -83,8 +83,14 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 	 * @param game
 	 */
 	public void render(TileShipGame game) {
+
 		if(this.debugMode){
-			game.font.draw(game.batch, getPositionAsString(), getX() + 2 , getY() + (size.y/4));
+			game.font.draw(
+					game.batch,
+					getPositionAsString(),
+					getX() + 2 ,
+					getY() + (size.y/4));
+
 		}
 	}
 

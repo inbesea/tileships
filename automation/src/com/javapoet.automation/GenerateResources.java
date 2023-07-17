@@ -7,9 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.Texture;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
@@ -39,14 +37,15 @@ public class GenerateResources extends ApplicationAdapter {
                 .addStatement("assetManager = new $T()", AssetManager.class);
 
         CreateSoundFX(typeSpecBuilder, methodSpecBuilder);
-        CreateSprites(typeSpecBuilder, methodSpecBuilder);
+        CreateTextures(typeSpecBuilder, methodSpecBuilder);
 
 //        for (TextureAtlas.AtlasRegion region : textureAtlas.getRegions()) {
 //            typeSpecBuilder.addField(TextureAtlas.AtlasRegion.class, toVariableName("region" + upperFirstChar(region.name)), Modifier.PUBLIC, Modifier.STATIC);
 //        }
 
-        methodSpecBuilder.addStatement("assetManager.load(\"Atlas/textures.Atlas\", $T.class)", TextureAtlas.class)
-                .addStatement("assetManager.finishLoading()");
+//        methodSpecBuilder.addStatement("assetManager.load(\"Atlas/textures.Atlas\", $T.class)", TextureAtlas.class);
+
+        methodSpecBuilder.addStatement("assetManager.finishLoading()");
 
 //        methodSpecBuilder.addStatement("$T textureAtlas = assetManager.get(\"Atlas/textures.Atlas\")", TextureAtlas.class);
 //        for (TextureAtlas.AtlasRegion atlasRegion : regions) {
@@ -93,27 +92,33 @@ public class GenerateResources extends ApplicationAdapter {
         }
         // Add loading statement
         for (FileHandle sfxFile : sfxFiles) {
-            methodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "sfx/" + sfxFile.name(), Sound.class);
+            methodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Sound Effects/" + sfxFile.name(), Sound.class);
         }
+
+        methodSpecBuilder.addStatement("assetManager.finishLoading()");
+
         for (FileHandle sfxFile : sfxFiles) {
-            methodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName("sfx" + upperFirstChar(sfxFile.nameWithoutExtension())), "sfx/" + sfxFile.name());
+            methodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName("sfx" + upperFirstChar(sfxFile.nameWithoutExtension())), "Sound Effects/" + sfxFile.name());
         }
     }
 
-    private void CreateSprites(TypeSpec.Builder typeSpecBuilder, MethodSpec.Builder methodSpecBuilder) {
-        FileHandle spritePath = new FileHandle(Paths.get("assets/Sprites").toFile());
-        FileHandle[] spriteFiles = spritePath.list("png");
+    private void CreateTextures(TypeSpec.Builder typeSpecBuilder, MethodSpec.Builder methodSpecBuilder) {
+        FileHandle texturePath = new FileHandle(Paths.get("assets/Textures").toFile());
+        FileHandle[] textureFiles = texturePath.list("png");
 
         // Create field with file name
-        for (FileHandle spriteFile : spriteFiles){
-            typeSpecBuilder.addField(Sprite.class, toVariableName(upperFirstChar(spriteFile.nameWithoutExtension()) + "Sprite"), Modifier.PUBLIC, Modifier.STATIC);
+        for (FileHandle textureFile : textureFiles){
+            typeSpecBuilder.addField(Texture.class, toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"), Modifier.PUBLIC, Modifier.STATIC);
         }
         // Add loading statement
-        for (FileHandle spriteFile : spriteFiles) {
-            methodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "sfx/" + spriteFile.name(), Sprite.class);
+        for (FileHandle textureFile : textureFiles) {
+            methodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Textures/" + textureFile.name(), Texture.class);
         }
-        for (FileHandle spriteFile : spriteFiles) {
-            methodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(spriteFile.nameWithoutExtension()) + "Sprite"), "Sprites/" + spriteFile.name());
+
+        methodSpecBuilder.addStatement("assetManager.finishLoading()");
+
+        for (FileHandle textureFile : textureFiles) {
+            methodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"), "Textures/" + textureFile.name());
         }
     }
 }

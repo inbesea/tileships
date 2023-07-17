@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.javapoet.Resources;
 import com.shipGame.generalObjects.GameObject;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.physics.box2d.Box2DWrapper;
@@ -19,9 +20,8 @@ import com.shipGame.screens.MainMenuScreen;
 public class TileShipGame extends Game {
 	public static float zoomMax = 5;
 	public static float zoomMin = 0.5f;
-	public AssetManager assetManager; // Assetmanager vital for optimization of reused art assets!
 	Screen gs;
-	public SpriteBatch batch; // Draws the textures and fonts etc.
+	public static SpriteBatch batch; // Draws the textures and fonts etc.
 	public BitmapFont font;
 	private Ship playerShip;
 	public Box2DWrapper physicsWrapper;
@@ -35,7 +35,6 @@ public class TileShipGame extends Game {
 	 */
 	@Override
 	public void create () {
-		assetManager = new AssetManager();
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 
@@ -69,7 +68,7 @@ public class TileShipGame extends Game {
 	public void dispose () {
 		font.dispose();
 		batch.dispose();
-		assetManager.dispose();
+		Resources.assetManager.dispose();
 		gs.dispose();
 	}
 

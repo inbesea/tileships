@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.javapoet.Resources;
 import com.shipGame.ID;
 import com.shipGame.generalObjects.GameObject;
 import com.shipGame.player.TileHoverIndicator;
@@ -37,17 +38,14 @@ public class Ship extends GameObject {
 	private final TileCondenser tileCondenser;
 	private final ShipTilesManager shipTilesManager;
 	private final UnlockTracker unlockTracker;
-	AssetManager assetManager;
 	public boolean mute = true;
-	GameScreen screen;
 
 	/**
 	 * Ship keeps track of the tiles of the ship and has methods for
 	 * managing removing and adding tiles.
 	 */
-	public Ship (Vector2 position, AssetManager assetManager) {
+	public Ship (Vector2 position) {
 		super(position, new Vector2(0,0), ID.Ship);
-		this.assetManager = assetManager;
 
 		shipTilesManager = new ShipTilesManager(this);
 		collectionManager = new CollectionManager();
@@ -66,20 +64,19 @@ public class Ship extends GameObject {
 	 *  TODO : Scale tile locations by the ship position to allow ship movement.
 	 */
 	public void render(TileShipGame game) {
-		AssetManager assetManager = game.assetManager;
 		Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
 		// Draw tiles
 		for(int i = 0; i < existing.size; i++) {
 			ShipTile tempTile = existing.get(i);
-			game.batch.draw(assetManager.get(tempTile.getTexture(),Texture.class),
+			game.batch.draw(tempTile.getTexture(),
 					tempTile.getX(), tempTile.getY(),
 					tempTile.getSize().x, tempTile.getSize().y);
 			tempTile.render(game);
 		}
 		// Draw dragged tile
 		if(draggedTile != null){
-			game.batch.draw(assetManager.get(draggedTile.getTexture(), Texture.class),
+			game.batch.draw(draggedTile.getTexture(),
 					draggedTile.getX(),draggedTile.getY(),draggedTile.getSize().x,draggedTile.getSize().y);
 		}
 		// Draw collected tile overlay
@@ -87,7 +84,7 @@ public class Ship extends GameObject {
 			Array<ShipTile> tiles = collectionManager.getTileArray();
 			for(int i = 0 ; tiles.size > i ; i++){
 				ShipTile tile = tiles.get(i);
-				game.batch.draw(assetManager.get( MainMenuScreen.spritePath + "ToBeCollapsed.png", Texture.class),
+				game.batch.draw(Resources.ToBeCollapsedTexture,
 						tile.getX(), tile.getY(),
 						ShipTile.TILESIZE,ShipTile.TILESIZE);
 			}
@@ -215,7 +212,7 @@ public class Ship extends GameObject {
 	}
 
 	@Override
-	public Sprite getSprite() {
+	public Texture getTexture() {
 		return null;
 	}
 
@@ -422,7 +419,7 @@ public class Ship extends GameObject {
 			collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
 			return null;
 		} else { // if Tile produced then swap the tiles used out of existence and return the new one.
-			playBuildSound();
+			Resources.sfxBuildTileSound.play(0.1f);
 			Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
 			vector2.y += ShipTile.TILESIZE/2f;
 			vector2.x += ShipTile.TILESIZE/2f;
@@ -431,16 +428,6 @@ public class Ship extends GameObject {
 			System.out.println("Building new tile " + result.getID());
 			return result;
 		}
-	}
-
-	/**
-	 * Convinence method to play the build sound
-	 * @return - nothing
-	 */
-	public void playBuildSound(){
-		Sound buildTileSound;
-		buildTileSound = assetManager.get(MainMenuScreen.soundPath + "buildTileSound.mp3", Sound.class);
-		buildTileSound.play(0.1f);
 	}
 
 	public ShipTilesManager getTileManager() {

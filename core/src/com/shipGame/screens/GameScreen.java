@@ -49,7 +49,6 @@ public class GameScreen implements Screen {
 
     OrthographicCamera camera;
     SimpleTouch st;
-    AssetManager assetManager;
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
@@ -60,7 +59,6 @@ public class GameScreen implements Screen {
 
     public GameScreen(final TileShipGame game) {
         this.game = game;
-        this.assetManager = game.assetManager;
         game.setGameScreen(this); // Give this to be disposed at exit
 
         gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
@@ -74,7 +72,7 @@ public class GameScreen implements Screen {
         this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
 
         // init ship
-        playerShip = new Ship(new Vector2(-1, -1), assetManager);
+        playerShip = new Ship(new Vector2(-1, -1));
         game.setPlayerShip(playerShip);
         playerShip.initialize();
 
@@ -98,7 +96,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(input);
 
         asteroidManager = new AsteroidManager(this);
-        hud = new HUD(game.assetManager, game);
+        hud = new HUD(game);
 
         // Create collision listener
         collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
@@ -214,15 +212,9 @@ public class GameScreen implements Screen {
      * Expects to be called after game.batch.begin() and with a batch that has the correct camera location context
      */
     private void drawGameObject(GameObject gameObject) {
-        // Get the texture of the game object and draw it based on the GameScreen Camera.
-        String textureString = gameObject.getTexture();
-
-        // Updates objects here.
-
-        if (!Objects.equals(textureString, MainMenuScreen.ignoreLoad) && !Objects.equals(textureString, "")) { // If ID has associated string
-            Texture texture = assetManager.get(textureString, Texture.class);
+        if (gameObject.getTexture() != null) {
             Vector2 size = gameObject.getSize();
-            game.batch.draw(texture, gameObject.getX(), gameObject.getY(), size.x, size.y);
+            game.batch.draw(gameObject.getTexture(), gameObject.getX(), gameObject.getY(), size.x, size.y);
         }
         gameObject.render(this.game);
     }

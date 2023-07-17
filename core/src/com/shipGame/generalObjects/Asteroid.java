@@ -1,9 +1,11 @@
 package com.shipGame.generalObjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.javapoet.Resources;
 import com.shipGame.ID;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.StrongTile;
@@ -113,6 +115,11 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	@Override
 	public void collision(GameObject gameObject) {
 			bounce(gameObject);
+	}
+
+	@Override
+	public Texture getTexture() {
+		return Resources.AsteroidPurpleTexture;
 	}
 
 	private void bounce(GameObject gameObject) {
