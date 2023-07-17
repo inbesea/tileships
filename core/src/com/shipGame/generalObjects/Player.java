@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.javapoet.Resources;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.ID;
 import com.shipGame.TileShipGame;
@@ -57,6 +58,11 @@ public class Player extends GameObject {
     @Override
     public void collision(GameObject gameObject) {
 
+    }
+
+    @Override
+    public Texture getTexture() {
+        return Resources.RobotV2Texture;
     }
 
     @Override

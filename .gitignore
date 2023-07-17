@@ -111,4 +111,6 @@ desktop/build
 html/build
 core/build
 ios/build
+/automation/build
+/automation/out
 .idea

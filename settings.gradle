@@ -1,4 +1,5 @@
 include 'desktop',
         'ios',
         'html',
-        'core'
+        'core',
+        'automation'

@@ -1,8 +1,10 @@
 package com.shipGame.player;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.javapoet.Resources;
 import com.shipGame.ID;
 import com.shipGame.generalObjects.GameObject;
 import com.shipGame.TileShipGame;
@@ -17,7 +19,6 @@ public class TileHoverIndicator extends GameObject {
 
         // Hover Indicator will always use the same texture
         this.id = ID.Hover;
-        this.textureRef = id.getSprite();
     }
 
     @Override
@@ -38,6 +39,11 @@ public class TileHoverIndicator extends GameObject {
     @Override
     public void collision(GameObject gameObject) {
 
+    }
+
+    @Override
+    public Texture getTexture() {
+        return Resources.HoverIndicatorTexture;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.javapoet.Resources;
 import com.shipGame.TileShipGame;
 
 public class MainMenuScreen implements Screen {
@@ -20,14 +21,13 @@ public class MainMenuScreen implements Screen {
     };
 
     public static final String soundPath = "Sound Effects/";
-    public static final String spritePath = "Sprites/";
-    public static String ignoreLoad = "Sprites/none"; // Used to ignore IDs without associated sprite references
+    public static final String spritePath = "Textures/";
+    public static String ignoreLoad = "Textures/none"; // Used to ignore IDs without associated sprite references
     final TileShipGame game;
 
     OrthographicCamera camera;
 
     Music mainMenuMusic;
-    AssetManager assetManager;
 
     /**
      * Constructs the mainmenu object
@@ -36,7 +36,6 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final TileShipGame game) {
         this.game = game;
 
-        assetManager = game.assetManager;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/Audio Export/MainMenuTune.wav"));
@@ -45,6 +44,7 @@ public class MainMenuScreen implements Screen {
         mainMenuMusic.setLooping(true);
 
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        Resources.loadAssets();
     }
 
     @Override
@@ -56,44 +56,30 @@ public class MainMenuScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        ScreenUtils.clear(0.00f, 0.00f, 0.10f, 1);
 
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        TileShipGame.batch.setProjectionMatrix(camera.combined);
 
         // Call to load textures to asset manager
-        initAssetManager();
+        Resources.updateAssets();
 
-        game.batch.begin();
-        if(assetManager.update()){
-            game.font.getData().setScale(0.04f, 0.04f);
-            game.font.draw(game.batch, "Welcome to tileships!!! ", 0, 3.9f);
-            game.font.draw(game.batch, "Tap anywhere to begin!", 3.125f, 3.125f);
+        TileShipGame.batch.begin();
+        if(Resources.assetManager.update()){
+            game.font.draw(TileShipGame.batch, "Welcome to tileships!!! ", 100, 300);
+            game.font.draw(TileShipGame.batch, "Tap anywhere to begin!", 150, 250);
         } else {
-            game.font.draw(game.batch, "~~~Loading Assets " + assetManager.getProgress() +" ~~~",3.125f,3.125f);
+            game.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() +" ~~~",175,275);
         }
-        game.batch.end();
+        TileShipGame.batch.end();
 
-        if (Gdx.input.isTouched() && assetManager.update()) {
+        if (Gdx.input.isTouched() && Resources.assetManager.update()) {
             mainMenuMusic.setLooping(false);
             mainMenuMusic.dispose();
             GameScreen gameScreen = new GameScreen(game);
             game.setScreen(gameScreen);
             game.setGameScreen(gameScreen);
             dispose();
-        }
-    }
-
-
-    /**
-     * Loads in the assets needed to run the game into the asset manager.
-     */
-    private void initAssetManager() {
-        for (int i = 0 ; i < spritesToLoad.length ; i++){
-            assetManager.load(spritePath + spritesToLoad[i], Texture.class);
-        }
-        for (int i = 0; i < soundsToLoad.length ; i++){
-            assetManager.load(soundPath + soundsToLoad[i], Sound.class);
         }
     }
 

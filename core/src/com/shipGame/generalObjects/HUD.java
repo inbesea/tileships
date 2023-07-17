@@ -17,7 +17,7 @@ public class HUD {
 
     private boolean showDebugHud = true;
 
-    public HUD(AssetManager assetManager, TileShipGame game) {
+    public HUD(TileShipGame game) {
         this.game = game;
         this.playerShip = game.getPlayerShip();
 
