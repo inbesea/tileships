@@ -15,7 +15,22 @@ import com.squareup.javapoet.TypeSpec;
 import javax.lang.model.element.Modifier;
 import java.nio.file.Paths;
 
+/**
+ * This class automates resource management and retrieval.
+ * When updating, adding or removing a resource this will need to be ran so core/src/com/javapoet/Resources.java is updated.
+ *
+ * It uses Java Poet, a builder pattern that can add methods, fields, etc. and output that to a usable java file.
+ */
 public class GenerateResources extends ApplicationAdapter {
+
+    private String sfxPrefix = "sfx";
+
+    protected TypeSpec.Builder typeSpecBuilder;
+    protected MethodSpec.Builder loadAssetMethodSpecBuilder;
+    protected MethodSpec.Builder updateAssetMethodSpecBuilder;
+
+    private FileHandle[] sfxFiles;
+    private FileHandle[] textureFiles;
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         new Lwjgl3Application(new GenerateResources(), config);
@@ -23,48 +38,84 @@ public class GenerateResources extends ApplicationAdapter {
 
     @Override
     public void create(){
-
-//        FileHandle atlasPath = new FileHandle(Paths.get("assets/Atlas").toFile());
-//        FileHandle[] atlasFiles = atlasPath.list("atlas");
-//        Array<TextureAtlas.AtlasRegion> regions = textureAtlas.getRegions();
-
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(("Resources"))
+        typeSpecBuilder = TypeSpec.classBuilder(("Resources"))
                 .addModifiers((Modifier.PUBLIC))
                 .addField(AssetManager.class, "assetManager", Modifier.PUBLIC, Modifier.STATIC);
 
-        MethodSpec.Builder methodSpecBuilder = MethodSpec.methodBuilder("loadAssets")
+        loadAssetMethodSpecBuilder = MethodSpec.methodBuilder("loadAssets")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addStatement("assetManager = new $T()", AssetManager.class);
 
-        CreateSoundFX(typeSpecBuilder, methodSpecBuilder);
-        CreateTextures(typeSpecBuilder, methodSpecBuilder);
+        updateAssetMethodSpecBuilder = MethodSpec.methodBuilder("updateAssets")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
-//        for (TextureAtlas.AtlasRegion region : textureAtlas.getRegions()) {
-//            typeSpecBuilder.addField(TextureAtlas.AtlasRegion.class, toVariableName("region" + upperFirstChar(region.name)), Modifier.PUBLIC, Modifier.STATIC);
-//        }
 
-//        methodSpecBuilder.addStatement("assetManager.load(\"Atlas/textures.Atlas\", $T.class)", TextureAtlas.class);
+        // Get files
+        FileHandle sfxPath = new FileHandle(Paths.get("assets/Sound Effects").toFile());
+        sfxFiles = sfxPath.list("mp3");
 
-        methodSpecBuilder.addStatement("assetManager.finishLoading()");
+        FileHandle texturePath = new FileHandle(Paths.get("assets/Textures").toFile());
+        textureFiles = texturePath.list("png");
 
-//        methodSpecBuilder.addStatement("$T textureAtlas = assetManager.get(\"Atlas/textures.Atlas\")", TextureAtlas.class);
-//        for (TextureAtlas.AtlasRegion atlasRegion : regions) {
-//            methodSpecBuilder.addStatement("$L = textureAtlas.findRegion($S)", toVariableName("region" + upperFirstChar(atlasRegion.name)), atlasRegion.name);
-//        }
 
-        typeSpecBuilder.addMethod(methodSpecBuilder.build());
+        CreateFields();
+        CreateLoadingStatements();
+        CreateGetStatements();
+
+        typeSpecBuilder.addMethod(loadAssetMethodSpecBuilder.build());
+        typeSpecBuilder.addMethod(updateAssetMethodSpecBuilder.build());
+
+        // Styles are set here and the file is modeled.
         JavaFile javaFile = JavaFile.builder("com.javapoet", typeSpecBuilder.build())
                 .indent("    ")
                 .build();
 
-        // Create output here
+        // Create output file here
         FileHandle target = new FileHandle(Paths.get("core/src/com/javapoet/Resources.java").toFile());
         target.writeString(javaFile.toString(), false);
 
+        // Done building Resources.java
         Gdx.app.exit();
     }
 
+    private void CreateFields() {
+        // Create field with file name
+        for (FileHandle sfxFile : sfxFiles){
+            typeSpecBuilder.addField(Sound.class, toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())), Modifier.PUBLIC, Modifier.STATIC);
+        }
+        for (FileHandle textureFile : textureFiles){
+            typeSpecBuilder.addField(Texture.class, toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"), Modifier.PUBLIC, Modifier.STATIC);
+        }
+    }
+    private void CreateLoadingStatements() {
+        // Add loading statement
+        for (FileHandle sfxFile : sfxFiles) {
+            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Sound Effects/" + sfxFile.name(), Sound.class);
+        }
+        for (FileHandle textureFile : textureFiles) {
+            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Textures/" + textureFile.name(), Texture.class);
+        }
+    }
+
+    private void CreateGetStatements() {
+        updateAssetMethodSpecBuilder.beginControlFlow("if(assetManager.update())");
+        for (FileHandle sfxFile : sfxFiles) {
+            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())), "Sound Effects/" + sfxFile.name());
+        }
+        for (FileHandle textureFile : textureFiles) {
+            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"), "Textures/" + textureFile.name());
+        }
+        updateAssetMethodSpecBuilder.endControlFlow();
+    }
+
+    /**
+     * Cleans up names to remove illegal file name features.
+     *
+     * @param name - name to clean
+     * @return - cleaned-up name string
+     */
     private static String toVariableName(String name) {
+        // Dashes, and periods are not allowed.
         name = name.replaceAll("^[./]*", "").replaceAll("[\\\\/\\-\\s]", "_").replaceAll("['\"]", "");
         String[] splits = name.split("_");
         StringBuilder builder = new StringBuilder(splits[0]);
@@ -77,10 +128,21 @@ public class GenerateResources extends ApplicationAdapter {
         return builder.toString();
     }
 
+    /**
+     * Capitalizes first character of the passed string.
+     *
+     * @param string
+     * @return
+     */
     private static String upperFirstChar(String string) {
         return Character.toUpperCase(string.charAt(0)) + string.substring(1);
     }
 
+    /**
+     * Add sfx files to the resources.java file
+     * @param typeSpecBuilder
+     * @param methodSpecBuilder
+     */
     private void CreateSoundFX(TypeSpec.Builder typeSpecBuilder, MethodSpec.Builder methodSpecBuilder){
         // Get files
         FileHandle sfxPath = new FileHandle(Paths.get("assets/Sound Effects").toFile());
@@ -88,7 +150,7 @@ public class GenerateResources extends ApplicationAdapter {
 
         // Create field with file name
         for (FileHandle sfxFile : sfxFiles){
-            typeSpecBuilder.addField(Sound.class, toVariableName("sfx" + upperFirstChar(sfxFile.nameWithoutExtension())), Modifier.PUBLIC, Modifier.STATIC);
+            typeSpecBuilder.addField(Sound.class, toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())), Modifier.PUBLIC, Modifier.STATIC);
         }
         // Add loading statement
         for (FileHandle sfxFile : sfxFiles) {
@@ -98,7 +160,7 @@ public class GenerateResources extends ApplicationAdapter {
         methodSpecBuilder.addStatement("assetManager.finishLoading()");
 
         for (FileHandle sfxFile : sfxFiles) {
-            methodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName("sfx" + upperFirstChar(sfxFile.nameWithoutExtension())), "Sound Effects/" + sfxFile.name());
+            methodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())), "Sound Effects/" + sfxFile.name());
         }
     }
 

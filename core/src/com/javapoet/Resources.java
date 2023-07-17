@@ -34,10 +34,6 @@ public class Resources {
         assetManager.load("Sound Effects/buildTileSound.mp3", Sound.class);
         assetManager.load("Sound Effects/collectTileSound.mp3", Sound.class);
         assetManager.load("Sound Effects/rain.mp3", Sound.class);
-        assetManager.finishLoading();
-        sfxBuildTileSound = assetManager.get("Sound Effects/buildTileSound.mp3");
-        sfxCollectTileSound = assetManager.get("Sound Effects/collectTileSound.mp3");
-        sfxRain = assetManager.get("Sound Effects/rain.mp3");
         assetManager.load("Textures/asteroid_purple.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/RobotV1.png", Texture.class);
@@ -46,15 +42,21 @@ public class Resources {
         assetManager.load("Textures/ShipTile_Red.png", Texture.class);
         assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
         assetManager.load("Textures/ToBeCollapsed.png", Texture.class);
-        assetManager.finishLoading();
-        AsteroidPurpleTexture = assetManager.get("Textures/asteroid_purple.png");
-        HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
-        RobotV1Texture = assetManager.get("Textures/RobotV1.png");
-        RobotV2Texture = assetManager.get("Textures/RobotV2.png");
-        ShipTileCoreTexture = assetManager.get("Textures/ShipTile_Core.png");
-        ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
-        ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
-        ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
-        assetManager.finishLoading();
+    }
+
+    public static void updateAssets() {
+        if(assetManager.update()) {
+            sfxBuildTileSound = assetManager.get("Sound Effects/buildTileSound.mp3");
+            sfxCollectTileSound = assetManager.get("Sound Effects/collectTileSound.mp3");
+            sfxRain = assetManager.get("Sound Effects/rain.mp3");
+            AsteroidPurpleTexture = assetManager.get("Textures/asteroid_purple.png");
+            HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
+            RobotV1Texture = assetManager.get("Textures/RobotV1.png");
+            RobotV2Texture = assetManager.get("Textures/RobotV2.png");
+            ShipTileCoreTexture = assetManager.get("Textures/ShipTile_Core.png");
+            ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
+            ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
+            ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
+        }
     }
 }
