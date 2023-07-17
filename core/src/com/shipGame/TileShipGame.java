@@ -22,7 +22,7 @@ public class TileShipGame extends Game {
 	public static float zoomMin = 0.5f;
 	Screen gs;
 	public static SpriteBatch batch; // Draws the textures and fonts etc.
-	public BitmapFont font;
+	public static BitmapFont font;
 	private Ship playerShip;
 	public Box2DWrapper physicsWrapper;
 	public static int zoomSpeed = 5;

@@ -86,7 +86,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 
 		if(this.debugMode){
 			game.font.draw(
-					game.batch,
+					TileShipGame.batch,
 					getPositionAsString(),
 					getX() + 2 ,
 					getY() + (size.y/4));
