@@ -1,0 +1,7 @@
+package com.Interfaces;
+
+import com.badlogic.gdx.math.Vector2;
+
+public interface TextBoxInterface {
+    public void update(Vector2 position);
+}

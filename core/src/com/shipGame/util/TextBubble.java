@@ -1,73 +1,89 @@
 package com.shipGame.util;
 
+import com.Shapes.Tentacle;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.TileShipGame;
-import com.shipGame.player.PlayerInput;
 
-public class TextBubble {
+public abstract class TextBubble {
+
+   /*TODO This might need to be a builder object.
+   We need to be able to fade out the text, end the text visually right away,
+   begin fade out/end after crawling the whole text, or begin the countdown right away,
+   One this is true, this needs polish
+   * */
     Long begin;
-    long delta;
+    long deltaFromStart;
     int millisecondsBetweenLetters;
     int lastChar;
-
-    Sound letterSound;
-    Sound[] letterSounds;
-
+    Long timeout = -1L;
+    boolean dead = false;
     String text;
-    String intermediateString;
+    String intermediateString = "";
+    // starts full opacity
+    private float opacity = 1f;
+    private float fadespeed = 0f;
+
+    Tentacle speechArrow;
     public TextBubble(String text, int millisecondsBetweenLetters){
         begin = System.currentTimeMillis();
         this.text = text;
         this.millisecondsBetweenLetters = millisecondsBetweenLetters;
+        speechArrow = new Tentacle(12 ,12);
     }
 
-    public TextBubble(String text, int millisecondsBetweenLetters, Sound letterSound){
-        begin = System.currentTimeMillis();
-        this.text = text;
-        this.millisecondsBetweenLetters = millisecondsBetweenLetters;
-        this.letterSound = letterSound;
+    public void update(Vector2 location){
+        if(dead){return;} // Dont print text that's expired
+        if(begin == null)begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+
+        lastChar = getLastChar();
+        intermediateString = this.text.substring(0, lastChar);
+        print(location);
     }
 
-    public TextBubble(String text, int millisecondsBetweenLetters, Sound[] letterSounds){
-        begin = System.currentTimeMillis();
-        this.text = text;
-        this.millisecondsBetweenLetters = millisecondsBetweenLetters;
-        this.letterSounds = letterSounds;
+    /**
+     * Gets the current char based on delta from start and crawl speed.
+     *
+     * @return - number of chars to display based on time since beginning.
+     */
+    protected int getLastChar(){
+        if(begin == null)begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+
+        return Math.min((int) (deltaFromStart / millisecondsBetweenLetters), text.length());
     }
 
     /**
      * Call each render to print value
      */
-    public void print(Vector2 location){
-        if(begin == null)begin = System.currentTimeMillis();
-
-        delta = System.currentTimeMillis() - begin;
-
-        if(letterSound != null){letterSound();}
-        else if(letterSounds != null){letterSounds();}
-
-
-        lastChar = Math.min((int) (delta/ millisecondsBetweenLetters), text.length());
-        intermediateString = this.text.substring(0, lastChar);
+    protected void print(Vector2 location){
         TileShipGame.font.draw(TileShipGame.batch, intermediateString, location.x, location.y);
     }
-
-    /**
-     * Creates placement sounds from list
-     */
-    private void letterSounds() {
-        if(lastChar != Math.min((int) (delta/ millisecondsBetweenLetters), text.length())){
-            letterSounds[(int) generalUtil.getRandomNumber(0, letterSounds.length)].play(25);
+    
+    private void fadeout(){
+        if(timeout >= 0){
+            if(timeout < deltaFromStart){
+                this.opacity -= fadespeed;
+            }
+        }
+    }
+    
+    private void stop(){
+        if(timeout >= 0){
+            if(timeout < deltaFromStart){
+                kill();
+            }
         }
     }
 
-    /**
-     * Creates single sound
-     */
-    private void letterSound() {
-        if(lastChar != Math.min((int) (delta/ millisecondsBetweenLetters), text.length())){
-            letterSound.play(0.25f);
-        }
+    public void setFadespeed(float fadespeed){
+        this.fadespeed = fadespeed;
+    }
+
+    private void kill() {
+        dead = true;
+    }
+
+    public void setSpeechArrow(int startArrow, int endArrow){
+        speechArrow.setPosition(startArrow, endArrow);
     }
 }

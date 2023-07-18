@@ -15,14 +15,13 @@ import static org.mockito.Mockito.*;
 @RunWith(JUnit4.class)
 public class ShipTest extends TestCase {
     public Ship ship;
-    public AssetManager assetManager;
     Box2DWrapper box2DWrapper;
 
     @Before
     public void setUp() throws Exception{
         box2DWrapper = mock(Box2DWrapper.class);
 //        when(box2DWrapper.).thenReturn(null);
-        ship = new Ship(new Vector2(0,0), assetManager);
+        ship = new Ship(new Vector2(0,0));
     }
 
     @Test

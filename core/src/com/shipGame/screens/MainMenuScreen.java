@@ -6,11 +6,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.javapoet.Resources;
 import com.shipGame.TileShipGame;
-import com.shipGame.util.TextBubble;
+import com.shipGame.util.SoundTextBubble;
 import com.shipGame.util.TextBubble;
 
 public class MainMenuScreen extends ScreenAdapter {
@@ -21,7 +19,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     Music mainMenuMusic;
 
-    private TextBubble welcome;
+    private SoundTextBubble welcome;
 
     /**
      * Constructs a MainMenu object
@@ -59,10 +57,10 @@ public class MainMenuScreen extends ScreenAdapter {
 
         TileShipGame.batch.begin();
         if(Resources.assetManager.update()){
-            String str = "Welcome to tileships!!! ";
-            if(welcome == null)welcome = new TextBubble(str, 100, Resources.sfxCollectTileSound);
+            String str = "Welcome to tileships!!!";
+            if(welcome == null)welcome = new SoundTextBubble(str, 100, Resources.sfxCollectTileSound);
 
-            welcome.print(new Vector2(250,350));
+            welcome.update(new Vector2(250,350));
             game.font.draw(TileShipGame.batch, "Tap anywhere to begin!", 150, 250);
         } else {
             game.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 175, 275);

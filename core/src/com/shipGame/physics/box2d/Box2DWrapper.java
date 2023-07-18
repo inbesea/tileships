@@ -102,7 +102,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
                 try {
                     gameObject.getBounds().setPosition(gameObjectNewPosition);
                 } catch (NullPointerException nullPointerException) {
-                    nullPointerException.printStackTrace();
+//                    nullPointerException.printStackTrace();
                 }
 
                 try {

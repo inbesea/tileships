@@ -1,16 +1,19 @@
 package com.shipGame.screens;
 
+import com.Shapes.Tentacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.javapoet.Resources;
 import com.shipGame.ID;
 import com.shipGame.TileShipGame;
 import com.shipGame.generalObjects.GameObject;
@@ -29,6 +32,7 @@ import com.shipGame.physics.collisions.CollisionHandler;
 import com.shipGame.physics.collisions.CollisionListener;
 import com.shipGame.player.PlayerInput;
 import com.shipGame.player.SimpleTouch;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
  * Main game screen - where the game happens
@@ -51,6 +55,9 @@ public class GameScreen implements Screen {
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
     private final CollisionHandler collisionHandler;
+
+    Tentacle tentacle;
+    public static ShapeDrawer shapeDrawer;
 
     public GameScreen(final TileShipGame game) {
         this.game = game;
@@ -97,6 +104,10 @@ public class GameScreen implements Screen {
         collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
+
+        tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
+        shapeDrawer = new ShapeDrawer(TileShipGame.batch);
+        shapeDrawer.setTextureRegion(new TextureRegion(Resources.ShipTileStrongTexture, 20, 20, 20, 20));
     }
 
     @Override
@@ -164,6 +175,9 @@ public class GameScreen implements Screen {
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
+
+        tentacle.follow(player.getX(), player.getY());
+        tentacle.draw(shapeDrawer);
         TileShipGame.batch.end();
 
         Box2DWrapper.getInstance().drawDebug(camera);
