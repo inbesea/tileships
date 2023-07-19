@@ -1,11 +1,12 @@
 package com.shipGame.util;
 
+import com.Interfaces.TextBoxInterface;
 import com.Shapes.Tentacle;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.TileShipGame;
 
-public abstract class TextBubble {
+public class TextBubble  implements TextBoxInterface {
 
    /*TODO This might need to be a builder object.
    We need to be able to fade out the text, end the text visually right away,

@@ -1,5 +1,7 @@
 package com.shipGame.util;
 
+import com.Interfaces.TextBoxInterface;
+import com.Shapes.Line;
 import com.Shapes.Tentacle;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -9,42 +11,59 @@ import com.javapoet.Resources;
 import com.shipGame.TileShipGame;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-public class SoundTextBubble extends TextBubble {
-    private Sound letterSound;
-    private Sound[] letterSounds;
+import java.util.ArrayList;
 
+public class SoundTextBubble extends TextBubble implements TextBoxInterface {
+    private ArrayList<Sound> letterSounds;
+    ShapeDrawer shapeDrawer;
     Tentacle tentacle;
-    public SoundTextBubble(String text, int millisecondsBetweenLetters, Sound letterSound) {
-        super(text, millisecondsBetweenLetters);
-        this.letterSound = letterSound;
-        tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
-    }
 
-    public SoundTextBubble(String text, int millisecondsBetweenLetters, Sound[] letterSounds) {
+    public SoundTextBubble(String text, int millisecondsBetweenLetters, ArrayList<Sound> letterSounds) {
         super(text, millisecondsBetweenLetters);
         this.letterSounds = letterSounds;
         tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
+        shapeDrawer = createShapeDrawer();
     }
 
+    public SoundTextBubble(String text, int millisecondsBetweenLetters, Sound letterSounds) {
+        super(text, millisecondsBetweenLetters);
+        this.letterSounds = new ArrayList<>();
+        this.letterSounds.add(letterSounds);
+        tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
+        shapeDrawer = createShapeDrawer();
+    }
+
+    private ShapeDrawer createShapeDrawer() {
+        ShapeDrawer shapeDrawer1 = new ShapeDrawer(TileShipGame.batch);
+        shapeDrawer1.setTextureRegion(new TextureRegion(Resources.ShipTileStrongTexture, 20, 20, 20, 20));
+        return shapeDrawer1;
+    }
 
     // When using this we want to be able to call this method, pass text, and crawl speed.
     // sounds are the new stuff.
     // a lot of the super logic is half-baked I would say.
 
     @Override
-    public void update(Vector2 location){
+    public void update(Vector2 textBoxLocation){
         if(dead){return;} // Dont print text that's expired
-        if(begin == null)begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+        if(begin == null){
+            begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+
+            //
+            //Line[] lines = tentacle.getLines().setPosition(textBoxLocation);
+        }
 
         deltaFromStart = System.currentTimeMillis() - begin;
 
-        if(letterSound != null){letterSound();}
-        else if(letterSounds != null){letterSounds();}
+        if(letterSounds != null){letterSounds();}
 
         lastChar = getLastChar();
         intermediateString = this.text.substring(0, lastChar);
 
-        print(location);
+        tentacle.follow(textBoxLocation);
+        tentacle.draw(shapeDrawer);
+
+        print(textBoxLocation);
     }
 
     /**
@@ -52,19 +71,7 @@ public class SoundTextBubble extends TextBubble {
      */
     private void letterSounds() {
         if(lastChar != Math.min((int) (deltaFromStart / millisecondsBetweenLetters), text.length())){
-            letterSounds[(int) generalUtil.getRandomNumber(0, letterSounds.length)].play(25);
-        }
-    }
-
-    /**
-     * Creates single sound
-     */
-    private void letterSound() {
-        int newLastChar = Math.min((int) (deltaFromStart / millisecondsBetweenLetters), text.length());
-        System.out.println(newLastChar + ", " + lastChar + " These are the two char vars");
-        if(lastChar != newLastChar){
-            System.out.println("Playing the sound!!!");
-            letterSound.play();
+            letterSounds.get((int) generalUtil.getRandomNumber(0, letterSounds.size())).play(25);
         }
     }
 }

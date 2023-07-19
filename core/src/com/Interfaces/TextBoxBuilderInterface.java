@@ -2,6 +2,8 @@ package com.Interfaces;
 
 import com.badlogic.gdx.audio.Sound;
 
+import java.util.ArrayList;
+
 public interface TextBoxBuilderInterface {
     void reset();
     void setText(String text);
@@ -13,11 +15,11 @@ public interface TextBoxBuilderInterface {
 
     // Will remove the previously set sounds.
     void setSounds(Sound sound);
-    void setSounds(Sound[] sounds);
+    void setSounds(ArrayList<Sound> sounds);
     // Will append
     void addSounds(Sound sound);
-    void addSounds(Sound[] sounds);
-
+    void addSounds(ArrayList<Sound> sounds);
+    void setAddArrow(boolean setArrow);
     void setTextSpeed(int millisecondsBetweenWords);
 
     TextBoxInterface buildProduct();// Return whatever we made lol

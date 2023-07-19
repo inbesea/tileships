@@ -32,6 +32,7 @@ import com.shipGame.physics.collisions.CollisionHandler;
 import com.shipGame.physics.collisions.CollisionListener;
 import com.shipGame.player.PlayerInput;
 import com.shipGame.player.SimpleTouch;
+import com.shipGame.util.SoundTextBubble;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
@@ -58,7 +59,7 @@ public class GameScreen implements Screen {
 
     Tentacle tentacle;
     public static ShapeDrawer shapeDrawer;
-
+    public SoundTextBubble textBubble;
     public GameScreen(final TileShipGame game) {
         this.game = game;
         game.setGameScreen(this); // Give this to be disposed at exit
@@ -108,6 +109,8 @@ public class GameScreen implements Screen {
         tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
         shapeDrawer = new ShapeDrawer(TileShipGame.batch);
         shapeDrawer.setTextureRegion(new TextureRegion(Resources.ShipTileStrongTexture, 20, 20, 20, 20));
+
+        textBubble = new SoundTextBubble("Hello, this is a test message", 300, Resources.sfxCollectTileSound);
     }
 
     @Override
@@ -178,6 +181,9 @@ public class GameScreen implements Screen {
 
         tentacle.follow(player.getX(), player.getY());
         tentacle.draw(shapeDrawer);
+
+        textBubble.update(new Vector2(player.getX() - 30, player.getY() + 125));
+
         TileShipGame.batch.end();
 
         Box2DWrapper.getInstance().drawDebug(camera);
