@@ -4,6 +4,7 @@ import com.Interfaces.TextBoxBuilderInterface;
 import com.Interfaces.TextBoxInterface;
 import com.Shapes.Tentacle;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Vector2;
 import com.shipGame.util.SoundTextBubble;
 import com.shipGame.util.TextBubble;
 
@@ -21,7 +22,7 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
     private ArrayList<Sound> sounds;
     int millisecondsBetweenWords = -1;
     long timeout;
-
+    Vector2 target;
 
     @Override
     public void reset() {
@@ -31,6 +32,7 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
         millisecondsBetweenWords = 300;
         createArrow = false;
         timeout = 7000;
+        target = null;
     }
 
     @Override
@@ -95,9 +97,14 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
     }
 
     @Override
+    public void stretchyArrow(boolean arrowIsStretchy) {
+
+    }
+
+    @Override
     public TextBoxInterface buildProduct() {
         if(checkSoundboxCriteria()){
-            return new SoundTextBubble(text, millisecondsBetweenWords, sounds);
+            return new SoundTextBubble(text, millisecondsBetweenWords, sounds, target);
         } else {
             return new TextBubble(text, millisecondsBetweenWords);
         }

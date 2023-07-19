@@ -29,5 +29,15 @@ public class TextBoxDirector {
         boxBuilder.setText(text);
 
         return boxBuilder.buildProduct();
-    };
+    }
+
+    public TextBoxInterface getSoundTextBubbleWithTimeout(String text, Sound sound, int timeout){
+        boxBuilder.reset();
+
+        boxBuilder.addSounds(sound);
+        boxBuilder.setText(text);
+        boxBuilder.setTimeout(timeout);
+
+        return boxBuilder.buildProduct();
+    }
 }

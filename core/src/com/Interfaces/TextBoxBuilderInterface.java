@@ -19,8 +19,10 @@ public interface TextBoxBuilderInterface {
     // Will append
     void addSounds(Sound sound);
     void addSounds(ArrayList<Sound> sounds);
-    void setAddArrow(boolean setArrow);
     void setTextSpeed(int millisecondsBetweenWords);
+
+    void stretchyArrow(boolean arrowIsStretchy);
+    void setAddArrow(boolean setArrow);
 
     TextBoxInterface buildProduct();// Return whatever we made lol
 }

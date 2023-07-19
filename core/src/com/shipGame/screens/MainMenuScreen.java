@@ -58,7 +58,7 @@ public class MainMenuScreen extends ScreenAdapter {
         TileShipGame.batch.begin();
         if(Resources.assetManager.update()){
             String str = "Welcome to tileships!!!";
-            if(welcome == null)welcome = new SoundTextBubble(str, 100, Resources.sfxCollectTileSound);
+            if(welcome == null)welcome = new SoundTextBubble(str, 100, Resources.sfxCollectTileSound, null);
 
             welcome.update(new Vector2(250,350));
             game.font.draw(TileShipGame.batch, "Tap anywhere to begin!", 150, 250);

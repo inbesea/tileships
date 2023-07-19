@@ -60,6 +60,7 @@ public class GameScreen implements Screen {
     Tentacle tentacle;
     public static ShapeDrawer shapeDrawer;
     public SoundTextBubble textBubble;
+    public SoundTextBubble textBubble1;
     public GameScreen(final TileShipGame game) {
         this.game = game;
         game.setGameScreen(this); // Give this to be disposed at exit
@@ -106,11 +107,12 @@ public class GameScreen implements Screen {
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
 
-        tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
+//        tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
         shapeDrawer = new ShapeDrawer(TileShipGame.batch);
         shapeDrawer.setTextureRegion(new TextureRegion(Resources.ShipTileStrongTexture, 20, 20, 20, 20));
 
-        textBubble = new SoundTextBubble("Hello, this is a test message", 300, Resources.sfxCollectTileSound);
+        textBubble = new SoundTextBubble("Hello, this is a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
+        textBubble1 = new SoundTextBubble("This is also a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
     }
 
     @Override
@@ -179,10 +181,11 @@ public class GameScreen implements Screen {
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
 
-        tentacle.follow(player.getX(), player.getY());
-        tentacle.draw(shapeDrawer);
+//        tentacle.follow(player.getX(), player.getY());
+//        tentacle.draw(shapeDrawer);
 
         textBubble.update(new Vector2(player.getX() - 30, player.getY() + 125));
+        textBubble1.update(new Vector2(0, 0));
 
         TileShipGame.batch.end();
 
