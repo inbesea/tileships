@@ -37,6 +37,11 @@ public class TileHoverIndicator extends GameObject {
     }
 
     @Override
+    protected void setBoundsPosition(Vector2 boundsPosition) {
+        return;
+    }
+
+    @Override
     public void collision(GameObject gameObject) {
 
     }

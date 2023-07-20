@@ -92,25 +92,12 @@ public class Box2DWrapper implements Box2DWrapperInterface {
                 gameObjectNewPosition.y = gameObjectNewPosition.y * ShipTile.TILE_SIZE;
                 // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
 
-                //
+                // I guess we're checking if the body is unmovable or not? :/
                 if (b.getType().equals(BodyDef.BodyType.StaticBody)) {
                     continue;
                 }
                 // Update the entities/sprites position and angle
                 gameObject.setPosition(gameObjectNewPosition);
-
-                try {
-                    gameObject.getBounds().setPosition(gameObjectNewPosition);
-                } catch (NullPointerException nullPointerException) {
-//                    nullPointerException.printStackTrace();
-                }
-
-                try {
-                    gameObject.getCircleBounds().setPosition(gameObjectNewPosition);
-                } catch (NullPointerException nullPointerException) {
-                    // shouldn't do this probably but w/e
-                }
-
 
                 // We need to convert our angle from radians to degrees
                 gameObject.setRotation(MathUtils.radiansToDegrees * b.getAngle());

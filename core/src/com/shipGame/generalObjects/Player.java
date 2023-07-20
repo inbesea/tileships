@@ -32,6 +32,7 @@ public class Player extends GameObject {
     private float tileCircleRotationSpeed = 0.01f;
     private float circleRotation = 0;
     private final int INIT_HELD_RADIUS = 32; // one Radius
+    private Rectangle bounds;
 
     private float playerSpeed = ShipTile.TILE_SIZE * 1.5f;
 
@@ -53,6 +54,17 @@ public class Player extends GameObject {
         Rectangle r = new com.badlogic.gdx.math.Rectangle((int) position.x, (int) position.y, ShipTile.TILE_SIZE *.33f, ShipTile.TILE_SIZE * 0.5f);
         //r.intersects
         return r;
+    }
+
+    @Override
+    public void setPosition(Vector2 position){
+        position.set(position);
+        bounds.setPosition(position);
+    }
+
+    @Override
+    protected void setBoundsPosition(Vector2 boundsPosition) {
+        bounds.setPosition(boundsPosition);
     }
 
     @Override

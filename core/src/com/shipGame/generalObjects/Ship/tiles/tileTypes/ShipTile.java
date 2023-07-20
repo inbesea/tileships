@@ -28,7 +28,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     private int cool = 0;
     public boolean isEdge;
     public final static float TILE_SIZE = 64f;
-    private final Rectangle collider;
+    private final Rectangle bounds;
     private final TileTypeData typeData; // Need for unique platonic form data
 
     private final ShipTilesManager manager;
@@ -49,7 +49,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 
         this.manager = manager;
 
-        collider = new com.badlogic.gdx.math.Rectangle(position.x, position.y, ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
+        bounds = new com.badlogic.gdx.math.Rectangle(position.x, position.y, ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
         // Need to knit together the shiptile to adjacent tiles connectAdjacent();
     }
 
@@ -128,7 +128,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      */
     @Override
     public Rectangle getBounds() {
-        return collider;
+        return bounds;
     }
 
     /**
@@ -378,5 +378,10 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     @Override
     public Body getBody() {
         return body;
+    }
+
+    @Override
+    protected void setBoundsPosition(Vector2 boundsPosition){
+        this.bounds.setPosition(boundsPosition);
     }
 }

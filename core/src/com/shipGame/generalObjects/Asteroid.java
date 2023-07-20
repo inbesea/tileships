@@ -54,6 +54,11 @@ public class Asteroid extends GameObject implements PhysicsObject {
 		return null;
 	}
 
+	@Override
+	protected void setBoundsPosition(Vector2 boundsPosition) {
+		circle.setPosition(boundsPosition);
+	}
+
 	public Circle getCircleBounds() {
 		return circle;
 	}

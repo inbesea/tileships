@@ -3,6 +3,7 @@ package com.shipGame.managers;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.ID;
+import com.shipGame.TileShipGame;
 import com.shipGame.generalObjects.Asteroid;
 import com.shipGame.generalObjects.GameObject;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
@@ -31,7 +32,7 @@ public class AsteroidManager implements Manager {
     private int numberOfAsteroids = asteroids.size;
     // Needed for physics simulation
     Circle circle;
-    float spawnRadius;
+    float spawnRadius = TileShipGame.defaultViewportSizeX;
 
     /**
      * Spawns asteroids.
@@ -46,9 +47,7 @@ public class AsteroidManager implements Manager {
         spawning = true; // Assume spawning if using this constructor.
 
         this.circle = new Circle();
-        spawnRadius = screen.getCamera().viewportWidth;
         circle.setRadius(spawnRadius);
-//        initSpawn();
     }
 
     public AsteroidManager(GameScreen screen, boolean spawning){
@@ -58,7 +57,6 @@ public class AsteroidManager implements Manager {
         numberOfAsteroids = 0;
 
         this.circle = new Circle();
-        spawnRadius = screen.getCamera().viewportWidth;
         circle.setRadius(spawnRadius);
     }
 
@@ -77,6 +75,8 @@ public class AsteroidManager implements Manager {
      * @return - marking this as unfinished
      */
     private void cleanup() {
+        spawnRadius = spawnRadius + screen.getCamera().zoom;
+
         // Check asteroids and remove any outside of the "zoneOfPlay"
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
@@ -130,10 +130,16 @@ public class AsteroidManager implements Manager {
      * @return - true if x,y bigger than bounds
      */
     private boolean outOfBounds(Asteroid asteroid) {
-        Circle circleBigRadius = new Circle(circle);
-        circleBigRadius.setRadius(circleBigRadius.radius + screen.getCamera().zoom + 3);
-        boolean oob = !asteroid.getCircleBounds().overlaps(circleBigRadius);
-        return oob;
+
+        // This is dumb, but the circles aren't being updated properly, while the position is. Deal with it
+        asteroid.setPosition(asteroid.getPosition());
+
+        Circle inBoundsRadius = new Circle(circle);
+        inBoundsRadius.setRadius(spawnRadius);
+//        circleBigRadius.setRadius(circleBigRadius.radius + screen.getCamera().zoom + 3);
+
+        boolean inBounds = asteroid.getCircleBounds().overlaps(inBoundsRadius);
+        return !inBounds;
     }
 
     /**

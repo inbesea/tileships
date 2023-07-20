@@ -50,6 +50,9 @@ public abstract class GameObject {
 	public abstract void tick();
 	public abstract void render(TileShipGame game);
 	public abstract Rectangle getBounds();
+
+	// Meant to reflect the physical bounds of the gameObject
+	protected abstract void setBoundsPosition(Vector2 boundsPosition);
 	public abstract void collision(GameObject gameObject);
 	public void setX(float x) {
 		this.position.x = x;
@@ -92,6 +95,7 @@ public abstract class GameObject {
 
 	public void setPosition(Vector2 position) {
 		this.position = position;
+		this.setBoundsPosition(position);
 	}
 
 	/**
