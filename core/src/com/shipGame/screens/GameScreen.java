@@ -1,5 +1,7 @@
 package com.shipGame.screens;
 
+import com.Builders.TextBoxBuilder;
+import com.Directors.TextBoxDirector;
 import com.Shapes.Tentacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -61,6 +63,7 @@ public class GameScreen implements Screen {
     public static ShapeDrawer shapeDrawer;
     public SoundTextBubble textBubble;
     public SoundTextBubble textBubble1;
+    TextBoxDirector boxDirector;
     public GameScreen(final TileShipGame game) {
         this.game = game;
         game.setGameScreen(this); // Give this to be disposed at exit
@@ -107,12 +110,14 @@ public class GameScreen implements Screen {
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
 
-//        tentacle = new Tentacle(40, 2, 1 , 20 , Color.WHITE, Color.WHITE);
         shapeDrawer = new ShapeDrawer(TileShipGame.batch);
         shapeDrawer.setTextureRegion(new TextureRegion(Resources.ShipTileStrongTexture, 20, 20, 20, 20));
 
-        textBubble = new SoundTextBubble("Hello, this is a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
-        textBubble1 = new SoundTextBubble("This is also a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
+        boxDirector = new TextBoxDirector(new TextBoxBuilder());
+        // TODO : Add back these textbubbles with the manager handling updates, and the director creating instances.
+//        textBubble = new SoundTextBubble("Hello, this is a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
+//
+//        textBubble1 = new SoundTextBubble("This is also a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
     }
 
     @Override
@@ -184,8 +189,6 @@ public class GameScreen implements Screen {
 //        tentacle.follow(player.getX(), player.getY());
 //        tentacle.draw(shapeDrawer);
 
-        textBubble.update(new Vector2(player.getX() - 30, player.getY() + 125));
-        textBubble1.update(new Vector2(0, 0));
 
         TileShipGame.batch.end();
 

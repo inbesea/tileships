@@ -7,6 +7,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.javapoet.Resources;
 import com.shipGame.TileShipGame;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
@@ -14,18 +16,26 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 
 import java.util.ArrayList;
 
+/**
+ * Text bubble object.
+ * Call this from TextBoxBulder.java!! Meant to be called from a builder due
+ * to the extensive customizability.
+ */
 public class SoundTextBubble extends TextBubble implements TextBoxInterface {
     private ArrayList<Sound> letterSounds;
     ShapeDrawer shapeDrawer;
     Tentacle tentacle;
     Vector2 target;
-    private boolean firstUpdate = true;
 
-    private int arrowSegments = 75;
+    private Button imageButton;
 
-    //TODO : Fix this shit class hiarchy. The tentacle thing needs to be ripped out of the constructor, or made optional. Builder much???
-    public SoundTextBubble(String text, int millisecondsBetweenLetters, ArrayList<Sound> letterSounds, Vector2 target) {
-        super(text, millisecondsBetweenLetters);
+    private int arrowSegments = 40;
+
+    public SoundTextBubble(String text, int millisecondsBetweenLetters,
+                           Long timeout, boolean timeoutAfterCrawl,
+                           float fadeoutSpeed, ArrayList<Sound> letterSounds, Vector2 target,
+                           Tentacle tentacle) {
+        super(text, millisecondsBetweenLetters, timeout, timeoutAfterCrawl, fadeoutSpeed);
         this.letterSounds = letterSounds;
 
         if(target != null){
@@ -33,10 +43,13 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
             tentacle = new Tentacle(arrowSegments, 2, 1 , 20 , Color.WHITE, Color.WHITE);
             shapeDrawer = createShapeDrawer();
         }
+
     }
 
-    public SoundTextBubble(String text, int millisecondsBetweenLetters, Sound letterSounds, Vector2 target) {
-        super(text, millisecondsBetweenLetters);
+    public SoundTextBubble(String text, int millisecondsBetweenLetters,
+                           Long timeout, boolean timeoutAfterCrawl,
+                           float fadeoutSpeed, Sound letterSounds, Vector2 target) {
+        super(text, millisecondsBetweenLetters, timeout, timeoutAfterCrawl, fadeoutSpeed);
         this.letterSounds = new ArrayList<>();
         this.letterSounds.add(letterSounds);
 
@@ -62,12 +75,6 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
         if(dead){return;} // Dont print text that's expired
         if(firstUpdate){
             begin = System.currentTimeMillis(); // First print will cause the beginning to be set
-//            if(tentacle != null){
-//                tentacle.setPosition(textBoxLocation.x,textBoxLocation.y - ShipTile.TILE_SIZE/2);
-//                tentacle.lock();
-//            }
-            //
-            //Line[] lines = tentacle.getLines().setPosition(textBoxLocation);
             firstUpdate = false;
         }
 

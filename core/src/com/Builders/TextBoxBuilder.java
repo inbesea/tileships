@@ -4,17 +4,16 @@ import com.Interfaces.TextBoxBuilderInterface;
 import com.Interfaces.TextBoxInterface;
 import com.Shapes.Tentacle;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.util.SoundTextBubble;
 import com.shipGame.util.TextBubble;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TextBoxBuilder implements TextBoxBuilderInterface {
 
     protected String text;
-    protected Tentacle arrow;
     protected boolean createArrow;
     protected
     TextBubble textBubble;
@@ -23,16 +22,35 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
     int millisecondsBetweenWords = -1;
     long timeout;
     Vector2 target;
+    // Determines when the textbox begins fading out, before or after all text is printed.
+    boolean timeoutAfterCrawl;
+    float fadeoutSpeed;
+
+    protected Tentacle arrow;
+    protected int lineSegments;
+    protected int lineSize;
+    protected int startingTentacleWidth;
+    protected int finalTentacleWidth;
+    protected Color beginColor;
+    protected Color endColor;
+
 
     @Override
     public void reset() {
         text = "";
-        arrow = null;
         sounds = new ArrayList<>();
         millisecondsBetweenWords = 300;
         createArrow = false;
         timeout = 7000;
         target = null;
+        timeoutAfterCrawl = true;
+        fadeoutSpeed = 0.1f;
+
+        arrow = null;
+        lineSegments = 40;
+        lineSize = 2;
+        startingTentacleWidth = 1;
+        finalTentacleWidth = 15;
     }
 
     @Override
@@ -41,8 +59,8 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
     }
 
     @Override
-    public void setSpeechArrow(int beginning, int end) {
-
+    public void setSpeechArrowTarget(Vector2 target) {
+        this.target = target;
     }
 
     @Override
@@ -98,16 +116,25 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
 
     @Override
     public void stretchyArrow(boolean arrowIsStretchy) {
-
+        // TODO : add logic to allow the textboxs' arrow to extend out, connecting both sides.
+        // Difficult!
+        System.out.println("TODO : implement stretchy Arrows in textboxbuilder!");
     }
 
     @Override
     public TextBoxInterface buildProduct() {
         if(checkSoundboxCriteria()){
-            return new SoundTextBubble(text, millisecondsBetweenWords, sounds, target);
+            return new SoundTextBubble(text, millisecondsBetweenWords, timeout,
+                    timeoutAfterCrawl, fadeoutSpeed, sounds,target, arrow);
         } else {
-            return new TextBubble(text, millisecondsBetweenWords);
+            return new TextBubble(text, millisecondsBetweenWords, timeout,
+                    timeoutAfterCrawl, fadeoutSpeed);
         }
+    }
+
+    @Override
+    public void setCountdownAfterCrawl(boolean timeoutAfterCrawl) {
+        this.timeoutAfterCrawl = timeoutAfterCrawl;
     }
 
     private boolean checkSoundboxCriteria() {

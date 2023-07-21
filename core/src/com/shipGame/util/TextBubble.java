@@ -6,6 +6,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.shipGame.TileShipGame;
 
+import java.util.Objects;
+
 public class TextBubble  implements TextBoxInterface {
 
    /*TODO This might need to be a builder object.
@@ -14,7 +16,9 @@ public class TextBubble  implements TextBoxInterface {
    One this is true, this needs polish
    * */
     Long begin;
-    long deltaFromStart;
+    Long deltaFromStart;
+    Long timeoutCount;
+    boolean timeoutAfterCrawl = true;
     int millisecondsBetweenLetters;
     int lastChar;
     Long timeout = -1L;
@@ -24,9 +28,11 @@ public class TextBubble  implements TextBoxInterface {
     // starts full opacity
     private float opacity = 1f;
     private float fadespeed = 0f;
+    protected boolean firstUpdate = true;
 
     Tentacle speechArrow;
-    public TextBubble(String text, int millisecondsBetweenLetters){
+    public TextBubble(String text, int millisecondsBetweenLetters, Long timeout,
+                      boolean timeoutAfterCrawl, float fadeoutSpeed){
         begin = System.currentTimeMillis();
         this.text = text;
         this.millisecondsBetweenLetters = millisecondsBetweenLetters;
@@ -35,11 +41,42 @@ public class TextBubble  implements TextBoxInterface {
 
     public void update(Vector2 location){
         if(dead){return;} // Dont print text that's expired
-        if(begin == null)begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+        if(firstUpdate){
+            begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+            firstUpdate = false;
+        }
+
+        deltaFromStart = System.currentTimeMillis() - begin;
 
         lastChar = getLastChar();
         intermediateString = this.text.substring(0, lastChar);
+
+        if(timingOut()){ // Begin fading out, or timeout.
+
+        }
+
         print(location);
+    }
+
+    /**
+     * Returns true if the textbox is expired
+     *
+     * @return
+     */
+    private boolean timingOut() {
+        // Handles timeouts after crawl, and before based on string leng, and
+        // firstupdate. Should be good.
+        if(timeoutAfterCrawl && millisecondsBetweenLetters >= 0){
+            if(Objects.equals(intermediateString, text)){
+                return true; // Crawl has completed, and timeout begins
+            } else {
+                return false; // Crawl still developing
+            }
+        } else if(!timeoutAfterCrawl && firstUpdate){
+            return true; // Timeout after first update
+        } else {
+            return false; // Update might not be called yet
+        }
     }
 
     /**
@@ -64,11 +101,15 @@ public class TextBubble  implements TextBoxInterface {
         if(timeout >= 0){
             if(timeout < deltaFromStart){
                 this.opacity -= fadespeed;
+                // Remove invisible textbox.
+                if(this.opacity == 0){
+                    kill();
+                }
             }
         }
     }
     
-    private void stop(){
+    protected void stop(){
         if(timeout >= 0){
             if(timeout < deltaFromStart){
                 kill();
@@ -80,7 +121,8 @@ public class TextBubble  implements TextBoxInterface {
         this.fadespeed = fadespeed;
     }
 
-    private void kill() {
+    @Override
+    public void kill() {
         dead = true;
     }
 

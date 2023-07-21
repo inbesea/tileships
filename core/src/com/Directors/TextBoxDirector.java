@@ -1,12 +1,9 @@
 package com.Directors;
 
 import com.Builders.TextBoxBuilder;
-import com.Interfaces.TextBoxBuilderInterface;
 import com.Interfaces.TextBoxInterface;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g3d.utils.TextureBinder;
-import com.shipGame.util.SoundTextBubble;
-import com.shipGame.util.TextBubble;
+import com.badlogic.gdx.math.Vector2;
 
 public class TextBoxDirector {
     protected TextBoxBuilder boxBuilder;
@@ -37,6 +34,17 @@ public class TextBoxDirector {
         boxBuilder.addSounds(sound);
         boxBuilder.setText(text);
         boxBuilder.setTimeout(timeout);
+
+        return boxBuilder.buildProduct();
+    }
+
+    public TextBoxInterface getAnchoredSoundTextBoxWithPostCrawlTimeout(String text, Sound sound, int timeout, Vector2 Anchor){
+        boxBuilder.reset();
+
+        boxBuilder.setText(text);
+        boxBuilder.addSounds(sound);
+        boxBuilder.setTimeout(timeout);
+        boxBuilder.setCountdownAfterCrawl(true);
 
         return boxBuilder.buildProduct();
     }

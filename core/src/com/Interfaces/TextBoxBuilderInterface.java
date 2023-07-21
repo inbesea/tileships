@@ -1,13 +1,14 @@
 package com.Interfaces;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
 public interface TextBoxBuilderInterface {
     void reset();
     void setText(String text);
-    void setSpeechArrow(int beginning, int end); // Will need where it points and hangs to
+    public void setSpeechArrowTarget(Vector2 target); // Sets the speech bubble anchor point
     void setSpeechArrowWidths(int beginningWidth, int endWidth);
     void setSpeechArrowSegments(int segments);
     void setSpeechArrowSegmentSizes(int segmentSizes);
@@ -25,4 +26,6 @@ public interface TextBoxBuilderInterface {
     void setAddArrow(boolean setArrow);
 
     TextBoxInterface buildProduct();// Return whatever we made lol
+
+    void setCountdownAfterCrawl(boolean countdownAfterCrawl);
 }
