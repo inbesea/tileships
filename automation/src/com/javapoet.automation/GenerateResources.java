@@ -12,9 +12,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import org.apache.commons.lang3.ArrayUtils;
+import sun.security.util.ArrayUtil;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
  * NOTE : If this fails with an error code it may be the name of the file having illegal chars somehow?
@@ -56,14 +59,13 @@ public class GenerateResources extends ApplicationAdapter {
 
         // Get files
         FileHandle sfxPath = new FileHandle(Paths.get("assets/Sound Effects").toFile());
-        sfxFiles = sfxPath.list("mp3");
+        sfxFiles = ArrayUtils.addAll(sfxPath.list("mp3"), sfxPath.list("wav"));
 
         FileHandle texturePath = new FileHandle(Paths.get("assets/Textures").toFile());
         textureFiles = texturePath.list("png");
 
         FileHandle musicPath = new FileHandle(Paths.get("assets/Music").toFile());
         musicFiles = musicPath.list("wav");
-
 
         CreateFields();
         CreateLoadingStatements();
@@ -88,7 +90,8 @@ public class GenerateResources extends ApplicationAdapter {
     private void CreateFields() {
         // Create field with file name
         for (FileHandle sfxFile : sfxFiles){
-            typeSpecBuilder.addField(Sound.class, toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())),
+            typeSpecBuilder.addField(Sound.class, toVariableName(sfxPrefix +
+                            upperFirstChar(sfxFile.nameWithoutExtension())),
                     Modifier.PUBLIC, Modifier.STATIC);
         }
         for (FileHandle textureFile : textureFiles){
@@ -103,7 +106,8 @@ public class GenerateResources extends ApplicationAdapter {
     private void CreateLoadingStatements() {
         // Add loading statement
         for (FileHandle sfxFile : sfxFiles) {
-            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Sound Effects/" + sfxFile.name(), Sound.class);
+            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)",
+                    "Sound Effects/" + sfxFile.name(), Sound.class);
         }
         for (FileHandle textureFile : textureFiles) {
             loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Textures/" + textureFile.name(), Texture.class);

@@ -5,10 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -35,8 +32,8 @@ public class PreferencesScreen implements Screen {
     @Override
     public void show() {
         preferencesScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune.wav"));
-        preferencesScreenMusic.play();
         preferencesScreenMusic.setVolume(game.getPreferences().getMusicVolume());
+        preferencesScreenMusic.play();
         preferencesScreenMusic.setLooping(true);
 
         stage.clear();
@@ -61,7 +58,7 @@ public class PreferencesScreen implements Screen {
         // sound volume
         final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         soundMusicSlider.setValue(game.getPreferences().getSoundVolume());
-        soundMusicSlider.addListener(new EventListener() {
+        soundMusicSlider.addListener(new InputListener() {
             @Override
             public boolean handle(Event event) {
                 game.getPreferences().setSoundVolume(soundMusicSlider.getValue());
@@ -77,6 +74,7 @@ public class PreferencesScreen implements Screen {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked();
+                System.out.println("Checkbox is returning " + enabled + " for .isChecked()");
                 game.getPreferences().setMusicEnabled(enabled);
                 return false;
             }

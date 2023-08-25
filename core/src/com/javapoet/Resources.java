@@ -14,6 +14,14 @@ public class Resources {
 
     public static Sound sfxRain;
 
+    public static Sound sfxDrop;
+
+    public static Sound sfxPickUpTileQuick0;
+
+    public static Sound sfxPlaceTileSound;
+
+    public static Sound sfxTilePlacement;
+
     public static Texture AsteroidPurpleTexture;
 
     public static Texture HoverIndicatorTexture;
@@ -39,6 +47,10 @@ public class Resources {
         assetManager.load("Sound Effects/buildTileSound.mp3", Sound.class);
         assetManager.load("Sound Effects/collectTileSound.mp3", Sound.class);
         assetManager.load("Sound Effects/rain.mp3", Sound.class);
+        assetManager.load("Sound Effects/drop.wav", Sound.class);
+        assetManager.load("Sound Effects/PickUpTileQuick0.wav", Sound.class);
+        assetManager.load("Sound Effects/PlaceTileSound.wav", Sound.class);
+        assetManager.load("Sound Effects/tilePlacement.wav", Sound.class);
         assetManager.load("Textures/asteroid_purple.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/RobotV1.png", Texture.class);
@@ -56,6 +68,10 @@ public class Resources {
             sfxBuildTileSound = assetManager.get("Sound Effects/buildTileSound.mp3");
             sfxCollectTileSound = assetManager.get("Sound Effects/collectTileSound.mp3");
             sfxRain = assetManager.get("Sound Effects/rain.mp3");
+            sfxDrop = assetManager.get("Sound Effects/drop.wav");
+            sfxPickUpTileQuick0 = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
+            sfxPlaceTileSound = assetManager.get("Sound Effects/PlaceTileSound.wav");
+            sfxTilePlacement = assetManager.get("Sound Effects/tilePlacement.wav");
             AsteroidPurpleTexture = assetManager.get("Textures/asteroid_purple.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
             RobotV1Texture = assetManager.get("Textures/RobotV1.png");

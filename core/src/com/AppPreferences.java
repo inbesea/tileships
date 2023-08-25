@@ -44,6 +44,7 @@ public class AppPreferences {
      */
     public float getMusicVolume() {
         if(!isMusicEnabled())return 0.0f;
+        System.out.println("isMusicEnabled returned true");
         return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
     }
 
@@ -52,7 +53,6 @@ public class AppPreferences {
      * @param volume
      */
     public void setMusicVolume(float volume) {
-        setMusicEnabled(true);
         getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
         getPrefs().flush();
     }
@@ -67,7 +67,9 @@ public class AppPreferences {
     }
 
     public boolean isMusicEnabled() {
-        return getPrefs().getBoolean(PREF_MUSIC_ENABLED, true);
+        boolean music = getPrefs().getBoolean(PREF_MUSIC_ENABLED, true);
+//        System.out.println("Returning " + music + " for isMusicEnabled");
+        return music;
     }
 
     public void setMusicEnabled(boolean musicEnabled) {

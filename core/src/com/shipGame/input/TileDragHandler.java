@@ -1,9 +1,11 @@
 package com.shipGame.input;
 
+import com.AppPreferences;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.javapoet.Resources;
 import com.shipGame.generalObjects.Player;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.generalObjects.Ship.TileArrayToString;
@@ -64,6 +66,8 @@ public class TileDragHandler extends InputAdapter {
             // Drag the tile with mouse
             draggedTile.setX(screenX - ShipTile.TILE_SIZE / 2.0f);
             draggedTile.setY(screenY - ShipTile.TILE_SIZE / 2.0f);
+            //TODO : Add a sound here to make moving tiles feel better.
+            // The sound can increase in pitch based on the distance moved (use play(volume, pitch, pan))
         }
         return true;
     }
@@ -90,7 +94,7 @@ public class TileDragHandler extends InputAdapter {
             }
             playerShip.buildNewTile(collectedTileArray);
         } else if (playerShip.getDraggedTile() != null) { // If there is a tile being dragged
-            handlePlacingDragged(playerShip, screenX, screenY);
+            placeDraggedTile(playerShip, screenX, screenY);
         }
         setDragging(false);
         return true;
@@ -114,6 +118,7 @@ public class TileDragHandler extends InputAdapter {
     private void pickUpTile(ShipTile pickedUpTile) {
         playerShip.removeTileFromShip(pickedUpTile);
         playerShip.setDraggedTile(pickedUpTile); // Set intermediate tile to *remove from existing tiles*
+        Resources.sfxPickUpTileQuick0.play(AppPreferences.getAppPreferences().getSoundVolume());
     }
 
     /**
@@ -124,8 +129,9 @@ public class TileDragHandler extends InputAdapter {
      * @param x - x position of dragged tile
      * @param y - y position of dragged tile
      */
-    private void handlePlacingDragged(Ship playerShip, float x, float y) {
+    private void placeDraggedTile(Ship playerShip, float x, float y) {
         playerShip.addTileToShip(x, y, playerShip.getDraggedTile().getID());
+        Resources.sfxPlaceTileSound.play(AppPreferences.getAppPreferences().getSoundVolume());
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);
     }
