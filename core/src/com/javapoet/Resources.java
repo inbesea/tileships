@@ -1,6 +1,7 @@
 package com.javapoet;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -29,6 +30,10 @@ public class Resources {
 
     public static Texture ToBeCollapsedTexture;
 
+    public static Music MainMenuExtendedMessingaroundMusic;
+
+    public static Music MainMenuTuneMusic;
+
     public static void loadAssets() {
         assetManager = new AssetManager();
         assetManager.load("Sound Effects/buildTileSound.mp3", Sound.class);
@@ -42,6 +47,8 @@ public class Resources {
         assetManager.load("Textures/ShipTile_Red.png", Texture.class);
         assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
         assetManager.load("Textures/ToBeCollapsed.png", Texture.class);
+        assetManager.load("Music/MainMenu Extended Messingaround.wav", Music.class);
+        assetManager.load("Music/MainMenuTune.wav", Music.class);
     }
 
     public static void updateAssets() {
@@ -57,6 +64,8 @@ public class Resources {
             ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
             ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
             ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
+            MainMenuExtendedMessingaroundMusic = assetManager.get("Music/MainMenu Extended Messingaround.wav");
+            MainMenuTuneMusic = assetManager.get("Music/MainMenuTune.wav");
         }
     }
 }
