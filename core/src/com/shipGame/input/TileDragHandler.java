@@ -19,8 +19,8 @@ public class TileDragHandler extends InputAdapter {
      * Handles input from the player for grabbing tiles from the player's ship.
      *
      * TODO : This should be moved to the multiple input class and reworked. It could even be dissolved into other classes
-     * Probably a case of Shotgun Surgery https://refactoring.guru/smells/shotgun-surgery
-     * @param player
+     * Probably a case of Shotgun Surgery <a href="https://refactoring.guru/smells/shotgun-surgery">...</a>
+     * @param player - Player object that will use this handler
      */
     public TileDragHandler(Player player) {
         this.player = player;
