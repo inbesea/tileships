@@ -15,6 +15,13 @@ public class TileDragHandler extends InputAdapter {
     private final Ship playerShip;
     private boolean dragging;
 
+    /**
+     * Handles input from the player for grabbing tiles from the player's ship.
+     *
+     * TODO : This should be moved to the multiple input class and reworked. It could even be dissolved into other classes
+     * Probably a case of Shotgun Surgery https://refactoring.guru/smells/shotgun-surgery
+     * @param player
+     */
     public TileDragHandler(Player player) {
         this.player = player;
         this.playerShip = player.getPlayerShip();
@@ -24,17 +31,18 @@ public class TileDragHandler extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button != Input.Buttons.LEFT) return false;
         // Set init values
-        dragging = true;
+        setDragging(true);
 
         // Handle init collect click
-        if (playerShip.isCollectingTiles()) {
+        if (playerShip.isCollectingTiles()) { // Begin collecting tiles for condensing
             playerShip.updateCollect(new Vector3(screenX, screenY, 0f));
-        } else { // Pick up and drag tile
+        } else { // If not collecting, assume pick up and drag tile
+
             // Get a tile and check if it can be picked up.
             ShipTile pickedUpTile = playerShip.returnTile(screenX, screenY);
-            boolean canGrabTile = canGrabTile(pickedUpTile);
+            boolean selectedTileCanBeGrabbed = canGrabTile(pickedUpTile);
 
-            if (canGrabTile) {
+            if (selectedTileCanBeGrabbed) {
                 pickUpTile(pickedUpTile);
             }
         }
@@ -44,7 +52,7 @@ public class TileDragHandler extends InputAdapter {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (!dragging) return false;
+        if (!getDragging()) return false;
 
         // Need to handle dragging to collect more tiles
         ShipTile draggedTile = playerShip.getDraggedTile();
@@ -84,7 +92,7 @@ public class TileDragHandler extends InputAdapter {
         } else if (playerShip.getDraggedTile() != null) { // If there is a tile being dragged
             handlePlacingDragged(playerShip, screenX, screenY);
         }
-        dragging = false;
+        setDragging(false);
         return true;
     }
 
@@ -98,18 +106,43 @@ public class TileDragHandler extends InputAdapter {
         return leftCornerOff && rightCornerOff;// Check if tile is same as tile that is stood on
     }
 
+    /**
+     * Removes the tile from the Ship and moves to the dragged tile variable
+     *
+     * @param pickedUpTile - Tile selected to drag
+     */
     private void pickUpTile(ShipTile pickedUpTile) {
         playerShip.removeTileFromShip(pickedUpTile);
         playerShip.setDraggedTile(pickedUpTile); // Set intermediate tile to *remove from existing tiles*
     }
 
+    /**
+     * Adds the dragged tile back to the ship and sets dragged to null.
+     * Note : This loses the identity of the original tile!! It is added via ID reference
+     *
+     * @param playerShip - Ship to add tile to
+     * @param x - x position of dragged tile
+     * @param y - y position of dragged tile
+     */
     private void handlePlacingDragged(Ship playerShip, float x, float y) {
         playerShip.addTileToShip(x, y, playerShip.getDraggedTile().getID());
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);
     }
 
+    /**
+     * Standard setter for dragging bool
+     * @param dragging
+     */
     public void setDragging(boolean dragging) {
         this.dragging = dragging;
+    }
+
+    /**
+     * Standard getter for dragging boolean
+     * @return
+     */
+    public boolean getDragging(){
+        return this.dragging;
     }
 }
