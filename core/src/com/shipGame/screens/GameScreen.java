@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -64,14 +65,11 @@ public class GameScreen implements Screen {
     public SoundTextBubble textBubble;
     public SoundTextBubble textBubble1;
     TextBoxDirector boxDirector;
+
+    private Stage menuOverlay;
+
     public GameScreen(final TileShipGame game) {
         this.game = game;
-        game.setGameScreen(this); // Give this to be disposed at exit
-
-        gameScreenMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune/MainMenu Extended Messingaround.wav"));
-        gameScreenMusic.play();
-        gameScreenMusic.setVolume(0.5f);
-        gameScreenMusic.setLooping(true);
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
@@ -93,7 +91,6 @@ public class GameScreen implements Screen {
         gameObjects.add(playerShip);
 
         // Add input event handling
-        // st = new SimpleTouch(this);
         InputPreProcessor input = new InputPreProcessor(camera);
         input.addProcessor(new TileCollectHandler(playerShip));
         TileDragHandler tileDragHandler = new TileDragHandler(player);
@@ -122,7 +119,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        Resources.MainMenuExtendedMessingaroundMusic.play();
+        Resources.MainMenuExtendedMessingaroundMusic.setVolume(game.getPreferences().getMusicVolume());
+        Resources.MainMenuExtendedMessingaroundMusic.setLooping(true);
     }
 
     /**

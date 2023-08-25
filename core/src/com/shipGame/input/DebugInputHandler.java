@@ -31,9 +31,6 @@ public class DebugInputHandler extends InputAdapter {
             }
             playerShip.startCollapseCollect(); // Begins ship collecting
         }
-        if (keycode == Input.Keys.ESCAPE) {
-            Gdx.app.exit();
-        }
         return false;
     }
 

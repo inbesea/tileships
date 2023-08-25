@@ -3,6 +3,7 @@ package com.javapoet.automation;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -16,6 +17,8 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Paths;
 
 /**
+ * NOTE : If this fails with an error code it may be the name of the file having illegal chars somehow?
+ *
  * This class automates resource management and retrieval.
  * When updating, adding or removing a resource this will need to be ran so core/src/com/javapoet/Resources.java is updated.
  *
@@ -31,6 +34,7 @@ public class GenerateResources extends ApplicationAdapter {
 
     private FileHandle[] sfxFiles;
     private FileHandle[] textureFiles;
+    private FileHandle[] musicFiles;
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         new Lwjgl3Application(new GenerateResources(), config);
@@ -57,6 +61,9 @@ public class GenerateResources extends ApplicationAdapter {
         FileHandle texturePath = new FileHandle(Paths.get("assets/Textures").toFile());
         textureFiles = texturePath.list("png");
 
+        FileHandle musicPath = new FileHandle(Paths.get("assets/Music").toFile());
+        musicFiles = musicPath.list("wav");
+
 
         CreateFields();
         CreateLoadingStatements();
@@ -81,10 +88,16 @@ public class GenerateResources extends ApplicationAdapter {
     private void CreateFields() {
         // Create field with file name
         for (FileHandle sfxFile : sfxFiles){
-            typeSpecBuilder.addField(Sound.class, toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())), Modifier.PUBLIC, Modifier.STATIC);
+            typeSpecBuilder.addField(Sound.class, toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())),
+                    Modifier.PUBLIC, Modifier.STATIC);
         }
         for (FileHandle textureFile : textureFiles){
-            typeSpecBuilder.addField(Texture.class, toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"), Modifier.PUBLIC, Modifier.STATIC);
+            typeSpecBuilder.addField(Texture.class, toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"),
+                    Modifier.PUBLIC, Modifier.STATIC);
+        }
+        for(FileHandle musicFile : musicFiles){
+            typeSpecBuilder.addField(Music.class, toVariableName(upperFirstChar(musicFile.nameWithoutExtension()) + "Music"),
+                    Modifier.PUBLIC, Modifier.STATIC);
         }
     }
     private void CreateLoadingStatements() {
@@ -95,6 +108,9 @@ public class GenerateResources extends ApplicationAdapter {
         for (FileHandle textureFile : textureFiles) {
             loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Textures/" + textureFile.name(), Texture.class);
         }
+        for (FileHandle musicFile : musicFiles) {
+            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Music/" + musicFile.name(), Music.class);
+        }
     }
 
     private void CreateGetStatements() {
@@ -103,7 +119,12 @@ public class GenerateResources extends ApplicationAdapter {
             updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())), "Sound Effects/" + sfxFile.name());
         }
         for (FileHandle textureFile : textureFiles) {
-            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"), "Textures/" + textureFile.name());
+            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) +
+                    "Texture"), "Textures/" + textureFile.name());
+        }
+        for(FileHandle musicFile : musicFiles){
+            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(musicFile.nameWithoutExtension()) +
+                    "Music"), "Music/" + musicFile.name());
         }
         updateAssetMethodSpecBuilder.endControlFlow();
     }

@@ -1,5 +1,7 @@
 package com.shipGame.generalObjects.Ship;
 
+import com.AppPreferences;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
@@ -435,7 +437,7 @@ public class Ship extends GameObject {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
             return null;
         } else { // if Tile produced then swap the tiles used out of existence and return the new one.
-            Resources.sfxBuildTileSound.play(0.1f);
+            Resources.sfxBuildTileSound.play(AppPreferences.getAppPreferences().getSoundVolume());
             Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
             vector2.y += ShipTile.TILE_SIZE / 2f;
             vector2.x += ShipTile.TILE_SIZE / 2f;
