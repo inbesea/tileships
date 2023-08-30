@@ -174,7 +174,7 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	}
 
 	/**
-	 * Draws basic enemy on screen relative to the camera
+	 * Sets the position of the asteroid to the physics body's position
 	 */
 	public void render(TileShipGame game) {
 		circle.setPosition(body.getPosition());

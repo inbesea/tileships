@@ -1,5 +1,6 @@
 package com.shipGame.input;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -12,8 +13,10 @@ public class DebugInputHandler extends InputAdapter {
 
     private final Ship playerShip;
     private final TileDragHandler tileDragHandler;
+    GameScreen screen;
 
     public DebugInputHandler(GameScreen screen) {
+        this.screen = screen;
         this.playerShip = screen.getPlayerShip();
         this.tileDragHandler = screen.getTileDragHandler();
     }
@@ -33,6 +36,7 @@ public class DebugInputHandler extends InputAdapter {
             playerShip.startCollapseCollect(); // Begins ship collecting
         } else if (keycode == Input.Keys.ESCAPE) {
             // TODO : Make this bring up the in game menu
+            screen.showInGameMenu();
         }
         return false;
     }

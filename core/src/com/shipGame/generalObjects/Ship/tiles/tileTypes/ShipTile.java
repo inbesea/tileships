@@ -1,5 +1,6 @@
 package com.shipGame.generalObjects.Ship.tiles.tileTypes;
 
+import com.AppPreferences;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -92,8 +93,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      * @param game
      */
     public void render(TileShipGame game) {
-
-        if (this.debugMode) {
+        if (AppPreferences.getAppPreferences().getIsDebug()) {
             game.font.draw(
                     TileShipGame.batch,
                     getPositionAsString(),

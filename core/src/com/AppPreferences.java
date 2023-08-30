@@ -13,6 +13,7 @@ public class AppPreferences {
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
+    private static final String IS_DEBUG_MODE = "debug.mode";
     // Location of preferences
     private static final String PREFS_NAME = "b2dtut";
 
@@ -83,6 +84,21 @@ public class AppPreferences {
 
     public void setSoundVolume(float volume) {
         getPrefs().putFloat(PREF_SOUND_VOL, volume);
+        getPrefs().flush();
+    }
+
+    public boolean getIsDebug() {
+        System.out.println("Debug mode is set to: " + getPrefs().getBoolean(IS_DEBUG_MODE, false));
+        return getPrefs().getBoolean(IS_DEBUG_MODE, false);
+    }
+    public void setIsDebug(boolean isDebug) {
+        getPrefs().putBoolean(IS_DEBUG_MODE, isDebug);
+        getPrefs().flush();
+        System.out.println("Debug mode set to: " + isDebug);
+    }
+
+    public void toggleIsDebug() {
+        getPrefs().putBoolean(IS_DEBUG_MODE, !getIsDebug());
         getPrefs().flush();
     }
 }

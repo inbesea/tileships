@@ -20,8 +20,6 @@ import com.shipGame.screens.PreferencesScreen;
  * We need the logic to be referenced from this point.
  */
 public class TileShipGame extends Game {
-    public boolean debugMode = false;
-
     private AppPreferences appPreferences;
 	public static float zoomMax = 5;
 	public static float zoomMin = 0.5f;
@@ -141,9 +139,5 @@ public class TileShipGame extends Game {
 
     public AppPreferences getPreferences(){
         return this.appPreferences;
-    }
-
-    public void toggleDebugMode() {
-        debugMode = debugMode ? false : true;
     }
 }

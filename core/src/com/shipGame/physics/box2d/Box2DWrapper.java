@@ -75,6 +75,9 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
     }
 
+    /**
+     * Sets game objects to physics simulation positions/angles
+     */
     @Override
     public void updateGameObjectsToPhysicsSimulation() {
         for (int i = 0; i < bodies.size; i++) {
@@ -92,7 +95,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
                 gameObjectNewPosition.y = gameObjectNewPosition.y * ShipTile.TILE_SIZE;
                 // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
 
-                // I guess we're checking if the body is unmovable or not? :/
+                // Continue if the body is static (unmovable)
                 if (b.getType().equals(BodyDef.BodyType.StaticBody)) {
                     continue;
                 }

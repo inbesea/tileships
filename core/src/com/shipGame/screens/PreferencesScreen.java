@@ -42,7 +42,7 @@ public class PreferencesScreen implements Screen {
         // Each time we show this the table is reasserted to update values
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(game.debugMode);
+        table.setDebug(AppPreferences.getAppPreferences().getIsDebug());
         stage.addActor(table);
 
         // TODO : Switch skin creation to use the automation version

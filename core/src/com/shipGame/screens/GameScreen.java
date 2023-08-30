@@ -1,5 +1,6 @@
 package com.shipGame.screens;
 
+import com.AppPreferences;
 import com.Builders.TextBoxBuilder;
 import com.Directors.TextBoxDirector;
 import com.Shapes.Tentacle;
@@ -134,6 +135,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(new Color(0.00f, 0.00f, 0.10f, 1));
 
+        // Sets focus to drawn on extended viewport
         extendViewport.apply();
 
         // Update game object positions
@@ -192,7 +194,9 @@ public class GameScreen implements Screen {
 
         TileShipGame.batch.end();
 
-        Box2DWrapper.getInstance().drawDebug(camera);
+        if(AppPreferences.getAppPreferences().getIsDebug()){
+            Box2DWrapper.getInstance().drawDebug(camera);
+        }
 
         Box2DWrapper.getInstance().stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
@@ -319,5 +323,12 @@ public class GameScreen implements Screen {
 
     public TileDragHandler getTileDragHandler() {
         return tileDragHandler;
+    }
+
+    /**
+     * Shows the in-game menu
+     */
+    public void showInGameMenu() {
+        // TODO : Change GameScreen to so updating the objects and drawing them are in separate methods
     }
 }

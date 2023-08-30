@@ -1,5 +1,6 @@
 package com.shipGame.screens;
 
+import com.AppPreferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
@@ -64,7 +65,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         // Create a table that fills the screen. Everything else will go inside this table.
         this.table = new Table();
         table.setFillParent(true);
-        table.setDebug(game.debugMode);
+        table.setDebug(AppPreferences.getAppPreferences().getIsDebug());
         stage.addActor(table);
         // TODO : Fix this direct file access so it uses the Automated version
         Skin skin = new Skin(Gdx.files.internal("skin/neon/skin/neon-ui.json"));
@@ -136,7 +137,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         debug.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.toggleDebugMode();
+                AppPreferences.getAppPreferences().toggleIsDebug();
             }
 
         });
@@ -154,7 +155,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         Gdx.gl.glClearColor(0.00f, 0.00f, 0.10f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        table.setDebug(game.debugMode);
+        table.setDebug(AppPreferences.getAppPreferences().getIsDebug());
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
