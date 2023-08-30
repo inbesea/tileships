@@ -6,15 +6,16 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import com.shipGame.screens.GameScreen;
 
 public class DebugInputHandler extends InputAdapter {
 
     private final Ship playerShip;
     private final TileDragHandler tileDragHandler;
 
-    public DebugInputHandler(Ship playerShip, TileDragHandler tileDragHandler) {
-        this.playerShip = playerShip;
-        this.tileDragHandler = tileDragHandler;
+    public DebugInputHandler(GameScreen screen) {
+        this.playerShip = screen.getPlayerShip();
+        this.tileDragHandler = screen.getTileDragHandler();
     }
 
     @Override
@@ -30,6 +31,8 @@ public class DebugInputHandler extends InputAdapter {
                 tileDragHandler.setDragging(false);
             }
             playerShip.startCollapseCollect(); // Begins ship collecting
+        } else if (keycode == Input.Keys.ESCAPE) {
+            // TODO : Make this bring up the in game menu
         }
         return false;
     }

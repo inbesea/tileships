@@ -55,6 +55,7 @@ public class GameScreen implements Screen {
     SimpleTouch st;
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
+    private TileDragHandler tileDragHandler;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
     Music gameScreenMusic;
     CircleShape circle = new CircleShape();
@@ -93,9 +94,9 @@ public class GameScreen implements Screen {
         // Add input event handling
         InputPreProcessor input = new InputPreProcessor(camera);
         input.addProcessor(new TileCollectHandler(playerShip));
-        TileDragHandler tileDragHandler = new TileDragHandler(player);
+        tileDragHandler = new TileDragHandler(player);
         input.addProcessor(tileDragHandler);
-        input.addProcessor(new DebugInputHandler(playerShip, tileDragHandler));
+        input.addProcessor(new DebugInputHandler(this));
         input.addProcessor(new ZoomHandler(camera));
         Gdx.input.setInputProcessor(input);
 
@@ -314,5 +315,9 @@ public class GameScreen implements Screen {
 
     public void quitGame() {
         Gdx.app.exit();
+    }
+
+    public TileDragHandler getTileDragHandler() {
+        return tileDragHandler;
     }
 }
