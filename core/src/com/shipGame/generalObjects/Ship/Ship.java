@@ -437,7 +437,7 @@ public class Ship extends GameObject {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
             return null;
         } else { // if Tile produced then swap the tiles used out of existence and return the new one.
-            Resources.sfxBuildTileSound.play(AppPreferences.getAppPreferences().getSoundVolume());
+            // TODO : Replace build tile sound
             Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
             vector2.y += ShipTile.TILE_SIZE / 2f;
             vector2.x += ShipTile.TILE_SIZE / 2f;

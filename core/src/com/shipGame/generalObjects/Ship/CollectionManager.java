@@ -137,8 +137,6 @@ public class CollectionManager {
                 collectionSoundPitch += 0.1f;
                 pitchSelectionSound();
 
-                Sound collectSound = Gdx.audio.newSound(Gdx.files.internal("Sound Effects/collectTileSound.mp3"));
-                collectSound.play();
                 System.out.println("Adding tile to array stack!");
                 collectedTiles.add(shipTile);
                 return true;

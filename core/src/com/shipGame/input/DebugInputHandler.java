@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
+import com.shipGame.TileShipGame;
 import com.shipGame.generalObjects.Ship.Ship;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.screens.GameScreen;
@@ -35,8 +36,8 @@ public class DebugInputHandler extends InputAdapter {
             }
             playerShip.startCollapseCollect(); // Begins ship collecting
         } else if (keycode == Input.Keys.ESCAPE) {
-            // TODO : Make this bring up the in game menu
-            screen.showInGameMenu();
+            // TODO : Make this bring up the in game menu... maybe... Stretchgoal?
+            screen.getGame().changeScreen(TileShipGame.MENU);
         }
         return false;
     }
