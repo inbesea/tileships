@@ -150,27 +150,7 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	// Each Game Object should not need a reference to the camera held inside it. We need to give the
 	// Camera to the update method.
 	public void tick() {
-//		x += velX;
-//		y += velY;
-//
-//		if(y <= 0 + cam.y || y >= legacyGame.HEIGHT - 55 + cam.y) {
-//			y -= velY;
-//			velY *= -1;
-//		}
-//		if(x <= 0 + cam.x || x >= legacyGame.WIDTH - 32 + cam.x) {
-//			x -= velX;
-//			velX *= -1;
-//		}
-//
-//		// Extra stuff to make the enemy bounce off the ship
-//		if(shiphandler.returnTile(x - velX - cam.x, y - cam.y) != null) {
-//			y -= velY;
-//			velY *= -1;
-//		}
-//		if(shiphandler.returnTile(x - cam.x, y - velX - cam.y) != null) {
-//			x -= velX;
-//			velX *= -1;
-//		}
+
 	}
 
 	/**
