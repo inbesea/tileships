@@ -180,12 +180,12 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
     @Override
     public void pause() {
-        mainMenuMusic.dispose();
+        mainMenuMusic.pause();
     }
 
     @Override
     public void resume() {
-
+        mainMenuMusic.play();
     }
 
     @Override
