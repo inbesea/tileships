@@ -114,6 +114,7 @@ public class TileShipGame extends Game {
         if(this.currentScreen != null) this.currentScreen.pause();
         this.currentScreen = screen;
         setScreen(this.currentScreen);
+        this.currentScreen.resume();
     }
 
     public Screen getCurrentScreen(){
