@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.javapoet.Resources;
 import com.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import com.shipGame.player.TileHoverIndicator;
 
@@ -14,7 +15,9 @@ import com.shipGame.player.TileHoverIndicator;
  * This class can be toggled on, and off to control tile addition.
  */
 public class CollectionManager {
-
+    long collectionSoundID = 0;
+    float collectionSoundPitch = 1f;
+    private static float collectionPitchMax = 2.0f;
     public boolean collectTiles = false;
     // Lives in the stack manager
     private final TileHoverIndicator tileHoverIndicator;
@@ -68,6 +71,9 @@ public class CollectionManager {
 
     public void startCollect() {
         System.out.println("Begin collecting tiles");
+
+        collectionSoundID = Resources.sfxSelectionBuzzLooped.loop();
+
         if (!collectedTiles.isEmpty()) collectedTiles.clear();
 
         collectTiles = true;
@@ -81,6 +87,9 @@ public class CollectionManager {
     public Array<ShipTile> endCollect() {
         Array<ShipTile> shipTileStack = getTileArray();
         System.out.println("End collecting tiles");
+
+        Resources.sfxSelectionBuzzLooped.stop(collectionSoundID);
+        collectionSoundPitch = 1f;
         collectTiles = false;
         return shipTileStack;
     }
@@ -121,10 +130,13 @@ public class CollectionManager {
         if (!isCollectingTiles()) {
             throw new RuntimeException("Trying to collect tiles while not collecting.");
         }
-        if (isTileCollected(shipTile) || shipTile == null) {
+        if (isTileCollected(shipTile) || shipTile == null) { // If shipTile is already collected or is null
             return false;
         } else if (!this.isFull()) { // Confirm the hovered tile is a neighbor
             if (collectedTiles.isEmpty() || shipTile.isNeighbor(collectedTiles.peek())) {
+                collectionSoundPitch += 0.1f;
+                pitchSelectionSound();
+
                 Sound collectSound = Gdx.audio.newSound(Gdx.files.internal("Sound Effects/collectTileSound.mp3"));
                 collectSound.play();
                 System.out.println("Adding tile to array stack!");
@@ -136,6 +148,13 @@ public class CollectionManager {
             }
         }
         return false;
+    }
+
+    private void pitchSelectionSound() {
+        Resources.sfxSelectionBuzzLooped.setPitch(collectionSoundID, collectionSoundPitch);
+        if(collectionSoundPitch > collectionPitchMax){
+            collectionSoundPitch = collectionPitchMax;
+        }
     }
 
     /**

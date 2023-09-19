@@ -20,6 +20,8 @@ public class Resources {
 
     public static Sound sfxPlaceTileSound;
 
+    public static Sound sfxSelectionBuzzLooped;
+
     public static Sound sfxTilePlacement;
 
     public static Texture AsteroidPurpleTexture;
@@ -50,6 +52,7 @@ public class Resources {
         assetManager.load("Sound Effects/drop.wav", Sound.class);
         assetManager.load("Sound Effects/PickUpTileQuick0.wav", Sound.class);
         assetManager.load("Sound Effects/PlaceTileSound.wav", Sound.class);
+        assetManager.load("Sound Effects/SelectionBuzzLooped.wav", Sound.class);
         assetManager.load("Sound Effects/tilePlacement.wav", Sound.class);
         assetManager.load("Textures/asteroid_purple.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
@@ -71,6 +74,7 @@ public class Resources {
             sfxDrop = assetManager.get("Sound Effects/drop.wav");
             sfxPickUpTileQuick0 = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
             sfxPlaceTileSound = assetManager.get("Sound Effects/PlaceTileSound.wav");
+            sfxSelectionBuzzLooped = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
             sfxTilePlacement = assetManager.get("Sound Effects/tilePlacement.wav");
             AsteroidPurpleTexture = assetManager.get("Textures/asteroid_purple.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
