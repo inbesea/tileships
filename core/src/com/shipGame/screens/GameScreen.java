@@ -13,7 +13,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -69,6 +71,19 @@ public class GameScreen implements Screen {
     TextBoxDirector boxDirector;
 
     private Stage menuOverlay;
+    private boolean showMenu;
+
+    private Label titleLabel;
+    private Label volumeMusicLabel;
+    private Label volumeSoundLabel;
+    private Label musicOnOffLabel;
+    private Label soundOnOffLabel;
+
+    InputPreProcessor input;
+    TileCollectHandler tileCollectHandler;
+    DebugInputHandler debugInputHandler;
+    ZoomHandler zoomHandler;
+
 
     public GameScreen(final TileShipGame game) {
         this.game = game;
@@ -93,13 +108,7 @@ public class GameScreen implements Screen {
         gameObjects.add(playerShip);
 
         // Add input event handling
-        InputPreProcessor input = new InputPreProcessor(camera);
-        input.addProcessor(new TileCollectHandler(playerShip));
-        tileDragHandler = new TileDragHandler(player);
-        input.addProcessor(tileDragHandler);
-        input.addProcessor(new DebugInputHandler(this));
-        input.addProcessor(new ZoomHandler(camera));
-        Gdx.input.setInputProcessor(input);
+        initializeInputEventHandling();
 
         asteroidManager = new AsteroidManager(this);
         hud = new HUD(game);
@@ -117,6 +126,17 @@ public class GameScreen implements Screen {
 //        textBubble = new SoundTextBubble("Hello, this is a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
 //
 //        textBubble1 = new SoundTextBubble("This is also a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
+
+    }
+
+    private void initializeInputEventHandling() {
+        input = new InputPreProcessor(camera);
+        input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
+        tileDragHandler = new TileDragHandler(player);
+        input.addProcessor(tileDragHandler);
+        input.addProcessor(debugInputHandler = new DebugInputHandler(this));
+        input.addProcessor(zoomHandler = new ZoomHandler(camera));
+        Gdx.input.setInputProcessor(input);
     }
 
     @Override
@@ -214,12 +234,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-
+        Gdx.input.setInputProcessor(null);
+        Resources.MainMenuExtendedMessingaroundMusic.pause();
     }
 
     @Override
     public void resume() {
-
+        System.out.println("Resuming GameScreen");
+        Gdx.input.setInputProcessor(input);
+        Resources.MainMenuExtendedMessingaroundMusic.play();
     }
 
     @Override
@@ -326,9 +349,12 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Shows the in-game menu
+     * Toggles the in-game menu
      */
-    public void showInGameMenu() {
-        // TODO : Change GameScreen to so updating the objects and drawing them are in separate methods
+    public void toggleInGameMenu() {
+        this.hud.toggleMenu();
+    }
+    public void setFocusToGame(){
+        this.initializeInputEventHandling();
     }
 }
