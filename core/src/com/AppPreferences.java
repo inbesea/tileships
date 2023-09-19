@@ -45,7 +45,6 @@ public class AppPreferences {
      */
     public float getMusicVolume() {
         if(!isMusicEnabled())return 0.0f;
-        System.out.println("isMusicEnabled returned true");
         return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
     }
 
@@ -88,13 +87,11 @@ public class AppPreferences {
     }
 
     public boolean getIsDebug() {
-        System.out.println("Debug mode is set to: " + getPrefs().getBoolean(IS_DEBUG_MODE, false));
         return getPrefs().getBoolean(IS_DEBUG_MODE, false);
     }
     public void setIsDebug(boolean isDebug) {
         getPrefs().putBoolean(IS_DEBUG_MODE, isDebug);
         getPrefs().flush();
-        System.out.println("Debug mode set to: " + isDebug);
     }
 
     public void toggleIsDebug() {
