@@ -239,4 +239,33 @@ public class generalUtil {
 
         return bodyDef;
     }
+
+
+    /**
+     * Gets a point on a line
+     * @param p1 - starting point
+     * @param p2 - ending point
+     * @param t - how far along the line (0 to 1)
+     * @return - point on the line as Vector2
+     */
+    public static Vector2 getPointOnLine(Vector2 p1, Vector2 p2, float t){
+        return p1.add(p2.sub(p1).scl(t));
+    }
+
+    /**
+     * Returns a scalar that scales the line to intersect the passed limit
+     * The passed line will intersect a horizontal or vertical line drawn from the limit
+     * @param p1 - starting point
+     * @param p2 - ending point
+     * @param limit - limit point
+     * @return - scalar (can be negative)
+     */
+    public static float findLineScalarToGoal(Vector2 p1, Vector2 p2, Vector2 limit){
+        float tX;
+        float tY;
+
+        tX = (limit.x - p1.x) / (p2.x - p1.x);
+        tY = (limit.y - p1.y) / (p2.y - p1.y);
+        return Math.abs(tX) < Math.abs(tY) ? tX : tY;
+    }
 }

@@ -57,4 +57,64 @@ public class generalUtilTest extends TestCase {
         Array<Vector2> vector2Array = new Array<>();
 //        vector2Array.add(new Vector2(), new Vector2(-1.0));
     }
+
+    @Test
+    public void testWhenGettingScalarFromStart_Return0(){
+        // Given
+        Vector2 first = new Vector2(0,0);
+        Vector2 second = new Vector2(1,1);
+        Vector2 limit = new Vector2(1,0);
+        // When
+        float scalar = generalUtil.findLineScalarToGoal(first, second, limit);
+        // Then
+        Assert.assertEquals(0, scalar,0);
+    }
+
+    @Test
+    public void testWhenGettingScalarFromHalf_Return0_5(){
+        // Given
+        Vector2 first = new Vector2(0,0);
+        Vector2 second = new Vector2(2,2);
+        Vector2 limit = new Vector2(2,1);
+        // When
+        float scalar = generalUtil.findLineScalarToGoal(first, second, limit);
+        // Then
+        Assert.assertEquals(0.5f, scalar,0);
+    }
+
+    @Test
+    public void testWhenGettingScalarFromSteepHalf_Return0_5(){
+        // Given
+        Vector2 first = new Vector2(0,0);
+        Vector2 second = new Vector2(1,2);
+        Vector2 limit = new Vector2(2,1);
+        // When
+        float scalar = generalUtil.findLineScalarToGoal(first, second, limit);
+        // Then
+        Assert.assertEquals(0.5f, scalar,0);
+    }
+
+    @Test
+    public void testWhenGettingScalarFromNegativeHalf_Return0_5(){
+        // Given
+        Vector2 first = new Vector2(0,0);
+        Vector2 second = new Vector2(-2,-2);
+        Vector2 limit = new Vector2(-2,-1);
+        // When
+        float scalar = generalUtil.findLineScalarToGoal(first, second, limit);
+        // Then
+        Assert.assertEquals(0.5f, scalar,0);
+    }
+
+    @Test
+    public void testWhenGettingScalarFromNegativeLineOrigin_Return_Neg0_5(){
+        // Given
+        Vector2 first = new Vector2(0,0);
+        Vector2 second = new Vector2(-2,-2);
+        Vector2 limit = new Vector2(2,1);
+        // When
+        float scalar = generalUtil.findLineScalarToGoal(first, second, limit);
+        // Then
+        Assert.assertEquals(-0.5f, scalar,0);
+    }
 }
