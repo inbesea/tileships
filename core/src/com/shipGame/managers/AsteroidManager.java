@@ -75,7 +75,7 @@ public class AsteroidManager implements Manager {
      * @return - marking this as unfinished
      */
     private void cleanup() {
-        spawnRadius = spawnRadius + screen.getCamera().zoom;
+//        spawnRadius = spawnRadius + screen.getCamera().zoom;
 
         // Check asteroids and remove any outside of the "zoneOfPlay"
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
