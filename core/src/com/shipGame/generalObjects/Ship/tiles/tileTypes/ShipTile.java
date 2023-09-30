@@ -328,7 +328,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         if (tileBelongsToItsManager) {
             manager.removeTileFromShip(this);
         } else {
-            throw new RuntimeException("Tile " + getPositionAsString() + ", " + getAbbreviation() + " does not belong to its' manager reference.");
+            System.out.println("ERROR : ShipTile " + this.getID() + " at " + this.getPositionAsString() + " does not belong to its manager.");
         }
     }
 
