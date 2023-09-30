@@ -1,7 +1,6 @@
 package com.shipGame.screens;
 
 import com.AppPreferences;
-import com.Builders.TextBoxBuilder;
 import com.Directors.TextBoxDirector;
 import com.Shapes.Tentacle;
 import com.badlogic.gdx.Gdx;
@@ -10,12 +9,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -33,6 +28,7 @@ import com.shipGame.input.TileCollectHandler;
 import com.shipGame.input.TileDragHandler;
 import com.shipGame.input.ZoomHandler;
 import com.shipGame.managers.AsteroidManager;
+import com.shipGame.managers.TextBoxManager;
 import com.shipGame.physics.box2d.Box2DWrapper;
 import com.shipGame.physics.collisions.CollisionHandler;
 import com.shipGame.physics.collisions.CollisionListener;
@@ -68,16 +64,9 @@ public class GameScreen implements Screen {
     public static ShapeDrawer shapeDrawer;
     public SoundTextBubble textBubble;
     public SoundTextBubble textBubble1;
+    TextBoxManager textBoxHandler;
+
     TextBoxDirector boxDirector;
-
-    private Stage menuOverlay;
-    private boolean showMenu;
-
-    private Label titleLabel;
-    private Label volumeMusicLabel;
-    private Label volumeSoundLabel;
-    private Label musicOnOffLabel;
-    private Label soundOnOffLabel;
 
     InputPreProcessor input;
     TileCollectHandler tileCollectHandler;
@@ -118,15 +107,7 @@ public class GameScreen implements Screen {
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
 
-        shapeDrawer = new ShapeDrawer(TileShipGame.batch);
-        shapeDrawer.setTextureRegion(new TextureRegion(Resources.ShipTileStrongTexture, 20, 20, 20, 20));
-
-        boxDirector = new TextBoxDirector(new TextBoxBuilder());
-        // TODO : Add back these textbubbles with the manager handling updates, and the director creating instances.
-//        textBubble = new SoundTextBubble("Hello, this is a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
-//
-//        textBubble1 = new SoundTextBubble("This is also a test message", 300, Resources.sfxCollectTileSound, player.getPosition());
-
+        textBoxHandler = new TextBoxManager();
     }
 
     private void initializeInputEventHandling() {
@@ -144,6 +125,10 @@ public class GameScreen implements Screen {
         Resources.MainMenuExtendedMessingaroundMusic.play();
         Resources.MainMenuExtendedMessingaroundMusic.setVolume(game.getPreferences().getMusicVolume());
         Resources.MainMenuExtendedMessingaroundMusic.setLooping(true);
+    }
+
+    private void checkForSpeechBubble() {
+        
     }
 
     /**
@@ -208,9 +193,7 @@ public class GameScreen implements Screen {
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
 
-//        tentacle.follow(player.getX(), player.getY());
-//        tentacle.draw(shapeDrawer);
-
+        textBoxHandler.render();
 
         TileShipGame.batch.end();
 
