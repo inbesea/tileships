@@ -113,7 +113,7 @@ public class ShipTilesManager {
         int indexXY[];
         ShipTile tempTile;
 
-        indexXY = calculateIndex(x, y); // Get index corresponding to x, y position
+        indexXY = returnIndex(x, y); // Get index corresponding to x, y position
 
         System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
                 "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
@@ -158,7 +158,7 @@ public class ShipTilesManager {
      * @return
      */
     public Vector2 getGridAlignedPosition(float x, float y) {
-        int[] indexes = calculateIndex(x, y);
+        int[] indexes = returnIndex(x, y);
         return new Vector2(getGameSpacePositionFromIndex(indexes[0]), getGameSpacePositionFromIndex(indexes[1]));
     }
 
@@ -238,10 +238,10 @@ public class ShipTilesManager {
     }
 
     /**
-     * Lazy bad way to get a tile with a different passed in value, but I don't feel like creating another method for both of these to call.
+     * Returns a tile from this manager based on a Vector2 position
      *
-     * @param position
-     * @return
+     * @param position - Vector2 position
+     * @return - Returns a ShipTile object. Will return null on spaces without tiles.
      */
     public ShipTile returnTile(Vector2 position) {
         return findTile(position);
@@ -251,10 +251,10 @@ public class ShipTilesManager {
      * Returns reference to a tile based on x, y of Vector2
      *
      * @param position - click coordinates
-     * @return - Can return a ShipTile object. Will return null on spaces without tiles.
+     * @return - Returns a ShipTile object. Will return null on spaces without tiles.
      */
     private ShipTile findTile(Vector2 position) {
-        int indexXY[] = calculateIndex(position.x, position.y);
+        int indexXY[] = returnIndex(position.x, position.y);
 
         ShipTile temp;
         Stack<ShipTile> resultTiles = new Stack<>();
@@ -284,12 +284,13 @@ public class ShipTilesManager {
 
     /**
      * Returns the index of a tilelocation from an x,y location.
+     * The index is centered on the bottom left corner of the tile
      *
      * @param x - The x location
      * @param y - The y location
-     * @return - int array of 2 numbers. Index is a whole number
+     * @return - int array of 2 numbers. Index will be an Integer
      */
-    public int[] calculateIndex(float x, float y) {
+    public int[] returnIndex(float x, float y) {
 
         // A locations' index is determined by a range of 0 == x where x is between tilesize*0 -> tilesize*1 - 0.01
 
