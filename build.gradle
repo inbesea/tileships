@@ -117,9 +117,12 @@ project(":html") {
 
     dependencies {
         implementation project(":core")
-        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+        implementation "com.github.tommyettinger:gdx-backend-gwt:1.1200.1"
+        implementation "com.github.tommyettinger:gdx-backend-gwt:1.1200.1:sources"
+        implementation "com.google.jsinterop:jsinterop-annotations:2.0.0:sources"
+//        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+//        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
         api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion:sources"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-gwt:$gdxControllersVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-gwt:$gdxControllersVersion:sources"

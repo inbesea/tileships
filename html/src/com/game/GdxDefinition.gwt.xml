@@ -10,8 +10,9 @@
 	<inherits name='Box2DLights' />
 	<inherits name="space.earlygrey.shapedrawer"/>
 
-	<inherits name='tileShipGame' />
 	<source path=""/>
+	<inherits name="tileShipGame"/> <!--Absolutely required for this	-->
+<!--	<inherits name='com.game.GdxDefinitionSuperdev'/>-->
 	<entry-point class='com.game.client.HtmlLauncher' />
 
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>

@@ -11,6 +11,10 @@
 
 	<inherits name='com.game.GdxDefinition' />
 
+	<source path=""/>
+	<inherits name='tileShipGame'/>
+	<entry-point class='com.game.client.HtmlLauncher' />
+
 	<collapse-all-properties />
     
 	<add-linker name="xsiframe"/>	
