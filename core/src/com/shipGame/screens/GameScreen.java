@@ -181,7 +181,10 @@ public class GameScreen implements Screen {
             go = gameObjects.get(i);
 
             // This render should happen after a sweep attempt
-            if (go.isDead()) throw new RuntimeException("Game Object was not swept " + go.getID().toString());
+            if (go.isDead()) {
+                System.out.println("ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                continue;
+            }
 
             drawGameObject(go); // Call helper to draw object
         }
