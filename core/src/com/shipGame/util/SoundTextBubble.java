@@ -35,7 +35,7 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
                            Long timeout, boolean timeoutAfterCrawl,
                            float fadeoutSpeed, ArrayList<Sound> letterSounds, Vector2 target,
                            Tentacle tentacle) {
-        super(text, millisecondsBetweenLetters, timeout, timeoutAfterCrawl, fadeoutSpeed);
+        super(text, millisecondsBetweenLetters, timeout, timeoutAfterCrawl, fadeoutSpeed, target);
         this.letterSounds = letterSounds;
 
         if(target != null){
@@ -49,7 +49,7 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
     public SoundTextBubble(String text, int millisecondsBetweenLetters,
                            Long timeout, boolean timeoutAfterCrawl,
                            float fadeoutSpeed, Sound letterSounds, Vector2 target) {
-        super(text, millisecondsBetweenLetters, timeout, timeoutAfterCrawl, fadeoutSpeed);
+        super(text, millisecondsBetweenLetters, timeout, timeoutAfterCrawl, fadeoutSpeed, target);
         this.letterSounds = new ArrayList<>();
         this.letterSounds.add(letterSounds);
 
@@ -60,6 +60,11 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
         }
     }
 
+    /**
+     * Convenience method to create a ShapeDrawer
+     * (needed for Tentacle)
+     * @return - Shape drawer object to draw tentacles
+     */
     private ShapeDrawer createShapeDrawer() {
         ShapeDrawer shapeDrawer1 = new ShapeDrawer(TileShipGame.batch);
         shapeDrawer1.setTextureRegion(new TextureRegion(Resources.ShipTileStrongTexture, 20, 20, 20, 20));
@@ -70,6 +75,10 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
     // sounds are the new stuff.
     // a lot of the super logic is half-baked I would say.
 
+    /**
+     * Updates the text bubble's location for rendering
+     * @param textBoxLocation
+     */
     @Override
     public void update(Vector2 textBoxLocation){
         if(dead){return;} // Dont print text that's expired
@@ -85,15 +94,40 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
         lastChar = getLastChar();
         intermediateString = this.text.substring(0, lastChar);
 
-        if(tentacle != null){
-//            tentacle.translateX(textBoxLocation.x);
-//            tentacle.translateY(textBoxLocation.y - ShipTile.TILE_SIZE/2);
-            tentacle.follow(target);
+        if(tentacle != null){ // Tentacle drawing/following
+            tentacle.follow(target);// The order here is important. It causes the
             tentacle.inverseFollow(textBoxLocation);
             tentacle.draw(shapeDrawer);
         }
+        setLocation(textBoxLocation);
+        print();
+    }
 
-        print(textBoxLocation);
+    /**
+     * Draws the text bubble in place
+     */
+    @Override
+    public void render(){
+        if(dead){return;} // Dont print text that's expired
+        if(firstUpdate){
+            begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+            firstUpdate = false;
+        }
+
+        deltaFromStart = System.currentTimeMillis() - begin;
+
+        if(letterSounds != null){letterSounds();}
+
+        lastChar = getLastChar();
+        intermediateString = this.text.substring(0, lastChar);
+
+        if(tentacle != null){ // Tentacle drawing/following
+            tentacle.follow(target);// The order here is important. It causes the
+            tentacle.inverseFollow(location);
+            tentacle.draw(shapeDrawer);
+        }
+
+        print();
     }
 
     /**

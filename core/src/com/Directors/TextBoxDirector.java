@@ -11,10 +11,25 @@ public class TextBoxDirector {
         this.boxBuilder = boxBuilder;
     }
 
+    /**
+     * Will create a text bubble with all defaults.
+     * Will be drawn with a location of 0,0
+     * @param text
+     * @return
+     */
     public TextBoxInterface getTextBubble(String text){
         boxBuilder.reset();
 
         boxBuilder.setText(text);
+
+        return boxBuilder.buildProduct();
+    }
+
+    public TextBoxInterface getTextBubble(String text, Vector2 position){
+        boxBuilder.reset();
+
+        boxBuilder.setText(text);
+        boxBuilder.setPosition(position);
 
         return boxBuilder.buildProduct();
     }

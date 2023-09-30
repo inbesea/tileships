@@ -63,6 +63,10 @@ public class Tentacle implements Movable {
         return lines[lines.length - 1].getA().y;
     }
 
+    /**
+     * Updates the tentacle's location to follow the target position from the forward direction
+     * @param target
+     */
     public void follow(Vector2 target) {
         for (int i = 0; i < lines.length; i++) {
             target = i == 0 ? target : lines[i - 1].getA();
@@ -77,6 +81,10 @@ public class Tentacle implements Movable {
         }
     }
 
+    /**
+     * Gets the array of lines to follow the target position from the reverse direction
+     * @param target
+     */
     public void inverseFollow(Vector2 target){
         for (int i = lines.length - 1; i >= 0; i--) {
             target = i == lines.length - 1 ? target : lines[i + 1].getA();

@@ -29,21 +29,44 @@ public class TextBubble  implements TextBoxInterface {
     private float opacity = 1f;
     private float fadespeed = 0f;
     protected boolean firstUpdate = true;
+    protected Vector2 location;
 
-    Tentacle speechArrow;
     public TextBubble(String text, int millisecondsBetweenLetters, Long timeout,
-                      boolean timeoutAfterCrawl, float fadeoutSpeed){
+                      boolean timeoutAfterCrawl, float fadeoutSpeed, Vector2 location){
         begin = System.currentTimeMillis();
         this.text = text;
         this.millisecondsBetweenLetters = millisecondsBetweenLetters;
-        speechArrow = new Tentacle(12 ,12);
+        this.location = location;
     }
 
+    /**
+     * Sets the location of the text bubble, and draws it.
+     * @param location
+     */
     public void update(Vector2 location){
+        // TODO: possibly remove this. What is it doing?? It could be used to update values, but not draw the textbox.
         if(dead){return;} // Dont print text that's expired
         if(firstUpdate){
-            begin = System.currentTimeMillis(); // First print will cause the beginning to be set
-            firstUpdate = false;
+            runFirstUpdate();
+        }
+
+        deltaFromStart = System.currentTimeMillis() - begin;
+
+        lastChar = getLastChar();
+        intermediateString = this.text.substring(0, lastChar);
+
+        if(timingOut()){ // Begin fading out, or timeout.
+
+        }
+        setLocation(location);
+        print();
+    }
+
+    @Override
+    public void render() {
+        if(dead){return;} // Dont print text that's expired
+        if(firstUpdate){
+            runFirstUpdate();
         }
 
         deltaFromStart = System.currentTimeMillis() - begin;
@@ -55,7 +78,12 @@ public class TextBubble  implements TextBoxInterface {
 
         }
 
-        print(location);
+        print();
+    }
+
+    private void runFirstUpdate(){
+        begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+        firstUpdate = false;
     }
 
     /**
@@ -80,7 +108,8 @@ public class TextBubble  implements TextBoxInterface {
     }
 
     /**
-     * Gets the current char based on delta from start and crawl speed.
+     * Gets the current char counted to.
+     * This is based on the delta from start and crawl speed.
      *
      * @return - number of chars to display based on time since beginning.
      */
@@ -91,10 +120,10 @@ public class TextBubble  implements TextBoxInterface {
     }
 
     /**
-     * Call each render to print value
+     * Render the text bubble at the given location
      */
-    protected void print(Vector2 location){
-        TileShipGame.font.draw(TileShipGame.batch, intermediateString, location.x, location.y);
+    protected void print(){
+        TileShipGame.font.draw(TileShipGame.batch, intermediateString, this.location.x, this.location.y);
     }
     
     private void fadeout(){
@@ -126,7 +155,7 @@ public class TextBubble  implements TextBoxInterface {
         dead = true;
     }
 
-    public void setSpeechArrow(int startArrow, int endArrow){
-        speechArrow.setPosition(startArrow, endArrow);
+    public void setLocation(Vector2 location){
+        this.location = location;
     }
 }

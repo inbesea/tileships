@@ -13,15 +13,17 @@ import java.util.ArrayList;
 
 public class TextBoxBuilder implements TextBoxBuilderInterface {
 
+    //Message text
     protected String text;
+    // Should an arrow be created
     protected boolean createArrow;
-    protected
-    TextBubble textBubble;
+    protected TextBubble textBubble;
     private Sound sound;
     private ArrayList<Sound> sounds;
     int millisecondsBetweenWords = -1;
     long timeout;
     Vector2 target;
+    Vector2 textBoxLocation;
     // Determines when the textbox begins fading out, before or after all text is printed.
     boolean timeoutAfterCrawl;
     float fadeoutSpeed;
@@ -37,12 +39,14 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
 
     @Override
     public void reset() {
-        text = "";
-        sounds = new ArrayList<>();
-        millisecondsBetweenWords = 300;
-        createArrow = false;
-        timeout = 7000;
+        /*Default is , no arrow, , , no target*/
+        text = "";//no text
+        sounds = new ArrayList<>();//no sounds
+        millisecondsBetweenWords = 300; // 300ms text crawl
+        createArrow = false; // no arrow
+        timeout = 7000; // 7000ms timeout
         target = null;
+        textBoxLocation = new Vector2(0, 0);
         timeoutAfterCrawl = true;
         fadeoutSpeed = 0.1f;
 
@@ -61,6 +65,10 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
     @Override
     public void setSpeechArrowTarget(Vector2 target) {
         this.target = target;
+    }
+
+    public void setPosition(Vector2 position){
+        this.textBoxLocation = position;
     }
 
     @Override
@@ -121,6 +129,19 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
         System.out.println("TODO : implement stretchy Arrows in textboxbuilder!");
     }
 
+    /**
+     * Set the timeout after crawling is finished.
+     * @param timeoutAfterCrawl
+     */
+    @Override
+    public void setCountdownAfterCrawl(boolean timeoutAfterCrawl) {
+        this.timeoutAfterCrawl = timeoutAfterCrawl;
+    }
+
+    /**
+     * Builds instance of TextBubble/SoundTextBubble
+     * @return
+     */
     @Override
     public TextBoxInterface buildProduct() {
         if(checkSoundboxCriteria()){
@@ -128,13 +149,8 @@ public class TextBoxBuilder implements TextBoxBuilderInterface {
                     timeoutAfterCrawl, fadeoutSpeed, sounds,target, arrow);
         } else {
             return new TextBubble(text, millisecondsBetweenWords, timeout,
-                    timeoutAfterCrawl, fadeoutSpeed);
+                    timeoutAfterCrawl, fadeoutSpeed, textBoxLocation);
         }
-    }
-
-    @Override
-    public void setCountdownAfterCrawl(boolean timeoutAfterCrawl) {
-        this.timeoutAfterCrawl = timeoutAfterCrawl;
     }
 
     private boolean checkSoundboxCriteria() {
