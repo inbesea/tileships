@@ -1,18 +1,12 @@
-sourceCompatibility = 1.8
-
-repositories{
-    maven { url "https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api/5.9.0"}
-}
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
 
 dependencies {
-//    testCompile "junit:junit:5.9.0"
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+  api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+  api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
+  api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+  api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
 }
-
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.test.java.srcDirs = [ "test/" ]
-
-eclipse.project.name = appName + "-core"
