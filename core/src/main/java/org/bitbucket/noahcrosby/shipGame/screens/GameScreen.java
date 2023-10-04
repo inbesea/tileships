@@ -14,7 +14,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -32,6 +31,7 @@ import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.shipGame.player.SimpleTouch;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
 import space.earlygrey.shapedrawer.ShapeDrawer;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 
 /**
  * Main game screen - where the game happens
@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
     // Represents each side's size
     public static final Vector2 playerSize = new Vector2(ShipTile.TILE_SIZE * .33f, ShipTile.TILE_SIZE * .45f);
 
-    OrthographicCamera camera;
+    static OrthographicCamera camera;
     SimpleTouch st;
     private final Array<GameObject> gameObjects;
     private final Ship playerShip;
@@ -124,7 +124,7 @@ public class GameScreen implements Screen {
     }
 
     private void checkForSpeechBubble() {
-        
+
     }
 
     /**
@@ -188,6 +188,8 @@ public class GameScreen implements Screen {
         if (playerShip.isCollectingTiles() && playerShip.isHoverDrawing()) {
             drawGameObject(playerShip.getTileHoverIndicator());
             drawGameObject(playerShip);
+        } else if (playerShip.isDragging()) {
+            playerShip.drawDraggingPlacementIndicator();
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
@@ -338,5 +340,9 @@ public class GameScreen implements Screen {
     }
     public void setFocusToGame(){
         this.initializeInputEventHandling();
+    }
+
+    public static OrthographicCamera getGameCamera(){
+        return camera;
     }
 }

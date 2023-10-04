@@ -7,12 +7,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 
 public class Ship extends GameObject {
 
@@ -458,4 +458,15 @@ public class Ship extends GameObject {
         return draggedTile;
     }
 
+    /**
+     * Returns true if a tile is being dragged.
+     * @return
+     */
+    public boolean isDragging() {
+        return draggedTile != null;
+    }
+
+    public void drawDraggingPlacementIndicator() {
+        this.shipTilesManager.getPlacementIndex();
+    }
 }

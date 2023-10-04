@@ -8,11 +8,11 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.Shi
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.TileTypeFactory;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
 import java.util.Stack;
 
-import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.closestVector2;
-import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.getQuadrant;
+import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.*;
 
 /**
  * Class to handle logic for placing/removing tiles to allow the ship to handle holding the pieces together rather than working the logic directly.
@@ -46,9 +46,7 @@ public class ShipTilesManager {
     public ShipTile addTile(float x, float y, ID id) {
 
         // Use vector to set new tile
-        Vector3 tileLocation = new Vector3();
-        tileLocation.set(x, y, 0);
-        Vector2 tileLocation2 = new Vector2(tileLocation.x, tileLocation.y);
+        Vector2 tileLocation2 = new Vector2(x, y);
         ShipTile closestTile;
         ShipTile tempTile;
 
@@ -57,7 +55,7 @@ public class ShipTilesManager {
             if (ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y, id); // Can add anywhere
 
             closestTile = closestTile(tileLocation2, ship.getExistingTiles());
-            Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation);
+            Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation2);
             tempTile = gridAlignedxyTilePlacement(closestExternalVacancy.x, closestExternalVacancy.y, id);
         } else { // Released on Shiptile
             Vector2 nearestEmptySpace = closestInternalVacancy(tileLocation2); // Get closest Vacancy on edge tiles
@@ -71,6 +69,10 @@ public class ShipTilesManager {
         }
         return tempTile;
 
+    }
+
+    private Vector2 getPlacementLocationCandidate(float x, float y) {
+return new Vector2(x, y);
     }
 
     /**
@@ -339,10 +341,10 @@ public class ShipTilesManager {
      * @param closestTile
      * @param mousePosition
      */
-    public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector3 mousePosition) {
+    public Vector2 getVectorOfClosestSide(ShipTile closestTile, Vector2 mousePosition) {
 
         // Get the closest side of the tile from the mouse position
-        int closestSide = getQuadrant(closestTile.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
+        int closestSide = getQuadrant(closestTile.getCenter(), mousePosition);
 
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
@@ -608,5 +610,10 @@ public class ShipTilesManager {
 
     private void removeAllTilesFromGame() {
 
+    }
+
+    public void getPlacementIndex() {
+        Vector3 playerControlPosition = returnUnprojectedPosition(GameScreen.getGameCamera());
+//        getVectorOfClosestSi()
     }
 }

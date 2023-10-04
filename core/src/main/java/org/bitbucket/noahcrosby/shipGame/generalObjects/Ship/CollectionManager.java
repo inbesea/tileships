@@ -2,9 +2,9 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 
 /**
  * Essentially an array and hover indicator.

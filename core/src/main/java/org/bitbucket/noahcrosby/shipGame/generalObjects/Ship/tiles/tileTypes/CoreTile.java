@@ -2,10 +2,10 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.TileTypeData;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 
 public class CoreTile extends ShipTile {
 
