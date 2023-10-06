@@ -46,7 +46,7 @@ public abstract class GameObject {
 		this.size.x = size.x;
 		this.size.y = size.y;
 	}
-	
+
 	public abstract void tick();
 	public abstract void render(TileShipGame game);
 	public abstract Rectangle getBounds();
@@ -60,28 +60,28 @@ public abstract class GameObject {
 	public float getX() {
 		return position.x;
 	}
-	
+
 	public void setY(float y) {
 		this.position.y = y;
 	}
 	public float getY() {
 		return position.y;
 	}
-	
+
 	public void setID(ID id) {
 		this.id = id;
 	}
 	public ID getID() {
 		return id;
 	}
-	
+
 	public void setVelX(int velX) {
 		this.velX = velX;
 	}
 	public float getVelX() {
 		return velX;
 	}
-	
+
 	public void setVelY(int velY) {
 		this.velY = velY;
 	}
@@ -122,7 +122,7 @@ public abstract class GameObject {
 		return size.x;
 	}
 
-	public float getHight(){
+	public float getHeight(){
 		return size.y;
 	}
 

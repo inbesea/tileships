@@ -78,7 +78,7 @@ public class CollisionHandler {
             // remove the asteroid and add a tile.
             System.out.println("CoreTile/Asteroid creation event. ~~~ Creating new tile "+ asteroid.getPosition().toString() +" and marking Asteroid for deletion!");
             asteroid.physicsDelete();
-            tile.getManager().addTile(asteroid.getX(), asteroid.getY(), ID.StandardTile);
+            tile.getManager().addTile(asteroid.getX() + asteroid.getWidth() / 2, asteroid.getY() + asteroid.getHeight() / 2, ID.StandardTile);
         } else if (tile.isInvulnerable()){
             return; // Do nothing, the tile cannot be destroyed
         } else {
