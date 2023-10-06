@@ -90,7 +90,7 @@ public class TileDragHandler extends InputAdapter {
                 System.out.println("Tiles collected : None");
             } else {
                 TileArrayToString tileArrayToString = new TileArrayToString(collectedTileArray);
-                System.out.println("Tiles collected : " + tileArrayToString.tilesToString() + " Size : " + collectedTileArray.size);
+                System.out.println("Tiles collected : " + tileArrayToString.tileArrayToPrintString() + " Size : " + collectedTileArray.size);
             }
             playerShip.buildNewTile(collectedTileArray);
         } else if (playerShip.getDraggedTile() != null) { // If there is a tile being dragged

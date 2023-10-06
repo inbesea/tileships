@@ -150,4 +150,16 @@ public class TileArrayToString {
 
         return tileArrayString.toString();
     }
+
+    /**
+     * Prints array of tiles as a useful string
+     * @return
+     */
+    public String tileArrayToPrintString() {
+        StringBuilder tileArrayString = new StringBuilder();
+        for (ShipTile tile : tiles) {
+            tileArrayString.append(tile.getTileInfoString() + "\n");
+        }
+        return null;
+    }
 }

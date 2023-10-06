@@ -379,4 +379,13 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     protected void setBoundsPosition(Vector2 boundsPosition){
         this.bounds.setPosition(boundsPosition);
     }
+
+    /**
+     * Returns a string representation of the tile's position.
+     * Will be overridden by specific tile types.
+     * @return - String representation of tile
+     */
+    public String getTileInfoString() {
+        return this.getAbbreviation() + " at " + getPositionAsString();
+    }
 }
