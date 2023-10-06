@@ -1,19 +1,17 @@
-sourceSets.main.java.srcDirs = [ "src/" ]
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "com.mobidevelop.robovm:robovm-gradle-plugin:$robovmVersion"
+  }
+}
+apply plugin: 'robovm'
 
-sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-repositories{
-	maven { url "https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api/5.9.0"}
-}
-
-dependencies {
-//	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-//	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-}
-
 ext {
-	mainClassName = "com.ncrosby.game.IOSLauncher"
+  mainClassName = "org.bitbucket.noahcrosby.ios.IOSLauncher"
 }
 
 launchIPhoneSimulator.dependsOn build
@@ -21,8 +19,17 @@ launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
 
-robovm {
-	archs = "thumbv7:arm64"
+eclipse.project {
+  name = appName + "-ios"
+  natures 'org.robovm.eclipse.RoboVMNature'
 }
 
-eclipse.project.name = appName + "-ios"
+dependencies {
+  implementation "com.badlogicgames.gdx-controllers:gdx-controllers-ios:$gdxControllersVersion"
+  implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+  implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+  implementation "com.mobidevelop.robovm:robovm-cocoatouch:$robovmVersion"
+  implementation "com.mobidevelop.robovm:robovm-rt:$robovmVersion"
+  implementation project(':core')
+}
