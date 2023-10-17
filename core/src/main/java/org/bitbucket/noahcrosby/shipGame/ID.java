@@ -44,9 +44,6 @@ public enum ID {
 		return isTileType;
 	}
 
-	public String getSprite() {
-		return MainMenuScreen.spritePath + texture;
-	}
 
 	public void setTexture(String texture) {
 		this.texture = texture;
