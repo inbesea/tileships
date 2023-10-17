@@ -1,0 +1,9 @@
+<LevelPack>
+    <Level number="1">
+        <Block x="0" y="0" rotation="90" color="#FF0000" />
+        <Block x="50" y="22" rotation="45" color="#00FF00" />
+    </Level>
+    <Level number="2">
+        ...
+    </Level>
+</LevelPack>
