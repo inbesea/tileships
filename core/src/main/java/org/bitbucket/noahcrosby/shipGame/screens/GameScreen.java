@@ -1,16 +1,12 @@
 package org.bitbucket.noahcrosby.shipGame.screens;
 
 import org.bitbucket.noahcrosby.AppPreferences;
-import org.bitbucket.noahcrosby.Directors.TextBoxDirector;
-import org.bitbucket.noahcrosby.Shapes.Tentacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -33,6 +29,8 @@ import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
+import java.util.ArrayList;
+
 /**
  * Main game screen - where the game happens
  */
@@ -52,22 +50,16 @@ public class GameScreen implements Screen {
     private final Ship playerShip;
     private TileDragHandler tileDragHandler;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
-    Music gameScreenMusic;
-    CircleShape circle = new CircleShape();
     private final CollisionHandler collisionHandler;
 
-    Tentacle tentacle;
-    public static ShapeDrawer shapeDrawer;
-    public SoundTextBubble textBubble;
-    public SoundTextBubble textBubble1;
     TextBoxManager textBoxHandler;
-
-    TextBoxDirector boxDirector;
 
     InputPreProcessor input;
     TileCollectHandler tileCollectHandler;
     DebugInputHandler debugInputHandler;
     ZoomHandler zoomHandler;
+
+    Box2DWrapper box2DWrapper;
 
 
     public GameScreen(final TileShipGame game) {
