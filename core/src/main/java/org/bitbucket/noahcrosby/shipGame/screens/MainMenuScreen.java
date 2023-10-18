@@ -21,7 +21,6 @@ import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
 
 public class MainMenuScreen extends ScreenAdapter implements Screen {
-    public static final String spritePath = "Textures/";
     final TileShipGame game;
 
     OrthographicCamera camera;
@@ -30,7 +29,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
     private SoundTextBubble welcome;
     private Stage stage;
-    private TextButton newGame;
+    private TextButton endLessMode;
     private TextButton preferences;
     private TextButton exit;
     private CheckBox debug;
@@ -67,43 +66,18 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         // TODO : Fix this direct file access so it uses the Automated version
         Skin skin = new Skin(Gdx.files.internal("skin/neon/skin/neon-ui.json"));
 
-        newGame = new TextButton("New Game", skin);
+        endLessMode = new TextButton("Endless Mode", skin);
         preferences = new TextButton("Preferences", skin);
         exit = new TextButton("Exit", skin);
         debug = new CheckBox("Debug Mode", skin);
 
-        table.add(newGame).fillX().uniformX();
+        table.add(endLessMode).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(preferences).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
         table.row().bottom();
         table.add(debug).align(Align.bottom).align(Align.left);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void show() {
-        // Need to call it with file string so the remaining files can be loaded
-        mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune.wav"));
-        mainMenuMusic.play();
-        mainMenuMusic.setVolume(game.getPreferences().getMusicVolume());
-        mainMenuMusic.setLooping(true);
-
-        stage.clear();
-        Gdx.input.setInputProcessor(stage);
-
-        // Each time we show this the table is reasserted to update values
-        Table table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
-
-        setUpMenuButtons();
-        setButtonBehavior();
     }
 
     private void setButtonBehavior(){
@@ -114,7 +88,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
             }
         });
 
-        newGame.addListener(new ChangeListener() {
+        endLessMode.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if(Resources.assetManager.update()){
@@ -138,6 +112,31 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
             }
 
         });
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void show() {
+        // Need to call it with file string so the remaining files can be loaded
+        mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenuTune.wav"));
+        mainMenuMusic.play();
+        mainMenuMusic.setVolume(game.getPreferences().getMusicVolume());
+        mainMenuMusic.setLooping(true);
+
+        stage.clear();
+        Gdx.input.setInputProcessor(stage);
+
+        // Each time we show this the table is reasserted to update values
+        this.table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        setUpMenuButtons();
+        setButtonBehavior();
     }
 
     /**
