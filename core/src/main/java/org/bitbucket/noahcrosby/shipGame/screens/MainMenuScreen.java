@@ -29,7 +29,8 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
     private SoundTextBubble welcome;
     private Stage stage;
-    private TextButton endLessMode;
+    private TextButton arcadeMode;
+    private TextButton classicMode;
     private TextButton preferences;
     private TextButton exit;
     private CheckBox debug;
@@ -66,12 +67,14 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         // TODO : Fix this direct file access so it uses the Automated version
         Skin skin = new Skin(Gdx.files.internal("skin/neon/skin/neon-ui.json"));
 
-        endLessMode = new TextButton("Endless Mode", skin);
+        arcadeMode = new TextButton("Endless Mode", skin);
+        classicMode = new TextButton("Classic Mode", skin);
         preferences = new TextButton("Preferences", skin);
         exit = new TextButton("Exit", skin);
         debug = new CheckBox("Debug Mode", skin);
 
-        table.add(endLessMode).fillX().uniformX();
+        table.add(classicMode).fillX().uniformX();
+        table.add(arcadeMode).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(preferences).fillX().uniformX();
         table.row();
@@ -88,13 +91,24 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
             }
         });
 
-        endLessMode.addListener(new ChangeListener() {
+        classicMode.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if(Resources.assetManager.update()){
                     mainMenuMusic.setLooping(false);
                     mainMenuMusic.dispose();
-                    game.changeScreen(TileShipGame.APPLICATION);
+                    game.changeScreen(TileShipGame.CLASSIC_MODE);
+                    dispose();}
+            }
+        });
+
+        arcadeMode.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(Resources.assetManager.update()){
+                    mainMenuMusic.setLooping(false);
+                    mainMenuMusic.dispose();
+                    game.changeScreen(TileShipGame.ARCADE_MODE);
                     dispose();}
             }
         });
