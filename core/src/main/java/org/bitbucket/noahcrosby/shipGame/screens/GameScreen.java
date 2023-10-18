@@ -105,7 +105,7 @@ public class GameScreen implements Screen {
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
         tileDragHandler = new TileDragHandler(player);
         input.addProcessor(tileDragHandler);
-        input.addProcessor(debugInputHandler = new DebugInputHandler(this));
+        input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.playerShip, this.tileDragHandler));
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
         Gdx.input.setInputProcessor(input);
     }

@@ -10,11 +10,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 
@@ -23,11 +26,16 @@ import java.util.ArrayList;
 public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
     // Varibles here
     private Ship arcadeShip;
+    TileCollectHandler tileCollectHandler;
+    private TileDragHandler tileDragHandler;
+    ZoomHandler zoomHandler;
+    DebugInputHandler debugInputHandler;
+    private Player player;
     final TileShipGame game;
     ExtendViewport extendViewport;
     static OrthographicCamera camera;
     private final HUD hud;
-
+    InputPreProcessor input;
     Box2DWrapper box2DWrapper;
 
     final AsteroidManager asteroidManager;
@@ -50,7 +58,12 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
 
         arcadeShip = new Ship(new Vector2(0,0), box2DWrapper);
+        arcadeShip.initialize();
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
+
+        player = new Player(new Vector2(arcadeShip.getX(), arcadeShip.getY()), GameScreen.playerSize, ID.Player, camera, this.game);
+
+        initializeInputEventHandling();
 
         arcadeGameObjects = new Array<>();
     }
@@ -68,16 +81,25 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
         // Render asteroids
         TileShipGame.batch.begin();
-        box2DWrapper.drawDebug();
+        box2DWrapper.drawDebug(camera);
         TileShipGame.batch.end();
 
         drawGameObjects(asteroidManager.getAsteroids());
-        Asteroid temp = asteroidManager.getAsteroids().get(0);
-        System.out.println("Velocity is " + temp.getVelX() + " " +  temp.getVelY() + "\n" + temp.getID() + " " + temp.getX() + " " + temp.getY());
-        asteroidManager.getAsteroids().get(0).updatePosition();
 
         // Don't forget to step the simulation
         box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
+        System.out.println("First Asteroid position " + asteroidManager.getAsteroids().get(0).getPosition().toString());
+
+    }
+
+    private void initializeInputEventHandling() {
+        input = new InputPreProcessor(camera);
+        input.addProcessor(tileCollectHandler = new TileCollectHandler(arcadeShip));
+        tileDragHandler = new TileDragHandler(player);
+        input.addProcessor(tileDragHandler);
+        input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.arcadeShip, this.tileDragHandler));
+        input.addProcessor(zoomHandler = new ZoomHandler(camera));
+        Gdx.input.setInputProcessor(input);
     }
 
     /**
@@ -97,6 +119,8 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         // Uses the game and camera context to handle drawing properly.
         TileShipGame.batch.begin();
 
+        System.out.println("First Asteroid position " + gameObjects.get(0).getPosition().toString());
+
         for (GameObject go : gameObjects) {
 
             // This render should happen after a sweep attempt
@@ -111,6 +135,8 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
             }
             go.render(this.game);
         }
+
+        System.out.println("First Asteroid position " + gameObjects.get(0).getPosition().toString());
 
         TileShipGame.batch.end();
     }
@@ -128,6 +154,19 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
         extendViewport.update(width, height);
         hud.update(width, height);
+    }
+
+    @Override
+    public void pause() {
+        Gdx.input.setInputProcessor(null);
+        Resources.MainMenuExtendedMessingaroundMusic.pause();
+    }
+
+    @Override
+    public void resume() {
+        System.out.println("Resuming " + this.getClass().getSimpleName());
+        Gdx.input.setInputProcessor(input);
+        Resources.MainMenuExtendedMessingaroundMusic.play();
     }
 
 }
