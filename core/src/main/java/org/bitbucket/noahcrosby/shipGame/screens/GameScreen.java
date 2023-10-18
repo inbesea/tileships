@@ -70,8 +70,10 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
 
+        box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
+
         // init ship
-        playerShip = new Ship(new Vector2(-1, -1));
+        playerShip = new Ship(new Vector2(-1, -1), box2DWrapper);
         game.setPlayerShip(playerShip);
         playerShip.initialize();
 
@@ -87,13 +89,13 @@ public class GameScreen implements Screen {
         // Add input event handling
         initializeInputEventHandling();
 
-        asteroidManager = new AsteroidManager(this);
+        asteroidManager = new AsteroidManager(box2DWrapper ,camera);
         hud = new HUD(game);
 
         // Create collision listener
         collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
-        Box2DWrapper.getInstance().setWorldContactListener(collisionListener);
+        box2DWrapper.setWorldContactListener(collisionListener); // Get the world in contact with this collision listener
 
         textBoxHandler = new TextBoxManager();
     }
@@ -132,7 +134,7 @@ public class GameScreen implements Screen {
         extendViewport.apply();
 
         // Update game object positions
-        Box2DWrapper.getInstance().updateGameObjectsToPhysicsSimulation();
+        box2DWrapper.updateGameObjectsToPhysicsSimulation();
 
         // Draw game objects
         drawGameObjects();
@@ -190,15 +192,48 @@ public class GameScreen implements Screen {
 
         TileShipGame.batch.end();
 
+        drawGameObjects(asteroidManager.getAsteroids());
+
         if(AppPreferences.getAppPreferences().getIsDebug()){
-            Box2DWrapper.getInstance().drawDebug(camera);
+            box2DWrapper.drawDebug(camera);
         }
 
-        Box2DWrapper.getInstance().stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
+        box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
         // Call collision handling first and then sweep as objects are marked during this step lol
         collisionHandler.handleCollisions();
-        Box2DWrapper.getInstance().sweepForDeadBodies();
+        box2DWrapper.sweepForDeadBodies();
+    }
+
+    /**
+     * Draws specific array[] of type-identical game objects
+     * @param gameObjects
+     */
+    private void drawGameObjects(ArrayList<? extends GameObject> gameObjects) {
+        // tell the camera to update its matrices.
+        camera.update();
+
+        // tell the SpriteBatch to render in the
+        // coordinate system specified by the camera.
+        TileShipGame.batch.setProjectionMatrix(extendViewport.getCamera().combined);
+
+        // begin a new batch
+        // Loops through the game objects and draws them.
+        // Uses the game and camera context to handle drawing properly.
+        TileShipGame.batch.begin();
+
+        for (GameObject go : gameObjects) {
+
+            // This render should happen after a sweep attempt
+            if (go.isDead()) {
+                System.out.println("ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                continue;
+            }
+
+            drawGameObject(go); // Call helper to draw object
+        }
+
+        TileShipGame.batch.end();
     }
 
     @Override
@@ -228,7 +263,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        circle.dispose();
+
     }
 
     /**
