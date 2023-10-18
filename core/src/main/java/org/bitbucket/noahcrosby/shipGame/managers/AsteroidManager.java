@@ -98,15 +98,6 @@ public class AsteroidManager implements Manager {
     }
 
     /**
-     * removes asteroid instance by identity
-     * @param asteroid - asteroid to remove
-     */
-    public void removeAsteroid(Asteroid asteroid){
-        asteroids.removeValue(asteroid, true);
-        Box2DWrapper.getInstance().removeObjectBody(asteroid.getBody());
-    }
-
-    /**
      * Removes asteroid instance by identity.
      * Meant to be called from an agnostic point of view allowing us to remove objects from a generic GameObject call.
      * @param gameObject
