@@ -11,6 +11,7 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
@@ -39,10 +40,10 @@ public class Ship extends GameObject {
      * Ship keeps track of the tiles of the ship and has methods for
      * managing removing and adding tiles.
      */
-    public Ship(Vector2 position) {
+    public Ship(Vector2 position, Box2DWrapper box2DWrapper) {
         super(position, new Vector2(0, 0), ID.Ship);
 
-        shipTilesManager = new ShipTilesManager(this);
+        shipTilesManager = new ShipTilesManager(box2DWrapper ,this);
         collectionManager = new CollectionManager();
 
         UnlockTracker unlockTracker = new UnlockTracker();
