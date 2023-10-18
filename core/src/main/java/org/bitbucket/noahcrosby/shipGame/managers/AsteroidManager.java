@@ -1,18 +1,18 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
-import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
+
+import java.util.ArrayList;
 
 /*
 * Have a way to call this during render that will handle adding more asteroids.
@@ -25,40 +25,43 @@ import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
  */
 public class AsteroidManager implements Manager {
     private boolean spawning;
-    private GameScreen screen;
     private int asteroidLimit;
-    Rectangle zoneOfPlay;
-    // Keep asteroid references for simplicity
-    private Array<Asteroid> asteroids = new Array<>();
-    private int numberOfAsteroids = asteroids.size;
+    // Keep managed asteroid within manager
+    private ArrayList<Asteroid> asteroids = new ArrayList<>();
+    private int numberOfAsteroids;
     // Needed for physics simulation
-    Circle circle;
+    Circle asteroidSpawnZone;
     float spawnRadius = TileShipGame.defaultViewportSizeX;
+    OrthographicCamera camera;
+    Box2DWrapper box2DWrapper;
 
     /**
-     * Spawns asteroids.
+     * Spawns/cleans up asteroids and adds/removes them from passed physics simulation
      * Assumes spawning is true if using this constructor.
      *
-     * @param screen
+     * @param box2DWrapper - physics simulation for asteroids to use
+     * @param camera - Orthographic camera used to see edges of screen
      */
-    public AsteroidManager(GameScreen screen){
-        this.screen = screen;
+    public AsteroidManager(Box2DWrapper box2DWrapper, OrthographicCamera camera){
         asteroidLimit = 20;
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
+        this.camera = camera;  // Needed for seeing edges of screen?
+        this.box2DWrapper = box2DWrapper;
 
-        this.circle = new Circle();
-        circle.setRadius(spawnRadius);
+        this.asteroidSpawnZone = new Circle();
+        asteroidSpawnZone.setRadius(spawnRadius);
     }
 
-    public AsteroidManager(GameScreen screen, boolean spawning){
-        this.screen = screen;
-        this.spawning = spawning;
+    public AsteroidManager(Box2DWrapper box2DWrapper, OrthographicCamera camera, boolean spawning){
+        this.spawning = spawning; // Set initial spawning state
         asteroidLimit = 30;
         numberOfAsteroids = 0;
+        this.camera = camera;  // Needed for seeing edges of screen?
+        this.box2DWrapper = box2DWrapper;
 
-        this.circle = new Circle();
-        circle.setRadius(spawnRadius);
+        this.asteroidSpawnZone = new Circle();
+        asteroidSpawnZone.setRadius(spawnRadius);
     }
 
     /**
@@ -81,14 +84,14 @@ public class AsteroidManager implements Manager {
         // Check asteroids and remove any outside of the "zoneOfPlay"
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
-        for(Asteroid asteroid: asteroids){
-            if(!screen.getGameObjects().contains(asteroid, true)){
-                throw new RuntimeException("Aw jeez");
-            }
-            if(outOfBounds(asteroid)){
+        Asteroid temp;
+        for(int i = 0; i < asteroids.size(); i++){
+            temp = asteroids.get(i);
+            temp.updatePosition();
+            if(outOfBounds(temp)){
 //                System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
-                deleteMember(asteroid);
-                numberOfAsteroids = asteroids.size;
+                deleteMember(temp);
+                numberOfAsteroids = asteroids.size();
 //                System.out.println("numberOfAsteroids " + numberOfAsteroids);
             }
         }
@@ -114,9 +117,8 @@ public class AsteroidManager implements Manager {
         if(gameObject.getID() != ID.Asteroid)return false;
         try{
             Asteroid asteroid = (Asteroid) gameObject;
-            asteroids.removeValue(asteroid, true);
-            Box2DWrapper.getInstance().removeObjectBody(asteroid.getBody());
-            screen.removeGameObject(asteroid);
+            asteroids.remove(asteroid);
+            box2DWrapper.removeObjectBody(asteroid.getBody());
             return true;
         } catch (ClassCastException cce){
             System.out.println(cce);
@@ -135,7 +137,7 @@ public class AsteroidManager implements Manager {
         // This is dumb, but the circles aren't being updated properly, while the position is. Deal with it
         asteroid.setPosition(asteroid.getPosition());
 
-        Circle inBoundsRadius = new Circle(circle);
+        Circle inBoundsRadius = new Circle(asteroidSpawnZone);
         inBoundsRadius.setRadius(spawnRadius);
 //        circleBigRadius.setRadius(circleBigRadius.radius + screen.getCamera().zoom + 3);
 
@@ -147,23 +149,15 @@ public class AsteroidManager implements Manager {
      * Method that spawns an asteroid and adds it to the gameObject list and local asteroids list
      */
     public void spawnAsteroid(){
-
         // Check if active
-            Vector2 spawnLocation = getVectorInValidSpawnArea();
+        Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-            Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
-            Box2DWrapper.getInstance().setObjectPhysics(asteroid);
-            //setAsteroidPhysics(asteroid);
+        Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
+        box2DWrapper.setObjectPhysics(asteroid);
+        //setAsteroidPhysics(asteroid);
 
-            screen.newGameObject(asteroid);
-            asteroids.add(asteroid);
-            numberOfAsteroids = asteroids.size;
-            int i = screen.getGameObjects().indexOf(asteroid, true); // Get index of gameObject
-            if(i < 0){
-                throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + screen.getGameObjects().size +
-                        " location of gameObject " + asteroid.getX() + ", " + asteroid.getY() + " GameObject ID : " +asteroid.getID());
-            }
-//        System.out.println("Spawned Asteroid : asteroids.size " + asteroids.size);
+        asteroids.add(asteroid);
+        numberOfAsteroids = asteroids.size();
     }
 
     /**
@@ -176,11 +170,13 @@ public class AsteroidManager implements Manager {
 
         // Scale up the radius of spawning to hide the spawning.
         // get x,y
-        float x = (circle.radius + screen.getCamera().zoom) * (float) Math.sin(betweenZeroAnd2PI);
-        float y = (circle.radius + screen.getCamera().zoom) * (float) Math.cos(betweenZeroAnd2PI);
+        float x = (asteroidSpawnZone.radius + camera.zoom) * (float) Math.sin(betweenZeroAnd2PI);
+        float y = (asteroidSpawnZone.radius + camera.zoom) * (float) Math.cos(betweenZeroAnd2PI);
 
         Vector3 position = new Vector3(x,y,0);
         return new Vector2(position.x,position.y);
+
+        // TODO : Check for spawing on a tile dude wtf
     }
 
     /**
@@ -206,18 +202,24 @@ public class AsteroidManager implements Manager {
     }
 
     /**
-     * Call this to remove all asteroids.
-     * Need additional call to remove asteroids as soon as they leave the limit of the viewport
+     * Removes all asteroids in manager and physics simulation
      */
     public void removeAllAsteroids(){
         // Go through the asteroids and remove their reference from the local list and the screen object list
+        for(int i = 0; i < asteroids.size(); i++){
+            deleteMember(asteroids.get(i));
+        }
+        if(asteroids.size() > 0){
+            System.out.println("ERROR : removeAllAsteroids() did not clear asteroid array in AsteroidManager");
+        }
+    }
 
-        System.out.println("REMOVE ALL ASTEROIDS NOT IMPLEMENTED");
-        return;
-
-//        for(int i = 0 ; i < asteroids.size ; i++){
-//            screen.removeGameObject(asteroids.removeIndex(i)); // Compact method to remove locally and in GameScreen
-//        }
-//        if(asteroids.size == 0) throw new RuntimeException("Did not remove all asteroids in removeAllAsteroids() : \n";
+    /**
+     * Returns array of asteroids
+     *
+     * @return - Array of asteroids
+     */
+    public ArrayList<Asteroid> getAsteroids() {
+        return asteroids;
     }
 }
