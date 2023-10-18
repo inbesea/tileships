@@ -27,7 +27,6 @@ public class TileShipGame extends Game {
 	public static SpriteBatch batch; // Draws the textures and fonts etc.
 	public static BitmapFont font;
 	private Ship playerShip;
-	public Box2DWrapper physicsWrapper;
 	public static int zoomSpeed = 5;
 	public static float defaultViewportSizeX = 700f, defaultViewportSizeY = 500f;
 	public static float meterLength = 64f;
@@ -54,12 +53,7 @@ public class TileShipGame extends Game {
 
         appPreferences = AppPreferences.getAppPreferences();
 
-        this.physicsWrapper = new Box2DWrapper(new Vector2(0, 0), true);
-
-        //legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
-//        this.setScreen(new MainMenuScreen(this));
         this.changeScreen(MENU);
-//        setGameScreen(this.getScreen());
     }
 
     public void changeScreen(int screen) {
