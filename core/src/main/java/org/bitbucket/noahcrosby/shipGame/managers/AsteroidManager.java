@@ -79,8 +79,6 @@ public class AsteroidManager implements Manager {
      * @return - marking this as unfinished
      */
     private void cleanup() {
-//        spawnRadius = spawnRadius + screen.getCamera().zoom;
-
         // Check asteroids and remove any outside of the "zoneOfPlay"
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
@@ -89,10 +87,8 @@ public class AsteroidManager implements Manager {
             temp = asteroids.get(i);
             temp.updatePosition();
             if(outOfBounds(temp)){
-//                System.out.println("Removing Out of bounds! : " + asteroid.getX() +  ", " + asteroid.getY());
                 deleteMember(temp);
                 numberOfAsteroids = asteroids.size();
-//                System.out.println("numberOfAsteroids " + numberOfAsteroids);
             }
         }
     }

@@ -164,6 +164,9 @@ public class Asteroid extends GameObject implements PhysicsObject {
      */
     public void updatePosition() {
         circle.setPosition(body.getPosition());
+        setX(body.getPosition().x);
+        setY(body.getPosition().y);
+        System.out.println("Setting circle to " + body.getPosition().x + " " + body.getPosition().y);
     }
 
 }

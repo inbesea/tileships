@@ -336,15 +336,6 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * removes an asteroid instance from the asteroid manager
-     *
-     * @param asteroid the asteroid to remove
-     */
-    public void removeAsteroid(GameObject asteroid) {
-        asteroidManager.deleteMember(asteroid);
-    }
-
-    /**
      * Update logic for mouseMoved to make sure it's updated
      */
     public void updateMouseMoved() {

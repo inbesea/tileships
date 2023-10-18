@@ -74,6 +74,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         debug = new CheckBox("Debug Mode", skin);
 
         table.add(classicMode).fillX().uniformX();
+        table.row().pad(10, 0, 10, 0);
         table.add(arcadeMode).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(preferences).fillX().uniformX();
