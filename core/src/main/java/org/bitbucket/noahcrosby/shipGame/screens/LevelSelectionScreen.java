@@ -35,7 +35,7 @@ public class LevelSelectionScreen extends ScreenAdapter implements Screen {
         stage.addActor(table);
 
         setUpLevelButtons();
-        setButtonBehavior();
+//        setButtonBehavior(); come back to this later lol
     }
 
     private void setUpLevelButtons() {
@@ -46,12 +46,12 @@ public class LevelSelectionScreen extends ScreenAdapter implements Screen {
         this.table = new Table();
     }
 
-    private void setButtonBehavior() {
-        for (TextButton button : levelButtons) {
-            button.addListener((ChangeListener) (event, actor) -> {
-
-            });
-        }
-    }
+//    private void setButtonBehavior() {
+//        for (TextButton button : levelButtons) {
+//            button.addListener((ChangeListener) (event, actor) -> {
+//
+//            });
+//        }
+//    }
 
 }
