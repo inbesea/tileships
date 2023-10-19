@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -126,6 +127,7 @@ public class GameScreen implements Screen {
 
         // Update game object positions
         box2DWrapper.updateGameObjectsToPhysicsSimulation();
+        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
         // Draw game objects
         drawGameObjects();
@@ -138,7 +140,6 @@ public class GameScreen implements Screen {
             PlayerInput.handleKeyPressed(player, camera);
         }
         PlayerInput.updateCameraOnPlayer(player, camera);
-        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
     }
 
     /**
