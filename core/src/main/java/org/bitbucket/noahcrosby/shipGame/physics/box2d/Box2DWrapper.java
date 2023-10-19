@@ -42,6 +42,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
     /**
      * Draws the debug shapes.
+     * DO NOT CALL IN A BATCH OR IT WILL RUIN THE RENDER
      *
      * @param orthoCamera gives the projection matrix
      */

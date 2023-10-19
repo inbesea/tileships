@@ -96,10 +96,12 @@ public class Player extends GameObject {
 
     /**
      * Render more complex features of the player
+     * Assumes is drawn in a batch loop
      *
      * @param game - reference to the game context
      */
     public void render(TileShipGame game) {
+        TileShipGame.batch.draw(getTexture(), getPosition().x, getPosition().y, getSize().x, getSize().y);
         renderCircleOfHeldTiles(); // Moved this logic out to allow render to be more flexible
     }
 
@@ -240,5 +242,8 @@ public class Player extends GameObject {
 
     public void setPlayerSpeed(float playerSpeed) {
         this.playerSpeed = playerSpeed;
+    }
+    public void setPlayerShip(Ship playerShip) {
+        this.playerShip = playerShip;
     }
 }

@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
@@ -20,6 +22,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 
 import java.util.ArrayList;
 
@@ -31,7 +34,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
     ZoomHandler zoomHandler;
     DebugInputHandler debugInputHandler;
     private Player player;
-    final TileShipGame game;
+    TileShipGame game;
     ExtendViewport extendViewport;
     static OrthographicCamera camera;
     private final HUD hud;
@@ -62,7 +65,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
 
         player = new Player(new Vector2(arcadeShip.getX(), arcadeShip.getY()), GameScreen.playerSize, ID.Player, camera, this.game);
-
+        player.setPlayerShip(arcadeShip);
         initializeInputEventHandling();
 
         arcadeGameObjects = new Array<>();
@@ -71,6 +74,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(new Color(0.00f, 0.00f, 0.10f, 1));
+        camera.update();
 
         // Sets focus to drawn on extended viewport
         extendViewport.apply();
@@ -79,16 +83,32 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
-        // Render asteroids
+        drawGame();
+
+        // Don't forget to step the simulation
+        box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
+
+        // process user input
+        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            PlayerInput.handleKeyPressed(player, camera);
+        }
+        PlayerInput.updateCameraOnPlayer(player, camera);
+    }
+
+    private void drawGame() {
+        // tell the SpriteBatch to render in the coordinate system specified by the camera.
+        TileShipGame.batch.setProjectionMatrix(extendViewport.getCamera().combined);
+
         TileShipGame.batch.begin();
-        box2DWrapper.drawDebug(camera);
+        drawGameObject(arcadeShip);
+        player.render(game);
         TileShipGame.batch.end();
 
         drawGameObjects(asteroidManager.getAsteroids());
 
-        // Don't forget to step the simulation
-        box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
-        System.out.println("First Asteroid position " + asteroidManager.getAsteroids().get(0).getPosition().toString());
+        if(AppPreferences.getAppPreferences().getIsDebug()){
+            box2DWrapper.drawDebug(camera);
+        }
 
     }
 
@@ -110,17 +130,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         // tell the camera to update its matrices.
         camera.update();
 
-        // tell the SpriteBatch to render in the
-        // coordinate system specified by the camera.
-        TileShipGame.batch.setProjectionMatrix(extendViewport.getCamera().combined);
-
-        // begin a new batch
-        // Loops through the game objects and draws them.
-        // Uses the game and camera context to handle drawing properly.
-        TileShipGame.batch.begin();
-
-        System.out.println("First Asteroid position " + gameObjects.get(0).getPosition().toString());
-
+        game.batch.begin();
         for (GameObject go : gameObjects) {
 
             // This render should happen after a sweep attempt
@@ -135,10 +145,19 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
             }
             go.render(this.game);
         }
+        game.batch.end();
+    }
 
-        System.out.println("First Asteroid position " + gameObjects.get(0).getPosition().toString());
-
-        TileShipGame.batch.end();
+    /**
+     * Helper method holds rendering logic, takes game object
+     * Expects to be called after game.batch.begin() and with a batch that has the correct camera location context
+     */
+    private void drawGameObject(GameObject gameObject) {
+        if (gameObject.getTexture() != null) {
+            Vector2 size = gameObject.getSize();
+            TileShipGame.batch.draw(gameObject.getTexture(), gameObject.getX(), gameObject.getY(), size.x, size.y);
+        }
+        gameObject.render(this.game);
     }
 
     // Methods
