@@ -1,6 +1,5 @@
 package org.bitbucket.noahcrosby.shipGame.screens;
 
-import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -25,8 +24,6 @@ import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionHandler;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.shipGame.player.SimpleTouch;
-import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
-import space.earlygrey.shapedrawer.ShapeDrawer;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
 import java.util.ArrayList;
@@ -46,7 +43,6 @@ public class GameScreen implements Screen {
 
     static OrthographicCamera camera;
     SimpleTouch st;
-    private final Array<GameObject> gameObjects;
     private final Ship playerShip;
     private TileDragHandler tileDragHandler;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
@@ -80,11 +76,6 @@ public class GameScreen implements Screen {
         // init player
         // Give player the game reference
         player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, camera, this.game);
-
-        // Place init game objects into the array
-        gameObjects = new Array<>();
-        gameObjects.add(player);
-        gameObjects.add(playerShip);
 
         // Add input event handling
         initializeInputEventHandling();
@@ -165,24 +156,14 @@ public class GameScreen implements Screen {
         // Loops through the game objects and draws them.
         // Uses the game and camera context to handle drawing properly.
         TileShipGame.batch.begin();
-        GameObject go;
 
-        for (int i = 0; i < gameObjects.size; i++) {
-            go = gameObjects.get(i);
-
-            // This render should happen after a sweep attempt
-            if (go.isDead()) {
-                System.out.println("ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
-                continue;
-            }
-
-            drawGameObject(go); // Call helper to draw object
-        }
+        playerShip.render(game);
 
         if (playerShip.isCollectingTiles() && playerShip.isHoverDrawing()) {
             drawGameObject(playerShip.getTileHoverIndicator());
             drawGameObject(playerShip);
-        } else if (playerShip.isDragging()) {
+        } else
+            if (playerShip.isDragging()) {
             playerShip.drawDraggingPlacementIndicator();
         }
         drawGameObject(player);// Draw last to be on top of robot
@@ -296,43 +277,12 @@ public class GameScreen implements Screen {
         return player;
     }
 
-    /**
-     * Add new game object to game.
-     * New object will be renderered based on position and its own render method.
-     *
-     * @param go the game object to add
-     */
-    public void newGameObject(GameObject go) {
-        gameObjects.add(go);
-    }
-
-    /**
-     * Finds the game object, removes and returns it from the game screen Array
-     *
-     * @param gameObject the game object to remove
-     * @return the removed game object
-     */
-    public GameObject removeGameObject(GameObject gameObject) {
-        int i = gameObjects.indexOf(gameObject, true); // Get index of gameObject
-
-        if (i < 0) {
-            throw new RuntimeException("gameObject not found in GameScreen existing game objects - number of objects... : " + gameObjects.size +
-                    " location of gameObject " + gameObject.getX() + ", " + gameObject.getY() + " GameObject ID : " + gameObject.getID());
-        }
-        return gameObjects.removeIndex(i); // Returns the object reference and removes it.
-    }
-
     public ExtendViewport getExtendViewport() {
         return extendViewport;
     }
 
     public TileShipGame getGame() {
         return game;
-    }
-
-
-    public Array<GameObject> getGameObjects() {
-        return gameObjects;
     }
 
     /**
