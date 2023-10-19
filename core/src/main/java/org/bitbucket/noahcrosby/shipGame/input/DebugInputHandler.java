@@ -12,12 +12,12 @@ public class DebugInputHandler extends InputAdapter {
 
     private final Ship playerShip;
     private final TileDragHandler tileDragHandler;
-    GameScreen screen;
+    private TileShipGame game;
 
-    public DebugInputHandler(GameScreen screen) {
-        this.screen = screen;
-        this.playerShip = screen.getPlayerShip();
-        this.tileDragHandler = screen.getTileDragHandler();
+    public DebugInputHandler(TileShipGame game ,Ship playerShip, TileDragHandler tileDragHandler) {
+        this.game = game;
+        this.playerShip = playerShip;
+        this.tileDragHandler = tileDragHandler;
     }
 
     @Override
@@ -34,8 +34,7 @@ public class DebugInputHandler extends InputAdapter {
             }
             playerShip.startCollapseCollect(); // Begins ship collecting
         } else if (keycode == Input.Keys.ESCAPE) {
-            // TODO : Make this bring up the in game menu... maybe... Stretchgoal?
-            screen.getGame().changeScreen(TileShipGame.MENU);
+            game.changeScreen(TileShipGame.MENU);
         }
         return false;
     }

@@ -11,23 +11,28 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.util.ShipBuilder;
 
+import java.util.List;
+
+/**
+ * Ship is a class of modules meant to simulate the core mechanics of a ship.
+ * This includes adding/removing tiles from the ship, keeping track of the ship's grid, and producing new tiles from the existing tiles.
+ * <p>
+ * Ship has many methods to manage tiles internally.
+ * Edge management happens on I/O of tiles so we have a reference to the tile being updated.
+ * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
+ * <p>
+ * SOLID
+ * S - Represents the ship and it's underlying systems.
+ * O -
+ */
 public class Ship extends GameObject {
 
-    /**
-     * Ship is a class of modules meant to simulate the core mechanics of a ship.
-     * This includes adding/removing tiles from the ship, keeping track of the ship's grid, and producing new tiles from the existing tiles.
-     * <p>
-     * Ship has many methods to manage tiles internally.
-     * Edge management happens on I/O of tiles so we have a reference to the tile being updated.
-     * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
-     * <p>
-     * SOLID
-     * S - Represents the ship and it's underlying systems.
-     * O -
-     */
+
     private ShipTile draggedTile;
     public int destroyedTileCount = 0;
     private final CollectionManager collectionManager;
@@ -39,10 +44,10 @@ public class Ship extends GameObject {
      * Ship keeps track of the tiles of the ship and has methods for
      * managing removing and adding tiles.
      */
-    public Ship(Vector2 position) {
+    public Ship(Vector2 position, Box2DWrapper box2DWrapper) {
         super(position, new Vector2(0, 0), ID.Ship);
 
-        shipTilesManager = new ShipTilesManager(this);
+        shipTilesManager = new ShipTilesManager(box2DWrapper ,this);
         collectionManager = new CollectionManager();
 
         UnlockTracker unlockTracker = new UnlockTracker();
@@ -90,7 +95,7 @@ public class Ship extends GameObject {
      * Sets the initial tiles.
      * TODO : This can be another class that takes an argument to determine what ship will be initialized. MOVE IT OUT
      */
-    public void initialize() {
+    public void initialize(ShipBuilder tiles) {
         addTileToShip(position.x, position.y, ID.CoreTile);
         addTileToShip(position.x + ShipTile.TILE_SIZE, position.y, ID.StandardTile);
         addTileToShip(position.x + ShipTile.TILE_SIZE, position.y + ShipTile.TILE_SIZE, ID.StandardTile);

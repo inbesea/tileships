@@ -21,7 +21,6 @@ import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
 
 public class MainMenuScreen extends ScreenAdapter implements Screen {
-    public static final String spritePath = "Textures/";
     final TileShipGame game;
 
     OrthographicCamera camera;
@@ -30,7 +29,8 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
     private SoundTextBubble welcome;
     private Stage stage;
-    private TextButton newGame;
+    private TextButton arcadeMode;
+    private TextButton classicMode;
     private TextButton preferences;
     private TextButton exit;
     private CheckBox debug;
@@ -67,18 +67,66 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         // TODO : Fix this direct file access so it uses the Automated version
         Skin skin = new Skin(Gdx.files.internal("skin/neon/skin/neon-ui.json"));
 
-        newGame = new TextButton("New Game", skin);
+        arcadeMode = new TextButton("Endless Mode", skin);
+        classicMode = new TextButton("Classic Mode", skin);
         preferences = new TextButton("Preferences", skin);
         exit = new TextButton("Exit", skin);
         debug = new CheckBox("Debug Mode", skin);
 
-        table.add(newGame).fillX().uniformX();
+        table.add(classicMode).fillX().uniformX();
+        table.row().pad(10, 0, 10, 0);
+        table.add(arcadeMode).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(preferences).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
         table.row().bottom();
         table.add(debug).align(Align.bottom).align(Align.left);
+    }
+
+    private void setButtonBehavior(){
+        exit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
+
+        classicMode.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(Resources.assetManager.update()){
+                    mainMenuMusic.setLooping(false);
+                    mainMenuMusic.dispose();
+                    game.changeScreen(TileShipGame.CLASSIC_MODE);
+                    dispose();}
+            }
+        });
+
+        arcadeMode.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(Resources.assetManager.update()){
+                    mainMenuMusic.setLooping(false);
+                    mainMenuMusic.dispose();
+                    game.changeScreen(TileShipGame.ARCADE_MODE);
+                    dispose();}
+            }
+        });
+
+        preferences.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(TileShipGame.PREFERENCES);
+            }
+        });
+        debug.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                AppPreferences.getAppPreferences().toggleIsDebug();
+            }
+
+        });
     }
 
     @Override
@@ -98,46 +146,12 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         // Each time we show this the table is reasserted to update values
-        Table table = new Table();
+        this.table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
         setUpMenuButtons();
         setButtonBehavior();
-    }
-
-    private void setButtonBehavior(){
-        exit.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
-            }
-        });
-
-        newGame.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(Resources.assetManager.update()){
-                    mainMenuMusic.setLooping(false);
-                    mainMenuMusic.dispose();
-                    game.changeScreen(TileShipGame.APPLICATION);
-                    dispose();}
-            }
-        });
-
-        preferences.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(TileShipGame.PREFERENCES);
-            }
-        });
-        debug.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                AppPreferences.getAppPreferences().toggleIsDebug();
-            }
-
-        });
     }
 
     /**

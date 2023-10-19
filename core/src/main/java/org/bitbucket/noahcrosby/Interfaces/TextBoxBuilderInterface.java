@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
-public interface TextBoxBuilderInterface {
+public interface TextBoxBuilderInterface extends BuilderInterface {
     void reset();
     void setText(String text);
     public void setSpeechArrowTarget(Vector2 target); // Sets the speech bubble anchor point
@@ -24,7 +24,6 @@ public interface TextBoxBuilderInterface {
 
     void stretchyArrow(boolean arrowIsStretchy);
     void setAddArrow(boolean setArrow);
-
     TextBoxInterface buildProduct();// Return whatever we made lol
 
     void setCountdownAfterCrawl(boolean countdownAfterCrawl);

@@ -114,3 +114,6 @@ ios/build
 /automation/build
 /automation/out
 .idea
+
+## lwjgl
+/lwjgl3/build

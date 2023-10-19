@@ -157,7 +157,15 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	 * Sets the position of the asteroid to the physics body's position
 	 */
 	public void render(TileShipGame game) {
-		circle.setPosition(body.getPosition());
 	}
 
+    /**
+     * Update the asteroid to be at the physics sim position
+     */
+    public void updatePosition() {
+        // Can't directly update to body position because of the scale-up needed
+//        circle.setPosition(body.getPosition());
+//        setX(body.getPosition().x);
+//        setY(body.getPosition().y);
+    }
 }

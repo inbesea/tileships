@@ -5,11 +5,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.screens.ArcadeModeScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.MainMenuScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.PreferencesScreen;
@@ -27,7 +26,6 @@ public class TileShipGame extends Game {
 	public static SpriteBatch batch; // Draws the textures and fonts etc.
 	public static BitmapFont font;
 	private Ship playerShip;
-	public Box2DWrapper physicsWrapper;
 	public static int zoomSpeed = 5;
 	public static float defaultViewportSizeX = 700f, defaultViewportSizeY = 500f;
 	public static float meterLength = 64f;
@@ -35,14 +33,15 @@ public class TileShipGame extends Game {
 
     private Screen mainGameScreen;
     private Screen mainMenuScreen;
-    private Screen loadingScreen;
-    private Screen endgameScreen;
+    private ArcadeModeScreen arcadeModeScreen;
     private Screen preferencesScreen;
     public final static int MENU = 0;
     public final static int PREFERENCES = 1;
-    public final static int APPLICATION = 2;
+    public final static int CLASSIC_MODE = 2;
     public final static int ENDGAME = 3;
     public final static int LOADING = 4;
+    public final static int ARCADE_MODE = 5;
+
 
     /**
      * Initialization of the game stuff
@@ -54,12 +53,7 @@ public class TileShipGame extends Game {
 
         appPreferences = AppPreferences.getAppPreferences();
 
-        this.physicsWrapper = new Box2DWrapper(new Vector2(0, 0), true);
-
-        //legacyGame game = new legacyGame(); // Creates game the old way. No longer necessary. Need to create a way to build game in new window.
-//        this.setScreen(new MainMenuScreen(this));
         this.changeScreen(MENU);
-//        setGameScreen(this.getScreen());
     }
 
     public void changeScreen(int screen) {
@@ -73,9 +67,13 @@ public class TileShipGame extends Game {
                 if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
                 this.setGameScreen(preferencesScreen);
                 break;
-            case APPLICATION:
+            case CLASSIC_MODE:
                 if(mainGameScreen == null) mainGameScreen = new GameScreen(this);
                 this.setGameScreen(mainGameScreen);
+                break;
+            case ARCADE_MODE:
+                if(arcadeModeScreen == null) arcadeModeScreen = new ArcadeModeScreen(this);
+                this.setGameScreen(arcadeModeScreen);
                 break;
             case LOADING:
                 break;

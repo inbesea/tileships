@@ -21,16 +21,18 @@ public class ShipTilesManager {
     private final Array<ShipTile> existingTiles;
     private final Array<ShipTile> edgeTiles;
     Ship ship;
+    Box2DWrapper box2DWrapper;
 
     /**
      * Constructor method
      *
      * @param ship
      */
-    public ShipTilesManager(Ship ship) {
+    public ShipTilesManager(Box2DWrapper box2DWrapper ,Ship ship) {
         this.ship = ship;
         this.existingTiles = new Array<>();
         this.edgeTiles = new Array<>();
+        this.box2DWrapper = box2DWrapper;
     }
 
     /**
@@ -127,7 +129,7 @@ return new Vector2(x, y);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
 
-        Box2DWrapper.getInstance().setObjectPhysics(tempTile);
+        box2DWrapper.setObjectPhysics(tempTile);
 
 
         //setTilePhysics(tempTile);
@@ -472,7 +474,7 @@ return new Vector2(x, y);
             logRemovedTile(tile);
 
             // Remove from simulation
-            Box2DWrapper.getInstance().removeObjectBody(tile.getBody());
+            box2DWrapper.removeObjectBody(tile.getBody());
         }
     }
 

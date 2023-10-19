@@ -20,24 +20,14 @@ public class Box2DWrapper implements Box2DWrapperInterface {
     public static final int positionIterations = 2;
     private float accumulator = 0;
 
-    private static Box2DWrapper INSTANCE;
     private final World world;
     private final Box2DDebugRenderer box2DDebugRenderer;
     private final Array<Body> bodies = new Array<>();
 
     public Box2DWrapper(Vector2 gravity, boolean doSleep) {
-        if (INSTANCE != null) throw new RuntimeException("Box2DWrapper already exists!");
         Box2D.init();
         this.world = new World(gravity, doSleep);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
-        INSTANCE = this;
-    }
-
-    public static Box2DWrapper getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new Box2DWrapper(new Vector2(0, 0), true);
-        }
-        return INSTANCE;
     }
 
     /**
@@ -52,6 +42,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
     /**
      * Draws the debug shapes.
+     * DO NOT CALL IN A BATCH OR IT WILL RUIN THE RENDER
      *
      * @param orthoCamera gives the projection matrix
      */
