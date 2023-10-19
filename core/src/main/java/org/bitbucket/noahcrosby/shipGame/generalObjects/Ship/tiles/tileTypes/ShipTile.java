@@ -94,7 +94,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
                     getPositionAsString(),
                     getX() + 2,
                     getY() + (size.y / 4));
-
         }
     }
 

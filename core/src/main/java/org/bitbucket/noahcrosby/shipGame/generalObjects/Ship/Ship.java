@@ -15,20 +15,21 @@ import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
+/**
+ * Ship is a class of modules meant to simulate the core mechanics of a ship.
+ * This includes adding/removing tiles from the ship, keeping track of the ship's grid, and producing new tiles from the existing tiles.
+ * <p>
+ * Ship has many methods to manage tiles internally.
+ * Edge management happens on I/O of tiles so we have a reference to the tile being updated.
+ * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
+ * <p>
+ * SOLID
+ * S - Represents the ship and it's underlying systems.
+ * O -
+ */
 public class Ship extends GameObject {
 
-    /**
-     * Ship is a class of modules meant to simulate the core mechanics of a ship.
-     * This includes adding/removing tiles from the ship, keeping track of the ship's grid, and producing new tiles from the existing tiles.
-     * <p>
-     * Ship has many methods to manage tiles internally.
-     * Edge management happens on I/O of tiles so we have a reference to the tile being updated.
-     * Ships manage shipTiles. Tiles don't know about their relationship with other tiles, the ship manages that.
-     * <p>
-     * SOLID
-     * S - Represents the ship and it's underlying systems.
-     * O -
-     */
+
     private ShipTile draggedTile;
     public int destroyedTileCount = 0;
     private final CollectionManager collectionManager;
