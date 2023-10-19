@@ -14,6 +14,9 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.Shi
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.util.ShipBuilder;
+
+import java.util.List;
 
 /**
  * Ship is a class of modules meant to simulate the core mechanics of a ship.
@@ -92,7 +95,7 @@ public class Ship extends GameObject {
      * Sets the initial tiles.
      * TODO : This can be another class that takes an argument to determine what ship will be initialized. MOVE IT OUT
      */
-    public void initialize() {
+    public void initialize(ShipBuilder tiles) {
         addTileToShip(position.x, position.y, ID.CoreTile);
         addTileToShip(position.x + ShipTile.TILE_SIZE, position.y, ID.StandardTile);
         addTileToShip(position.x + ShipTile.TILE_SIZE, position.y + ShipTile.TILE_SIZE, ID.StandardTile);

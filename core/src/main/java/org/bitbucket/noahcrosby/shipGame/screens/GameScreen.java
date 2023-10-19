@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
+import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -26,6 +27,8 @@ import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.shipGame.player.SimpleTouch;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.util.ShipBuilder;
+import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
 import java.util.ArrayList;
 
@@ -70,9 +73,8 @@ public class GameScreen implements Screen {
         box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
 
         // init ship
-        playerShip = new Ship(new Vector2(-1, -1), box2DWrapper);
+        playerShip = new ShipDirector().buildClassicShip(box2DWrapper, new Vector2(TileInit.ORIGIN_X, TileInit.ORIGIN_Y));
         game.setPlayerShip(playerShip);
-        playerShip.initialize();
 
         // init player
         // Give player the game reference

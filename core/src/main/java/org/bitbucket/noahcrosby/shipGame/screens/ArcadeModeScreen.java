@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
+import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
@@ -60,8 +61,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
 
 
-        arcadeShip = new Ship(new Vector2(0,0), box2DWrapper);
-        arcadeShip.initialize();
+        arcadeShip = new ShipDirector().buildArcadeShip(box2DWrapper, new Vector2(0, 0));
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
 
         player = new Player(new Vector2(arcadeShip.getX(), arcadeShip.getY()), GameScreen.playerSize, ID.Player, camera, this.game);
