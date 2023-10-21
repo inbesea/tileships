@@ -1,10 +1,10 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 /**
  * Class to handle orienting an array of tiles.

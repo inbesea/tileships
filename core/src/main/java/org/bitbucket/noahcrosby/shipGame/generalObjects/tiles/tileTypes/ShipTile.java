@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.math.Circle;
@@ -10,8 +10,8 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.TileTypeData;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 

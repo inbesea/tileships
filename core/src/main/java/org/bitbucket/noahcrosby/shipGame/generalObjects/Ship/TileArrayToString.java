@@ -2,9 +2,9 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.TileOrienter;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileOrienter;
 
 /**
  * Takes an array of ShipTiles and can return a string representation of said array.

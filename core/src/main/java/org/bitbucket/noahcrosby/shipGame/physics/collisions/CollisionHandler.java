@@ -1,10 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
-import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 
 import java.util.ArrayList;
 

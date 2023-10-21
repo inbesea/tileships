@@ -3,8 +3,8 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.TileRecipes;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileRecipes;
 
 /**
  * Class to determine IDs based on ordered arrays of tiles.
@@ -47,6 +47,7 @@ public class TileCondenser {
     private ID developTileIDFromArray(Array<ShipTile> tiles) {
         ID result;
 
+        // Faster check for single tile
         if (tiles.size == 1) return singleTileHandle(tiles);
 
         // Get String for comparison
