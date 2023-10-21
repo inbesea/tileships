@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
     private final Ship playerShip;
     private TileDragHandler tileDragHandler;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
-    private final CollisionHandler collisionHandler;
+    private final ClassicCollisionHandler collisionHandler;
 
     TextBoxManager textBoxHandler;
 
@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
         hud = new HUD(game);
 
         // Create collision listener
-        collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
+        collisionHandler = new ClassicCollisionHandler(asteroidManager);// Handler has manager to manage stuff
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         box2DWrapper.setWorldContactListener(collisionListener); // Get the world in contact with this collision listener
 
