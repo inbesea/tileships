@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 
 /**
  * Used to hold unique data about tileable types of shiptiles.

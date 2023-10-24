@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.Interfaces.ShipBuilderInterface;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 
 import java.util.ArrayList;

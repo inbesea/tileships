@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.math.Circle;
@@ -10,8 +10,8 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.AdjacentTiles;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.TileTypeData;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
@@ -20,8 +20,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     private final AdjacentTiles neighbors = new AdjacentTiles();
     private final int xIndex, yIndex;
 
-    private long placed = System.currentTimeMillis();
-    private int cool = 0;
     public boolean isEdge;
     public final static float TILE_SIZE = 64f;
     private final Rectangle bounds;
@@ -95,24 +93,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
                     getX() + 2,
                     getY() + (size.y / 4));
         }
-    }
-
-    /**
-     * Method to cool a placed shipTile over time.
-     */
-    private void coolPlacedBlock(TileShipGame game) {
-        long deltaTime = System.currentTimeMillis() - placed;
-        if (deltaTime >= 150) {
-            //System.out.println( "r : " + (255 - cool) + "g : " + (0 + cool) + "b : " + (0 + cool));
-
-            if (cool <= 200) {
-                cool = cool + 5;
-                placed = System.currentTimeMillis();
-            }
-        }
-        // If still doing this we need to animate a cooling block possibly? Hmmm idk if LibGDX has good solution here
-//		g.setColor(new Color(255 - cool, cool, cool));
-//		g.drawRect(xLoc - cam.x, yLoc - cam.y, TILESIZE, TILESIZE);
     }
 
     /**

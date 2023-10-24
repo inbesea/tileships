@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
 /**
  * Interface to specify methods used with all tiles.

@@ -9,9 +9,9 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
  */
 public class CollisionListener implements ContactListener {
 
-    private CollisionHandler collisionHandler;
+    private ClassicCollisionHandler collisionHandler;
 
-    public CollisionListener(CollisionHandler collisionHandler){
+    public CollisionListener(ClassicCollisionHandler collisionHandler){
         this.collisionHandler = collisionHandler;
         System.out.println("~ Collision Listener created ~");
     }

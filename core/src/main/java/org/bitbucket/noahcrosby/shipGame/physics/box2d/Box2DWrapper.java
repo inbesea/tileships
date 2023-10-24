@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 

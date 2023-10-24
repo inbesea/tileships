@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
@@ -17,17 +16,16 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 import org.bitbucket.noahcrosby.shipGame.managers.TextBoxManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
-import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionHandler;
+import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHandler;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.shipGame.player.SimpleTouch;
 import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.util.ShipBuilder;
 import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
 import java.util.ArrayList;
@@ -50,7 +48,7 @@ public class GameScreen implements Screen {
     private final Ship playerShip;
     private TileDragHandler tileDragHandler;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
-    private final CollisionHandler collisionHandler;
+    private final ClassicCollisionHandler collisionHandler;
 
     TextBoxManager textBoxHandler;
 
@@ -87,7 +85,7 @@ public class GameScreen implements Screen {
         hud = new HUD(game);
 
         // Create collision listener
-        collisionHandler = new CollisionHandler(asteroidManager);// Handler has manager to manage stuff
+        collisionHandler = new ClassicCollisionHandler(asteroidManager);// Handler has manager to manage stuff
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         box2DWrapper.setWorldContactListener(collisionListener); // Get the world in contact with this collision listener
 

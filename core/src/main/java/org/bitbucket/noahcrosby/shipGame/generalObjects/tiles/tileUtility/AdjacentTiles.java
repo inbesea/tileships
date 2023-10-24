@@ -1,7 +1,7 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 /**
  * Manages adjacent ShipTiles to a shiptile

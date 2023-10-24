@@ -2,7 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.tiles.tileUtility.TileRecipes;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileRecipes;
 
 /**
  * Class to check if criteria for building a tile recipe is met.
