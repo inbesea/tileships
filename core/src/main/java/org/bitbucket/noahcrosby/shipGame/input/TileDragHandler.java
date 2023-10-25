@@ -46,6 +46,7 @@ public class TileDragHandler extends InputAdapter {
 
             if (selectedTileCanBeGrabbed) {
                 pickUpTile(pickedUpTile);
+                pickedUpTile.pickedUp();
             }
         }
 
@@ -130,7 +131,9 @@ public class TileDragHandler extends InputAdapter {
      * @param y - y position of dragged tile
      */
     private void placeDraggedTile(Ship playerShip, float x, float y) {
-        playerShip.addTileToShip(x, y, playerShip.getDraggedTile());
+        ShipTile tempTile = playerShip.getDraggedTile();
+        playerShip.addTileToShip(x, y, tempTile);
+        tempTile.replaced();
         Resources.sfxPlaceTileSound.play(AppPreferences.getAppPreferences().getSoundVolume());
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);

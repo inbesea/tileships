@@ -180,7 +180,7 @@ public class ShipTilesManager {
      */
     private ShipTile gridAlignedxyTilePlacement(float x, float y, ID id) {
 
-        // TODO : Perform some extract methods so we can make a second method for tiles.
+        // There are some DRY issues here, but I'm moving on for now.
         int indexXY[];
         ShipTile tempTile;
 

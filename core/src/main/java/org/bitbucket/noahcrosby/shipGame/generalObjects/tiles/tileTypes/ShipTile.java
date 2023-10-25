@@ -46,6 +46,11 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         // Need to knit together the shiptile to adjacent tiles connectAdjacent();
     }
 
+    public abstract boolean isInvulnerable();
+    //These methods are for updating tiles when they're grabbing and placing a tile back.
+    public abstract void replaced();
+    public abstract void pickedUp();
+
     /**
      * TODO : This index determination needs to be updated to allow for ship displacement/rotation.
      * Determines an index value for the ShipTile based on the float passed in.
@@ -300,8 +305,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     public ShipTilesManager getManager() {
         return manager;
     }
-
-    public abstract boolean isInvulnerable();
 
     /**
      * Call to remove this tile from it's manager.

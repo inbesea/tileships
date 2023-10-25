@@ -53,6 +53,22 @@ public class ColorTile extends ShipTile{
     }
 
     /**
+     * Do this when placed
+     */
+    @Override
+    public void replaced() {
+
+    }
+
+    /**
+     * Do this when picked up
+     */
+    @Override
+    public void pickedUp() {
+
+    }
+
+    /**
      * Setter method to set the invulnerability
      * @param isInvulnerable
      */
