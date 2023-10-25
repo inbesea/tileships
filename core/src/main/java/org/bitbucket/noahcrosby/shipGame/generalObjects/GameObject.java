@@ -143,7 +143,7 @@ public abstract class GameObject {
 	 */
 	public void physicsDelete(){
 		physicsDeletable = true;
-	};
+	}
 
 	/**
 	 * Returns value of physics death from a collision or some other physics based action.

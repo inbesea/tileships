@@ -22,6 +22,8 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.physics.collisions.ArcadeCollisionHandler;
+import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
     final AsteroidManager asteroidManager;
     private final Array<GameObject> arcadeGameObjects; // Used to render the objects?
+
+    ArcadeCollisionHandler collisionHandler;
 
     // Constructor
     public ArcadeModeScreen(final TileShipGame game) {
@@ -69,6 +73,10 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         initializeInputEventHandling();
 
         arcadeGameObjects = new Array<>();
+
+        collisionHandler = new ArcadeCollisionHandler(this);
+        CollisionListener collisionListener = new CollisionListener(collisionHandler);
+        box2DWrapper.setWorldContactListener(collisionListener);
     }
 
     @Override
@@ -87,7 +95,8 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
         // Don't forget to step the simulation
         box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
-
+        collisionHandler.handleCollisions();
+        box2DWrapper.sweepForDeadBodies();
         // process user input
         if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
             PlayerInput.handleKeyPressed(player, camera);
@@ -188,4 +197,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         Resources.MainMenuExtendedMessingaroundMusic.play();
     }
 
+    public AsteroidManager getAsteroidManager() {
+        return asteroidManager;
+    }
 }

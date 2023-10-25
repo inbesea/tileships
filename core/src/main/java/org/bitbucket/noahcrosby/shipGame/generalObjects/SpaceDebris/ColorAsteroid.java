@@ -30,4 +30,8 @@ public class ColorAsteroid extends Asteroid {
         this.color = color;
         this.colorTexture = ArcadeColors.getAsteroidTexture(color);
     }
+
+    public ArcadeColors getColor(){
+        return color;
+    }
 }
