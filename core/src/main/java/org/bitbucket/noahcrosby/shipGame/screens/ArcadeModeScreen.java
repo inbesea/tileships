@@ -15,7 +15,6 @@ import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
@@ -63,6 +62,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
         arcadeShip = new ShipDirector().buildArcadeShip(box2DWrapper, new Vector2(0, 0));
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
+        asteroidManager.setArcadeMode(true);
 
         player = new Player(new Vector2(arcadeShip.getX(), arcadeShip.getY()), GameScreen.playerSize, ID.Player, camera, this.game);
         player.setPlayerShip(arcadeShip);

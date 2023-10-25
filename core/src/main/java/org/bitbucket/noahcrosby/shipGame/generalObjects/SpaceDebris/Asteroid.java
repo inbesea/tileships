@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StrongTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;

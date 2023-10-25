@@ -7,7 +7,7 @@ import org.bitbucket.noahcrosby.javapoet.Resources;
  * This reflects an optional color for a tile to have.
  * Currently used only in Arcade mode
  */
-public enum TileColor {
+public enum ArcadeColors {
     RED("red"),
     ORANGE("orange"),
     YELLOW("yellow"),
@@ -16,12 +16,12 @@ public enum TileColor {
     PURPLE("purple"),
     SILVER("silver");
     private String color;
-    TileColor(String color){
+    ArcadeColors(String color){
         this.color = color;
     }
 
-    public static Texture getTexture(TileColor tileColor) {
-        switch (tileColor) {
+    public static Texture getTileTexture(ArcadeColors arcadeColors) {
+        switch (arcadeColors) {
             case RED:
                 return Resources.ShipTileRedTexture;
             case ORANGE:
@@ -41,11 +41,32 @@ public enum TileColor {
         }
     }
 
+    public static Texture getAsteroidTexture(ArcadeColors arcadeColors) {
+        switch (arcadeColors) {
+            case RED:
+                return Resources.AsteroidRedTexture;
+            case ORANGE:
+                return Resources.AsteroidOrangeTexture;
+            case YELLOW:
+                return Resources.AsteroidYellowTexture;
+            case GREEN:
+                return Resources.AsteroidGreenTexture;
+            case BLUE:
+                return Resources.AsteroidBlueTexture;
+            case PURPLE:
+                return Resources.AsteroidPurpleTexture;
+            case SILVER:
+                return Resources.AsteroidSilverTexture;
+            default:
+                return null;
+        }
+    }
+
     /**
      * Returns a random color
      * @return
      */
-    public static TileColor getRandomColor() {
+    public static ArcadeColors getRandomColor() {
         return values()[(int) (Math.random() * values().length)];
     }
 }

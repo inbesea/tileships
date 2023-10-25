@@ -24,7 +24,19 @@ public class Resources {
 
     public static Sound sfxTilePlacement;
 
+    public static Texture AsteroidBlueTexture;
+
+    public static Texture AsteroidGreenTexture;
+
+    public static Texture AsteroidOrangeTexture;
+
     public static Texture AsteroidPurpleTexture;
+
+    public static Texture AsteroidRedTexture;
+
+    public static Texture AsteroidSilverTexture;
+
+    public static Texture AsteroidYellowTexture;
 
     public static Texture HoverIndicatorTexture;
 
@@ -64,7 +76,13 @@ public class Resources {
         assetManager.load("Sound Effects/PlaceTileSound.wav", Sound.class);
         assetManager.load("Sound Effects/SelectionBuzzLooped.wav", Sound.class);
         assetManager.load("Sound Effects/tilePlacement.wav", Sound.class);
+        assetManager.load("Textures/asteroid_blue.png", Texture.class);
+        assetManager.load("Textures/asteroid_green.png", Texture.class);
+        assetManager.load("Textures/asteroid_orange.png", Texture.class);
         assetManager.load("Textures/asteroid_purple.png", Texture.class);
+        assetManager.load("Textures/asteroid_red.png", Texture.class);
+        assetManager.load("Textures/asteroid_silver.png", Texture.class);
+        assetManager.load("Textures/asteroid_yellow.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/RobotV2.png", Texture.class);
         assetManager.load("Textures/ShipTileBlue.png", Texture.class);
@@ -91,7 +109,13 @@ public class Resources {
             sfxPlaceTileSound = assetManager.get("Sound Effects/PlaceTileSound.wav");
             sfxSelectionBuzzLooped = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
             sfxTilePlacement = assetManager.get("Sound Effects/tilePlacement.wav");
+            AsteroidBlueTexture = assetManager.get("Textures/asteroid_blue.png");
+            AsteroidGreenTexture = assetManager.get("Textures/asteroid_green.png");
+            AsteroidOrangeTexture = assetManager.get("Textures/asteroid_orange.png");
             AsteroidPurpleTexture = assetManager.get("Textures/asteroid_purple.png");
+            AsteroidRedTexture = assetManager.get("Textures/asteroid_red.png");
+            AsteroidSilverTexture = assetManager.get("Textures/asteroid_silver.png");
+            AsteroidYellowTexture = assetManager.get("Textures/asteroid_yellow.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
             RobotV2Texture = assetManager.get("Textures/RobotV2.png");
             ShipTileBlueTexture = assetManager.get("Textures/ShipTileBlue.png");

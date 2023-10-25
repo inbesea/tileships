@@ -6,8 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Asteroid;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
@@ -34,6 +35,8 @@ public class AsteroidManager implements Manager {
     float spawnRadius = TileShipGame.defaultViewportSizeX;
     OrthographicCamera camera;
     Box2DWrapper box2DWrapper;
+
+    boolean arcadeMode = false;
 
     /**
      * Spawns/cleans up asteroids and adds/removes them from passed physics simulation
@@ -139,7 +142,14 @@ public class AsteroidManager implements Manager {
         // Check if active
         Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-        Asteroid asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
+        Asteroid asteroid;
+
+        if(isArcadeMode()){
+            asteroid = new ColorAsteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
+        } else {
+            asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
+        }
+
         box2DWrapper.setObjectPhysics(asteroid);
         //setAsteroidPhysics(asteroid);
 
@@ -208,5 +218,14 @@ public class AsteroidManager implements Manager {
      */
     public ArrayList<Asteroid> getAsteroids() {
         return asteroids;
+    }
+
+
+    public boolean isArcadeMode() {
+        return arcadeMode;
+    }
+
+    public void setArcadeMode(boolean arcadeMode) {
+        this.arcadeMode = arcadeMode;
     }
 }

@@ -12,7 +12,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTy
  */
 public class ColorTile extends ShipTile{
 
-    private TileColor color;
+    private ArcadeColors color;
     private Texture colorTexture;
     private boolean isInvulnerable = false;
 
@@ -25,7 +25,7 @@ public class ColorTile extends ShipTile{
     public ColorTile(Vector2 position, ShipTilesManager manager) {
         super(position, ID.ColorTile, TileTypeData.ColorTile, manager);
 
-        setColor(TileColor.getRandomColor()); // Default color is red. We can set this again after the tile is created
+        setColor(ArcadeColors.getRandomColor()); // Default color is red. We can set this again after the tile is created
     }
 
     @Override
@@ -37,9 +37,9 @@ public class ColorTile extends ShipTile{
      * When a color tile is set to a specific color it will update the texture reference
      * @param color
      */
-    public void setColor(TileColor color){
+    public void setColor(ArcadeColors color){
         this.color = color;
-        this.colorTexture = TileColor.getTexture(color);
+        this.colorTexture = ArcadeColors.getTileTexture(color);
     }
 
     @Override
