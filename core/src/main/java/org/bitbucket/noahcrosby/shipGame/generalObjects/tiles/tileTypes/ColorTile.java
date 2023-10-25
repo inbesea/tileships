@@ -1,6 +1,5 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
@@ -13,21 +12,20 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTy
  */
 public class ColorTile extends ShipTile{
 
-    TileColor color;
-    Texture colorTexture;
+    private TileColor color;
+    private Texture colorTexture;
+    private boolean isInvulnerable = false;
 
     /**
-     * These tiles will all need health, and a way to relate to tiles next to them..?
-     * But they will need to be stored in a 2d array.
-     * So when the game initializes there will need to be an array of tiles built out.
+     * Color tile allows a tile to change color on the fly
      *
-     * @param position
-     * @param id
-     * @param typeData
-     * @param manager
+     * @param position - the position of the tile
+     * @param manager - the shipTile's manager
      */
-    public ColorTile(Vector2 position, ID id, TileTypeData typeData, ShipTilesManager manager) {
-        super(position, id, typeData, manager);
+    public ColorTile(Vector2 position, ShipTilesManager manager) {
+        super(position, ID.ColorTile, TileTypeData.ColorTile, manager);
+
+        setColor(TileColor.getRandomColor()); // Default color is red. We can set this again after the tile is created
     }
 
     @Override
@@ -46,11 +44,19 @@ public class ColorTile extends ShipTile{
 
     @Override
     public boolean deleteFromGame() {
-        return false;
+        return destroySelf();
     }
 
     @Override
     public boolean isInvulnerable() {
-        return false;
+        return isInvulnerable;
+    }
+
+    /**
+     * Setter method to set the invulnerability
+     * @param isInvulnerable
+     */
+    public void setInvulnerability(boolean isInvulnerable){
+        this.isInvulnerable = isInvulnerable;
     }
 }
