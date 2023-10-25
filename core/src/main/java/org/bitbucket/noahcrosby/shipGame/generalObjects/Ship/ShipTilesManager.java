@@ -195,6 +195,7 @@ public class ShipTilesManager {
      * Gets contextual tiles via the ship's context, and calls delegate method within tile, passing the possible neighbor context.
      * <p></p>
      * Sets tile neighbors equal to adjacent tiles, or to null if they don't exist
+     * Can be given an existing tile
      *
      * @param tile - tile to initialize
      * @return - number of neighbor tiles

@@ -116,6 +116,10 @@ public class Ship extends GameObject {
         return tile;
     }
 
+    public ShipTile addTileToShip(float x, float y, ShipTile tile) {
+        return shipTilesManager.addTile(x, y, tile);
+    }
+
     /**
      * Rounds an x/y position to align with the ships' tile grid
      * <p>
@@ -132,6 +136,7 @@ public class Ship extends GameObject {
     /**
      * Removes a tile by reference to the tile instance
      * Should only be used when a tile instance is found. Tile manager handles flushing the adjacency relationships between tiles.
+     * Removes body from entire game
      *
      * @param tile - Tile to remove from ship
      */

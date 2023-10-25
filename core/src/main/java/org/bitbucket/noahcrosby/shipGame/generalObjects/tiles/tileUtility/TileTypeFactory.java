@@ -3,10 +3,7 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.CoreTile;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StandardTile;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StrongTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.*;
 
 /**
  * This gives us ShipTile objects of specific types depending on the ID given.
@@ -29,6 +26,8 @@ public class TileTypeFactory {
                 return new CoreTile(vector2, manager);
             case StrongTile:
                 return new StrongTile(vector2, manager);
+            case ColorTile:
+                return new ColorTile(vector2, manager);
             default: return null;
         }
     }
