@@ -40,4 +40,12 @@ public enum TileColor {
                 return null;
         }
     }
+
+    /**
+     * Returns a random color
+     * @return
+     */
+    public static TileColor getRandomColor() {
+        return values()[(int) (Math.random() * values().length)];
+    }
 }
