@@ -18,7 +18,8 @@ import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 public abstract class ShipTile extends GameObject implements PhysicsObject {
 
     private final AdjacentTiles neighbors = new AdjacentTiles();
-    private final int xIndex, yIndex;
+    private int xIndex;
+    private int yIndex;
 
     public boolean isEdge;
     public final static float TILE_SIZE = 64f;
@@ -28,22 +29,20 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     private final ShipTilesManager manager;
 
     /**
-     * These tiles will all need health, and a way to relate to tiles next to them..?
-     * But they will need to be stored in a 2d array.
-     * So when the game initializes there will need to be an array of tiles built out.
+     * ShipTiles are the basic unit of a Ship. They are boxes of data, and can be extended to do more.
+     * The position needs to a multiple of TILE_SIZE or the index will be wrong.
      */
     public ShipTile(Vector2 position, ID id, TileTypeData typeData, ShipTilesManager manager) {
         // vector is not adjusted, so tiles can be independently created anywhere
         super(position, new Vector2(TILE_SIZE, TILE_SIZE), id);
 
-        this.xIndex = determineIndex(position.x);
-        this.yIndex = determineIndex(position.y);
+        setPosition(position);
 
         this.typeData = typeData;
 
         this.manager = manager;
 
-        bounds = new Rectangle(position.x, position.y, ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
+        bounds = new Rectangle(this.position.x, this.position.y, ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
         // Need to knit together the shiptile to adjacent tiles connectAdjacent();
     }
 
@@ -56,6 +55,17 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      */
     private int determineIndex(float position) {
         return (int) (position / TILE_SIZE);
+    }
+
+    /**
+     * sets the position and index of the shiptile.
+     * @param position
+     */
+    @Override
+    public void setPosition(Vector2 position) {
+        this.position = position;
+        this.xIndex = determineIndex(position.x);
+        this.yIndex = determineIndex(position.y);
     }
 
     public void tick() {
@@ -296,13 +306,15 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     /**
      * Call to remove this tile from it's manager.
      */
-    public void destroySelf() {
+    public boolean destroySelf() {
         boolean tileBelongsToItsManager = manager.returnTile(this.getPosition()) != null;
 
         if (tileBelongsToItsManager) {
             manager.removeTileFromShip(this);
+            return true;
         } else {
             System.out.println("ERROR : ShipTile " + this.getID() + " at " + this.getPositionAsString() + " does not belong to its manager.");
+            return false;
         }
     }
 
