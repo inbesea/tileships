@@ -21,9 +21,9 @@ public class ShipDirector {
 
         shipBuilder.addTile((int)center.x, (int)center.y, ID.CoreTile);
         shipBuilder.addTile((int)center.x + 1, (int)center.y, ID.StandardTile);
-        shipBuilder.addTile((int)center.x - 1, (int)center.y, ID.StandardTile);
-        shipBuilder.addTile((int)center.x, (int)center.y - 1, ID.StandardTile);
-        shipBuilder.addTile((int)center.x, (int)center.y + 1, ID.StandardTile);
+        shipBuilder.addTile((int)center.x + 2, (int)center.y, ID.StandardTile);
+        shipBuilder.addTile((int)center.x + 1, (int)center.y + 1, ID.StandardTile);
+        shipBuilder.addTile((int)center.x + 2, (int)center.y + 1, ID.StandardTile);
 
         return shipBuilder.buildProduct();
     }
@@ -34,7 +34,13 @@ public class ShipDirector {
         shipBuilder.setCenter(center);
         shipBuilder.setBox2DWrapper(box2DWrapper);
 
-        shipBuilder.addTile((int)center.x, (int)center.y, ID.CoreTile);
+        shipBuilder.addTile((int)center.x, (int)center.y, ID.ColorTile);
+        shipBuilder.addTile((int)center.x, (int)center.y, ID.ColorTile);
+        shipBuilder.addTile((int)center.x, (int)center.y, ID.ColorTile);
+        shipBuilder.addTile((int)center.x, (int)center.y, ID.ColorTile);
+        shipBuilder.addTile((int)center.x, (int)center.y, ID.ColorTile);
+        shipBuilder.addTile((int)center.x, (int)center.y, ID.ColorTile);
+        shipBuilder.addTile((int)center.x, (int)center.y, ID.ColorTile);
 
         return shipBuilder.buildProduct();
     }
