@@ -48,33 +48,47 @@ public class ShipTilesManager {
     public ShipTile addTile(float x, float y, ID id) {
 
         // Use vector to set new tile
+        Vector2 placementLocationResult; // We will add method to get this.
         Vector2 tileLocation2 = new Vector2(x, y);
-        ShipTile closestTile;
         ShipTile tempTile;
 
-        ShipTile destinationTile = returnTile(tileLocation2);
-        if (destinationTile == null) { // Released on empty space
-            if (ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y, id); // Can add anywhere
+        placementLocationResult = getClosestPlacementVector2(tileLocation2);
+        tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, id);
 
-            closestTile = closestTile(tileLocation2, ship.getExistingTiles());
-            Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation2);
-            tempTile = gridAlignedxyTilePlacement(closestExternalVacancy.x, closestExternalVacancy.y, id);
-        } else { // Released on Shiptile
-            Vector2 nearestEmptySpace = closestInternalVacancy(tileLocation2); // Get closest Vacancy on edge tiles
-            tempTile = gridAlignedxyTilePlacement(nearestEmptySpace.x, nearestEmptySpace.y, id);
-        }
+        validateEdgeSize();
 
-        if (existingTiles.size < edgeTiles.size) {
-            throw new RuntimeException("More edgeTiles than existing!" +
-                    "\nexistingTiles.size : " + existingTiles.size +
-                    "\nedgeTiles.size : " + edgeTiles.size);
-        }
         return tempTile;
 
     }
 
-    private Vector2 getPlacementLocationCandidate(float x, float y) {
-return new Vector2(x, y);
+    /**
+     * Returns a Vector2 position representing the closet ShipTile vacancy to the passed location.
+     * @param location - Location checked for closest placement
+     * @return - Vector2 position representing the closest valid placement location.
+     */
+    public Vector2 getClosestPlacementVector2(Vector2 location) {
+
+        ShipTile destinationTile = returnTile(location);
+
+        if (destinationTile == null) { // Released on empty space
+            if (ship.getExistingTiles().size == 0) return location;// Passed location is valid
+
+            ShipTile closestTile = closestTile(location, ship.getExistingTiles());
+            return getVectorOfClosestSide(closestTile, location); // This will be the closest empty space
+        } else { // Released on Shiptile
+            return closestInternalVacancy(location); // Get closest Vacancy on edge tiles
+        }
+    }
+
+    /**
+     * Checks the size of the edge and existing tiles to make sure they are correctly sized.
+     */
+    private void validateEdgeSize() {
+        if (existingTiles.size < edgeTiles.size) {
+            throw new RuntimeException("More edgeTiles than existing!" +
+                "\nexistingTiles.size : " + existingTiles.size +
+                "\nedgeTiles.size : " + edgeTiles.size);
+        }
     }
 
     /**
@@ -131,16 +145,16 @@ return new Vector2(x, y);
 
         box2DWrapper.setObjectPhysics(tempTile);
 
-
         //setTilePhysics(tempTile);
-        if (existingTiles.size < edgeTiles.size) {
-            throw new RuntimeException("More edgeTiles than existing! " +
-                    " existingTiles.size : " + existingTiles.size +
-                    "edgeTiles.size : " + edgeTiles.size);
-        }
+        validateEdgeSize();
+
         return tempTile;
     }
 
+    /**
+     * Checks if the new tile index overlaps with an existing tile
+     * @param newTile - new tile to validate against existing tiles
+     */
     private void validateNewTileIndex(ShipTile newTile) {
         ShipTile existingTile;
         for (int i = 0; i < existingTiles.size; i++) {
@@ -206,11 +220,7 @@ return new Vector2(x, y);
         checkIfAdjustEdgeArray(left);
         checkIfAdjustEdgeArray(tile);
 
-        if (existingTiles.size < edgeTiles.size) {
-            throw new RuntimeException("More edgeTiles than existing!" +
-                    "\nexistingTiles.size : " + existingTiles.size +
-                    "\nedgeTiles.size : " + edgeTiles.size);
-        }
+        validateEdgeSize();
 
         return numberOfNeighbors;
     }
