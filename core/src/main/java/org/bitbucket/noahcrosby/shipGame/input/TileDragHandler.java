@@ -130,7 +130,7 @@ public class TileDragHandler extends InputAdapter {
      * @param y - y position of dragged tile
      */
     private void placeDraggedTile(Ship playerShip, float x, float y) {
-        playerShip.addTileToShip(x, y, playerShip.getDraggedTile().getID());
+        playerShip.addTileToShip(x, y, playerShip.getDraggedTile());
         Resources.sfxPlaceTileSound.play(AppPreferences.getAppPreferences().getSoundVolume());
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);

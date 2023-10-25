@@ -36,6 +36,32 @@ public class ShipTilesManager {
     }
 
     /**
+     * Places a tile to the ship via existing tile reference and new location.
+     * Returns updated tile.
+     * NOTE : The body is removed, and recreated in this implementation.
+     * We could add filters somehow, but I'm not learning that now.
+     *
+     * @param x - x position
+     * @param y - y position
+     * @param tile - Existing tile to replace
+     * @return replaced, updated tile
+     */
+    public ShipTile addTile(float x, float y, ShipTile tile){
+        // Use vector to set new tile
+        Vector2 placementLocationResult; // We will add method to get this.
+        Vector2 tileLocation2 = new Vector2(x, y);
+        ShipTile tempTile;
+
+        placementLocationResult = getClosestPlacementVector2(tileLocation2);
+        tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, tile);
+        box2DWrapper.setObjectPhysics(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
+
+        validateEdgeSize();
+
+        return tempTile;
+    }
+
+    /**
      * This Method adds a tile to the ship with a reference to the tile's x and y
      * positions , the color, ID, and camera object for updating
      * the render location
@@ -127,7 +153,34 @@ public class ShipTilesManager {
     /**
      * Adds a tile expecting the x,y to be a valid placement location
      */
+    private ShipTile gridAlignedxyTilePlacement(float x, float y, ShipTile tile) {
+
+        int indexXY[];
+
+        indexXY = returnIndex(x, y); // Get index corresponding to x, y position
+
+        System.out.println("Replacing " + tile.getID() + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
+            "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
+
+        // Create tile subtype based on ID using factory static call.
+        Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
+        tile.setPosition(vector2); // Set existing tile position
+        validateNewTileIndex(tile);
+        this.existingTiles.add(tile);
+
+        setNeighbors(tile); // Setting tile neighbors within ship
+        // We don't need to set physics for grid aligned tiles, but there could be race condition eventually.
+        validateEdgeSize();
+
+        return tile;
+    }
+
+    /**
+     * Adds a tile expecting the x,y to be a valid placement location
+     */
     private ShipTile gridAlignedxyTilePlacement(float x, float y, ID id) {
+
+        // TODO : Perform some extract methods so we can make a second method for tiles.
         int indexXY[];
         ShipTile tempTile;
 
