@@ -2,6 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.LambdaRecipe;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileRecipes;
 
 /**
@@ -12,8 +13,10 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileRe
  */
 public class UnlockTracker {
 
-    Array<TileRecipes> allRecipes = new Array<>();
-    Array<TileRecipes> unlockedRecipes = new Array<>();
+    Array<TileRecipes> allStringRecipes = new Array<>();
+    Array<LambdaRecipe> allLambdaRecipes = new Array<>();
+    Array<LambdaRecipe> unlockedLambdaRecipes = new Array<>();
+    Array<TileRecipes> unlockedStringRecipes = new Array<>();
 
     public UnlockTracker (){
         populateAllRecipies();
@@ -21,16 +24,17 @@ public class UnlockTracker {
     }
 
     private void populateAllRecipies() {
-        allRecipes.add(new TileRecipes("STD0STD1STD2STD", ID.StrongTile));
+        allStringRecipes.add(new TileRecipes("STD0STD1STD2STD", ID.StrongTile));
+        allLambdaRecipes.add(TileRecipes.arcadeRemove);
     }
 
     public boolean unlockRecipe(ID newUnlock){
         TileRecipes tileRecipes;
-        for(int i = 0 ; i < allRecipes.size ; i++){
-            tileRecipes = allRecipes.get(i);
+        for(int i = 0; i < allStringRecipes.size ; i++){
+            tileRecipes = allStringRecipes.get(i);
             if(tileRecipes.getId() == newUnlock){
-                if(unlockedRecipes.contains(tileRecipes,true))throw new RuntimeException("Attempting to unlock unlocked tile recipe");
-                unlockedRecipes.add(tileRecipes);
+                if(unlockedStringRecipes.contains(tileRecipes,true))System.out.println("ERROR : Attempting to unlock unlocked tile recipe");
+                unlockedStringRecipes.add(tileRecipes);
                 System.out.println(newUnlock + " successfully unlocked!");
                 return true;
             }
@@ -44,10 +48,10 @@ public class UnlockTracker {
      * @return
      */
     public boolean unlockRecipe(TileRecipes newUnlock){
-        for(int i = 0 ; i < allRecipes.size ; i++){
-            if(allRecipes.get(i).getId() == newUnlock.getId()){
-                if(unlockedRecipes.contains(newUnlock,true))throw new RuntimeException("Attempting to unlock unlocked tile recipe");
-                unlockedRecipes.add(newUnlock);
+        for(int i = 0; i < allStringRecipes.size ; i++){
+            if(allStringRecipes.get(i).getId() == newUnlock.getId()){
+                if(unlockedStringRecipes.contains(newUnlock,true))throw new RuntimeException("Attempting to unlock unlocked tile recipe");
+                unlockedStringRecipes.add(newUnlock);
                 System.out.println(newUnlock.getId() + " successfully unlocked!");
                 return true;
             }

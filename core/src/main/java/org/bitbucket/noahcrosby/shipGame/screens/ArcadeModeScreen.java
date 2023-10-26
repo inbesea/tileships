@@ -29,6 +29,7 @@ import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import java.util.ArrayList;
 
 public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
+    public static int tetrisSize = 6;
     // Varibles here
     private Ship arcadeShip;
     TileCollectHandler tileCollectHandler;
@@ -65,6 +66,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
 
         arcadeShip = new ShipDirector().buildArcadeShip(box2DWrapper, new Vector2(0, 0));
+        arcadeShip.getCollectionManager().setCOLLECTED_TILE_LIMIT(tetrisSize);
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
         asteroidManager.setArcadeMode(true);
 

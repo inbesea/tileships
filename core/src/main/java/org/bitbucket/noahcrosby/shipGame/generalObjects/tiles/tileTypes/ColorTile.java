@@ -75,4 +75,8 @@ public class ColorTile extends ShipTile{
     public void setInvulnerability(boolean isInvulnerable){
         this.isInvulnerable = isInvulnerable;
     }
+
+    public ArcadeColors getColor() {
+        return color;
+    }
 }

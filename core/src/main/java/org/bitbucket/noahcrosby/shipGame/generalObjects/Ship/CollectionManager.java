@@ -20,8 +20,17 @@ public class CollectionManager {
     // Lives in the stack manager
     private final TileHoverIndicator tileHoverIndicator;
     private final Array<ShipTile> collectedTiles;
+
+    public int getCOLLECTED_TILE_LIMIT() {
+        return COLLECTED_TILE_LIMIT;
+    }
+
+    public void setCOLLECTED_TILE_LIMIT(int COLLECTED_TILE_LIMIT) {
+        this.COLLECTED_TILE_LIMIT = COLLECTED_TILE_LIMIT;
+    }
+
     // How many tiles can be grabbed for an array of tiles.
-    private final int COLLECTED_TILE_LIMIT = 5;
+    private int COLLECTED_TILE_LIMIT = 5;
 
     /**
      * Class to handle collecting tiles.
