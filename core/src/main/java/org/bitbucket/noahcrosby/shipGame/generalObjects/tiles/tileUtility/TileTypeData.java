@@ -6,7 +6,8 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 public enum TileTypeData {
     CoreTile("COR"),
     StandardTile("STD"),
-    StrongTile("STR");
+    StrongTile("STR"),
+    ColorTile("CLR");
 
     public String getAbbreviation() {
         return abbreviation;

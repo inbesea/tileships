@@ -1,6 +1,11 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 
+import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ArcadeColors;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ColorTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.screens.ArcadeModeScreen;
 
 /**
  * Class to hold lambda expression to compare and produce a tile ID.
@@ -8,6 +13,28 @@ import org.bitbucket.noahcrosby.shipGame.ID;
  * TileRecipes holds a simple matching String. The recipe String assumes the input to match is oriented upwards. F or example : STD0COR
  */
 public class TileRecipes {
+    public static LambdaRecipe arcadeRemove = (Array<ShipTile> tiles) -> {
+        Array<ArcadeColors> arcadeColors = new Array<>();
+        ColorTile colorTile;
+        // Check for color tiles and no duplicate colors.
+        if(tiles.size < ArcadeModeScreen.tetrisSize) return null;
+        for (int i = 0; i < tiles.size; i++) {
+            if(tiles.get(i).getID() == ID.ColorTile){
+                colorTile = (ColorTile) tiles.get(i);
+                for(int n = 0 ; n < arcadeColors.size ; n++){ // Check for duplicate colors each addition
+                    if(arcadeColors.get(n).equals(colorTile.getColor()))return null;
+                }
+                arcadeColors.add(colorTile.getColor());
+            }
+        }
+        System.out.println("Tetris found!!!");
+        for(int i = 0 ; tiles.size > 0 ; ){
+            ShipTile tile = tiles.get(i);
+            System.out.println("Tetris match removing  : " + tile.getPositionAsString());
+            tile.destroySelf();
+        }
+        return null;
+    };
     private String recipe;
 
     private ID id;

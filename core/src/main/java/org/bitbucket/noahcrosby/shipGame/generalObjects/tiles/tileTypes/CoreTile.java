@@ -25,7 +25,21 @@ public class CoreTile extends ShipTile {
     public boolean isInvulnerable() {
         return true;
     }
+    /**
+     * Do this when placed
+     */
+    @Override
+    public void replaced() {
 
+    }
+
+    /**
+     * Do this when picked up
+     */
+    @Override
+    public void pickedUp() {
+
+    }
     public CoreTile(Vector2 position, ShipTilesManager manager) {
         super(position, ID.CoreTile, TileTypeData.CoreTile, manager);
     }

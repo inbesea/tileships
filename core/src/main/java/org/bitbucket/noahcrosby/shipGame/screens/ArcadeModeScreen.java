@@ -15,7 +15,6 @@ import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
@@ -23,11 +22,14 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.physics.collisions.ArcadeCollisionHandler;
+import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 
 import java.util.ArrayList;
 
 public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
+    public static int tetrisSize = 6;
     // Varibles here
     private Ship arcadeShip;
     TileCollectHandler tileCollectHandler;
@@ -44,6 +46,8 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
     final AsteroidManager asteroidManager;
     private final Array<GameObject> arcadeGameObjects; // Used to render the objects?
+
+    ArcadeCollisionHandler collisionHandler;
 
     // Constructor
     public ArcadeModeScreen(final TileShipGame game) {
@@ -62,13 +66,19 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
 
         arcadeShip = new ShipDirector().buildArcadeShip(box2DWrapper, new Vector2(0, 0));
+        arcadeShip.getCollectionManager().setCOLLECTED_TILE_LIMIT(tetrisSize);
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
+        asteroidManager.setArcadeMode(true);
 
         player = new Player(new Vector2(arcadeShip.getX(), arcadeShip.getY()), GameScreen.playerSize, ID.Player, camera, this.game);
         player.setPlayerShip(arcadeShip);
         initializeInputEventHandling();
 
         arcadeGameObjects = new Array<>();
+
+        collisionHandler = new ArcadeCollisionHandler(this);
+        CollisionListener collisionListener = new CollisionListener(collisionHandler);
+        box2DWrapper.setWorldContactListener(collisionListener);
     }
 
     @Override
@@ -87,7 +97,8 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
         // Don't forget to step the simulation
         box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
-
+        collisionHandler.handleCollisions();
+        box2DWrapper.sweepForDeadBodies();
         // process user input
         if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
             PlayerInput.handleKeyPressed(player, camera);
@@ -188,4 +199,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         Resources.MainMenuExtendedMessingaroundMusic.play();
     }
 
+    public AsteroidManager getAsteroidManager() {
+        return asteroidManager;
+    }
 }

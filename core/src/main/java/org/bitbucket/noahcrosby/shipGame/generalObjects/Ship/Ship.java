@@ -33,6 +33,11 @@ public class Ship extends GameObject {
 
     private ShipTile draggedTile;
     public int destroyedTileCount = 0;
+
+    public CollectionManager getCollectionManager() {
+        return collectionManager;
+    }
+
     private final CollectionManager collectionManager;
     private final TileCondenser tileCondenser;
     private final ShipTilesManager shipTilesManager;
@@ -116,6 +121,10 @@ public class Ship extends GameObject {
         return tile;
     }
 
+    public ShipTile addTileToShip(float x, float y, ShipTile tile) {
+        return shipTilesManager.addTile(x, y, tile);
+    }
+
     /**
      * Rounds an x/y position to align with the ships' tile grid
      * <p>
@@ -132,6 +141,7 @@ public class Ship extends GameObject {
     /**
      * Removes a tile by reference to the tile instance
      * Should only be used when a tile instance is found. Tile manager handles flushing the adjacency relationships between tiles.
+     * Removes body from entire game
      *
      * @param tile - Tile to remove from ship
      */
@@ -432,9 +442,9 @@ public class Ship extends GameObject {
      * @return - ShipTile resulting from build action.
      */
     public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
-        ID newTileID = tileCondenser.determineNewTileID(collectedTileArray);
+        ShipTile newTile = tileCondenser.determineNewTileID(collectedTileArray);
 
-        if (newTileID == null) {
+        if (newTile == null) {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
             return null;
         } else { // if Tile produced then swap the tiles used out of existence and return the new one.
@@ -443,7 +453,7 @@ public class Ship extends GameObject {
             vector2.y += ShipTile.TILE_SIZE / 2f;
             vector2.x += ShipTile.TILE_SIZE / 2f;
             removeTilesFromShip(collectedTileArray);
-            ShipTile result = addTileToShip(vector2.x, vector2.y, newTileID);
+            ShipTile result = addTileToShip(vector2.x, vector2.y, newTile);
             System.out.println("Building new tile " + result.getID());
             return result;
         }

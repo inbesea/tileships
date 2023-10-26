@@ -36,6 +36,32 @@ public class ShipTilesManager {
     }
 
     /**
+     * Places a tile to the ship via existing tile reference and new location.
+     * Returns updated tile.
+     * NOTE : The body is removed, and recreated in this implementation.
+     * We could add filters somehow, but I'm not learning that now.
+     *
+     * @param x - x position
+     * @param y - y position
+     * @param tile - Existing tile to replace
+     * @return replaced, updated tile
+     */
+    public ShipTile addTile(float x, float y, ShipTile tile){
+        // Use vector to set new tile
+        Vector2 placementLocationResult; // We will add method to get this.
+        Vector2 tileLocation2 = new Vector2(x, y);
+        ShipTile tempTile;
+
+        placementLocationResult = getClosestPlacementVector2(tileLocation2);
+        tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, tile);
+        box2DWrapper.setObjectPhysics(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
+
+        validateEdgeSize();
+
+        return tempTile;
+    }
+
+    /**
      * This Method adds a tile to the ship with a reference to the tile's x and y
      * positions , the color, ID, and camera object for updating
      * the render location
@@ -48,33 +74,47 @@ public class ShipTilesManager {
     public ShipTile addTile(float x, float y, ID id) {
 
         // Use vector to set new tile
+        Vector2 placementLocationResult; // We will add method to get this.
         Vector2 tileLocation2 = new Vector2(x, y);
-        ShipTile closestTile;
         ShipTile tempTile;
 
-        ShipTile destinationTile = returnTile(tileLocation2);
-        if (destinationTile == null) { // Released on empty space
-            if (ship.getExistingTiles().size == 0) return gridAlignedxyTilePlacement(x, y, id); // Can add anywhere
+        placementLocationResult = getClosestPlacementVector2(tileLocation2);
+        tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, id);
 
-            closestTile = closestTile(tileLocation2, ship.getExistingTiles());
-            Vector2 closestExternalVacancy = getVectorOfClosestSide(closestTile, tileLocation2);
-            tempTile = gridAlignedxyTilePlacement(closestExternalVacancy.x, closestExternalVacancy.y, id);
-        } else { // Released on Shiptile
-            Vector2 nearestEmptySpace = closestInternalVacancy(tileLocation2); // Get closest Vacancy on edge tiles
-            tempTile = gridAlignedxyTilePlacement(nearestEmptySpace.x, nearestEmptySpace.y, id);
-        }
+        validateEdgeSize();
 
-        if (existingTiles.size < edgeTiles.size) {
-            throw new RuntimeException("More edgeTiles than existing!" +
-                    "\nexistingTiles.size : " + existingTiles.size +
-                    "\nedgeTiles.size : " + edgeTiles.size);
-        }
         return tempTile;
 
     }
 
-    private Vector2 getPlacementLocationCandidate(float x, float y) {
-return new Vector2(x, y);
+    /**
+     * Returns a Vector2 position representing the closet ShipTile vacancy to the passed location.
+     * @param location - Location checked for closest placement
+     * @return - Vector2 position representing the closest valid placement location.
+     */
+    public Vector2 getClosestPlacementVector2(Vector2 location) {
+
+        ShipTile destinationTile = returnTile(location);
+
+        if (destinationTile == null) { // Released on empty space
+            if (ship.getExistingTiles().size == 0) return location;// Passed location is valid
+
+            ShipTile closestTile = closestTile(location, ship.getExistingTiles());
+            return getVectorOfClosestSide(closestTile, location); // This will be the closest empty space
+        } else { // Released on Shiptile
+            return closestInternalVacancy(location); // Get closest Vacancy on edge tiles
+        }
+    }
+
+    /**
+     * Checks the size of the edge and existing tiles to make sure they are correctly sized.
+     */
+    private void validateEdgeSize() {
+        if (existingTiles.size < edgeTiles.size) {
+            throw new RuntimeException("More edgeTiles than existing!" +
+                "\nexistingTiles.size : " + existingTiles.size +
+                "\nedgeTiles.size : " + edgeTiles.size);
+        }
     }
 
     /**
@@ -113,7 +153,34 @@ return new Vector2(x, y);
     /**
      * Adds a tile expecting the x,y to be a valid placement location
      */
+    private ShipTile gridAlignedxyTilePlacement(float x, float y, ShipTile tile) {
+
+        int indexXY[];
+
+        indexXY = returnIndex(x, y); // Get index corresponding to x, y position
+
+        System.out.println("Replacing " + tile.getID() + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
+            "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
+
+        // Create tile subtype based on ID using factory static call.
+        Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
+        tile.setPosition(vector2); // Set existing tile position
+        validateNewTileIndex(tile);
+        this.existingTiles.add(tile);
+
+        setNeighbors(tile); // Setting tile neighbors within ship
+        // We don't need to set physics for grid aligned tiles, but there could be race condition eventually.
+        validateEdgeSize();
+
+        return tile;
+    }
+
+    /**
+     * Adds a tile expecting the x,y to be a valid placement location
+     */
     private ShipTile gridAlignedxyTilePlacement(float x, float y, ID id) {
+
+        // There are some DRY issues here, but I'm moving on for now.
         int indexXY[];
         ShipTile tempTile;
 
@@ -131,16 +198,16 @@ return new Vector2(x, y);
 
         box2DWrapper.setObjectPhysics(tempTile);
 
-
         //setTilePhysics(tempTile);
-        if (existingTiles.size < edgeTiles.size) {
-            throw new RuntimeException("More edgeTiles than existing! " +
-                    " existingTiles.size : " + existingTiles.size +
-                    "edgeTiles.size : " + edgeTiles.size);
-        }
+        validateEdgeSize();
+
         return tempTile;
     }
 
+    /**
+     * Checks if the new tile index overlaps with an existing tile
+     * @param newTile - new tile to validate against existing tiles
+     */
     private void validateNewTileIndex(ShipTile newTile) {
         ShipTile existingTile;
         for (int i = 0; i < existingTiles.size; i++) {
@@ -181,6 +248,7 @@ return new Vector2(x, y);
      * Gets contextual tiles via the ship's context, and calls delegate method within tile, passing the possible neighbor context.
      * <p></p>
      * Sets tile neighbors equal to adjacent tiles, or to null if they don't exist
+     * Can be given an existing tile
      *
      * @param tile - tile to initialize
      * @return - number of neighbor tiles
@@ -206,11 +274,7 @@ return new Vector2(x, y);
         checkIfAdjustEdgeArray(left);
         checkIfAdjustEdgeArray(tile);
 
-        if (existingTiles.size < edgeTiles.size) {
-            throw new RuntimeException("More edgeTiles than existing!" +
-                    "\nexistingTiles.size : " + existingTiles.size +
-                    "\nedgeTiles.size : " + edgeTiles.size);
-        }
+        validateEdgeSize();
 
         return numberOfNeighbors;
     }

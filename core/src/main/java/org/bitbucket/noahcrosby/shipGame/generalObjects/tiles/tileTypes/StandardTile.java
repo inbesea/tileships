@@ -21,7 +21,21 @@ public class StandardTile extends ShipTile{
     public boolean isInvulnerable(){
         return false;
     }
+    /**
+     * Do this when placed
+     */
+    @Override
+    public void replaced() {
 
+    }
+
+    /**
+     * Do this when picked up
+     */
+    @Override
+    public void pickedUp() {
+
+    }
     @Override
     public Texture getTexture() {
         return Resources.ShipTileRedTexture;
