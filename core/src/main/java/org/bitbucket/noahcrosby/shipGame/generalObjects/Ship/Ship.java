@@ -442,7 +442,7 @@ public class Ship extends GameObject {
      * @return - ShipTile resulting from build action.
      */
     public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
-        ShipTile newTile = tileCondenser.determineNewTileID(collectedTileArray);
+        ShipTile newTile = tileCondenser.determineNewTile(collectedTileArray);
 
         if (newTile == null) {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
