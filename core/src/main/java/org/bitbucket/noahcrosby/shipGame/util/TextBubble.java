@@ -27,21 +27,20 @@ public class TextBubble  implements TextBoxInterface {
     private float opacity = 1f;
     private float fadespeed = 0f;
     protected boolean firstUpdate = true;
-    protected Vector2 location;
+    protected Vector2 textBoxLocation;
 
     public TextBubble(String text, int millisecondsBetweenLetters, Long timeout,
                       boolean timeoutAfterCrawl, float fadeoutSpeed, Vector2 location){
         begin = System.currentTimeMillis();
         this.text = text;
         this.millisecondsBetweenLetters = millisecondsBetweenLetters;
-        this.location = location;
+        this.textBoxLocation = location;
     }
 
     /**
      * Sets the location of the text bubble, and draws it.
-     * @param location
      */
-    public void update(Vector2 location){
+    public void update(){
         // TODO: possibly remove this. What is it doing?? It could be used to update values, but not draw the textbox.
         if(dead){return;} // Dont print text that's expired
         if(firstUpdate){
@@ -56,7 +55,7 @@ public class TextBubble  implements TextBoxInterface {
         if(timingOut()){ // Begin fading out, or timeout.
 
         }
-        setLocation(location);
+        setTextBoxLocation(textBoxLocation);
         print();
     }
 
@@ -121,9 +120,9 @@ public class TextBubble  implements TextBoxInterface {
      * Render the text bubble at the given location
      */
     protected void print(){
-        TileShipGame.font.draw(TileShipGame.batch, intermediateString, this.location.x, this.location.y);
+        TileShipGame.font.draw(TileShipGame.batch, intermediateString, this.textBoxLocation.x, this.textBoxLocation.y);
     }
-    
+
     private void fadeout(){
         if(timeout >= 0){
             if(timeout < deltaFromStart){
@@ -135,7 +134,7 @@ public class TextBubble  implements TextBoxInterface {
             }
         }
     }
-    
+
     protected void stop(){
         if(timeout >= 0){
             if(timeout < deltaFromStart){
@@ -153,7 +152,7 @@ public class TextBubble  implements TextBoxInterface {
         dead = true;
     }
 
-    public void setLocation(Vector2 location){
-        this.location = location;
+    public void setTextBoxLocation(Vector2 textBoxLocation){
+        this.textBoxLocation = textBoxLocation;
     }
 }
