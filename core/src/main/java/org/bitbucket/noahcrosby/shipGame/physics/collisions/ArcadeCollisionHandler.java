@@ -4,7 +4,7 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ColorTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
-import org.bitbucket.noahcrosby.shipGame.screens.ArcadeModeScreen;
+import org.bitbucket.noahcrosby.shipGame.ArcadeMode.ArcadeModeScreen;
 
 public class ArcadeCollisionHandler extends  CollisionHandler {
 

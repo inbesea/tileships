@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.screens;
+package org.bitbucket.noahcrosby.shipGame.ArcadeMode;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -25,6 +25,7 @@ import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.ArcadeCollisionHandler;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
+import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
 import java.util.ArrayList;
 

@@ -5,7 +5,7 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ArcadeColors;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ColorTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.screens.ArcadeModeScreen;
+import org.bitbucket.noahcrosby.shipGame.ArcadeMode.ArcadeModeScreen;
 
 /**
  * Class to hold lambda expression to compare and produce a tile ID.

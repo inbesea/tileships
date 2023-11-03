@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.screens.ArcadeModeScreen;
+import org.bitbucket.noahcrosby.shipGame.ArcadeMode.ArcadeModeScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.MainMenuScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.PreferencesScreen;
