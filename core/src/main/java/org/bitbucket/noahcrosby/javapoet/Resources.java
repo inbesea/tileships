@@ -8,21 +8,21 @@ import com.badlogic.gdx.graphics.Texture;
 public class Resources {
     public static AssetManager assetManager;
 
-    public static Sound sfxBuildTileSound;
+    public static Sound BuildTileSoundSfx;
 
-    public static Sound sfxCollectTileSound;
+    public static Sound CollectTileSoundSfx;
 
-    public static Sound sfxRain;
+    public static Sound RainSfx;
 
-    public static Sound sfxDrop;
+    public static Sound DropSfx;
 
-    public static Sound sfxPickUpTileQuick0;
+    public static Sound PickUpTileQuick0Sfx;
 
-    public static Sound sfxPlaceTileSound;
+    public static Sound PlaceTileSoundSfx;
 
-    public static Sound sfxSelectionBuzzLooped;
+    public static Sound SelectionBuzzLoopedSfx;
 
-    public static Sound sfxTilePlacement;
+    public static Sound TilePlacementSfx;
 
     public static Texture AsteroidBlueTexture;
 
@@ -101,14 +101,14 @@ public class Resources {
 
     public static void updateAssets() {
         if(assetManager.update()) {
-            sfxBuildTileSound = assetManager.get("Sound Effects/buildTileSound.mp3");
-            sfxCollectTileSound = assetManager.get("Sound Effects/collectTileSound.mp3");
-            sfxRain = assetManager.get("Sound Effects/rain.mp3");
-            sfxDrop = assetManager.get("Sound Effects/drop.wav");
-            sfxPickUpTileQuick0 = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
-            sfxPlaceTileSound = assetManager.get("Sound Effects/PlaceTileSound.wav");
-            sfxSelectionBuzzLooped = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
-            sfxTilePlacement = assetManager.get("Sound Effects/tilePlacement.wav");
+            BuildTileSoundSfx = assetManager.get("Sound Effects/buildTileSound.mp3");
+            CollectTileSoundSfx = assetManager.get("Sound Effects/collectTileSound.mp3");
+            RainSfx = assetManager.get("Sound Effects/rain.mp3");
+            DropSfx = assetManager.get("Sound Effects/drop.wav");
+            PickUpTileQuick0Sfx = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
+            PlaceTileSoundSfx = assetManager.get("Sound Effects/PlaceTileSound.wav");
+            SelectionBuzzLoopedSfx = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
+            TilePlacementSfx = assetManager.get("Sound Effects/tilePlacement.wav");
             AsteroidBlueTexture = assetManager.get("Textures/asteroid_blue.png");
             AsteroidGreenTexture = assetManager.get("Textures/asteroid_green.png");
             AsteroidOrangeTexture = assetManager.get("Textures/asteroid_orange.png");

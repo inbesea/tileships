@@ -79,7 +79,7 @@ public class CollectionManager {
     public void startCollect() {
         System.out.println("Begin collecting tiles");
 
-        collectionSoundID = Resources.sfxSelectionBuzzLooped.loop();
+        collectionSoundID = Resources.SelectionBuzzLoopedSfx.loop();
 
         if (!collectedTiles.isEmpty()) collectedTiles.clear();
 
@@ -95,7 +95,7 @@ public class CollectionManager {
         Array<ShipTile> shipTileStack = getTileArray();
         System.out.println("End collecting tiles");
 
-        Resources.sfxSelectionBuzzLooped.stop(collectionSoundID);
+        Resources.SelectionBuzzLoopedSfx.stop(collectionSoundID);
         collectionSoundPitch = 1f;
         collectTiles = false;
         return shipTileStack;
@@ -156,7 +156,7 @@ public class CollectionManager {
     }
 
     private void pitchSelectionSound() {
-        Resources.sfxSelectionBuzzLooped.setPitch(collectionSoundID, collectionSoundPitch);
+        Resources.SelectionBuzzLoopedSfx.setPitch(collectionSoundID, collectionSoundPitch);
         if(collectionSoundPitch > collectionPitchMax){
             collectionSoundPitch = collectionPitchMax;
         }
