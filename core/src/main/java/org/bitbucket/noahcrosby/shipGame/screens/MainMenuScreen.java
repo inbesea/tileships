@@ -1,5 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.screens;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,9 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.bitbucket.noahcrosby.LevelData.MapDrawer;
+import org.bitbucket.noahcrosby.LevelData.MapNode;
+import org.bitbucket.noahcrosby.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
+
+import java.util.Timer;
 
 public class MainMenuScreen extends ScreenAdapter implements Screen {
     final TileShipGame game;
@@ -35,6 +44,8 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
     private TextButton exit;
     private CheckBox debug;
     private Table table;
+    SpaceMap map = new SpaceMap();
+    MapDrawer mapDrawer;
 
     /**
      * Constructs a MainMenu object
@@ -51,6 +62,22 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Resources.loadAssets();
+
+        setMapValues();
+        mapDrawer = new MapDrawer(map);
+    }
+
+    private void setMapValues() {
+        map.addNode(new MapNode(new Vector2(100, 100)), new int[]{});
+        map.addNode(new MapNode(new Vector2(200, 100)), new int[]{0});
+        map.addNode(new MapNode(new Vector2(200, 200)), new int[]{1});
+        map.addNode(new MapNode(new Vector2(100, 200)), new int[]{0, 2});
+        map.addNode(new MapNode(new Vector2(150, 150)), new int[]{0,1,2,3});
+        addToMap(2000);
+        addToMap(5000);
+        addToMap(9000);
+        addToMap(13000);
+        addToMap(17000);
     }
 
     /**
@@ -177,6 +204,12 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         // Call to load textures to asset manager
         Resources.updateAssets();
 
+        try {
+            mapDrawer.drawMap(camera.combined, 200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         TileShipGame.batch.begin();
         if(Resources.assetManager.update()){
 //            if(welcome == null)welcome = new SoundTextBubble(str, 100, Resources.sfxCollectTileSound, null);
@@ -187,6 +220,27 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
             TileShipGame.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 0, camera.viewportHeight - 100);
         }
         TileShipGame.batch.end();
+    }
+
+    /**
+     * Adds a map node to mainmenu after delay and in random location
+     * @param delay
+     */
+    private void addToMap(int delay) {
+
+        Timer timer = new java.util.Timer();
+        timer.schedule(
+            new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    map.addNode(new MapNode(new Vector2(generalUtil.getRandomNumber(0,TileShipGame.defaultViewportSizeX), generalUtil.getRandomNumber(0, TileShipGame.defaultViewportSizeY))),
+                        new int[]{0, 1, 2, 300});
+                    this.cancel();
+                }
+            },
+            delay
+        );
+        timer.purge();
     }
 
     @Override
