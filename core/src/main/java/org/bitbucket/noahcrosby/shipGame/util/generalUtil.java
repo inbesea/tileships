@@ -13,21 +13,6 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 public class generalUtil {
 
     /**
-     *
-     * Renders a texture at normalized x,y
-     *
-     * @param gameObject - object to hold all data needed to render a thing.
-     */
-    public static void render(GameObject gameObject, OrthographicCamera camera){
-        Vector3 vector = new Vector3(gameObject.getX(), gameObject.getY(), 0);
-        camera.unproject(vector);
-
-        // Restrictions, need a reference to the game context to render.
-        // game.batch.draw begin and all that.
-        // Need the normalized x ,y  and the texture.
-    }
-
-    /**
      * Handles getting mouse position in terms of the camera.
      * Unprojects the mouse position as a Vector3
      *
