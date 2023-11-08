@@ -1,5 +1,8 @@
 package org.bitbucket.noahcrosby.Shapes;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import org.bitbucket.noahcrosby.Interfaces.Movable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
@@ -16,6 +19,9 @@ public class Line implements Movable {
     private final float length;
     private final Color color;
     public float width = 5f;
+
+    private static ShapeRenderer debugRenderer = new ShapeRenderer();
+
 
     public Line(float ax, float ay, float bx, float by) {
         a = new Vector2(ax, ay);
@@ -59,6 +65,54 @@ public class Line implements Movable {
 
     public void draw(ShapeDrawer shapeDrawer) {
         shapeDrawer.line(a, b, color, width);
+    }
+
+    /**
+     * Draws a line
+     * pass in orthoCamera.combined
+     * @param start
+     * @param end
+     * @param lineWidth
+     * @param color
+     * @param projectionMatrix
+     */
+    public static void DrawDebugLine(Vector2 start, Vector2 end, int lineWidth, Color color, Matrix4 projectionMatrix)
+    {
+        Gdx.gl.glLineWidth(lineWidth);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.line(start, end);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    /**
+     * Draws a line
+     * pass in orthoCamera.combined
+     * @param start
+     * @param end
+     * @param projectionMatrix
+     */
+    public static void DrawDebugLine(Vector2 start, Vector2 end, Matrix4 projectionMatrix)
+    {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(Color.WHITE);
+        debugRenderer.line(start, end);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    public static void drawFilledCircle(Vector2 center, float radius, Color color, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        debugRenderer.setColor(color);
+        debugRenderer.circle(center.x, center.y, radius);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
     }
 
     @Override
