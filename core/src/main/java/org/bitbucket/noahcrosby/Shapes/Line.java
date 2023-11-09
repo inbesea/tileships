@@ -22,6 +22,7 @@ public class Line implements Movable {
     public float width = 5f;
 
     private static ShapeRenderer debugRenderer = new ShapeRenderer();
+    private static ShapeDrawer shapeDrawer = new ShapeDrawer(TileShipGame.batch);
 
 
     public Line(float ax, float ay, float bx, float by) {
@@ -77,15 +78,21 @@ public class Line implements Movable {
      * @param color
      * @param projectionMatrix
      */
-    public static void DrawDebugLine(Vector2 start, Vector2 end, int lineWidth, Color color, Matrix4 projectionMatrix)
-    {
+    public static void DrawDebugLine(Vector2 start, Vector2 end, int lineWidth, Color color, Matrix4 projectionMatrix) {
         Gdx.gl.glLineWidth(lineWidth);
         debugRenderer.setProjectionMatrix(projectionMatrix);
         debugRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugRenderer.setColor(color);
         debugRenderer.line(start, end);
         debugRenderer.end();
-        Gdx.gl.glLineWidth(1);
+
+
+//        TileShipGame.batch.begin();
+//        shapeDrawer.setTextureRegion(TileShipGame.font.getRegion());
+//        shapeDrawer.setDefaultLineWidth(lineWidth);
+//
+//        shapeDrawer.line(start, end, color);
+//        TileShipGame.batch.end();
     }
 
     /**
