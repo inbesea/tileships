@@ -45,4 +45,15 @@ public class AngleUtils {
     public static float degreesBetweenPoints(Vector2 pointA, Vector2 pointB) {
         return degreesBetweenPoints(pointA.x, pointA.y, pointB.x, pointB.y);
     }
+
+    /**
+     * Returns a point on a circle.
+     * @param center - center of circle
+     * @param radius - radius of orbit
+     * @param angle - point on circle
+     * @return
+     */
+    public static Vector2 getOrbitPoint(Vector2 center, float radius, float angle) {
+        return new Vector2(center.x + (radius * MathUtils.cosDeg(angle)), center.y + (radius * MathUtils.sinDeg(angle)));
+    }
 }
