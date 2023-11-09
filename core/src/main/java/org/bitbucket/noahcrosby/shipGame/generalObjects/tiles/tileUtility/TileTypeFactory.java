@@ -19,6 +19,7 @@ public class TileTypeFactory {
      * @return
      */
     public static ShipTile getShipTileTypeInstance(Vector2 vector2, ID id, ShipTilesManager manager){
+        if(id == null) return null;
         switch (id) {
             case StandardTile :
                 return new StandardTile(vector2, manager);
