@@ -46,6 +46,8 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
     private Table table;
     SpaceMap map = new SpaceMap();
     MapDrawer mapDrawer;
+    boolean afterLoadingMap = false;
+
 
     /**
      * Constructs a MainMenu object
@@ -191,9 +193,15 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         mainMenuMusic.setVolume(game.getPreferences().getMusicVolume());
 
         Gdx.gl.glClearColor(0.00f, 0.00f, 0.10f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
 
         table.setDebug(AppPreferences.getAppPreferences().getIsDebug());
+
+        try {
+            mapDrawer.drawMap(camera.combined);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -204,18 +212,21 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         // Call to load textures to asset manager
         Resources.updateAssets();
 
-        try {
-            mapDrawer.drawMap(camera.combined, 200);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         TileShipGame.batch.begin();
         if(Resources.assetManager.update()){
 //            if(welcome == null)welcome = new SoundTextBubble(str, 100, Resources.sfxCollectTileSound, null);
 
 //            welcome.update(new Vector2(250,350));
-            TileShipGame.font.draw(TileShipGame.batch, "Tap anywhere to begin!", 150, 250);
+            TileShipGame.font.draw(TileShipGame.batch, "T\nI\nL\n" +
+                "E\nS\nH\nI\nP\nS", 500, 350);
+            if(!afterLoadingMap){
+                map.addNode(new MapNode(new Vector2(460, 370)));
+                map.addNode(new MapNode(new Vector2(520, 370)), new int[]{map.getMapNodes().size - 1});
+                map.addNode(new MapNode(new Vector2(520, 150)), new int[]{map.getMapNodes().size - 1});
+                map.addNode(new MapNode(new Vector2(460, 150)), new int[]{map.getMapNodes().size - 1, map.getMapNodes().size - 3});
+                afterLoadingMap = true;
+            }
+
         } else {
             TileShipGame.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 0, camera.viewportHeight - 100);
         }
@@ -233,8 +244,9 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
             new java.util.TimerTask() {
                 @Override
                 public void run() {
-                    map.addNode(new MapNode(new Vector2(generalUtil.getRandomNumber(0,TileShipGame.defaultViewportSizeX), generalUtil.getRandomNumber(0, TileShipGame.defaultViewportSizeY))),
-                        new int[]{0, 1, 2, 300});
+                    map.addNode(new MapNode(new Vector2(generalUtil.getRandomNumber(0,TileShipGame.defaultViewportSizeX),
+                            generalUtil.getRandomNumber(0, TileShipGame.defaultViewportSizeY))),
+                        new int[]{generalUtil.getRandomNumber(0, map.getMapNodes().size - 1)});
                     this.cancel();
                 }
             },

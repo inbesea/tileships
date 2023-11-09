@@ -2,8 +2,8 @@ package org.bitbucket.noahcrosby.LevelData;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.Shapes.Line;
 
 import java.util.Stack;
@@ -30,7 +30,8 @@ public class MapDrawer {
      * @param transform - Projection Matrix from Orthographic Camerad
      */
     public void drawMap(Matrix4 transform) throws InterruptedException {
-        Array<MapNode> unvisitedMapNodes = map.getMapNodes(); // Move to next nodes bit by bit
+        Array<MapNode> unvisitedMapNodes = new Array<>(); // Move to next nodes bit by bit
+        unvisitedMapNodes.addAll(map.mapNodes);
         Array<MapNode> visited = new Array<>();
         Stack<MapNode> nextNodes = new Stack<>();
 
@@ -42,17 +43,24 @@ public class MapDrawer {
 
             MapNode currentNode = nextNodes.pop();
             for(MapNode mapNode : currentNode.edges){
+                if(!mapNode.visited || !currentNode.visited){
+                    currentNode.visited = true;
+                    Line.DrawDebugLine(currentNode.getDrawPosition(), mapNode.getDrawPosition(), 1, Color.WHITE, transform);
+                }
 //                if(mapNode.drawn)continue; // Already drawn
-                Line.DrawDebugLine(new Vector2(currentNode.position.x, currentNode.position.y), new Vector2(mapNode.position.x, mapNode.position.y), 2, Color.WHITE, transform);
-                nextNodes.push(mapNode);
+                if(!nextNodes.contains(mapNode) && !visited.contains(mapNode, true))nextNodes.push(mapNode);
             }
             currentNode.draw(transform);
+            if(AppPreferences.getAppPreferences().getIsDebug()) {
+                currentNode.drawDebug(transform);
+            }
 
             visited.add(currentNode);
             unvisitedMapNodes.removeValue(currentNode, true);
         }
-
-        map.mapNodes = visited;
+        for(int i = 0; i < map.mapNodes.size; i++){
+            map.mapNodes.get(i).visited = false;
+        }
     }
 
     /**
@@ -82,7 +90,7 @@ public class MapDrawer {
             for(MapNode mapNode : currentNode.edges){
                 if(!mapNode.visited || !currentNode.visited){
                     currentNode.visited = true;
-                    Line.DrawDebugLine(new Vector2(currentNode.position.x, currentNode.position.y), new Vector2(mapNode.position.x, mapNode.position.y), 2, Color.WHITE, transform);
+                    Line.DrawDebugLine(currentNode.getDrawPosition(), mapNode.getDrawPosition(), 2, Color.WHITE, transform);
                 }
 //                if(mapNode.drawn)continue; // Already drawn
                 if(!nextNodes.contains(mapNode) && !visited.contains(mapNode, true))nextNodes.push(mapNode);
