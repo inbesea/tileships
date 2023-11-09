@@ -17,7 +17,7 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Paths;
 
 /**
- * NOTE : If this fails with an error code it may be the name of the file having illegal chars somehow?
+ * NOTE : If this fails with an error code it may be the name of the file having illegal chars somehow
  *
  * This class automates resource management and retrieval.
  * When updating, adding or removing a resource this will need to be ran so core/src/com/javapoet/Resources.java is updated.
@@ -37,6 +37,7 @@ public class GenerateResources extends ApplicationAdapter {
     private FileHandle[] musicFiles;
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setBackBufferConfig(8,8,8,8,16,0,8);
         new Lwjgl3Application(new GenerateResources(), config);
     }
 
