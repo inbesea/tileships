@@ -66,8 +66,8 @@ public class generalUtil {
      * @param max
      * @return
      */
-    public static float getRandomNumber(int min, int max) {
-        return (float) ((Math.random() * (max - min)) + min);
+    public static int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
