@@ -7,6 +7,7 @@ import org.bitbucket.noahcrosby.Interfaces.Movable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
@@ -101,6 +102,32 @@ public class Line implements Movable {
         debugRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugRenderer.setColor(Color.WHITE);
         debugRenderer.line(start, end);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    public static void drawRectangle(Vector2 leftBottPosition, int x, int y, Color color, boolean fill , Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        if(fill)debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        else debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, x, y);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    public static void drawRectangle(Vector2 leftBottPosition, int x, int y, Color edge, Color fill, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        debugRenderer.setColor(fill);
+        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, x, y);
+        debugRenderer.end();
+
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(edge);
+        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, x, y);
         debugRenderer.end();
         Gdx.gl.glLineWidth(1);
     }
