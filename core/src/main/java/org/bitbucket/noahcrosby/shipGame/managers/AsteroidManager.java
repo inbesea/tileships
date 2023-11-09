@@ -142,7 +142,7 @@ public class AsteroidManager implements Manager {
         // Check if active
         Vector2 spawnLocation = getVectorInValidSpawnArea();
 
-        Asteroid asteroid;
+        final Asteroid asteroid;
 
         if(isArcadeMode()){
             asteroid = new ColorAsteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
