@@ -113,13 +113,13 @@ public class Line implements Movable {
         Gdx.gl.glLineWidth(1);
     }
 
-    public static void drawRectangle(Vector2 leftBottPosition, int x, int y, Color color, boolean fill , Matrix4 projectionMatrix) {
+    public static void drawRectangle(Vector2 leftBottPosition, Vector2 rightTopCorner, Color color, boolean fill , Matrix4 projectionMatrix) {
         Gdx.gl.glLineWidth(2);
         debugRenderer.setProjectionMatrix(projectionMatrix);
         if(fill)debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
         else debugRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugRenderer.setColor(color);
-        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, x, y);
+        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, rightTopCorner.x, rightTopCorner.y);
         debugRenderer.end();
         Gdx.gl.glLineWidth(1);
     }

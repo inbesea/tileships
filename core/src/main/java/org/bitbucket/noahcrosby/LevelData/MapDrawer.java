@@ -92,7 +92,6 @@ public class MapDrawer {
                     currentNode.visited = true;
                     Line.DrawDebugLine(currentNode.getDrawPosition(), mapNode.getDrawPosition(), 2, Color.WHITE, transform);
                 }
-//                if(mapNode.drawn)continue; // Already drawn
                 if(!nextNodes.contains(mapNode) && !visited.contains(mapNode, true))nextNodes.push(mapNode);
             }
             currentNode.draw(transform);

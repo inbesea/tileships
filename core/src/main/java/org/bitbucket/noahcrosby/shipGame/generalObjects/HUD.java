@@ -1,5 +1,9 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -7,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
@@ -42,16 +47,23 @@ public class HUD {
      */
     public void draw(){
         StringBuilder stringBuilder = new StringBuilder();
-        if(showDebugHud){
-            stringBuilder = buildDebugUI();
-        }
 
         //Secondly draw the Hud
         game.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
 
+        if(AppPreferences.getAppPreferences().getIsDebug()){
+            Line.drawRectangle(new Vector2(0,0),
+                new Vector2(HUDScreenLayer.getWorldWidth(), HUDScreenLayer.getWorldHeight()),
+                Color.GREEN,
+                false,
+                HUDScreenLayer.getCamera().combined);
+        }
+
+
         game.batch.begin();
 
-        if(showDebugHud){
+        if(AppPreferences.getAppPreferences().getIsDebug()){
+            stringBuilder = getDebugUIData();
             game.font.draw(game.batch, stringBuilder.toString() , 2,
                     (HUDScreenLayer.getWorldHeight() - 2)); // Worldheight gives the extendVeiwport hight
         }
@@ -61,7 +73,13 @@ public class HUD {
             menuOverlay.draw();
         }
 
+        drawControls();
+
         game.batch.end();
+    }
+
+    private void drawControls() {
+
     }
 
     private void createMenuOverlay() {
@@ -158,7 +176,7 @@ public class HUD {
      * Gets data for debug hud UI stack
      * @return - StringBuilder representing the debug info
      */
-    private StringBuilder buildDebugUI() {
+    private StringBuilder getDebugUIData() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
