@@ -40,6 +40,10 @@ public class Resources {
 
     public static Texture ConstallationMapTexture;
 
+    public static Texture CraftingIconTexture;
+
+    public static Texture CraftingIconPressedTexture;
+
     public static Texture HoverIndicatorTexture;
 
     public static Texture RobotV2Texture;
@@ -86,6 +90,8 @@ public class Resources {
         assetManager.load("Textures/asteroid_silver.png", Texture.class);
         assetManager.load("Textures/asteroid_yellow.png", Texture.class);
         assetManager.load("Textures/constallationMap.png", Texture.class);
+        assetManager.load("Textures/craftingIcon.png", Texture.class);
+        assetManager.load("Textures/craftingIconPressed.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/RobotV2.png", Texture.class);
         assetManager.load("Textures/ShipTileBlue.png", Texture.class);
@@ -120,6 +126,8 @@ public class Resources {
             AsteroidSilverTexture = assetManager.get("Textures/asteroid_silver.png");
             AsteroidYellowTexture = assetManager.get("Textures/asteroid_yellow.png");
             ConstallationMapTexture = assetManager.get("Textures/constallationMap.png");
+            CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
+            CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
             RobotV2Texture = assetManager.get("Textures/RobotV2.png");
             ShipTileBlueTexture = assetManager.get("Textures/ShipTileBlue.png");

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.Shapes.Line;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
@@ -79,7 +80,12 @@ public class HUD {
     }
 
     private void drawControls() {
-
+        TileShipGame.batch.draw(Resources.ConstallationMapTexture, HUDScreenLayer.getWorldWidth() - 100, 20, 64, 64);
+        if(playerShip.isCollectingTiles()){
+            TileShipGame.batch.draw(Resources.CraftingIconPressedTexture, HUDScreenLayer.getWorldWidth() - 100, 104, 64, 64);
+        }else {
+            TileShipGame.batch.draw(Resources.CraftingIconTexture, HUDScreenLayer.getWorldWidth() - 100, 104, 64, 64);
+        }
     }
 
     private void createMenuOverlay() {
