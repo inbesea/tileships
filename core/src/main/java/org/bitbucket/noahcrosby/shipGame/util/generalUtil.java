@@ -163,27 +163,27 @@ public class generalUtil {
     }
 
     /**
-     * Returns what quadrant the boat is in relative to the anchor.
+     * Returns a quadrant of a point relative to an origin on a 2D plane
      *
-     * @param anchor - The origin of the calculation
-     * @param boat - The point to find the quadrant of
+     * @param orgn - The origin of the calculation
+     * @param pt - The point to find the quadrant of
      * @return - An int representing a quadrant:
      * 0, 1 ,2 ,3 == North, East, South, West respectively.
      */
-    public static int getQuadrant(Vector2 anchor, Vector2 boat){
+    public static int getQuadrant(Vector2 orgn, Vector2 pt){
 
         // Should return the difference between the placed position and middle of the close tile.
-        float normalBoatX =
-                boat.x -
-                        (anchor.x);// Divide here to get center of tile for comparison
-        float normalBoatY =
-                boat.y -
-                        (anchor.y);
+        float normalPtX =
+                pt.x -
+                        (orgn.x);// Divide here to get center of tile for comparison
+        float normalPtY =
+                pt.y -
+                        (orgn.y);
 
         // the point is above y = x if the y is larger than x
-        boolean abovexEy = normalBoatY > normalBoatX;
+        boolean abovexEy = normalPtY > normalPtX;
         // the point is above y = -x if the y is larger than the negation of x
-        boolean aboveNxEy = normalBoatY > -normalBoatX;
+        boolean aboveNxEy = normalPtY > -normalPtX;
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
         // We can use this framing to decide the side to place the tile.
