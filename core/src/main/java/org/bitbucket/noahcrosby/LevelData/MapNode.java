@@ -25,7 +25,7 @@ public class MapNode {
     Boolean drawn = false;
 
     float rotation = 0f;
-    float rotationSpeed = generalUtil.getRandomNumber(-1.2f, 1.2f);
+    float rotationSpeed = generalUtil.getRandomlyNegativeNumber(3f, 8f);
 
     public MapNode(Vector2 position) {
         this.position = position;
@@ -33,11 +33,15 @@ public class MapNode {
     }
 
     public void draw(Matrix4 transform) {
-        Line.drawFilledCircle(getDrawPosition(), radius, new Color(0 ,0,1,1), transform); // Draw node
+        stepRotation();
+        Line.drawFilledCircle(getDrawPosition(), this.radius, new Color(0 ,0,1,1), transform); // Draw node
+    }
+
+    private void stepRotation() {
+        rotation += (Gdx.graphics.getDeltaTime() * rotationSpeed);
     }
 
     public Vector2 getDrawPosition() {
-        rotation += (Gdx.graphics.getDeltaTime() * rotationSpeed);
         Vector2 position =  AngleUtils.getOrbitPoint(this.position, orbitRadius, rotation);
         return position;
     }
@@ -60,5 +64,16 @@ public class MapNode {
      */
     public String getPositionAsString(){
         return "(" + (int)position.x + ", " + (int) position.y + ")";
+    }
+
+    /**
+     * Removes all edges from this node, and its current neighbors
+     * Will do nothing if this node has no edges
+     */
+    public void orphanSelf(){
+        for(MapNode node : edges){
+            node.edges.removeValue(this, true);
+        }
+        edges.clear();
     }
 }
