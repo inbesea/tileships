@@ -13,6 +13,12 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile
 
 public class PlayerInput {
 
+    /**
+     * Holy cow pie this is a terrible class.
+     * We could move out the camera lerping, and updating the player location pretty easily.
+     * We've just kept it this way for convenience. If it becomes a problem, we can change it.
+     */
+
     public static float cameraFollow = 0.95f;
 
     /**

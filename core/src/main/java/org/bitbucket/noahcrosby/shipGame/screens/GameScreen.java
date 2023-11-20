@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
     ZoomHandler zoomHandler;
 
     Box2DWrapper box2DWrapper;
-    private boolean updateLocation = true;
+    private boolean updateLocalMapLocation = true;
 
 
     public GameScreen(final TileShipGame game) {
@@ -138,11 +138,13 @@ public class GameScreen implements Screen {
         // Draws the HUD
         hud.draw();
 
-        // process user input
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            PlayerInput.handleKeyPressed(player, camera);
+        if(updateLocalMapLocation) {
+            // process user input
+            if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+                PlayerInput.handleKeyPressed(player, camera);
+            }
+            PlayerInput.updateCameraOnPlayer(player, camera);
         }
-        PlayerInput.updateCameraOnPlayer(player, camera);
     }
 
     /**
@@ -183,7 +185,7 @@ public class GameScreen implements Screen {
             box2DWrapper.drawDebug(camera);
         }
 
-        if(updateLocation){
+        if(updateLocalMapLocation){
             box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
             // Call collision handling first and then sweep as objects are marked during this step lol
@@ -325,7 +327,7 @@ public class GameScreen implements Screen {
      */
     public void toggleMap() {
         // If the game is showing the map we want to pause the game updates.
-        this.setLocationUpdating(this.hud.toggleMap());
+        this.setLocationUpdating(!this.hud.toggleMap());
     }
 
     /**
@@ -334,7 +336,20 @@ public class GameScreen implements Screen {
      * @param updateLocation - Whether or not to pause the game
      */
     private void setLocationUpdating(boolean updateLocation) {
-        this.updateLocation = updateLocation;
+        this.updateLocalMapLocation = updateLocation;
+        if(!updateLocation) {
+            input.removeProcessor(zoomHandler);
+            input.removeProcessor(debugInputHandler);
+            input.removeProcessor(tileDragHandler);
+            input.removeProcessor(tileCollectHandler);
+            Gdx.input.setInputProcessor(input);
+        } else {
+            input.addProcessor(zoomHandler);
+            input.addProcessor(debugInputHandler);
+            input.addProcessor(tileDragHandler);
+            input.addProcessor(tileCollectHandler);
+            Gdx.input.setInputProcessor(input);
+        }
     }
 
     public boolean showingMap() {
