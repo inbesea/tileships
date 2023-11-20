@@ -2,10 +2,12 @@ package org.bitbucket.noahcrosby.shipGame.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
 public class DebugInputHandler extends InputAdapter {
 
@@ -41,12 +43,16 @@ public class DebugInputHandler extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (playerShip.isCollectingTiles() && keycode == Input.Keys.SHIFT_LEFT) { // If user keys up should
+        if (playerShip.isCollectingTiles() &&
+            keycode == Input.Keys.SHIFT_LEFT) { // If user keys up should
             attemptNewTileProduction();
         }
         return false;
     }
 
+    /**
+     * Resolves the collect tiles action, and then attempts to build a new tile by passing to the tile Condenser
+     */
     private void attemptNewTileProduction() {
         Array<ShipTile> shipTileArray = playerShip.finishCollapseCollect(); // Ends collecting
         if (shipTileArray.isEmpty()) {

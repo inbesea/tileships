@@ -47,6 +47,7 @@ public class GameScreen implements Screen {
     SimpleTouch st;
     private final Ship playerShip;
     private TileDragHandler tileDragHandler;
+    private MapInputHandler gameScreenMapInputHandler;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
     private final ClassicCollisionHandler collisionHandler;
 
@@ -58,6 +59,7 @@ public class GameScreen implements Screen {
     ZoomHandler zoomHandler;
 
     Box2DWrapper box2DWrapper;
+    private boolean updateLocation = true;
 
 
     public GameScreen(final TileShipGame game) {
@@ -99,6 +101,7 @@ public class GameScreen implements Screen {
         input.addProcessor(tileDragHandler);
         input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.playerShip, this.tileDragHandler));
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
+        input.addProcessor(gameScreenMapInputHandler = new MapInputHandler(this));
         Gdx.input.setInputProcessor(input);
     }
 
@@ -180,11 +183,13 @@ public class GameScreen implements Screen {
             box2DWrapper.drawDebug(camera);
         }
 
-        box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
+        if(updateLocation){
+            box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
-        // Call collision handling first and then sweep as objects are marked during this step lol
-        collisionHandler.handleCollisions();
-        box2DWrapper.sweepForDeadBodies();
+            // Call collision handling first and then sweep as objects are marked during this step lol
+            collisionHandler.handleCollisions();
+            box2DWrapper.sweepForDeadBodies();
+        }
     }
 
     /**
@@ -313,5 +318,26 @@ public class GameScreen implements Screen {
 
     public static OrthographicCamera getGameCamera(){
         return camera;
+    }
+
+    /**
+     * Toggles the map on or off in the HUD
+     */
+    public void toggleMap() {
+        // If the game is showing the map we want to pause the game updates.
+        this.setLocationUpdating(this.hud.toggleMap());
+    }
+
+    /**
+     * Set the GameScreen to stop updating the current location
+     * This includes the ship, asteroids, etc.
+     * @param updateLocation - Whether or not to pause the game
+     */
+    private void setLocationUpdating(boolean updateLocation) {
+        this.updateLocation = updateLocation;
+    }
+
+    public boolean showingMap() {
+        return hud.showingMap();
     }
 }

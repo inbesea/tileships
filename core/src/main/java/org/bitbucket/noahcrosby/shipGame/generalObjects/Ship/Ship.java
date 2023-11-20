@@ -479,6 +479,9 @@ public class Ship extends GameObject {
         return draggedTile != null;
     }
 
+    /**
+     * TODO : Implement this. It's easy
+     */
     public void drawDraggingPlacementIndicator() {
         this.shipTilesManager.getPlacementIndex();
     }

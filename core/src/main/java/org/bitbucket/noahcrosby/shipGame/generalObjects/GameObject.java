@@ -48,6 +48,12 @@ public abstract class GameObject {
 	}
 
 	public abstract void tick();
+
+    /**
+     * Only used for drawing.
+     * DO NOT UPDATE ANYTHING WITH RENDER CALLS IDIOT
+     * @param game
+     */
 	public abstract void render(TileShipGame game);
 	public abstract Rectangle getBounds();
 

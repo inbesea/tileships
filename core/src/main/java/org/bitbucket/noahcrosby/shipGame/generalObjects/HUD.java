@@ -25,6 +25,7 @@ public class HUD {
     private TileShipGame game;
     private Ship playerShip;
     private boolean drawMenu = false;
+    boolean drawMap = false;
     private Stage menuOverlay;
     private boolean showDebugHud = true;
 
@@ -230,5 +231,18 @@ public class HUD {
             GameScreen gameScreen = (GameScreen) game.getCurrentScreen();
             gameScreen.setFocusToGame();
         }
+    }
+
+    /**
+     * Switches value of HUD.drawMap
+     * @return - true if map should be drawn, else false
+     */
+    public boolean toggleMap() {
+        drawMap = !drawMap;
+        return drawMap;
+    }
+
+    public boolean showingMap() {
+        return drawMap;
     }
 }

@@ -101,6 +101,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      * @param game
      */
     public void render(TileShipGame game) {
+        // Debug position declaration
         if (AppPreferences.getAppPreferences().getIsDebug()) {
             game.font.draw(
                     TileShipGame.batch,
