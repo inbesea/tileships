@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame;
 
+import com.badlogic.gdx.Gdx;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
@@ -57,7 +58,7 @@ public class TileShipGame extends Game {
     }
 
     public void changeScreen(int screen) {
-        System.out.println("Changing screen to " + screen);
+        Gdx.app.log("Screen Change", "Changing screen to " + screen);
         switch (screen){
             case MENU:
                 if(mainMenuScreen == null) mainMenuScreen = new MainMenuScreen(this);

@@ -11,29 +11,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import org.bitbucket.noahcrosby.LevelData.MapDrawer;
 import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
 /**
  * Layer of HUD elements. Is on a FitViewport to keep hud elements scaled correctly.
  */
 public class HUD {
-    private ExtendViewport HUDScreenLayer;
-    private TileShipGame game;
-    private Ship playerShip;
-    private boolean drawMenu = false;
+    protected ExtendViewport HUDScreenLayer;
+    protected TileShipGame game;
+    protected Ship playerShip;
+    protected boolean drawMenu = false;
     boolean drawMap = false;
-    private Stage menuOverlay;
-    private boolean showDebugHud = true;
+    protected Stage menuOverlay;
+    protected boolean showDebugHud = true;
 
-    private Label titleLabel;
-    private Label volumeMusicLabel;
-    private Label volumeSoundLabel;
-    private Label musicOnOffLabel;
-    private Label soundOnOffLabel;
+    protected Label titleLabel;
+    protected Label volumeMusicLabel;
+    protected Label volumeSoundLabel;
+    protected Label musicOnOffLabel;
+    protected Label soundOnOffLabel;
+    protected MapNavManager mapNavigator;
+    protected MapDrawer mapDrawer;
 
     public HUD(TileShipGame game) {
         this.game = game;
@@ -61,16 +65,15 @@ public class HUD {
                 HUDScreenLayer.getCamera().combined);
         }
 
-
         game.batch.begin();
 
         if(AppPreferences.getAppPreferences().getIsDebug()){
-            stringBuilder = getDebugUIData();
+            stringBuilder.append("\n" + getDebugUIData());
             game.font.draw(game.batch, stringBuilder.toString() , 2,
                     (HUDScreenLayer.getWorldHeight() - 2)); // Worldheight gives the extendVeiwport hight
         }
 
-        if(this.drawMenu()){
+        if(this.isShowingMenu()){
             menuOverlay.act(Gdx.graphics.getDeltaTime());
             menuOverlay.draw();
         }
@@ -80,8 +83,12 @@ public class HUD {
         game.batch.end();
     }
 
-    private void drawControls() {
+    /**
+     * Draws Player input indicators
+     */
+    protected void drawControls() {
         TileShipGame.batch.draw(Resources.ConstallationMapTexture, HUDScreenLayer.getWorldWidth() - 100, 20, 64, 64);
+
         if(playerShip.isCollectingTiles()){
             TileShipGame.batch.draw(Resources.CraftingIconPressedTexture, HUDScreenLayer.getWorldWidth() - 100, 104, 64, 64);
         }else {
@@ -183,7 +190,7 @@ public class HUD {
      * Gets data for debug hud UI stack
      * @return - StringBuilder representing the debug info
      */
-    private StringBuilder getDebugUIData() {
+    protected StringBuilder getDebugUIData() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
@@ -220,7 +227,11 @@ public class HUD {
         HUDScreenLayer.update(width, height, true);
     }
 
-    public boolean drawMenu() {
+    /**
+     * Checks if the menu should be drawn
+     * @return - true if menu should be drawn, else false
+     */
+    public boolean isShowingMenu() {
         return drawMenu;
     }
     public void toggleMenu(){
@@ -242,7 +253,15 @@ public class HUD {
         return drawMap;
     }
 
+    /**
+     * Check if the map should be drawn
+     * @return - true if map should be drawn, else false
+     */
     public boolean showingMap() {
         return drawMap;
+    }
+
+    public void setMapNavigator(MapNavManager mapNavigator) {
+        this.mapNavigator = mapNavigator;
     }
 }

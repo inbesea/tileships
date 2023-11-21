@@ -147,7 +147,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
             // This render should happen after a sweep attempt
             if (go.isDead()) {
-                System.out.println("ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                Gdx.app.error("SweepError","ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
                 continue;
             }
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
@@ -19,6 +20,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
+import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 import org.bitbucket.noahcrosby.shipGame.managers.TextBoxManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHandler;
@@ -36,7 +38,7 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
     final TileShipGame game;
     final AsteroidManager asteroidManager;
-    private final HUD hud;
+    private final MainGameHUD hud;
     ExtendViewport extendViewport;
     private final Player player;
 
@@ -60,6 +62,7 @@ public class GameScreen implements Screen {
 
     Box2DWrapper box2DWrapper;
     private boolean updateLocalMapLocation = true;
+    private MapNavManager mapNavigator;
 
 
     public GameScreen(final TileShipGame game) {
@@ -84,7 +87,9 @@ public class GameScreen implements Screen {
         initializeInputEventHandling();
 
         asteroidManager = new AsteroidManager(box2DWrapper ,camera);
-        hud = new HUD(game);
+        mapNavigator = new MapNavManager();
+        hud = new MainGameHUD(game, mapNavigator);
+        hud.setMapNavigator(mapNavigator);
 
         // Create collision listener
         collisionHandler = new ClassicCollisionHandler(asteroidManager);// Handler has manager to manage stuff
@@ -94,6 +99,9 @@ public class GameScreen implements Screen {
         textBoxHandler = new TextBoxManager();
     }
 
+    /**
+     * Convenience method to initialize input event handling when starting game.
+     */
     private void initializeInputEventHandling() {
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));

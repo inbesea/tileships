@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.Shapes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import org.bitbucket.noahcrosby.Interfaces.Movable;
@@ -115,6 +116,8 @@ public class Line implements Movable {
 
     public static void drawRectangle(Vector2 leftBottPosition, Vector2 rightTopCorner, Color color, boolean fill , Matrix4 projectionMatrix) {
         Gdx.gl.glLineWidth(2);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         debugRenderer.setProjectionMatrix(projectionMatrix);
         if(fill)debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
         else debugRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -122,6 +125,7 @@ public class Line implements Movable {
         debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, rightTopCorner.x, rightTopCorner.y);
         debugRenderer.end();
         Gdx.gl.glLineWidth(1);
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     public static void drawRectangle(Vector2 leftBottPosition, int x, int y, Color edge, Color fill, Matrix4 projectionMatrix) {
