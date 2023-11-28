@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.LevelData;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
@@ -22,6 +23,8 @@ public class MapDrawer {
     public MapDrawer(SpaceMap map) {
         this.map = map;
     }
+    public MapDrawer() {
+    }
 
     /**
      * Draws the map and edges between them.
@@ -29,7 +32,7 @@ public class MapDrawer {
      *
      * @param transform - Projection Matrix from Orthographic Camerad
      */
-    public void drawMap(Matrix4 transform) throws InterruptedException {
+    public void drawMap(Matrix4 transform) {
         Array<MapNode> unvisitedMapNodes = new Array<>(); // Move to next nodes bit by bit
         unvisitedMapNodes.addAll(map.mapNodes);
         Array<MapNode> visited = new Array<>();
@@ -70,7 +73,11 @@ public class MapDrawer {
      * @param transform - Projection Matrix from Orthographic Camerad
      * @param millisecondDelay - Delays immediate drawing of the entire graph
      */
-    public void drawMap(Matrix4 transform, int millisecondDelay) throws InterruptedException {
+    public void drawMap(Matrix4 transform, int millisecondDelay) {
+        if(millisecondDelay < 1){
+            Gdx.app.log("MapDrawer", "DrawMap passed delay of 0, setting to 1 to avoid division by 0");
+            millisecondDelay = 1;
+        }
         // We want to draw another node each delay. For each millidelay we draw another. (time/millidelay)%map.mapNodes.size
         long nodesToDraw = (System.currentTimeMillis() / millisecondDelay) % map.mapNodes.size;
 
@@ -105,6 +112,23 @@ public class MapDrawer {
     }
 
     /**
+     * Allows a passed map to be drawn rather than a in internally set map,
+     * returns to old map when done drawing if one was present.
+     * @param map
+     * @param transform
+     * @param millisecondDelay
+     */
+    public void drawMap(SpaceMap map, Matrix4 transform, int millisecondDelay) {
+        SpaceMap previousMap = null;
+        if(this.map != null)previousMap = this.map;
+
+        setMap(map);
+        drawMap(transform, millisecondDelay);
+
+        if(previousMap != null)setMap(previousMap);
+    }
+
+    /**
      * Checks the
      * @param nextNodes
      * @param unvisited
@@ -122,5 +146,13 @@ public class MapDrawer {
         for (MapNode node : map.getMapNodes()) {
             node.drawn = false;
         }
+    }
+
+    /**
+     * Swaps out the currently drawn map for a new one
+     * @param newMap
+     */
+    public void setMap(SpaceMap newMap) {
+        this.map = newMap;
     }
 }

@@ -1,30 +1,39 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import org.bitbucket.noahcrosby.LevelData.MapDrawer;
 import org.bitbucket.noahcrosby.LevelData.MapNode;
 import org.bitbucket.noahcrosby.LevelData.SpaceMap;
 
 
 /**
- * Handles the navigation of the maps
+ * Handles the navigation of the maps, and the drawing of the maps
  */
 public class MapNavManager {
     Array<SpaceMap> mapList;
     public SpaceMap currentMap;
     MapNode currentNode;
+    boolean drawingCurrentMap;
+    protected MapDrawer mapDrawer;
+
 
     public MapNavManager(){
         mapList = new Array<>();
-
-        addMap(new SpaceMap());
+        mapDrawer = new MapDrawer();
     }
 
     public void addMap(SpaceMap map){
         mapList.add(map);
         if(currentMap == null){
             setCurrentMap(map);
+            setCurrentNode(map.getEntryNode());
         }
+    }
+
+    public void removeMap(SpaceMap map){
+        mapList.removeValue(map, true);
     }
 
     public SpaceMap getCurrentMap(){
@@ -32,10 +41,22 @@ public class MapNavManager {
     }
 
     public void setCurrentMap(SpaceMap map){
-        // TODO implement and check if the map is adjacent to the current map
-//        if()
         currentMap = map;
+        mapDrawer.setMap(currentMap);
+    }
+
+    public void setCurrentNode(MapNode node){
+        currentNode = node;
     }
 
 
+    public void setDrawing(boolean drawMap) {
+            drawingCurrentMap = drawMap;
+    }
+
+    public void drawMap(Matrix4 transform) {
+        if(mapList.size < 1 || currentMap.getMapNodes().size < 1)return;
+
+        mapDrawer.drawMap(transform);
+    }
 }

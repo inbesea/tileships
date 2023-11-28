@@ -197,11 +197,8 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
         table.setDebug(AppPreferences.getAppPreferences().getIsDebug());
 
-        try {
-            mapDrawer.drawMap(camera.combined);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        mapDrawer.drawMap(camera.combined);
+
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

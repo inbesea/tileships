@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.LevelData;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -7,6 +8,9 @@ import com.badlogic.gdx.utils.Array;
  */
 public class SpaceMap {
     Array<MapNode> mapNodes;
+    MapNode entryNode;
+    MapNode exitNode;
+
 
     public SpaceMap() {
         mapNodes = new Array<>();
@@ -79,5 +83,46 @@ public class SpaceMap {
 
     public void setMapNodes(Array<MapNode> mapNodes) {
         this.mapNodes = mapNodes;
+    }
+
+    public MapNode getEntryNode() {
+        if(this.mapNodes.size == 0){
+            Gdx.app.error("SpaceMap", "No MapNodes found");
+            return null;
+        }else if(entryNode == null){ // Is nodes, but no entry
+            Gdx.app.log("SpaceMap", "No EntryNode found... setting default");
+            setEntryNode(mapNodes.get(0)); // set entry to default
+            return mapNodes.get(0);
+        } else { // Has entry, and nodes
+            return entryNode;
+        }
+    }
+
+    /**
+     * Returns the exit node and sets last node to exit node if no exit node is found
+     * @return
+     */
+    public MapNode getExitNode() {
+        if(this.mapNodes.size == 0){
+            Gdx.app.error("SpaceMap", "No MapNodes found");
+            return null;
+        }else if(exitNode == null){ // Is nodes, but no entry
+            Gdx.app.log("SpaceMap", "No EntryNode found... setting default");
+            setExitNode(mapNodes.get(mapNodes.size - 1)); // set entry to default (last node)
+            if(entryNode.equals(exitNode)){
+                Gdx.app.log("SpaceMap", "EntryNode and ExitNode are the same!!!");
+            }
+            return exitNode;
+        } else { // Has entry, and nodes
+            return entryNode;
+        }
+    }
+
+    private void setExitNode(MapNode mapNode) {
+        this.exitNode = mapNode;
+    }
+
+    public void setEntryNode(MapNode entryNode) {
+        this.entryNode = entryNode;
     }
 }

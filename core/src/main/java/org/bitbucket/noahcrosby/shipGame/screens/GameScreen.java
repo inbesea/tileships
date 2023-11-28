@@ -26,6 +26,7 @@ import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHand
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
 import java.util.ArrayList;
@@ -85,6 +86,7 @@ public class GameScreen implements Screen {
 
         asteroidManager = new AsteroidManager(box2DWrapper ,camera);
         mapNavigator = new MapNavManager();
+        mapNavigator.addMap(MapUtils.getDefaultMap());
         hud = new MainGameHUD(game, mapNavigator);
         hud.setMapNavigator(mapNavigator);
 

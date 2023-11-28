@@ -24,6 +24,7 @@ import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
  */
 public class HUD {
     protected ExtendViewport HUDScreenLayer;
+    protected ExtendViewport mapScreenLayer;
     protected TileShipGame game;
     protected Ship playerShip;
     protected boolean drawMenu = false;
@@ -37,13 +38,14 @@ public class HUD {
     protected Label musicOnOffLabel;
     protected Label soundOnOffLabel;
     protected MapNavManager mapNavigator;
-    protected MapDrawer mapDrawer;
 
     public HUD(TileShipGame game) {
         this.game = game;
         this.playerShip = game.getPlayerShip();
 
         HUDScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+        mapScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+
         createMenuOverlay();
     }
 
@@ -81,6 +83,10 @@ public class HUD {
         drawControls();
 
         game.batch.end();
+
+        if(showingMap()){
+            mapNavigator.drawMap(this.mapScreenLayer.getCamera().combined);
+        }
     }
 
     /**
@@ -250,6 +256,7 @@ public class HUD {
      */
     public boolean toggleMap() {
         drawMap = !drawMap;
+        mapNavigator.setDrawing(drawMap);
         return drawMap;
     }
 

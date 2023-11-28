@@ -43,14 +43,12 @@ public class MainGameHUD extends HUD {
     }
 
     protected void drawMap() {
+        // Opaque block for aesthetics
         Line.drawRectangle(new Vector2(0,0), new Vector2(HUDScreenLayer.getWorldWidth(), HUDScreenLayer.getWorldHeight()),
             new Color(0,0,0,0.5f), true, HUDScreenLayer.getCamera().combined);
 
         // Get the map and draw it
-        try{
-            mapDrawer.drawMap(HUDScreenLayer.getCamera().combined);
-        } catch (InterruptedException e) {
-            Gdx.app.error("TileShipGame", "Error drawing map", e);
-        }
+        mapDrawer.drawMap(HUDScreenLayer.getCamera().combined);
+
     }
 }
