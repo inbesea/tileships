@@ -9,6 +9,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.Adjace
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeFactory;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 import java.util.Stack;
 
@@ -88,7 +89,7 @@ public class ShipTilesManager {
     }
 
     /**
-     * Returns a Vector2 position representing the closet ShipTile vacancy to the passed location.
+     * Returns a Vector2 position representing the valid placement ShipTile vacancy to the passed location.
      * @param location - Location checked for closest placement
      * @return - Vector2 position representing the closest valid placement location.
      */
@@ -674,12 +675,12 @@ public class ShipTilesManager {
         this.existingTiles.clear();
     }
 
-    private void removeAllTilesFromGame() {
-
-    }
-
-    public void getPlacementIndex() {
-        Vector3 playerControlPosition = returnUnprojectedPosition(GameScreen.getGameCamera());
-//        getVectorOfClosestSi()
+    /**
+     * Returns the vector a tile should be placed at based on curren input position.
+     * @return a vector2 representing the placement location from the input position
+     */
+    public Vector2 getPlacementVector() {
+        Vector3 playerInputPosition = returnUnprojectedInputPosition(GameScreen.getGameCamera());
+        return this.getClosestPlacementVector2(generalUtil.flattenVector(playerInputPosition));
     }
 }

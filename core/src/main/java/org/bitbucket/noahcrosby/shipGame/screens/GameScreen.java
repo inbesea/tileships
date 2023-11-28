@@ -174,11 +174,8 @@ public class GameScreen implements Screen {
         playerShip.render(game);
 
         if (playerShip.isCollectingTiles() && playerShip.isHoverDrawing()) {
-            drawGameObject(playerShip.getTileHoverIndicator());
             drawGameObject(playerShip);
-        } else
-            if (playerShip.isDragging()) {
-            playerShip.drawDraggingPlacementIndicator();
+            drawGameObject(playerShip.getTileHoverIndicator());
         }
         drawGameObject(player);// Draw last to be on top of robot
         // Draw hud at this step
@@ -189,8 +186,10 @@ public class GameScreen implements Screen {
 
         drawGameObjects(asteroidManager.getAsteroids());
 
-        if(AppPreferences.getAppPreferences().getIsDebug()){
+        if(AppPreferences.getAppPreferences().getIsDebug()){ // This sucks because we're having these calls done outside the object. These
+            // should be called where we can generalize the object behavior.
             box2DWrapper.drawDebug(camera);
+            playerShip.drawDraggingPlacementIndicator();
         }
 
         if(updateLocalMapLocation){

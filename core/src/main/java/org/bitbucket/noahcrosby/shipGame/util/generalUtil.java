@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 
 public class generalUtil {
 
@@ -19,7 +18,7 @@ public class generalUtil {
      * @param camera - Orthographic camera for context
      * @return - Vector3 of unprojected mouse position based on Gdx.input.getX/Y();
      */
-    public static Vector3 returnUnprojectedPosition(OrthographicCamera camera){
+    public static Vector3 returnUnprojectedInputPosition(OrthographicCamera camera){
         Vector3 position = new Vector3();
         position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(position);
@@ -251,5 +250,14 @@ public class generalUtil {
         tX = (limit.x - p1.x) / (p2.x - p1.x);
         tY = (limit.y - p1.y) / (p2.y - p1.y);
         return Math.abs(tX) < Math.abs(tY) ? tX : tY;
+    }
+
+    /**
+     * Returns new instance of Vector2, dropping the z dimension.
+     * @param playerControlPosition
+     * @return
+     */
+    public static Vector2 flattenVector(Vector3 playerControlPosition) {
+        return new Vector2(playerControlPosition.x, playerControlPosition.y);
     }
 }

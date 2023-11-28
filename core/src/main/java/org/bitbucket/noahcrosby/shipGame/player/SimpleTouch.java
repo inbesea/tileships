@@ -14,7 +14,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.TileArrayToString;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
-import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnprojectedPosition;
+import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnprojectedInputPosition;
 
 /**
  * Main user input handling class.
@@ -102,7 +102,7 @@ public class SimpleTouch implements InputProcessor {
         // Set init values
         camera.unproject(tp.set(screenX, screenY, 0));
         setIsDragging(true);
-        Vector3 vector3 = returnUnprojectedPosition(camera);
+        Vector3 vector3 = returnUnprojectedInputPosition(camera);
 
         // Handle init collect click
         if (playerShip.isCollectingTiles()){
@@ -142,7 +142,7 @@ public class SimpleTouch implements InputProcessor {
 
         @Override public boolean touchUp (int screenX, int screenY, int pointer, int button) {
             if (button != Input.Buttons.LEFT || pointer > 0) return false;
-            Vector3 mousePosition = returnUnprojectedPosition(camera);
+            Vector3 mousePosition = returnUnprojectedInputPosition(camera);
 
             // Need to handle letting go of the mouse to construct.
             if(playerShip.isCollectingTiles()){

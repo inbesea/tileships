@@ -1,12 +1,12 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -480,9 +480,11 @@ public class Ship extends GameObject {
     }
 
     /**
-     * TODO : Implement this. It's easy
+     * Draws a line to the center of the tile location placement would happen at if a dragged tile was dropped.
      */
     public void drawDraggingPlacementIndicator() {
-        this.shipTilesManager.getPlacementIndex();
+        if(!isDragging())return;
+        Vector2 placementIndicator = this.shipTilesManager.getPlacementVector();
+        Line.DrawDebugLine(draggedTile.getCenter(), placementIndicator, 1 , Color.WHITE, TileShipGame.batch.getProjectionMatrix());
     }
 }

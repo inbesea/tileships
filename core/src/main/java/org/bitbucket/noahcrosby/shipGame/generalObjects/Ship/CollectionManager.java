@@ -59,15 +59,6 @@ public class CollectionManager {
     }
 
     /**
-     * Checks if the hovers should draw
-     *
-     * @return
-     */
-    public boolean hoverShouldDraw() {
-        return tileHoverIndicator.isHoverDrawing();
-    }
-
-    /**
      * Sets if the hover position should draw.
      *
      * @param shouldDraw
@@ -111,7 +102,12 @@ public class CollectionManager {
      * @return
      */
     public boolean isHoverDrawing() {
+        if(this.collectionIsNonzero())return false;
         return tileHoverIndicator.isHoverDrawing();
+    }
+
+    private boolean collectionIsNonzero() {
+        return collectedTiles.size > 0;
     }
 
     public boolean isCollectingTiles() {
