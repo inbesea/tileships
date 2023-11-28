@@ -91,7 +91,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         extendViewport.apply();
 
         // Update game object positions
-        box2DWrapper.updateGameObjectsToPhysicsSimulation();
+//        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
         drawGame();

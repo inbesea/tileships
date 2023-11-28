@@ -109,6 +109,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
             world.step(physicsFrameRate, velocityIterations, positionIterations);
             accumulator -= physicsFrameRate;
         }
+        updateGameObjectsToPhysicsSimulation();
     }
 
     @Override
