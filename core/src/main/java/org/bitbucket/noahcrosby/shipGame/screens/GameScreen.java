@@ -14,7 +14,6 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
@@ -26,7 +25,6 @@ import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHandler;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
-import org.bitbucket.noahcrosby.shipGame.player.SimpleTouch;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
@@ -46,7 +44,6 @@ public class GameScreen implements Screen {
     public static final Vector2 playerSize = new Vector2(ShipTile.TILE_SIZE * .33f, ShipTile.TILE_SIZE * .45f);
 
     static OrthographicCamera camera;
-    SimpleTouch st;
     private final Ship playerShip;
     private TileDragHandler tileDragHandler;
     private MapInputHandler gameScreenMapInputHandler;
@@ -298,13 +295,6 @@ public class GameScreen implements Screen {
 
     public TileShipGame getGame() {
         return game;
-    }
-
-    /**
-     * Update logic for mouseMoved to make sure it's updated
-     */
-    public void updateMouseMoved() {
-        st.mouseMoved(Gdx.input.getX(), Gdx.input.getY());
     }
 
     public void quitGame() {
