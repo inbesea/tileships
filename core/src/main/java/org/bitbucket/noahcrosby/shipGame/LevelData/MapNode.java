@@ -11,6 +11,8 @@ import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
+import java.util.Random;
+
 /**
  * Basic element of the map
  */
@@ -24,30 +26,49 @@ public class MapNode {
     Boolean visited = false;
     Boolean drawn = false;
 
-    float rotation = 0f;
+    float rotation = generalUtil.getRandomNumber(0, 360);
     float rotationSpeed = generalUtil.getRandomlyNegativeNumber(3f, 8f);
 
+    /**
+     * General node of a map. Can be overridden for new visuals etc.
+     * @param position
+     */
     public MapNode(Vector2 position) {
         this.position = position;
         edges = new Array<>();
     }
 
+    /**
+     * Draws this node
+     * @param transform
+     */
     public void draw(Matrix4 transform) {
         stepRotation();
         Line.drawFilledCircle(getDrawPosition(), this.radius, new Color(0 ,0,1,1), transform); // Draw node
     }
 
+    /**
+     * Steps the rotation of this node by the rotation speed and the time delta
+     */
     private void stepRotation() {
         rotation += (Gdx.graphics.getDeltaTime() * rotationSpeed);
     }
 
+    /**
+     * Handles determining where this node will be drawn
+     * @return
+     */
     public Vector2 getDrawPosition() {
-        Vector2 position =  AngleUtils.getOrbitPoint(this.position, orbitRadius, rotation);
-        return position;
+//        Vector2 position =  AngleUtils.getOrbitPoint(this.position, orbitRadius, rotation);
+//        return position;
+        return this.position;
     }
 
-    public void drawDebug(Matrix4 transform) {
-        Line.drawFilledCircle(position, 0.5f, new Color(150,200,250,1), transform);
+    /**
+     * Draws the debug calls of this node
+     */
+    public void drawDebug() {
+        drawCenterOfNode();
 
         TileShipGame.batch.begin();
         TileShipGame.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -56,6 +77,13 @@ public class MapNode {
         TileShipGame.font.draw(TileShipGame.batch, getPositionAsString(), getDrawPosition().x, getDrawPosition().y);
         TileShipGame.font.getData().setScale(scale);
         TileShipGame.batch.end();
+    }
+
+    /**
+     * Debug call to draw a point at the center of this node
+     */
+    protected void drawCenterOfNode() {
+        Line.drawFilledCircle(position, 0.5f, new Color(150,200,250,1), TileShipGame.batch.getProjectionMatrix());
     }
 
     /**

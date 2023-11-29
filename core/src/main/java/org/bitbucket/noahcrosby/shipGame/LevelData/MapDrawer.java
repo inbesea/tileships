@@ -55,7 +55,7 @@ public class MapDrawer {
             }
             currentNode.draw(transform);
             if(AppPreferences.getAppPreferences().getIsDebug()) {
-                currentNode.drawDebug(transform);
+                currentNode.drawDebug();
             }
 
             visited.add(currentNode);
