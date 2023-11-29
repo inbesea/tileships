@@ -1,11 +1,10 @@
 package org.bitbucket.noahcrosby.shipGame;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.StringBuilder;
 import org.bitbucket.noahcrosby.AppPreferences;
-import org.bitbucket.noahcrosby.LevelData.MapDrawer;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
 import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;

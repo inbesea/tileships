@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.LevelData;
+package org.bitbucket.noahcrosby.shipGame.LevelData;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;

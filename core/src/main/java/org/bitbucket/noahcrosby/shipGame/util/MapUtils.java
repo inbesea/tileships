@@ -1,8 +1,8 @@
 package org.bitbucket.noahcrosby.shipGame.util;
 
 import com.badlogic.gdx.math.Vector2;
-import org.bitbucket.noahcrosby.LevelData.MapNode;
-import org.bitbucket.noahcrosby.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
 
 public class MapUtils {
     public static SpaceMap getDefaultMap() {

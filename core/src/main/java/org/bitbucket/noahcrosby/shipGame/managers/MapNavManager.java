@@ -2,10 +2,9 @@ package org.bitbucket.noahcrosby.shipGame.managers;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
-import org.bitbucket.noahcrosby.LevelData.MapDrawer;
-import org.bitbucket.noahcrosby.LevelData.MapNode;
-import org.bitbucket.noahcrosby.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
 
 
 /**
