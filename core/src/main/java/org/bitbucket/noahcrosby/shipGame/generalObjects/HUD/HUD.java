@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
@@ -38,6 +38,10 @@ public class HUD {
     protected Label soundOnOffLabel;
     protected MapNavManager mapNavigator;
 
+    protected UIElement mapToggleUI;
+    protected UIElement tileCondenseUI;
+
+
     public HUD(TileShipGame game) {
         this.game = game;
         this.playerShip = game.getPlayerShip();
@@ -46,6 +50,9 @@ public class HUD {
         mapScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
 
         createMenuOverlay();
+
+        mapToggleUI = new UIElement(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 20), new Vector2(64,64), Resources.ConstallationMapTexture);
+        tileCondenseUI = new UIElement(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 104), new Vector2(64,64) , Resources.CraftingIconTexture);
     }
 
     /**
@@ -92,12 +99,14 @@ public class HUD {
      * Draws Player input indicators
      */
     protected void drawControls() {
-        TileShipGame.batch.draw(Resources.ConstallationMapTexture, HUDScreenLayer.getWorldWidth() - 100, 20, 64, 64);
+        mapToggleUI.render(game);
 
         if(playerShip.isCollectingTiles()){
-            TileShipGame.batch.draw(Resources.CraftingIconPressedTexture, HUDScreenLayer.getWorldWidth() - 100, 104, 64, 64);
+            tileCondenseUI.setTexture(Resources.CraftingIconPressedTexture);
+            tileCondenseUI.render(game);
         }else {
-            TileShipGame.batch.draw(Resources.CraftingIconTexture, HUDScreenLayer.getWorldWidth() - 100, 104, 64, 64);
+            tileCondenseUI.setTexture(Resources.CraftingIconTexture);
+            tileCondenseUI.render(game);
         }
     }
 

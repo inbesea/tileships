@@ -2,6 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -61,6 +62,7 @@ public class GameScreen implements Screen {
     Box2DWrapper box2DWrapper;
     private boolean updateLocalMapLocation = true;
     private MapNavManager mapNavigator;
+    private MapNavigationHandler mapInputNavigator;
 
 
     public GameScreen(final TileShipGame game) {
@@ -81,14 +83,14 @@ public class GameScreen implements Screen {
         // Give player the game reference
         player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, camera, this.game);
 
-        // Add input event handling
-        initializeInputEventHandling();
-
         asteroidManager = new AsteroidManager(box2DWrapper ,camera);
         mapNavigator = new MapNavManager();
         mapNavigator.addMap(MapUtils.getDefaultMap());
         hud = new MainGameHUD(game, mapNavigator);
         hud.setMapNavigator(mapNavigator);
+
+        // Add input event handling
+        initializeInputEventHandling();
 
         // Create collision listener
         collisionHandler = new ClassicCollisionHandler(asteroidManager);// Handler has manager to manage stuff
@@ -105,6 +107,7 @@ public class GameScreen implements Screen {
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
         tileDragHandler = new TileDragHandler(player);
+        mapInputNavigator = new MapNavigationHandler(mapNavigator);
         input.addProcessor(tileDragHandler);
         input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.playerShip, this.tileDragHandler));
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
@@ -326,11 +329,17 @@ public class GameScreen implements Screen {
      */
     public void toggleMap() {
         // If the game is showing the map we want to pause the game updates.
-        this.setLocationUpdating(!this.hud.toggleMap());
+        boolean showingMap = this.hud.toggleMap();
+        this.setLocationUpdating(!showingMap);// Pause the game if map showing
+        if(showingMap) {
+            input.addProcessor(this.mapInputNavigator);
+            // Create input handler for the map nav. Put the nav into the HUD? Need to think about that
+            // Want to be able to change the game state based on the current location lol
+        }
     }
 
     /**
-     * Set the GameScreen to stop updating the current location
+     * Set the GameScreen to stop updating the current location, and disconnects local input handlers
      * This includes the ship, asteroids, etc.
      * @param updateLocation - Whether or not to pause the game
      */

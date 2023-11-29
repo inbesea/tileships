@@ -22,9 +22,11 @@ public class MapNode {
     // To generally connect nodes positions will give us an overall position
     Vector2 position;
     int orbitRadius = generalUtil.getRandomNumber(3, 20);
-    float radius = generalUtil.getRandomNumber(0.75f, 4f);
+    float radius = generalUtil.getRandomNumber(0.95f, 4f);
     Boolean visited = false;
     Boolean drawn = false;
+
+    private Boolean hovered = false;
 
     float rotation = generalUtil.getRandomNumber(0, 360);
     float rotationSpeed = generalUtil.getRandomlyNegativeNumber(3f, 8f);
@@ -103,5 +105,22 @@ public class MapNode {
             node.edges.removeValue(this, true);
         }
         edges.clear();
+    }
+
+    /**
+     * Returns if the node is being hovered by the player
+     * @return
+     */
+    public Boolean getHovered() {
+        return hovered;
+    }
+
+    /**
+     * Sets if the node is being hovered
+     * likely changing the visuals of the node and giving an info popup.
+     * @param hovered
+     */
+    public void setHovered(Boolean hovered) {
+        this.hovered = hovered;
     }
 }
