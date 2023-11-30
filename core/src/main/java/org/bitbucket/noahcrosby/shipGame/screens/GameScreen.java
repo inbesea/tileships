@@ -2,15 +2,16 @@ package org.bitbucket.noahcrosby.shipGame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.Directors.ShipDirector;
+import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
@@ -192,6 +193,8 @@ public class GameScreen implements Screen {
             // should be called where we can generalize the object behavior.
             box2DWrapper.drawDebug(camera);
             playerShip.drawDraggingPlacementIndicator();
+            Circle spawnLimit = asteroidManager.getAsteroidSpawnZone();
+            Line.drawHollowCircle(new Vector2(spawnLimit.x, spawnLimit.y), spawnLimit.radius,0.5f , Color.WHITE, camera.combined);
         }
 
         if(updateLocalMapLocation){

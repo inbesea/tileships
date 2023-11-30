@@ -3,7 +3,6 @@ package org.bitbucket.noahcrosby.shipGame.managers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
@@ -71,6 +70,10 @@ public class AsteroidManager implements Manager {
      * Method to tick to check for asteroid cleanups and additions
      */
     public void checkForSpawn(){
+
+        // Set asteroid spawn zone to be center of the screen at least.
+        asteroidSpawnZone.setPosition(camera.position.x, camera.position.y);
+
         cleanup();
         while(canSpawn() && spawning){
             spawnAsteroid();
@@ -162,16 +165,16 @@ public class AsteroidManager implements Manager {
      * @return - Vector outside screen, bound by the spawn area size
      */
     private Vector2 getVectorInValidSpawnArea(){
-        // Get a value to use to find a random point on the circle of spawning
+        // Random radian value
         double betweenZeroAnd2PI = generalUtil.getRandomNumber(0d, 2d * Math.PI);
 
         // Scale up the radius of spawning to hide the spawning.
         // get x,y
-        float x = (asteroidSpawnZone.radius + camera.zoom) * (float) Math.sin(betweenZeroAnd2PI);
-        float y = (asteroidSpawnZone.radius + camera.zoom) * (float) Math.cos(betweenZeroAnd2PI);
+        float x = ((asteroidSpawnZone.radius + camera.zoom) * (float) Math.sin(betweenZeroAnd2PI)) + asteroidSpawnZone.x;
+        float y = ((asteroidSpawnZone.radius + camera.zoom) * (float) Math.cos(betweenZeroAnd2PI)) + asteroidSpawnZone.y;
 
-        Vector3 position = new Vector3(x,y,0);
-        return new Vector2(position.x,position.y);
+        Vector2 position = new Vector2(x, y);
+        return position;
 
         // TODO : Check for spawing on a tile dude wtf
     }
@@ -227,5 +230,9 @@ public class AsteroidManager implements Manager {
 
     public void setArcadeMode(boolean arcadeMode) {
         this.arcadeMode = arcadeMode;
+    }
+
+    public Circle getAsteroidSpawnZone() {
+        return asteroidSpawnZone;
     }
 }

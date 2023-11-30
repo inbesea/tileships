@@ -153,6 +153,16 @@ public class Line implements Movable {
         Gdx.gl.glLineWidth(1);
     }
 
+    public static void drawHollowCircle(Vector2 center, float radius, float lineWidth , Color color, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(lineWidth);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.circle(center.x, center.y, radius);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
     public static void drawArc(Vector2 start, Vector2 end, int lineWidth, Color color, Matrix4 projectionMatrix) {
         Gdx.gl.glLineWidth(lineWidth);
         debugRenderer.setProjectionMatrix(projectionMatrix);
