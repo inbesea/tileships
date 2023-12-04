@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -528,10 +529,12 @@ public class ShipTilesManager {
      * @param tile - Tile to remove from ship
      */
     public void removeTileFromShip(ShipTile tile) {
-        if (!this.existingTiles.removeValue(tile, true)) { // If not in existing tiles
-            throw new RuntimeException("Error: Tile was not present in ship!\n-> " + tile.getAbbreviation() +
+        if (!this.existingTiles.contains(tile, true)) { // If not in existing tiles
+            Gdx.app.error("Removing Tile Error", "Error: Tile was not present in ship!\n-> " + tile.getAbbreviation() +
                     " - " + tile.getPositionAsString());
         } else {
+            Gdx.app.debug("Removing Tile", "Removing tile from the ship" + tile.getAbbreviation() + " " + tile.getPositionAsString());
+            this.existingTiles.removeValue(tile, true);
             if (ship.isCollectingTiles()) { // Delete tile if being collected. Has to use the ship reference here.
                 ship.getCollapseCollect().removeValue(tile, true);
             }
