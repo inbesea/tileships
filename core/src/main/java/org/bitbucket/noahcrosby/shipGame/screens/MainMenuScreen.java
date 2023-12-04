@@ -25,7 +25,7 @@ import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
-import java.util.Timer;
+import com.badlogic.gdx.utils.Timer;
 
 public class MainMenuScreen extends ScreenAdapter implements Screen {
     final TileShipGame game;
@@ -73,11 +73,11 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         map.addNode(new MapNode(new Vector2(200, 200)), new int[]{1});
         map.addNode(new MapNode(new Vector2(100, 200)), new int[]{0, 2});
         map.addNode(new MapNode(new Vector2(150, 150)), new int[]{0,1,2,3});
-        addToMap(2000);
-        addToMap(5000);
-        addToMap(9000);
-        addToMap(13000);
-        addToMap(17000);
+        addToMap(2);
+        addToMap(5);
+        addToMap(8);
+        addToMap(13);
+        addToMap(17);
     }
 
     /**
@@ -234,20 +234,17 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
      */
     private void addToMap(int delay) {
 
-        Timer timer = new java.util.Timer();
-        timer.schedule(
-            new java.util.TimerTask() {
-                @Override
-                public void run() {
-                    map.addNode(new MapNode(new Vector2(generalUtil.getRandomNumber(0,TileShipGame.defaultViewportSizeX),
-                            generalUtil.getRandomNumber(0, TileShipGame.defaultViewportSizeY))),
-                        new int[]{generalUtil.getRandomNumber(0, map.getMapNodes().size - 1)});
-                    this.cancel();
-                }
-            },
-            delay
-        );
-        timer.purge();
+        Timer.schedule(new Timer.Task(){
+            public void run () {
+                map.addNode(new MapNode(new Vector2(generalUtil.getRandomNumber(0,TileShipGame.defaultViewportSizeX),
+                        generalUtil.getRandomNumber(0, TileShipGame.defaultViewportSizeY))),
+                    new int[]{generalUtil.getRandomNumber(0, map.getMapNodes().size - 1)});
+                Gdx.app.postRunnable(new Runnable(){
+                    public void run () {
+                        Gdx.app.log("addedMapNode", "Posted runnable to Gdx.app");
+                    }
+                });
+            }}, delay);
     }
 
     @Override
