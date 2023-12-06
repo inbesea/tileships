@@ -1,9 +1,14 @@
 package org.bitbucket.noahcrosby.shipGame.input;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
@@ -34,6 +39,16 @@ public class MapNavigationHandler extends InputAdapter {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        currentMap.getMapNodes();
+
+        Vector2 touch = new Vector2(screenX, screenY);
+        MapNode temp = generalUtil.getClosestObject(touch, currentMap.getMapNodes());
+        Line.drawHollowCircle(temp.getPosition(), 10, Color.WHITE, TileShipGame.batch.getProjectionMatrix());
+
+        Gdx.app.log("Tag",  touch.x + " " + touch.y + " Found this MapNode " + temp.getPositionAsString());
+        if(touch.dst(temp.getPosition()) < 20){
+//            temp.drawDebug();
+        }
         return false;
     }
 

@@ -338,6 +338,8 @@ public class GameScreen implements Screen {
             input.addProcessor(this.mapInputNavigator);
             // Create input handler for the map nav. Put the nav into the HUD? Need to think about that
             // Want to be able to change the game state based on the current location lol
+        }else{
+            input.removeProcessor(this.mapInputNavigator);
         }
     }
 
