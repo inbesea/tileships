@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -278,5 +279,9 @@ public class HUD {
 
     public void setMapNavigator(MapNavManager mapNavigator) {
         this.mapNavigator = mapNavigator;
+    }
+
+    public Camera getCamera() {
+        return this.HUDScreenLayer.getCamera();
     }
 }

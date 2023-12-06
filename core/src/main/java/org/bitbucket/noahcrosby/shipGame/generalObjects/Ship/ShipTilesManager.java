@@ -679,7 +679,7 @@ public class ShipTilesManager {
     }
 
     /**
-     * Returns the vector a tile should be placed at based on curren input position.
+     * Returns the vector a tile should be placed at based on current input position.
      * @return a vector2 representing the placement location from the input position
      */
     public Vector2 getPlacementVector() {

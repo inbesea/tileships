@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
@@ -16,6 +17,7 @@ public class MapNavManager {
     MapNode currentNode;
     boolean drawingCurrentMap;
     protected MapDrawer mapDrawer;
+    protected MapNode hightLightNode;
 
 
     public MapNavManager(){
@@ -57,5 +59,28 @@ public class MapNavManager {
         if(mapList.size < 1 || currentMap.getMapNodes().size < 1)return;
 
         mapDrawer.drawMap(transform);
+    }
+
+    public MapNode highLightNewNode(MapNode newNode) {
+        if(newNode == null){
+            Gdx.app.error("Null Error", "newNode is null MapNavManager.highlightNewNode()");
+            return null;
+        }
+        if(this.hightLightNode != null)this.hightLightNode.clicked(false); // Check the highlit node is not null
+
+        this.hightLightNode = newNode;
+        this.hightLightNode.clicked(true);
+        return newNode;
+    }
+
+    /**
+     * Unhighlights the nodes, removes selections, etc. when clicked off of everything
+     */
+    public void clearSelections() {
+        // Removes selected node and de-clicks it.
+        if(this.hightLightNode != null){
+            this.hightLightNode.clicked(false);
+            this.hightLightNode = null;
+        }
     }
 }

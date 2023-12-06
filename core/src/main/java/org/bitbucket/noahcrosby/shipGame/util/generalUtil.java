@@ -28,6 +28,18 @@ public class generalUtil {
         return position;
     }
 
+    /** Unprojects the mouse position as a Vector3
+     *
+         * @param camera - Orthographic camera for context
+     * @return - Vector3 of unprojected mouse position based on Gdx.input.getX/Y();
+     */
+    public static Vector2 returnUnprojectedInputVector2(OrthographicCamera camera){
+        Vector3 position = new Vector3();
+        position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(position);
+        return flattenVector(position);
+    }
+
     /**
      * Method to find the closest tile to a point given an Array of ShipTiles
      *
@@ -264,6 +276,13 @@ public class generalUtil {
         return new Vector2(playerControlPosition.x, playerControlPosition.y);
     }
 
+    /**
+     * Returns the closest object extending GameObject in the array passed.
+     * @param position - Position to compare array positions with
+     * @param array - array of generic GameObjects utilizing a positional Vector2
+     * @return - @Nullable returns closest node if there is one.
+     * @param <T> - A generic object bounded to extend GameObject
+     */
     public static <T extends GameObject> T getClosestObject(Vector2 position, Array<T> array){
         if (array.size == 0) return null;
         if (array.size == 1) return array.get(0);

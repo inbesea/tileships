@@ -32,6 +32,7 @@ public class MapNode extends GameObject {
 
     float rotation = generalUtil.getRandomNumber(0, 360);
     float rotationSpeed = generalUtil.getRandomlyNegativeNumber(3f, 8f);
+    private boolean clicked;
 
     /**
      * General node of a map. Can be overridden for new visuals etc.
@@ -54,6 +55,15 @@ public class MapNode extends GameObject {
     public void draw(Matrix4 transform) {
         stepRotation();
         Line.drawFilledCircle(getDrawPosition(), this.radius, new Color(0 ,0,1,1), transform); // Draw node
+
+        if(clicked){
+            Line.drawFilledCircle(getDrawPosition(), this.radius + 5, Color.CHARTREUSE, transform); // Draw node
+            Line.drawHollowCircle(getDrawPosition(), this.radius + 9, 0.5f , Color.WHITE, transform);
+            Line.drawFilledCircle(AngleUtils.getOrbitPoint(this.position, orbitRadius, rotation),
+                this.radius, Color.RED, transform);
+        } else if(hovered){
+            Line.drawFilledCircle(getDrawPosition(), this.radius + 4, Color.GREEN, transform);
+        }
     }
 
     /**
@@ -164,5 +174,13 @@ public class MapNode extends GameObject {
     @Override
     public boolean deleteFromGame() {
         return false;
+    }
+
+    public void clicked(boolean b) {
+        this.clicked = b;
+    }
+
+    public boolean isClicked() {
+        return this.clicked;
     }
 }

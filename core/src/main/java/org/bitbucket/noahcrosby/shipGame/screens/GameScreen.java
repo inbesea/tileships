@@ -108,7 +108,7 @@ public class GameScreen implements Screen {
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
         tileDragHandler = new TileDragHandler(player);
-        mapInputNavigator = new MapNavigationHandler(mapNavigator);
+        mapInputNavigator = new MapNavigationHandler(mapNavigator, (OrthographicCamera) hud.getCamera());
         input.addProcessor(tileDragHandler);
         input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.playerShip, this.tileDragHandler));
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
