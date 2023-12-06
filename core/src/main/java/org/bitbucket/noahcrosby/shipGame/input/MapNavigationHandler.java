@@ -1,9 +1,15 @@
 package org.bitbucket.noahcrosby.shipGame.input;
 
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
 import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
+/**
+ * Handles clicking on locations of the map and moving between nodes.
+ */
 public class MapNavigationHandler extends InputAdapter {
     protected MapNavManager navManager;
     protected SpaceMap currentMap;

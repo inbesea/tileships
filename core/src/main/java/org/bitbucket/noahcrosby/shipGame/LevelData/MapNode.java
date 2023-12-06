@@ -3,11 +3,14 @@ package org.bitbucket.noahcrosby.shipGame.LevelData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
@@ -16,11 +19,10 @@ import java.util.Random;
 /**
  * Basic element of the map
  */
-public class MapNode {
+public class MapNode extends GameObject {
 
     Array<MapNode> edges;
     // To generally connect nodes positions will give us an overall position
-    Vector2 position;
     int orbitRadius = generalUtil.getRandomNumber(3, 20);
     float radius = generalUtil.getRandomNumber(0.95f, 4f);
     Boolean visited = false;
@@ -36,7 +38,12 @@ public class MapNode {
      * @param position
      */
     public MapNode(Vector2 position) {
-        this.position = position;
+        super(position, new Vector2(1,1));
+        edges = new Array<>();
+    }
+
+    public MapNode(Vector2 position, Vector2 size) {
+        super(position, size);
         edges = new Array<>();
     }
 
@@ -122,5 +129,40 @@ public class MapNode {
      */
     public void setHovered(Boolean hovered) {
         this.hovered = hovered;
+    }
+
+    @Override
+    public void render(TileShipGame game) {
+
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return null;
+    }
+
+    @Override
+    protected void setBoundsPosition(Vector2 boundsPosition) {
+
+    }
+
+    @Override
+    public void collision(GameObject gameObject) {
+
+    }
+
+    @Override
+    public Texture getTexture() {
+        return null;
+    }
+
+    @Override
+    public Circle getCircleBounds() {
+        return null;
+    }
+
+    @Override
+    public boolean deleteFromGame() {
+        return false;
     }
 }
