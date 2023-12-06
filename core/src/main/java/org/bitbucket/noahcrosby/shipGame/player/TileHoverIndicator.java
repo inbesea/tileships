@@ -22,11 +22,6 @@ public class TileHoverIndicator extends GameObject {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public void render(TileShipGame game) {
     }
 

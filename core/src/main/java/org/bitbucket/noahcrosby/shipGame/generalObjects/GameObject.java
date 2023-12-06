@@ -17,8 +17,7 @@ public abstract class GameObject {
 	// From Enum list, needs a type
 	protected ID id;
 	protected float velX, velY;
-
-	protected boolean debugMode = true; //TODO:move to game object
+	protected boolean debugMode = true;
 	protected Body body;
 	protected float rotation;
 	protected boolean physicsDeletable;
@@ -46,8 +45,6 @@ public abstract class GameObject {
 		this.size.x = size.x;
 		this.size.y = size.y;
 	}
-
-	public abstract void tick();
 
     /**
      * Only used for drawing.

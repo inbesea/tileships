@@ -208,11 +208,6 @@ public class Ship extends GameObject {
     }
 
     @Override
-    public void tick() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public Rectangle getBounds() {
         // TODO Auto-generated method stub
         return null;

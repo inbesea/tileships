@@ -146,14 +146,6 @@ public class Asteroid extends GameObject implements PhysicsObject {
 		velY *= -1;
 	}
 
-	// TODO : burn this to the ground
-	// This method is totally wrong. There's a lot of inappropriate intimacy going on here.
-	// Each Game Object should not need a reference to the camera held inside it. We need to give the
-	// Camera to the update method.
-	public void tick() {
-
-	}
-
 	/**
 	 * Sets the position of the asteroid to the physics body's position
 	 */

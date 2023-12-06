@@ -23,11 +23,6 @@ public class UIElement extends GameObject {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public void render(TileShipGame game) {
         game.batch.draw(getTexture(), getPosition().x, getPosition().y, getSize().x, getSize().y);
     }

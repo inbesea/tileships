@@ -73,10 +73,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         this.yIndex = determineIndex(position.y);
     }
 
-    public void tick() {
-        // TODO Auto-generated method stub
-    }
-
     /**
      * Returns the indices of the ShipTile as a string
      *
