@@ -50,7 +50,7 @@ public class AngleUtils {
      * Returns a point on a circle.
      * @param center - center of circle
      * @param radius - radius of orbit
-     * @param angle - point on circle in degrees
+     * @param angle - point on circle in degrees (360 -> (-360))
      * @return - A Vector2 point on a circle
      */
     public static Vector2 getOrbitPoint(Vector2 center, float radius, float angle) {
