@@ -264,12 +264,12 @@ public class generalUtil {
         return new Vector2(playerControlPosition.x, playerControlPosition.y);
     }
 
-    public static GameObject getClosestObject(Vector2 position, Array<GameObject> array){
+    public static <T extends GameObject> T getClosestObject(Vector2 position, Array<T> array){
         if (array.size == 0) return null;
         if (array.size == 1) return array.get(0);
 
-        GameObject tempObj;
-        GameObject closestObject = null;
+        T tempObj;
+        T closestObject = null;
         Vector3 location3 = new Vector3(position.x, position.y, 0);
         Vector3 objectMiddle;
         double minDistance = Double.POSITIVE_INFINITY; // First check will always be true
