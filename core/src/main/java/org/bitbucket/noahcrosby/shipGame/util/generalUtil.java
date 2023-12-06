@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.util;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 public class generalUtil {
 
@@ -259,5 +262,33 @@ public class generalUtil {
      */
     public static Vector2 flattenVector(Vector3 playerControlPosition) {
         return new Vector2(playerControlPosition.x, playerControlPosition.y);
+    }
+
+    public static GameObject getClosestObject(Vector2 position, Array<GameObject> array){
+        if (array.size == 0) return null;
+        if (array.size == 1) return array.get(0);
+
+        GameObject tempObj;
+        GameObject closestObject = null;
+        Vector3 location3 = new Vector3(position.x, position.y, 0);
+        Vector3 objectMiddle;
+        double minDistance = Double.POSITIVE_INFINITY; // First check will always be true
+
+
+        //Loop through ship to find the closest tile
+        for (int i = 0; i < array.size; i++) {
+            tempObj = array.get(i);
+            // Get middle of tile to check distance
+            objectMiddle = new Vector3(tempObj.getPosition().x + tempObj.getSize().x / 2.0f,
+                tempObj.getPosition().y + tempObj.getSize().y / 2.0f, 0);
+            Float distance = location3.dst(objectMiddle);
+
+            // Check if distance between position and current tile is shorter
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestObject = tempObj;
+            }
+        }
+        return closestObject;
     }
 }

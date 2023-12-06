@@ -134,14 +134,14 @@ public class ShipTilesManager {
         ShipTile tempT;
         ShipTile closestTile = null;
         Vector3 location3 = new Vector3(location.x, location.y, 0);
-        Vector3 tileP;
+        Vector3 tileMiddle;
 
         //Loop through ship to find the closest tile
         for (int i = 0; i < tiles.size; i++) {
             tempT = tiles.get(i);
             // Get middle of tile to check distance
-            tileP = new Vector3(tempT.getPosition().x + ShipTile.TILE_SIZE / 2.0f, tempT.getPosition().y + ShipTile.TILE_SIZE / 2.0f, 0);
-            Float distance = location3.dst(tileP);
+            tileMiddle = new Vector3(tempT.getPosition().x + ShipTile.TILE_SIZE / 2.0f, tempT.getPosition().y + ShipTile.TILE_SIZE / 2.0f, 0);
+            Float distance = location3.dst(tileMiddle);
 
             // Check if distance between position and current tile is shorter
             if (distance < minDistance) {
