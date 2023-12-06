@@ -56,12 +56,13 @@ public class MapNode extends GameObject {
         stepRotation();
         Line.drawFilledCircle(getDrawPosition(), this.radius, new Color(0 ,0,1,1), transform); // Draw node
 
-        if(clicked){
+        // Drawing hightlighted and hovered situations
+        if(this.isClicked()){
             Line.drawFilledCircle(getDrawPosition(), this.radius + 5, Color.CHARTREUSE, transform); // Draw node
             Line.drawHollowCircle(getDrawPosition(), this.radius + 9, 0.5f , Color.WHITE, transform);
             Line.drawFilledCircle(AngleUtils.getOrbitPoint(this.position, orbitRadius, rotation),
                 this.radius, Color.RED, transform);
-        } else if(hovered){
+        } else if(this.isHovered()){
             Line.drawFilledCircle(getDrawPosition(), this.radius + 4, Color.GREEN, transform);
         }
     }
@@ -128,7 +129,7 @@ public class MapNode extends GameObject {
      * Returns if the node is being hovered by the player
      * @return
      */
-    public Boolean getHovered() {
+    public Boolean isHovered() {
         return hovered;
     }
 
