@@ -14,8 +14,6 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
-import java.util.Random;
-
 /**
  * Basic element of the map
  */
@@ -26,6 +24,7 @@ public class MapNode extends GameObject {
     int orbitRadius = generalUtil.getRandomNumber(3, 20);
     float radius = generalUtil.getRandomNumber(0.95f, 4f);
     Boolean visited = false;
+    private boolean playerVisited;// Is this node visited by the player
     Boolean drawn = false;
 
     private Boolean hovered = false;
@@ -59,11 +58,15 @@ public class MapNode extends GameObject {
         // Drawing hightlighted and hovered situations
         if(this.isClicked()){
             Line.drawFilledCircle(getDrawPosition(), this.radius + 5, Color.CHARTREUSE, transform); // Draw node
+        } else if(this.isHovered()){
+            Line.drawFilledCircle(getDrawPosition(), this.radius + 4, Color.GREEN, transform);
+        }
+
+        // Draw the player is here
+        if(this.playerIsHere()){
             Line.drawHollowCircle(getDrawPosition(), this.radius + 9, 0.5f , Color.WHITE, transform);
             Line.drawFilledCircle(AngleUtils.getOrbitPoint(this.position, orbitRadius, rotation),
                 this.radius, Color.RED, transform);
-        } else if(this.isHovered()){
-            Line.drawFilledCircle(getDrawPosition(), this.radius + 4, Color.GREEN, transform);
         }
     }
 
@@ -183,5 +186,13 @@ public class MapNode extends GameObject {
 
     public boolean isClicked() {
         return this.clicked;
+    }
+
+    public boolean playerIsHere() {
+        return this.playerVisited;
+    }
+
+    public void setPlayerIsHere(boolean b) {
+        this.playerVisited = b;
     }
 }

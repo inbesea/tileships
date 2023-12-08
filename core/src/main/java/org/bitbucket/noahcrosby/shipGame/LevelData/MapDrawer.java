@@ -41,7 +41,8 @@ public class MapDrawer {
         nextNodes.push(unvisitedMapNodes.pop());
 
         // Draw the nodes and edges
-        while (unvisitedMapNodes.size + nextNodes.size() > 0) {
+        int undrawnNodeCount = unvisitedMapNodes.size + nextNodes.size();
+        while (undrawnNodeCount > 0) { // There are unvisited nodes
             separateGroupCheck(nextNodes, unvisitedMapNodes);
 
             MapNode currentNode = nextNodes.pop();
@@ -60,6 +61,7 @@ public class MapDrawer {
 
             visited.add(currentNode);
             unvisitedMapNodes.removeValue(currentNode, true);
+            undrawnNodeCount = unvisitedMapNodes.size + nextNodes.size();
         }
         for(int i = 0; i < map.mapNodes.size; i++){
             map.mapNodes.get(i).visited = false;
@@ -129,11 +131,12 @@ public class MapDrawer {
     }
 
     /**
-     * Checks the
+     * Checks for groups of nodes unconnected to the previously drawn nodes.
+     * Must be used when with a group of nodes being iterated through passing to nextNodes
      * @param nextNodes
      * @param unvisited
      */
-    void separateGroupCheck(Stack<MapNode> nextNodes, Array<MapNode> unvisited){
+    private void separateGroupCheck(Stack<MapNode> nextNodes, Array<MapNode> unvisited){
         if(nextNodes.size() == 0){
             nextNodes.push(unvisited.pop());
         }

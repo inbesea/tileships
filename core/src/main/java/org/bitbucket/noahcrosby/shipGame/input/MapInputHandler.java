@@ -21,7 +21,12 @@ public class MapInputHandler extends InputAdapter {
         if (keycode == Input.Keys.M) { // Open the map
             // TODO : Open the map
             screen.toggleMap();
-            Gdx.app.log("Map", "Attempting to open Map - setting mapDraw to " + screen.showingMap());
+            Gdx.app.log("Map", "Toggling map - setting mapDraw to " + screen.showingMap());
+        } else if (keycode == Input.Keys.ESCAPE) {
+            if(screen.showingMap()){
+                screen.toggleMap();
+                Gdx.app.log("Map", "Toggling map - setting mapDraw to " + screen.showingMap());
+            }
         }
         return false;
     }

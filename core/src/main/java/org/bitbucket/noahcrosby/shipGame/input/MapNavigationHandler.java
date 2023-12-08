@@ -47,7 +47,7 @@ public class MapNavigationHandler extends InputAdapter {
         boolean closestIsSelectable = touch.dst(closestNode.getPosition()) < NODE_SELECT_DISTANCE;
         if(closestIsSelectable){
             Gdx.app.log("MapNavigationHandler", "Selecting node " + closestNode.getPositionAsString());
-            boolean alreadySelected = closestNode.equals(currentMap.getSelectedNode());
+            boolean alreadySelected = closestNode.equals(this.navManager.getSelectedNode());
             if(alreadySelected){
                 // We want to move there if possible
                 moveToNewNode(closestNode);
@@ -71,11 +71,13 @@ public class MapNavigationHandler extends InputAdapter {
      */
     private void moveToNewNode(MapNode closestNode) {
         if(!this.navManager.canMoveToNode(closestNode)){
-            return;
+            Gdx.app.log("MapNavigationHandler", "Cannot move to new node " + closestNode.getPositionAsString());
+        }else{
+            // Remove references to a selected node
+            Gdx.app.log("MapNavigationHandler", "Moving to new node " + closestNode.getPositionAsString());
+            this.navManager.clearSelections();
+            this.navManager.setCurrentNode(closestNode);
         }
-
-        // Remove references to a selected node
-        this.navManager.clearSelections();
     }
 
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {

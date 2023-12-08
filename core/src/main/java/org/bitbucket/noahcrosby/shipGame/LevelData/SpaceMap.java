@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Holds the map graph, draws the map graph
+ * Holds the map graph, relates to other map graphs
+ *
+ * Is NOT responsible for where the player is, or what the nodes are doing. Just relates the nodes and the edges to other maps.
  */
 public class SpaceMap {
     Array<MapNode> mapNodes;
     MapNode entryNode;
     MapNode exitNode;
-    private MapNode selectedNode;
-
 
     public SpaceMap() {
         mapNodes = new Array<>();
@@ -125,9 +125,5 @@ public class SpaceMap {
 
     public void setEntryNode(MapNode entryNode) {
         this.entryNode = entryNode;
-    }
-
-    public MapNode getSelectedNode() {
-        return this.selectedNode;
     }
 }

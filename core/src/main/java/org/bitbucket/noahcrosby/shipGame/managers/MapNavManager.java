@@ -46,7 +46,15 @@ public class MapNavManager {
         mapDrawer.setMap(currentMap);
     }
 
+    /**
+     * Sets the given node to where the player is, and replaces the old one.
+     * @param node
+     */
     public void setCurrentNode(MapNode node){
+        if(currentNode != null){
+            currentNode.setPlayerIsHere(false);
+        }
+        node.setPlayerIsHere(true);
         currentNode = node;
     }
 
@@ -100,5 +108,9 @@ public class MapNavManager {
     public boolean canMoveToNode(MapNode closestNode) {
         Gdx.app.debug("Unimplemented Method", "MapNavManager.canMoveToNode()");
         return true;
+    }
+
+    public MapNode getSelectedNode() {
+        return this.selectedNode;
     }
 }
