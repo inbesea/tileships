@@ -127,15 +127,6 @@ public class SpaceMap {
         this.entryNode = entryNode;
     }
 
-    public void selectNode(MapNode newSelectedNode) {
-        if(!this.mapNodes.contains(newSelectedNode, true)){
-            Gdx.app.error("Missing Node", "Cannot find selected node in current SpaceMap");
-            return;
-        }
-        newSelectedNode.clicked(true);
-        this.selectedNode = newSelectedNode;
-    }
-
     public MapNode getSelectedNode() {
         return this.selectedNode;
     }

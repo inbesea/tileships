@@ -41,27 +41,40 @@ public class MapNavigationHandler extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         // Get touch position and closest node to that position
         Vector2 touch = generalUtil.returnUnprojectedInputVector2(camera);
-        MapNode temp = generalUtil.getClosestObject(touch, currentMap.getMapNodes());
+        MapNode closestNode = generalUtil.getClosestObject(touch, currentMap.getMapNodes());
 
         // Selecting newly clicked node
-        boolean closestIsSelectable = touch.dst(temp.getPosition()) < NODE_SELECT_DISTANCE;
+        boolean closestIsSelectable = touch.dst(closestNode.getPosition()) < NODE_SELECT_DISTANCE;
         if(closestIsSelectable){
-            if(temp.equals(currentMap.getSelectedNode())){
-                currentMap.selectNode(null);
-                this.navManager.clearSelections();
+            boolean alreadySelected = closestNode.equals(currentMap.getSelectedNode());
+            if(alreadySelected){
+                // We want to move there if possible
+                moveToNewNode(closestNode);
             } else {
-                currentMap.selectNode(temp);
-                this.navManager.highLightNewNode(temp);
+                this.navManager.selectNode(closestNode);
             }
         } else {
             clearSelections();
         }
 
-        Gdx.app.log("Tag",  touch.x + " " + touch.y + " Found this MapNode " + temp.getPositionAsString());
-        if(touch.dst(temp.getPosition()) < 20){
+        Gdx.app.log("Tag",  touch.x + " " + touch.y + " Found this MapNode " + closestNode.getPositionAsString());
+        if(touch.dst(closestNode.getPosition()) < 20){
 //            temp.drawDebug();
         }
         return false;
+    }
+
+    /**
+     * Moves the player to a new location if possible.
+     * @param closestNode
+     */
+    private void moveToNewNode(MapNode closestNode) {
+        if(!this.navManager.canMoveToNode(closestNode)){
+            return;
+        }
+
+        // Remove references to a selected node
+        this.navManager.clearSelections();
     }
 
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {

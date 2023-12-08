@@ -17,7 +17,7 @@ public class MapNavManager {
     MapNode currentNode;
     boolean drawingCurrentMap;
     protected MapDrawer mapDrawer;
-    protected MapNode hightLightNode;
+    protected MapNode selectedNode;
 
 
     public MapNavManager(){
@@ -61,15 +61,23 @@ public class MapNavManager {
         mapDrawer.drawMap(transform);
     }
 
-    public MapNode highLightNewNode(MapNode newNode) {
+    /**
+     * Informs the node it has been selected and keeps the number of selected nodes to one
+     * @param newNode - node that is selected
+     */
+    public MapNode selectNode(MapNode newNode) {
         if(newNode == null){
             Gdx.app.error("Null Error", "newNode is null MapNavManager.highlightNewNode()");
             return null;
         }
-        if(this.hightLightNode != null)this.hightLightNode.clicked(false); // Check the highlit node is not null
+        if(!this.currentMap.getMapNodes().contains(newNode, true)){
+            Gdx.app.error("Missing Node", "Cannot find selected node in current SpaceMap");
+            return null;
+        }
+        if(this.selectedNode != null)this.selectedNode.clicked(false); // Check the highlit node is not null
 
-        this.hightLightNode = newNode;
-        this.hightLightNode.clicked(true);
+        newNode.clicked(true);
+        this.selectedNode = newNode;
         return newNode;
     }
 
@@ -78,9 +86,19 @@ public class MapNavManager {
      */
     public void clearSelections() {
         // Removes selected node and de-clicks it.
-        if(this.hightLightNode != null){
-            this.hightLightNode.clicked(false);
-            this.hightLightNode = null;
+        if(this.selectedNode != null){
+            this.selectedNode.clicked(false);
+            this.selectedNode = null;
         }
+    }
+
+    /**
+     * Determines if a node can be moved to
+     * @param closestNode
+     * @return
+     */
+    public boolean canMoveToNode(MapNode closestNode) {
+        Gdx.app.debug("Unimplemented Method", "MapNavManager.canMoveToNode()");
+        return true;
     }
 }
