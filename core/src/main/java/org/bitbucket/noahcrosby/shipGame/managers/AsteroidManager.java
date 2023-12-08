@@ -10,6 +10,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.util.ObjectRoller;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class AsteroidManager implements Manager {
     float spawnRadius = TileShipGame.defaultViewportSizeX;
     OrthographicCamera camera;
     Box2DWrapper box2DWrapper;
-
+    ObjectRoller asteroidRoller;
     boolean arcadeMode = false;
 
     /**
@@ -142,7 +143,6 @@ public class AsteroidManager implements Manager {
      * Method that spawns an asteroid and adds it to the gameObject list and local asteroids list
      */
     public void spawnAsteroid(){
-        // Check if active
         Vector2 spawnLocation = getVectorInValidSpawnArea();
 
         final Asteroid asteroid;
