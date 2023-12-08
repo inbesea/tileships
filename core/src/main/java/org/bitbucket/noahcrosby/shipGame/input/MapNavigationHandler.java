@@ -46,6 +46,7 @@ public class MapNavigationHandler extends InputAdapter {
         // Selecting newly clicked node
         boolean closestIsSelectable = touch.dst(closestNode.getPosition()) < NODE_SELECT_DISTANCE;
         if(closestIsSelectable){
+            Gdx.app.log("MapNavigationHandler", "Selecting node " + closestNode.getPositionAsString());
             boolean alreadySelected = closestNode.equals(currentMap.getSelectedNode());
             if(alreadySelected){
                 // We want to move there if possible
@@ -57,7 +58,7 @@ public class MapNavigationHandler extends InputAdapter {
             clearSelections();
         }
 
-        Gdx.app.log("Tag",  touch.x + " " + touch.y + " Found this MapNode " + closestNode.getPositionAsString());
+        Gdx.app.log("MapNavigationHandler",  touch.x + " " + touch.y + " Found this MapNode " + closestNode.getPositionAsString());
         if(touch.dst(closestNode.getPosition()) < 20){
 //            temp.drawDebug();
         }

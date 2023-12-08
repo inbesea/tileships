@@ -1,13 +1,12 @@
 package org.bitbucket.noahcrosby.shipGame.input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
 public class DebugInputHandler extends InputAdapter {
 
@@ -23,7 +22,7 @@ public class DebugInputHandler extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println("Keycode pressed is : " + keycode);
+        Gdx.app.debug("DebugInputHandler","Keycode pressed is : " + keycode);
 
         // Begin collecting tiles for collapse
         if (!playerShip.isCollectingTiles() && keycode == Input.Keys.SHIFT_LEFT) {
