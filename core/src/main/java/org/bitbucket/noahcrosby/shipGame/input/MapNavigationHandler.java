@@ -49,8 +49,9 @@ public class MapNavigationHandler extends InputAdapter {
             Gdx.app.log("MapNavigationHandler", "Selecting node " + closestNode.getPositionAsString());
             boolean alreadySelected = closestNode.equals(this.navManager.getSelectedNode());
             if(alreadySelected){
-                // We want to move there if possible
-                moveToNewNode(closestNode);
+                if(!closestNode.playerIsHere()){
+                    moveToNewNode(closestNode);
+                }
             } else {
                 this.navManager.selectNode(closestNode);
             }
