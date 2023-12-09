@@ -88,7 +88,6 @@ public class GameScreen implements Screen {
         mapNavigator = new MapNavManager();
         mapNavigator.addMap(MapUtils.getDefaultMap());
         hud = new MainGameHUD(game, mapNavigator);
-        hud.setMapNavigator(mapNavigator);
 
         // Add input event handling
         initializeInputEventHandling();

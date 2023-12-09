@@ -17,7 +17,7 @@ public class MainGameHUD extends HUD {
     public MainGameHUD(TileShipGame game, MapNavManager mapNavigator) {
         super(game);
 
-        this.mapNavigator = mapNavigator;
+        setMapNavigator(mapNavigator);
         this.mapDrawer = new MapDrawer(mapNavigator.currentMap); // Put this into the navigator so the HUD can be less complicated.
     }
 
