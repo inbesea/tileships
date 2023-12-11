@@ -1,5 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.screens;
 
+import com.badlogic.ashley.signals.Listener;
+import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -13,6 +15,7 @@ import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -36,7 +39,7 @@ import java.util.ArrayList;
 /**
  * Main game screen - where the game happens
  */
-public class GameScreen implements Screen {
+public class GameScreen implements Screen, Listener<MapNode> {
     final TileShipGame game;
     final AsteroidManager asteroidManager;
     private final MainGameHUD hud;
@@ -64,6 +67,7 @@ public class GameScreen implements Screen {
     private boolean updateLocalMapLocation = true;
     private MapNavManager mapNavigator;
     private MapNavigationHandler mapInputNavigator;
+    Listener nodeListener;
 
 
     public GameScreen(final TileShipGame game) {
@@ -86,7 +90,8 @@ public class GameScreen implements Screen {
 
         asteroidManager = new AsteroidManager(box2DWrapper ,camera);
         mapNavigator = new MapNavManager();
-        mapNavigator.addMap(MapUtils.getDefaultMap());
+        mapNavigator.getPublisher().add(this);// Get game screen to watch the new nodes.
+        mapNavigator.addMap(MapUtils.getDefaultMap());// Temp for testing
         hud = new MainGameHUD(game, mapNavigator);
 
         // Add input event handling
@@ -366,5 +371,10 @@ public class GameScreen implements Screen {
 
     public boolean showingMap() {
         return hud.showingMap();
+    }
+
+    @Override
+    public void receive(Signal<MapNode> signal, MapNode newNode) {
+        Gdx.app.log("Received Node", "GameScreen has received a new node " + newNode.getPositionAsString());
     }
 }

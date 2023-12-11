@@ -2,6 +2,10 @@ package org.bitbucket.noahcrosby;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+
+import static com.badlogic.gdx.Application.LOG_DEBUG;
+import static com.badlogic.gdx.Application.LOG_INFO;
 
 /**
  * Handles settings
@@ -94,8 +98,17 @@ public class AppPreferences {
         getPrefs().flush();
     }
 
+    /**
+     * Switches app to debug mode
+     * Also affects the logging level.
+     */
     public void toggleIsDebug() {
         getPrefs().putBoolean(IS_DEBUG_MODE, !getIsDebug());
         getPrefs().flush();
+        if(getIsDebug()){
+            Gdx.app.setLogLevel(LOG_DEBUG);
+        } else {
+            Gdx.app.setLogLevel(LOG_INFO);
+        }
     }
 }
