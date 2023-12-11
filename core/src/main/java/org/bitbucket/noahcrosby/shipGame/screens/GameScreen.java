@@ -69,7 +69,6 @@ public class GameScreen implements Screen, Listener<MapNode> {
     private MapNavigationHandler mapInputNavigator;
     Listener nodeListener;
 
-
     public GameScreen(final TileShipGame game) {
         this.game = game;
 
@@ -383,5 +382,19 @@ public class GameScreen implements Screen, Listener<MapNode> {
     @Override
     public void receive(Signal<MapNode> signal, MapNode newNode) {
         Gdx.app.log("Received Node", "GameScreen has received a new node " + newNode.getPositionAsString());
+        transitionNodes(newNode, mapNavigator.getPreviousNode());
+    }
+
+    /**
+     * Moves the game screen between two nodes.
+     * Might be difficult to edit in the future, but will work for us now.
+     * @param nn
+     * @param pn
+     */
+    private void transitionNodes(MapNode nn, MapNode pn){
+        // VERY TODO : Get the spawners working so we can get a set of finite asteroids here lol
+        pn.setAsteroids(asteroidManager.getFiniteAsteroids());
+        asteroidManager.setFiniteAsteroids(nn.getAsteroids());
+        asteroidManager.setSpawner(nn.getAsteroidSpawner()); // Need this to keep up basic spawning situations.
     }
 }

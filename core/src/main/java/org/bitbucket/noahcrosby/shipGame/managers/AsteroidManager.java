@@ -3,10 +3,12 @@ package org.bitbucket.noahcrosby.shipGame.managers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidSpawner;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
@@ -36,6 +38,7 @@ public class AsteroidManager implements Manager {
     OrthographicCamera camera;
     Box2DWrapper box2DWrapper;
     ObjectRoller asteroidRoller;
+    Array<Asteroid> finiteAsteroids;
     boolean arcadeMode = false;
 
     /**
@@ -121,6 +124,18 @@ public class AsteroidManager implements Manager {
     }
 
     /**
+     * Returns the asteroid after attempting to remove it from the list and box2d simulation.
+     * @param asteroid
+     * @return
+     */
+    public Asteroid removeMember(Asteroid asteroid){
+        if(asteroid.getID() != ID.Asteroid)return null;
+        asteroids.remove(asteroid);
+        box2DWrapper.removeObjectBody(asteroid.getBody());
+        return asteroid;
+    }
+
+    /**
      * Returns true if asteroid instance has larger abs x,y than allowed.
      *
      * @param asteroid - asteroid instance to check
@@ -158,6 +173,24 @@ public class AsteroidManager implements Manager {
 
         asteroids.add(asteroid);
         numberOfAsteroids = asteroids.size();
+    }
+
+    /**
+     * Adds existing asteroid to the manager and physics sim
+     * Returns the asteroid to a valid spawn area.
+     * @param asteroid
+     * @return
+     */
+    public Asteroid addAsteroid(Asteroid asteroid){
+        if(asteroids.contains(asteroid))return asteroid; // Don't double add an asteroid
+        Vector2 spawnLocation = getVectorInValidSpawnArea();
+
+        asteroid.setPosition(spawnLocation);
+        box2DWrapper.setObjectPhysics(asteroid);
+        asteroids.add(asteroid);
+        numberOfAsteroids = asteroids.size();
+
+        return asteroid;
     }
 
     /**
@@ -204,7 +237,7 @@ public class AsteroidManager implements Manager {
     /**
      * Removes all asteroids in manager and physics simulation
      */
-    public void removeAllAsteroids(){
+    public void deleteAllAsteroids(){
         // Go through the asteroids and remove their reference from the local list and the screen object list
         for(int i = 0; i < asteroids.size(); i++){
             deleteMember(asteroids.get(i));
@@ -213,6 +246,8 @@ public class AsteroidManager implements Manager {
             System.out.println("ERROR : removeAllAsteroids() did not clear asteroid array in AsteroidManager");
         }
     }
+
+
 
     /**
      * Returns array of asteroids
@@ -234,5 +269,21 @@ public class AsteroidManager implements Manager {
 
     public Circle getAsteroidSpawnZone() {
         return asteroidSpawnZone;
+    }
+
+    public Array<Asteroid> getFiniteAsteroids() {
+        return finiteAsteroids;
+    }
+
+    /**
+     * set the array of asteroids that can be diminished.
+     * @param asteroids
+     */
+    public void setFiniteAsteroids(Array<Asteroid> asteroids) {
+        finiteAsteroids = asteroids;
+    }
+
+    public void setSpawner(AsteroidSpawner asteroidSpawner) {
+
     }
 }

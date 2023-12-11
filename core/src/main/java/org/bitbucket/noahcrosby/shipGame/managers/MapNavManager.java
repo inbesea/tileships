@@ -17,6 +17,7 @@ public class MapNavManager {
     Array<SpaceMap> mapList;
     public SpaceMap currentMap;
     MapNode currentNode;
+    MapNode previousNode;
     boolean drawingCurrentMap;
     protected MapDrawer mapDrawer;
     protected MapNode selectedNode;
@@ -57,6 +58,7 @@ public class MapNavManager {
     public void setCurrentNode(MapNode node){
         if(currentNode != null){
             currentNode.setPlayerIsHere(false);
+            previousNode = currentNode;
         }
         node.setPlayerIsHere(true);
         currentNode = node;
@@ -131,5 +133,14 @@ public class MapNavManager {
 
     public MapNode getSelectedNode() {
         return this.selectedNode;
+    }
+
+
+    public MapNode getCurrentNode() {
+        return currentNode;
+    }
+
+    public MapNode getPreviousNode() {
+        return previousNode;
     }
 }

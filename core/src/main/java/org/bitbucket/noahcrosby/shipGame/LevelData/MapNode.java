@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidSpawner;
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
@@ -32,6 +34,7 @@ public class MapNode extends GameObject {
     float rotation = generalUtil.getRandomNumber(0, 360);
     float rotationSpeed = generalUtil.getRandomlyNegativeNumber(3f, 8f);
     private boolean clicked;
+    private Array<Asteroid> asteroids;
 
     /**
      * General node of a map. Can be overridden for new visuals etc.
@@ -194,5 +197,21 @@ public class MapNode extends GameObject {
 
     public void setPlayerIsHere(boolean b) {
         this.playerVisited = b;
+    }
+
+    /**
+     * Set the asteroids in this MapNode
+     */
+    public void setAsteroids(Array<Asteroid> asteroids){
+
+    }
+
+    public Array<Asteroid> getAsteroids() {
+        return this.asteroids;
+    }
+
+    public AsteroidSpawner getAsteroidSpawner() {
+
+        return null;
     }
 }
