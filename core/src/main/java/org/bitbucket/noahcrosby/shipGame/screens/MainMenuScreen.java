@@ -60,7 +60,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
         stage = new Stage(new ScreenViewport());
 
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Resources.loadAssets();
 
         setMapValues();

@@ -1,5 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
+import com.badlogic.ashley.signals.Listener;
+import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
@@ -18,11 +20,13 @@ public class MapNavManager {
     boolean drawingCurrentMap;
     protected MapDrawer mapDrawer;
     protected MapNode selectedNode;
+    protected Signal<MapNode> publisher;
 
 
     public MapNavManager(){
         mapList = new Array<>();
         mapDrawer = new MapDrawer();
+        publisher = new Signal<>();
     }
 
     public void addMap(SpaceMap map){
@@ -56,8 +60,23 @@ public class MapNavManager {
         }
         node.setPlayerIsHere(true);
         currentNode = node;
+        publishNewNode();
     }
 
+    /**
+     * Notifies listeners that a new node has been arrived.
+     */
+    private void publishNewNode(){
+        publisher.dispatch(currentNode);
+    }
+
+    /**
+     * Convenience method to get the current node.
+     * @return
+     */
+    public Signal<MapNode> getPublisher() {
+        return publisher;
+    }
 
     public void setDrawing(boolean drawMap) {
             drawingCurrentMap = drawMap;
