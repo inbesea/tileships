@@ -18,6 +18,7 @@ public class AppPreferences {
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
     private static final String IS_DEBUG_MODE = "debug.mode";
+    private static final String IS_FULL_SCREEN = "fullscreen";
     // Location of preferences
     private static final String PREFS_NAME = "b2dtut";
 
@@ -59,6 +60,20 @@ public class AppPreferences {
     public void setMusicVolume(float volume) {
         getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
         getPrefs().flush();
+    }
+
+    public void setIsFullScreen(boolean isFullScreen) {
+        if(isFullScreen){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        } else {
+            Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+        getPrefs().putBoolean(IS_FULL_SCREEN, isFullScreen);
+        getPrefs().flush();
+    }
+
+    public boolean isFullScreen() {
+        return getPrefs().getBoolean(IS_FULL_SCREEN, false);
     }
 
     public boolean isSoundEffectsEnabled() {
