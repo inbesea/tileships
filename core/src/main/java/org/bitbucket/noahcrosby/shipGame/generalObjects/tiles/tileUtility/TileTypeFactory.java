@@ -18,17 +18,17 @@ public class TileTypeFactory {
      * @param id
      * @return
      */
-    public static ShipTile getShipTileTypeInstance(Vector2 vector2, ID id, ShipTilesManager manager){
+    public static ShipTile getShipTileTypeInstance(Vector2 vector2, ID id){
         if(id == null) return null;
         switch (id) {
             case StandardTile :
-                return new StandardTile(vector2, manager);
+                return new StandardTile(vector2);
             case CoreTile:
-                return new CoreTile(vector2, manager);
+                return new CoreTile(vector2);
             case StrongTile:
-                return new StrongTile(vector2, manager);
+                return new StrongTile(vector2);
             case ColorTile:
-                return new ColorTile(vector2, manager);
+                return new ColorTile(vector2);
             default: return null;
         }
     }

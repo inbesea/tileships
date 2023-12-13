@@ -10,8 +10,8 @@ public class ColorAsteroid extends Asteroid {
     private ArcadeColors color;
     private Texture colorTexture;
 
-    public ColorAsteroid(Vector2 position, Vector2 size, ID id, AsteroidManager asteroidManager) {
-        super(position, size, id, asteroidManager);
+    public ColorAsteroid(Vector2 position, Vector2 size, ID id) {
+        super(position, size, id);
 
         color = ArcadeColors.getRandomColor();
         setColor(color);

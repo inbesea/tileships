@@ -95,6 +95,11 @@ public class AsteroidManager implements Manager {
         Asteroid temp;
         for(int i = 0; i < asteroids.size(); i++){
             temp = asteroids.get(i);
+
+            if(temp.getIsDead()){
+                deleteMember(temp);
+            }
+
             temp.updatePosition();
             if(outOfBounds(temp)){
                 deleteMember(temp);
@@ -163,9 +168,9 @@ public class AsteroidManager implements Manager {
         final Asteroid asteroid;
 
         if(isArcadeMode()){
-            asteroid = new ColorAsteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
+            asteroid = new ColorAsteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid);
         } else {
-            asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid, this);
+            asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid);
         }
 
         box2DWrapper.setObjectPhysics(asteroid);

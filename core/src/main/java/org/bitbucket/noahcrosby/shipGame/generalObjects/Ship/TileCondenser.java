@@ -53,7 +53,7 @@ public class TileCondenser {
         ID id;
 
         // Faster check for single tile
-        if (tiles.size == 1) return TileTypeFactory.getShipTileTypeInstance(new Vector2(0, 0), singleTileHandle(tiles), null);
+        if (tiles.size == 1) return TileTypeFactory.getShipTileTypeInstance(new Vector2(0, 0), singleTileHandle(tiles));
 
         id = checkStringRecipeMatches(tiles);
 
@@ -61,7 +61,7 @@ public class TileCondenser {
         if(result != null) return result;
 
         if(id != null) { // This is too specific, we want to be able to produce more specific stuff than this.
-            result = TileTypeFactory.getShipTileTypeInstance(new Vector2(0, 0), id, null);
+            result = TileTypeFactory.getShipTileTypeInstance(new Vector2(0, 0), id);
             return result;
         }else{
             return null;

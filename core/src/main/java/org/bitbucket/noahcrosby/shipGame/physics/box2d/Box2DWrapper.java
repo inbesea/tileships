@@ -169,7 +169,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         if (id.isTileType()) {
             System.out.println("Deleting a tile");
             ShipTile tile = (ShipTile) gameObject;
-            tile.destroySelf();
+            tile.setIsDeadTrue();
         } else {
             System.out.println("Deleting not a tile");
             gameObject.deleteFromGame();

@@ -8,8 +8,8 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTy
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
 public class StrongTile extends ShipTile implements ShipTileInterface{
-    public StrongTile(Vector2 vector2, ShipTilesManager manager){
-        super(vector2, ID.StrongTile, TileTypeData.StrongTile, manager);
+    public StrongTile(Vector2 vector2){
+        super(vector2, ID.StrongTile, TileTypeData.StrongTile);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
 
     @Override
     public boolean deleteFromGame() {
-        destroySelf();
+        setIsDeadTrue();
         return true;
     }
 }

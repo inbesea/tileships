@@ -12,8 +12,8 @@ import org.bitbucket.noahcrosby.javapoet.Resources;
  */
 public class StandardTile extends ShipTile{
 
-    public StandardTile(Vector2 vector2, ShipTilesManager manager){
-        super(vector2, ID.StandardTile, TileTypeData.StandardTile, manager);
+    public StandardTile(Vector2 vector2){
+        super(vector2, ID.StandardTile, TileTypeData.StandardTile);
 
     }
 
@@ -43,7 +43,7 @@ public class StandardTile extends ShipTile{
 
     @Override
     public boolean deleteFromGame() {
-        destroySelf();
+        setIsDeadTrue();
         return true;
     }
 }

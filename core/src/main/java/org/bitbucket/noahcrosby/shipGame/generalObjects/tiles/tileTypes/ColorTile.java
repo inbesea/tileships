@@ -22,8 +22,8 @@ public class ColorTile extends ShipTile{
      * @param position - the position of the tile
      * @param manager - the shipTile's manager
      */
-    public ColorTile(Vector2 position, ShipTilesManager manager) {
-        super(position, ID.ColorTile, TileTypeData.ColorTile, manager);
+    public ColorTile(Vector2 position) {
+        super(position, ID.ColorTile, TileTypeData.ColorTile);
 
         setColor(ArcadeColors.getRandomColor()); // Default color is red. We can set this again after the tile is created
     }
@@ -44,7 +44,7 @@ public class ColorTile extends ShipTile{
 
     @Override
     public boolean deleteFromGame() {
-        return destroySelf();
+        return setIsDeadTrue();
     }
 
     @Override
