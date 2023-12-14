@@ -77,7 +77,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
         arcadeGameObjects = new Array<>();
 
-        collisionHandler = new ArcadeCollisionHandler(this);
+        collisionHandler = new ArcadeCollisionHandler(this, arcadeShip.getTileManager());
         CollisionListener collisionListener = new CollisionListener(collisionHandler);
         box2DWrapper.setWorldContactListener(collisionListener);
     }

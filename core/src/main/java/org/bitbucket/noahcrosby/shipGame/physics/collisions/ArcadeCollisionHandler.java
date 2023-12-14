@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ColorTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
@@ -10,10 +11,12 @@ public class ArcadeCollisionHandler extends  CollisionHandler {
 
     ArcadeModeScreen arcadeModeScreen;
     AsteroidManager asteroidManager;
+    ShipTilesManager tilesManager;
 
-    public ArcadeCollisionHandler(ArcadeModeScreen arcadeModeScreen) {
+    public ArcadeCollisionHandler(ArcadeModeScreen arcadeModeScreen, ShipTilesManager tilesManager) {
         this.arcadeModeScreen = arcadeModeScreen;
         this.asteroidManager = arcadeModeScreen.getAsteroidManager();
+        this.tilesManager = tilesManager;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class ArcadeCollisionHandler extends  CollisionHandler {
                 ColorAsteroid asteroid = getAsteroid(collision);
                 asteroid.physicsDelete();
                 ColorTile tile = getColorTile(collision);
-                ColorTile newTile = (ColorTile) tile.getManager().addTile(asteroid.getX() + asteroid.getWidth() / 2, asteroid.getY() + asteroid.getHeight() / 2, ID.ColorTile);
+                ColorTile newTile = (ColorTile) tilesManager.addTile(asteroid.getX() + asteroid.getWidth() / 2, asteroid.getY() + asteroid.getHeight() / 2, ID.ColorTile);
                 newTile.setColor(asteroid.getColor());
             }
         }

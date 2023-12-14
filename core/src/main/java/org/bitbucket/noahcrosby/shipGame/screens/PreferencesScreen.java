@@ -19,6 +19,7 @@ public class PreferencesScreen implements Screen {
     private Label volumeSoundLabel;
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
+    private Label fullScreenLabel;
     private Music preferencesScreenMusic;
 
     public PreferencesScreen(final TileShipGame game){
@@ -92,6 +93,18 @@ public class PreferencesScreen implements Screen {
             }
         });
 
+        // fullscreen
+        final CheckBox fullScreenCheckbox = new CheckBox(null, skin);
+        fullScreenCheckbox.setChecked(game.getPreferences().isFullScreen());
+        fullScreenCheckbox.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                boolean enabled = fullScreenCheckbox.isChecked();
+                game.getPreferences().setIsFullScreen(enabled);
+                return game.getPreferences().isFullScreen();
+            }
+        });
+
         // return to main screen button
         final TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
@@ -108,6 +121,7 @@ public class PreferencesScreen implements Screen {
         volumeSoundLabel = new Label( "Sound Volume", skin );
         musicOnOffLabel = new Label( "Music", skin );
         soundOnOffLabel = new Label( "Sound Effect", skin );
+        fullScreenLabel = new Label( "Full Screen", skin );
 
 
         // Add to table
@@ -124,6 +138,9 @@ public class PreferencesScreen implements Screen {
         table.row().pad(10,0,0,10);
         table.add(soundOnOffLabel).left();
         table.add(soundEffectsCheckbox);
+        table.row().pad(10,0,0,10);
+        table.add(fullScreenLabel).left();
+        table.add(fullScreenCheckbox);
         table.row().pad(10,0,0,10);
         table.add(backButton).colspan(2);
     }
@@ -149,7 +166,7 @@ public class PreferencesScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        this.stage.getViewport().update(width, height, true);
     }
 
     @Override

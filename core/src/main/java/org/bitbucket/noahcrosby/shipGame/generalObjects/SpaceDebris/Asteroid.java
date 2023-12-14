@@ -23,15 +23,14 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	public static float minSpeed = 0.2f;
 	public static float radius = 0.5f;
 	Circle circle;
-	AsteroidManager asteroidManager;
-	public Asteroid(Vector2 position, Vector2 size , ID id, AsteroidManager asteroidManager) {
+    private boolean isDead;
+	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
 		velX = getRandomlyNegativeNumber(minSpeed,maxSpeed);
 		velY = getRandomlyNegativeNumber(minSpeed,maxSpeed);
 		radius = size.y * 0.5f;
 		circle = new Circle(position.x + radius, position.y + radius, radius);
-		this.asteroidManager = asteroidManager;
 	}
 
 	/**
@@ -41,14 +40,13 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	 * @param velocity
 	 * @param id
 	 */
-	public Asteroid(Vector2 position, Vector2 size, Vector2 velocity, ID id, AsteroidManager asteroidManager) {
+	public Asteroid(Vector2 position, Vector2 size, Vector2 velocity, ID id) {
 		super(position, size, id);
 
 		velX = velocity.x;
 		velY = velocity.y;
 		radius = size.y * 0.5f;
 		circle = new Circle(position.x + radius, position.y + radius, radius);
-		this.asteroidManager = asteroidManager;
 	}
 
 	public Rectangle getBounds(){
@@ -66,11 +64,18 @@ public class Asteroid extends GameObject implements PhysicsObject {
 
 	@Override
 	public boolean deleteFromGame() {
-		System.out.println("Asteroid is deleting itself from the manager");
-		asteroidManager.deleteMember(this);
-		System.out.println("Returning true after deleting asteroid");
-		return true;
+		setIsDead(true);
+        return getIsDead();
 	}
+
+    public boolean getIsDead(){
+        return this.isDead;
+    }
+
+    public boolean setIsDead(boolean isDead){
+        this.isDead = isDead;
+        return this.isDead;
+    }
 
 	@Override
 	public Body setPhysics(World world) {

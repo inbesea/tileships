@@ -25,22 +25,19 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     public final static float TILE_SIZE = 64f;
     private final Rectangle bounds;
     private final TileTypeData typeData; // Need for unique platonic form data
-
-    private final ShipTilesManager manager;
+    private boolean isDead = false;
 
     /**
      * ShipTiles are the basic unit of a Ship. They are boxes of data, and can be extended to do more.
      * The position needs to a multiple of TILE_SIZE or the index will be wrong.
      */
-    public ShipTile(Vector2 position, ID id, TileTypeData typeData, ShipTilesManager manager) {
+    public ShipTile(Vector2 position, ID id, TileTypeData typeData) {
         // vector is not adjusted, so tiles can be independently created anywhere
         super(position, new Vector2(TILE_SIZE, TILE_SIZE), id);
 
         setPosition(position);
 
         this.typeData = typeData;
-
-        this.manager = manager;
 
         bounds = new Rectangle(this.position.x, this.position.y, ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
         // Need to knit together the shiptile to adjacent tiles connectAdjacent();
@@ -299,23 +296,21 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         return neighbors.isWhichNeighbor(tile);
     }
 
-    public ShipTilesManager getManager() {
-        return manager;
-    }
-
     /**
      * Call to remove this tile from it's manager.
      */
-    public boolean destroySelf() {
-        boolean tileBelongsToItsManager = manager.returnTile(this.getPosition()) != null;
+    public boolean setIsDeadTrue() {
+        setIsDead(true);
+        return getIsDead();
+    }
 
-        if (tileBelongsToItsManager) {
-            manager.removeTileFromShip(this);
-            return true;
-        } else {
-            System.out.println("ERROR : ShipTile " + this.getID() + " at " + this.getPositionAsString() + " does not belong to its manager.");
-            return false;
-        }
+    public boolean getIsDead(){
+        return isDead;
+    }
+
+    public boolean setIsDead(boolean isDead){
+        this.isDead = isDead;
+        return this.isDead;
     }
 
     /**

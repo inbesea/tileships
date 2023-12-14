@@ -67,6 +67,7 @@ public class Ship extends GameObject {
      *  TODO : Scale tile locations by the ship position to allow ship movement.
      */
     public void render(TileShipGame game) {
+        shipTilesManager.purgeDead(); // Clean up before drawing (could cause problems if not drawing while simulating)
         Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
         // Draw tiles
@@ -235,7 +236,7 @@ public class Ship extends GameObject {
 
     @Override
     public boolean deleteFromGame() {
-        shipTilesManager.deleteSelf();
+        shipTilesManager.clearTileArrays();
         return true;
     }
 

@@ -2,7 +2,6 @@ package org.bitbucket.noahcrosby;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 
 import static com.badlogic.gdx.Application.LOG_DEBUG;
 import static com.badlogic.gdx.Application.LOG_INFO;
@@ -18,6 +17,7 @@ public class AppPreferences {
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
     private static final String IS_DEBUG_MODE = "debug.mode";
+    private static final String IS_FULL_SCREEN = "fullscreen";
     // Location of preferences
     private static final String PREFS_NAME = "b2dtut";
 
@@ -59,6 +59,29 @@ public class AppPreferences {
     public void setMusicVolume(float volume) {
         getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
         getPrefs().flush();
+    }
+
+    /**
+     * Calls the IS_FULL_SCREEN location and returns the value if set, else returns default value.
+     * Sets the Gdx.graphics.screen mode depending on the passed boolean.
+     * @param isFullScreen
+     */
+    public void setIsFullScreen(boolean isFullScreen) {
+        if(isFullScreen){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        } else {
+            Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+        getPrefs().putBoolean(IS_FULL_SCREEN, isFullScreen);
+        getPrefs().flush();
+    }
+
+    /**
+     * Returns true if the game is in full screen mode else false
+     * @return - boolean representing fullscreen status
+     */
+    public boolean isFullScreen() {
+        return getPrefs().getBoolean(IS_FULL_SCREEN, false);
     }
 
     public boolean isSoundEffectsEnabled() {

@@ -97,7 +97,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         initializeInputEventHandling();
 
         // Create collision listener
-        collisionHandler = new ClassicCollisionHandler(asteroidManager);// Handler has manager to manage stuff
+        collisionHandler = new ClassicCollisionHandler(asteroidManager, playerShip.getTileManager());// Handler has manager to manage stuff
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
         box2DWrapper.setWorldContactListener(collisionListener); // Get the world in contact with this collision listener
 
@@ -387,13 +387,16 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     /**
      * Moves the game screen between two nodes.
+     * Does not set the new node or anything
      * Might be difficult to edit in the future, but will work for us now.
      * @param nn
      * @param pn
      */
     private void transitionNodes(MapNode nn, MapNode pn){
+        if(pn != null){
+            pn.setAsteroids(asteroidManager.getFiniteAsteroids());
+        }
         // VERY TODO : Get the spawners working so we can get a set of finite asteroids here lol
-        pn.setAsteroids(asteroidManager.getFiniteAsteroids());
         asteroidManager.setFiniteAsteroids(nn.getAsteroids());
         asteroidManager.setSpawner(nn.getAsteroidSpawner()); // Need this to keep up basic spawning situations.
     }

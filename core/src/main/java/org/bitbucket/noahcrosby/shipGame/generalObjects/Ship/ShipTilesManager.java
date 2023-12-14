@@ -193,7 +193,7 @@ public class ShipTilesManager {
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
-        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id, this);
+        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id);
         validateNewTileIndex(tempTile);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
@@ -674,8 +674,9 @@ public class ShipTilesManager {
         return edgeTiles;
     }
 
-    public void deleteSelf() {
+    public void clearTileArrays() {
         this.existingTiles.clear();
+        this.edgeTiles.clear();
     }
 
     /**
@@ -685,5 +686,18 @@ public class ShipTilesManager {
     public Vector2 getPlacementVector() {
         Vector3 playerInputPosition = returnUnprojectedInputPosition(GameScreen.getGameCamera());
         return this.getClosestPlacementVector2(generalUtil.flattenVector(playerInputPosition));
+    }
+
+    /**
+     * Removes dead tiles when called
+     */
+    public void purgeDead(){
+        ShipTile tile;
+        for(int i = 0 ; i < this.existingTiles.size ; i++){
+            tile = existingTiles.get(i);
+            if(tile.getIsDead()){
+                this.removeTileFromShip(tile);
+            }
+        }
     }
 }
