@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.util;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
@@ -9,23 +10,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 public class generalUtil {
-
-    /**
-     *
-     * Renders a texture at normalized x,y
-     *
-     * @param gameObject - object to hold all data needed to render a thing.
-     */
-    public static void render(GameObject gameObject, OrthographicCamera camera){
-        Vector3 vector = new Vector3(gameObject.getX(), gameObject.getY(), 0);
-        camera.unproject(vector);
-
-        // Restrictions, need a reference to the game context to render.
-        // game.batch.draw begin and all that.
-        // Need the normalized x ,y  and the texture.
-    }
 
     /**
      * Handles getting mouse position in terms of the camera.
@@ -34,11 +21,23 @@ public class generalUtil {
      * @param camera - Orthographic camera for context
      * @return - Vector3 of unprojected mouse position based on Gdx.input.getX/Y();
      */
-    public static Vector3 returnUnprojectedPosition(OrthographicCamera camera){
+    public static Vector3 returnUnprojectedInputPosition(OrthographicCamera camera){
         Vector3 position = new Vector3();
         position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(position);
         return position;
+    }
+
+    /** Unprojects the mouse position as a Vector3
+     *
+         * @param camera - Orthographic camera for context
+     * @return - Vector3 of unprojected mouse position based on Gdx.input.getX/Y();
+     */
+    public static Vector2 returnUnprojectedInputVector2(OrthographicCamera camera){
+        Vector3 position = new Vector3();
+        position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(position);
+        return flattenVector(position);
     }
 
     /**
@@ -81,8 +80,8 @@ public class generalUtil {
      * @param max
      * @return
      */
-    public static float getRandomNumber(int min, int max) {
-        return (float) ((Math.random() * (max - min)) + min);
+    public static int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
@@ -178,27 +177,27 @@ public class generalUtil {
     }
 
     /**
-     * Returns what quadrant the boat is in relative to the anchor.
+     * Returns a quadrant of a point relative to an origin on a 2D plane
      *
-     * @param anchor - The origin of the calculation
-     * @param boat - The point to find the quadrant of
+     * @param orgn - The origin of the calculation
+     * @param pt - The point to find the quadrant of
      * @return - An int representing a quadrant:
      * 0, 1 ,2 ,3 == North, East, South, West respectively.
      */
-    public static int getQuadrant(Vector2 anchor, Vector2 boat){
+    public static int getQuadrant(Vector2 orgn, Vector2 pt){
 
         // Should return the difference between the placed position and middle of the close tile.
-        float normalBoatX =
-                boat.x -
-                        (anchor.x);// Divide here to get center of tile for comparison
-        float normalBoatY =
-                boat.y -
-                        (anchor.y);
+        float normalPtX =
+                pt.x -
+                        (orgn.x);// Divide here to get center of tile for comparison
+        float normalPtY =
+                pt.y -
+                        (orgn.y);
 
         // the point is above y = x if the y is larger than x
-        boolean abovexEy = normalBoatY > normalBoatX;
+        boolean abovexEy = normalPtY > normalPtX;
         // the point is above y = -x if the y is larger than the negation of x
-        boolean aboveNxEy = normalBoatY > -normalBoatX;
+        boolean aboveNxEy = normalPtY > -normalPtX;
 
         // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
         // We can use this framing to decide the side to place the tile.
@@ -266,5 +265,49 @@ public class generalUtil {
         tX = (limit.x - p1.x) / (p2.x - p1.x);
         tY = (limit.y - p1.y) / (p2.y - p1.y);
         return Math.abs(tX) < Math.abs(tY) ? tX : tY;
+    }
+
+    /**
+     * Returns new instance of Vector2, dropping the z dimension.
+     * @param playerControlPosition
+     * @return
+     */
+    public static Vector2 flattenVector(Vector3 playerControlPosition) {
+        return new Vector2(playerControlPosition.x, playerControlPosition.y);
+    }
+
+    /**
+     * Returns the closest object extending GameObject in the array passed.
+     * @param position - Position to compare array positions with
+     * @param array - array of generic GameObjects utilizing a positional Vector2
+     * @return - @Nullable returns closest node if there is one.
+     * @param <T> - A generic object bounded to extend GameObject
+     */
+    public static <T extends GameObject> T getClosestObject(Vector2 position, Array<T> array){
+        if (array.size == 0) return null;
+        if (array.size == 1) return array.get(0);
+
+        T tempObj;
+        T closestObject = null;
+        Vector3 location3 = new Vector3(position.x, position.y, 0);
+        Vector3 objectMiddle;
+        double minDistance = Double.POSITIVE_INFINITY; // First check will always be true
+
+
+        //Loop through ship to find the closest tile
+        for (int i = 0; i < array.size; i++) {
+            tempObj = array.get(i);
+            // Get middle of tile to check distance
+            objectMiddle = new Vector3(tempObj.getPosition().x + tempObj.getSize().x / 2.0f,
+                tempObj.getPosition().y + tempObj.getSize().y / 2.0f, 0);
+            Float distance = location3.dst(objectMiddle);
+
+            // Check if distance between position and current tile is shorter
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestObject = tempObj;
+            }
+        }
+        return closestObject;
     }
 }

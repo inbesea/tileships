@@ -1,9 +1,14 @@
 package org.bitbucket.noahcrosby.Shapes;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import org.bitbucket.noahcrosby.Interfaces.Movable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
@@ -16,6 +21,10 @@ public class Line implements Movable {
     private final float length;
     private final Color color;
     public float width = 5f;
+
+    private static ShapeRenderer debugRenderer = new ShapeRenderer();
+    private static ShapeDrawer shapeDrawer = new ShapeDrawer(TileShipGame.batch);
+
 
     public Line(float ax, float ay, float bx, float by) {
         a = new Vector2(ax, ay);
@@ -59,6 +68,118 @@ public class Line implements Movable {
 
     public void draw(ShapeDrawer shapeDrawer) {
         shapeDrawer.line(a, b, color, width);
+    }
+
+    /**
+     * Draws a line
+     * pass in orthoCamera.combined
+     * @param start
+     * @param end
+     * @param lineWidth
+     * @param color
+     * @param projectionMatrix
+     */
+    public static void DrawDebugLine(Vector2 start, Vector2 end, int lineWidth, Color color, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(lineWidth);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.line(start, end);
+        debugRenderer.end();
+
+
+//        TileShipGame.batch.begin();
+//        shapeDrawer.setTextureRegion(TileShipGame.font.getRegion());
+//        shapeDrawer.setDefaultLineWidth(lineWidth);
+//
+//        shapeDrawer.line(start, end, color);
+//        TileShipGame.batch.end();
+    }
+
+    /**
+     * Draws a line
+     * pass in orthoCamera.combined
+     * @param start
+     * @param end
+     * @param projectionMatrix
+     */
+    public static void DrawDebugLine(Vector2 start, Vector2 end, Matrix4 projectionMatrix)
+    {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(Color.WHITE);
+        debugRenderer.line(start, end);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    public static void drawRectangle(Vector2 leftBottPosition, Vector2 rightTopCorner, Color color, boolean fill , Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(2);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        if(fill)debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        else debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, rightTopCorner.x, rightTopCorner.y);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    public static void drawRectangle(Vector2 leftBottPosition, int x, int y, Color edge, Color fill, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        debugRenderer.setColor(fill);
+        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, x, y);
+        debugRenderer.end();
+
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(edge);
+        debugRenderer.rect(leftBottPosition.x, leftBottPosition.y, x, y);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    public static void drawHollowCircle(Vector2 center, float radius, Color color, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.circle(center.x, center.y, radius);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    public static void drawHollowCircle(Vector2 center, float radius, float lineWidth , Color color, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(lineWidth);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.circle(center.x, center.y, radius);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
+    }
+
+    public static void drawArc(Vector2 start, Vector2 end, int lineWidth, Color color, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(lineWidth);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(color);
+        debugRenderer.arc(start.x, start.y, end.x, end.y, 90, 180);
+        debugRenderer.end();
+    }
+
+    public static void drawFilledCircle(Vector2 center, float radius, Color color, Matrix4 projectionMatrix) {
+        Gdx.gl.glLineWidth(2);
+        debugRenderer.setProjectionMatrix(projectionMatrix);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        debugRenderer.setColor(color);
+        debugRenderer.circle(center.x, center.y, radius);
+        debugRenderer.end();
+        Gdx.gl.glLineWidth(1);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.screens;
 
+import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,9 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
+
+import com.badlogic.gdx.utils.Timer;
 
 public class MainMenuScreen extends ScreenAdapter implements Screen {
     final TileShipGame game;
@@ -35,6 +42,10 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
     private TextButton exit;
     private CheckBox debug;
     private Table table;
+    SpaceMap map = new SpaceMap();
+    MapDrawer mapDrawer;
+    boolean afterLoadingMap = false;
+
 
     /**
      * Constructs a MainMenu object
@@ -49,8 +60,24 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
         stage = new Stage(new ScreenViewport());
 
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         Resources.loadAssets();
+
+        setMapValues();
+        mapDrawer = new MapDrawer(map);
+    }
+
+    private void setMapValues() {
+        map.addNode(new MapNode(new Vector2(100, 100)), new int[]{});
+        map.addNode(new MapNode(new Vector2(200, 100)), new int[]{0});
+        map.addNode(new MapNode(new Vector2(200, 200)), new int[]{1});
+        map.addNode(new MapNode(new Vector2(100, 200)), new int[]{0, 2});
+        map.addNode(new MapNode(new Vector2(150, 150)), new int[]{0,1,2,3});
+        addToMap(2);
+        addToMap(5);
+        addToMap(8);
+        addToMap(13);
+        addToMap(17);
     }
 
     /**
@@ -164,9 +191,12 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         mainMenuMusic.setVolume(game.getPreferences().getMusicVolume());
 
         Gdx.gl.glClearColor(0.00f, 0.00f, 0.10f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
 
         table.setDebug(AppPreferences.getAppPreferences().getIsDebug());
+
+        mapDrawer.drawMap(camera.combined);
+
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -182,11 +212,39 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 //            if(welcome == null)welcome = new SoundTextBubble(str, 100, Resources.sfxCollectTileSound, null);
 
 //            welcome.update(new Vector2(250,350));
-            TileShipGame.font.draw(TileShipGame.batch, "Tap anywhere to begin!", 150, 250);
+            TileShipGame.font.draw(TileShipGame.batch, "T\nI\nL\n" +
+                "E\nS\nH\nI\nP\nS", 500, 350);
+            if(!afterLoadingMap){
+                map.addNode(new MapNode(new Vector2(460, 370)));
+                map.addNode(new MapNode(new Vector2(520, 370)), new int[]{map.getMapNodes().size - 1});
+                map.addNode(new MapNode(new Vector2(520, 150)), new int[]{map.getMapNodes().size - 1});
+                map.addNode(new MapNode(new Vector2(460, 150)), new int[]{map.getMapNodes().size - 1, map.getMapNodes().size - 3});
+                afterLoadingMap = true;
+            }
+
         } else {
             TileShipGame.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 0, camera.viewportHeight - 100);
         }
         TileShipGame.batch.end();
+    }
+
+    /**
+     * Adds a map node to mainmenu after delay and in random location
+     * @param delay
+     */
+    private void addToMap(int delay) {
+
+        Timer.schedule(new Timer.Task(){
+            public void run () {
+                map.addNode(new MapNode(new Vector2(generalUtil.getRandomNumber(0,TileShipGame.defaultViewportSizeX),
+                        generalUtil.getRandomNumber(0, TileShipGame.defaultViewportSizeY))),
+                    new int[]{generalUtil.getRandomNumber(0, map.getMapNodes().size - 1)});
+                Gdx.app.postRunnable(new Runnable(){
+                    public void run () {
+                        Gdx.app.log("addedMapNode", "Posted runnable to Gdx.app");
+                    }
+                });
+            }}, delay);
     }
 
     @Override

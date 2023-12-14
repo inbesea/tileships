@@ -119,7 +119,7 @@ public class TileDragHandler extends InputAdapter {
     private void pickUpTile(ShipTile pickedUpTile) {
         playerShip.removeTileFromShip(pickedUpTile);
         playerShip.setDraggedTile(pickedUpTile); // Set intermediate tile to *remove from existing tiles*
-        Resources.sfxPickUpTileQuick0.play(AppPreferences.getAppPreferences().getSoundVolume());
+        Resources.PickUpTileQuick0Sfx.play(AppPreferences.getAppPreferences().getSoundVolume());
     }
 
     /**
@@ -134,7 +134,7 @@ public class TileDragHandler extends InputAdapter {
         ShipTile tempTile = playerShip.getDraggedTile();
         playerShip.addTileToShip(x, y, tempTile);
         tempTile.replaced();
-        Resources.sfxPlaceTileSound.play(AppPreferences.getAppPreferences().getSoundVolume());
+        Resources.PlaceTileSoundSfx.play(AppPreferences.getAppPreferences().getSoundVolume());
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);
     }

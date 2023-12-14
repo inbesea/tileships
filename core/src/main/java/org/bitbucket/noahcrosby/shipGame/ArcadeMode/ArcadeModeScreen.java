@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.screens;
+package org.bitbucket.noahcrosby.shipGame.ArcadeMode;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -16,7 +16,7 @@ import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD.HUD;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.input.*;
@@ -25,6 +25,7 @@ import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.ArcadeCollisionHandler;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
+import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
 import java.util.ArrayList;
 
@@ -76,7 +77,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
         arcadeGameObjects = new Array<>();
 
-        collisionHandler = new ArcadeCollisionHandler(this);
+        collisionHandler = new ArcadeCollisionHandler(this, arcadeShip.getTileManager());
         CollisionListener collisionListener = new CollisionListener(collisionHandler);
         box2DWrapper.setWorldContactListener(collisionListener);
     }
@@ -90,7 +91,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         extendViewport.apply();
 
         // Update game object positions
-        box2DWrapper.updateGameObjectsToPhysicsSimulation();
+//        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
         drawGame();
@@ -146,7 +147,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
 
             // This render should happen after a sweep attempt
             if (go.isDead()) {
-                System.out.println("ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                Gdx.app.error("SweepError","ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
                 continue;
             }
 

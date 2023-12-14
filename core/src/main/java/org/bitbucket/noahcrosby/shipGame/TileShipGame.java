@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame;
 
+import com.badlogic.gdx.Gdx;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.screens.ArcadeModeScreen;
+import org.bitbucket.noahcrosby.shipGame.ArcadeMode.ArcadeModeScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.MainMenuScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.PreferencesScreen;
@@ -57,7 +58,7 @@ public class TileShipGame extends Game {
     }
 
     public void changeScreen(int screen) {
-        System.out.println("Changing screen to " + screen);
+        Gdx.app.log("Screen Change", "Changing screen to " + screen);
         switch (screen){
             case MENU:
                 if(mainMenuScreen == null) mainMenuScreen = new MainMenuScreen(this);

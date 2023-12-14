@@ -17,8 +17,7 @@ public abstract class GameObject {
 	// From Enum list, needs a type
 	protected ID id;
 	protected float velX, velY;
-
-	protected boolean debugMode = true; //TODO:move to game object
+	protected boolean debugMode = true;
 	protected Body body;
 	protected float rotation;
 	protected boolean physicsDeletable;
@@ -47,7 +46,11 @@ public abstract class GameObject {
 		this.size.y = size.y;
 	}
 
-	public abstract void tick();
+    /**
+     * Only used for drawing.
+     * DO NOT UPDATE ANYTHING WITH RENDER CALLS IDIOT
+     * @param game
+     */
 	public abstract void render(TileShipGame game);
 	public abstract Rectangle getBounds();
 

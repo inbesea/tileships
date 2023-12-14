@@ -24,7 +24,11 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
     Tentacle tentacle;
     Vector2 target;
 
-    private Button imageButton;
+    Vector2 textBoxStartLocation;
+    boolean fixed; // Is the text bubble fixed in place?
+    // Reference this to know how close/far to the target we can go.
+    float minFollowDistance;
+    float maxFollowDistance;
 
     private int arrowSegments = 40;
 
@@ -76,7 +80,6 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
      * Updates the text bubble's location for rendering
      * @param textBoxLocation
      */
-    @Override
     public void update(Vector2 textBoxLocation){
         if(dead){return;} // Dont print text that's expired
         if(firstUpdate){
@@ -96,7 +99,34 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
             tentacle.inverseFollow(textBoxLocation);
             tentacle.draw(shapeDrawer);
         }
-        setLocation(textBoxLocation);
+        setTextBoxLocation(textBoxLocation);
+        print();
+    }
+
+    /**
+     * Updates the text bubble's location for rendering
+     * @param textBoxLocation
+     */
+    public void update(){
+        if(dead){return;} // Dont print text that's expired
+        if(firstUpdate){
+            begin = System.currentTimeMillis(); // First print will cause the beginning to be set
+            firstUpdate = false;
+        }
+
+        deltaFromStart = System.currentTimeMillis() - begin;
+
+        if(letterSounds != null){letterSounds();}
+
+        lastChar = getLastChar();
+        intermediateString = this.text.substring(0, lastChar);
+
+        if(tentacle != null){ // Tentacle drawing/following
+            tentacle.follow(target);// The order here is important.
+//            tentacle.inverseFollow(textBoxLocation);
+            tentacle.draw(shapeDrawer);
+        }
+//        setLocation(textBoxLocation);
         print();
     }
 
@@ -119,8 +149,8 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
         intermediateString = this.text.substring(0, lastChar);
 
         if(tentacle != null){ // Tentacle drawing/following
-            tentacle.follow(target);// The order here is important. It causes the
-            tentacle.inverseFollow(location);
+            tentacle.follow(target);// The order here is important. It causes the textbox to stay on top of the arrowTentacle
+            tentacle.inverseFollow(textBoxLocation);
             tentacle.draw(shapeDrawer);
         }
 

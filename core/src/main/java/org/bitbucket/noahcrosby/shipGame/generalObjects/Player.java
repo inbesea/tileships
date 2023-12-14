@@ -91,9 +91,6 @@ public class Player extends GameObject {
         return false;
     }
 
-    public void tick() {
-    }
-
     /**
      * Render more complex features of the player
      * Assumes is drawn in a batch loop

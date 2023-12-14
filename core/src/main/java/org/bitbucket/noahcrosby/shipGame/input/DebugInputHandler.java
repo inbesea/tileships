@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
@@ -21,7 +22,7 @@ public class DebugInputHandler extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println("Keycode pressed is : " + keycode);
+        Gdx.app.debug("DebugInputHandler","Keycode pressed is : " + keycode);
 
         // Begin collecting tiles for collapse
         if (!playerShip.isCollectingTiles() && keycode == Input.Keys.SHIFT_LEFT) {
@@ -34,18 +35,23 @@ public class DebugInputHandler extends InputAdapter {
             playerShip.startCollapseCollect(); // Begins ship collecting
         } else if (keycode == Input.Keys.ESCAPE) {
             game.changeScreen(TileShipGame.MENU);
+            // TODO : Lets change this and the .pause() on screens to pause the game. We can clean this up to bring up an ingame menu very easily.
         }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if (playerShip.isCollectingTiles() && keycode == Input.Keys.SHIFT_LEFT) { // If user keys up should
+        if (playerShip.isCollectingTiles() &&
+            keycode == Input.Keys.SHIFT_LEFT) { // If user keys up should
             attemptNewTileProduction();
         }
         return false;
     }
 
+    /**
+     * Resolves the collect tiles action, and then attempts to build a new tile by passing to the tile Condenser
+     */
     private void attemptNewTileProduction() {
         Array<ShipTile> shipTileArray = playerShip.finishCollapseCollect(); // Ends collecting
         if (shipTileArray.isEmpty()) {

@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
@@ -15,13 +16,16 @@ public class ClassicCollisionHandler extends CollisionHandler {
     GameObject a;
     GameObject b;
 
+    ShipTilesManager tilesManager;
     /**
      * Collision Handler will need a lot of access to other managers to control what happens in the game.
      * @param asteroidManager
      */
-    public ClassicCollisionHandler(AsteroidManager asteroidManager){
+    public ClassicCollisionHandler(AsteroidManager asteroidManager, ShipTilesManager tilesManager){
         this.asteroidManager = asteroidManager;
+        this.tilesManager = tilesManager;
     }
+
 
     public void handleCollision(Collision collision){
         a = collision.colliderA;
@@ -84,11 +88,11 @@ public class ClassicCollisionHandler extends CollisionHandler {
             // remove the asteroid and add a tile.
             System.out.println("CoreTile/Asteroid creation event. ~~~ Creating new tile "+ asteroid.getPosition().toString() +" and marking Asteroid for deletion!");
             asteroid.physicsDelete();
-            tile.getManager().addTile(asteroid.getX() + asteroid.getWidth() / 2, asteroid.getY() + asteroid.getHeight() / 2, ID.StandardTile);
+            tilesManager.addTile(asteroid.getX() + asteroid.getWidth() / 2, asteroid.getY() + asteroid.getHeight() / 2, ID.StandardTile);
         } else if (tile.isInvulnerable()){
             return; // Do nothing, the tile cannot be destroyed
         } else {
-            tile.destroySelf();
+            tile.setIsDeadTrue();
             // destroy the tile
             // This means the tile is not a core tile or a invulnerable tile.
             // We will then conclude it can be destroyed.

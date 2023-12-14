@@ -1,12 +1,12 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -67,6 +67,7 @@ public class Ship extends GameObject {
      *  TODO : Scale tile locations by the ship position to allow ship movement.
      */
     public void render(TileShipGame game) {
+        shipTilesManager.purgeDead(); // Clean up before drawing (could cause problems if not drawing while simulating)
         Array<ShipTile> existing = shipTilesManager.getExistingTiles();
 
         // Draw tiles
@@ -208,11 +209,6 @@ public class Ship extends GameObject {
     }
 
     @Override
-    public void tick() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public Rectangle getBounds() {
         // TODO Auto-generated method stub
         return null;
@@ -240,7 +236,7 @@ public class Ship extends GameObject {
 
     @Override
     public boolean deleteFromGame() {
-        shipTilesManager.deleteSelf();
+        shipTilesManager.clearTileArrays();
         return true;
     }
 
@@ -442,7 +438,7 @@ public class Ship extends GameObject {
      * @return - ShipTile resulting from build action.
      */
     public ShipTile buildNewTile(Array<ShipTile> collectedTileArray) {
-        ShipTile newTile = tileCondenser.determineNewTileID(collectedTileArray);
+        ShipTile newTile = tileCondenser.determineNewTile(collectedTileArray);
 
         if (newTile == null) {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
@@ -479,7 +475,12 @@ public class Ship extends GameObject {
         return draggedTile != null;
     }
 
+    /**
+     * Draws a line to the center of the tile location placement would happen at if a dragged tile was dropped.
+     */
     public void drawDraggingPlacementIndicator() {
-        this.shipTilesManager.getPlacementIndex();
+        if(!isDragging())return;
+        Vector2 placementIndicator = this.shipTilesManager.getPlacementVector();
+        Line.DrawDebugLine(draggedTile.getCenter(), placementIndicator, 1 , Color.WHITE, TileShipGame.batch.getProjectionMatrix());
     }
 }

@@ -13,59 +13,13 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile
 
 public class PlayerInput {
 
-    public static float cameraFollow = 0.95f;
-
     /**
-     * This handles the player's default action when clicking on the screen.
-     * currently it lacks handling clicking on UI elements, but we need to make this work simply for now.
-     * Instead of clicking on UI, clicking can only move the robot.
-     *
-     * Ultimately this will need to move blocks around, not move the robot.
-     *
-     * @return - ShipTile of affected tile if any
+     * Holy cow pie this is a terrible class.
+     * We could move out the camera lerping, and updating the player location pretty easily.
+     * We've just kept it this way for convenience. If it becomes a problem, we can change it.
      */
-    public static ShipTile clickPlayerShipTiles(OrthographicCamera camera, Ship playerShip, Player player){
-        // Gets the click location
-        Vector3 touchPos = new Vector3();
-        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(touchPos); // Moves clicked point to camera location
 
-        // Remove a tile or place a tile?
-        Vector2 index = new Vector2();
-        ShipTile tile = playerShip.returnTile(touchPos.x, touchPos.y);
-
-        // Extract if checks
-        boolean noFoundTileButHeldTile = (tile == null && player.heldShipTiles.size > 0);
-        boolean noFoundTile = (tile == null);
-        boolean holdingTiles = player.heldShipTiles.size > 0;
-
-        if(noFoundTile){
-            if(holdingTiles){
-                // Remove tile from held tiles
-                ShipTile placedTile = player.popTile();
-                // Add tile to location giving tile ID
-                playerShip.addTileToShip(touchPos.x, touchPos.y, placedTile.getID());
-                return placedTile;
-            } else { // No tiles to place
-                System.out.println("Not holding any tiles to place!");
-                return null;
-            }
-        } else { // Found tile
-            if(tile.getID() == ID.CoreTile){
-                return null;
-            } else if (playerShip.returnTile(player.getX(), player.getY()) == tile) { // Can't grab tile under player
-                return null;
-            } else {
-                if(player.pickupTile(tile)){ // If can pickup tile
-//                    playerShip.removeTile(tile); // Remove from ship and
-                    // Return the tile grabbed
-                    return tile;
-                } else {
-                    return null; // Else, nothing is changed, return null
-                }
-            }
-        }
-    }
+    public static float cameraFollow = 0.95f;
 
     /**
      * Handle key presses from GameScreen
@@ -171,6 +125,7 @@ public class PlayerInput {
      * @param camera - Reference to camera context
      */
     public static void updateCameraOnPlayer(Player player, OrthographicCamera camera){
+        // TODO : Migrate this and fix the camera flying off into nowhere when the screen is not focused.
         float lerp = 0.8f;
         Vector3 cameraPos = camera.position;
         Vector3 playerPos = new Vector3(player.getX(), player.getY(), 0);
@@ -180,6 +135,7 @@ public class PlayerInput {
         Vector3 diff2 = new Vector3(cameraPos);
         diff = diff.sub(diff2);
 
+        // Issue is probably with this deltaTime check? If the delta is too big what happens?
         if(Math.abs(diff.x) > cameraFollow){
             cameraPos.x += (playerPos.x - cameraPos.x) *
                     lerp * Gdx.graphics.getDeltaTime();
@@ -188,10 +144,5 @@ public class PlayerInput {
             cameraPos.y += (playerPos.y - cameraPos.y) *
                     lerp * Gdx.graphics.getDeltaTime();
         }
-
-//                    cameraPos.y += (playerPos.y - cameraPos.y) *
-//                    lerp * Gdx.graphics.getDeltaTime();
-//                    cameraPos.x += (playerPos.x - cameraPos.x) *
-//                    lerp * Gdx.graphics.getDeltaTime();
     }
 }

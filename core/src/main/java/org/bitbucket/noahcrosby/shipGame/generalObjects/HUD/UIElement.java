@@ -1,28 +1,30 @@
-package org.bitbucket.noahcrosby.shipGame.player;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 
 /**
- * Method to hold reference to the hover indicator so it logically sits in the stack manager during the collapse process.
+ * Use this class to add and manage UI elements
+ *
+ * TODO : Add possible animation support for texture swapping. (maybe?)
  */
-public class TileHoverIndicator extends GameObject {
-    boolean drawHover = false;
-    public TileHoverIndicator(Vector2 position, Vector2 size) {
+public class UIElement extends GameObject {
+
+    protected Texture texture;
+
+    public UIElement(Vector2 position, Vector2 size, Texture texture) {
         super(position, size);
 
-        // Hover Indicator will always use the same texture
-        this.id = ID.Hover;
+        setTexture(texture);
     }
 
     @Override
     public void render(TileShipGame game) {
+        game.batch.draw(getTexture(), getPosition().x, getPosition().y, getSize().x, getSize().y);
     }
 
     @Override
@@ -32,17 +34,21 @@ public class TileHoverIndicator extends GameObject {
 
     @Override
     protected void setBoundsPosition(Vector2 boundsPosition) {
-        return;
+
     }
 
     @Override
     public void collision(GameObject gameObject) {
-
+        // No collision for UI
     }
 
     @Override
     public Texture getTexture() {
-        return Resources.HoverIndicatorTexture;
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 
     @Override
@@ -50,20 +56,8 @@ public class TileHoverIndicator extends GameObject {
         return null;
     }
 
-    /**
-     * Belongs to the tileManager, cannot be directly removed from the game.
-     * @return
-     */
     @Override
     public boolean deleteFromGame() {
         return false;
-    }
-
-    public boolean isHoverDrawing() {
-        return drawHover;
-    }
-
-    public void setDrawHover(boolean drawHover) {
-        this.drawHover = drawHover;
     }
 }

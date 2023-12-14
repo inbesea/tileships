@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -9,6 +10,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.Adjace
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeFactory;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 import java.util.Stack;
 
@@ -88,7 +90,7 @@ public class ShipTilesManager {
     }
 
     /**
-     * Returns a Vector2 position representing the closet ShipTile vacancy to the passed location.
+     * Returns a Vector2 position representing the valid placement ShipTile vacancy to the passed location.
      * @param location - Location checked for closest placement
      * @return - Vector2 position representing the closest valid placement location.
      */
@@ -132,14 +134,14 @@ public class ShipTilesManager {
         ShipTile tempT;
         ShipTile closestTile = null;
         Vector3 location3 = new Vector3(location.x, location.y, 0);
-        Vector3 tileP;
+        Vector3 tileMiddle;
 
         //Loop through ship to find the closest tile
         for (int i = 0; i < tiles.size; i++) {
             tempT = tiles.get(i);
             // Get middle of tile to check distance
-            tileP = new Vector3(tempT.getPosition().x + ShipTile.TILE_SIZE / 2.0f, tempT.getPosition().y + ShipTile.TILE_SIZE / 2.0f, 0);
-            Float distance = location3.dst(tileP);
+            tileMiddle = new Vector3(tempT.getPosition().x + ShipTile.TILE_SIZE / 2.0f, tempT.getPosition().y + ShipTile.TILE_SIZE / 2.0f, 0);
+            Float distance = location3.dst(tileMiddle);
 
             // Check if distance between position and current tile is shorter
             if (distance < minDistance) {
@@ -191,7 +193,7 @@ public class ShipTilesManager {
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
-        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id, this);
+        tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id);
         validateNewTileIndex(tempTile);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
@@ -527,10 +529,12 @@ public class ShipTilesManager {
      * @param tile - Tile to remove from ship
      */
     public void removeTileFromShip(ShipTile tile) {
-        if (!this.existingTiles.removeValue(tile, true)) { // If not in existing tiles
-            throw new RuntimeException("Error: Tile was not present in ship!\n-> " + tile.getAbbreviation() +
+        if (!this.existingTiles.contains(tile, true)) { // If not in existing tiles
+            Gdx.app.error("Removing Tile Error", "Error: Tile was not present in ship!\n-> " + tile.getAbbreviation() +
                     " - " + tile.getPositionAsString());
         } else {
+            Gdx.app.debug("Removing Tile", "Removing tile from the ship" + tile.getAbbreviation() + " " + tile.getPositionAsString());
+            this.existingTiles.removeValue(tile, true);
             if (ship.isCollectingTiles()) { // Delete tile if being collected. Has to use the ship reference here.
                 ship.getCollapseCollect().removeValue(tile, true);
             }
@@ -670,16 +674,30 @@ public class ShipTilesManager {
         return edgeTiles;
     }
 
-    public void deleteSelf() {
+    public void clearTileArrays() {
         this.existingTiles.clear();
+        this.edgeTiles.clear();
     }
 
-    private void removeAllTilesFromGame() {
-
+    /**
+     * Returns the vector a tile should be placed at based on current input position.
+     * @return a vector2 representing the placement location from the input position
+     */
+    public Vector2 getPlacementVector() {
+        Vector3 playerInputPosition = returnUnprojectedInputPosition(GameScreen.getGameCamera());
+        return this.getClosestPlacementVector2(generalUtil.flattenVector(playerInputPosition));
     }
 
-    public void getPlacementIndex() {
-        Vector3 playerControlPosition = returnUnprojectedPosition(GameScreen.getGameCamera());
-//        getVectorOfClosestSi()
+    /**
+     * Removes dead tiles when called
+     */
+    public void purgeDead(){
+        ShipTile tile;
+        for(int i = 0 ; i < this.existingTiles.size ; i++){
+            tile = existingTiles.get(i);
+            if(tile.getIsDead()){
+                this.removeTileFromShip(tile);
+            }
+        }
     }
 }

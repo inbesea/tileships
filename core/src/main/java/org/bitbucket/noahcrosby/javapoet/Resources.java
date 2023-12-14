@@ -8,21 +8,21 @@ import com.badlogic.gdx.graphics.Texture;
 public class Resources {
     public static AssetManager assetManager;
 
-    public static Sound sfxBuildTileSound;
+    public static Sound BuildTileSoundSfx;
 
-    public static Sound sfxCollectTileSound;
+    public static Sound CollectTileSoundSfx;
 
-    public static Sound sfxRain;
+    public static Sound RainSfx;
 
-    public static Sound sfxDrop;
+    public static Sound DropSfx;
 
-    public static Sound sfxPickUpTileQuick0;
+    public static Sound PickUpTileQuick0Sfx;
 
-    public static Sound sfxPlaceTileSound;
+    public static Sound PlaceTileSoundSfx;
 
-    public static Sound sfxSelectionBuzzLooped;
+    public static Sound SelectionBuzzLoopedSfx;
 
-    public static Sound sfxTilePlacement;
+    public static Sound TilePlacementSfx;
 
     public static Texture AsteroidBlueTexture;
 
@@ -37,6 +37,12 @@ public class Resources {
     public static Texture AsteroidSilverTexture;
 
     public static Texture AsteroidYellowTexture;
+
+    public static Texture ConstallationMapTexture;
+
+    public static Texture CraftingIconTexture;
+
+    public static Texture CraftingIconPressedTexture;
 
     public static Texture HoverIndicatorTexture;
 
@@ -83,6 +89,9 @@ public class Resources {
         assetManager.load("Textures/asteroid_red.png", Texture.class);
         assetManager.load("Textures/asteroid_silver.png", Texture.class);
         assetManager.load("Textures/asteroid_yellow.png", Texture.class);
+        assetManager.load("Textures/constallationMap.png", Texture.class);
+        assetManager.load("Textures/craftingIcon.png", Texture.class);
+        assetManager.load("Textures/craftingIconPressed.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/RobotV2.png", Texture.class);
         assetManager.load("Textures/ShipTileBlue.png", Texture.class);
@@ -101,14 +110,14 @@ public class Resources {
 
     public static void updateAssets() {
         if(assetManager.update()) {
-            sfxBuildTileSound = assetManager.get("Sound Effects/buildTileSound.mp3");
-            sfxCollectTileSound = assetManager.get("Sound Effects/collectTileSound.mp3");
-            sfxRain = assetManager.get("Sound Effects/rain.mp3");
-            sfxDrop = assetManager.get("Sound Effects/drop.wav");
-            sfxPickUpTileQuick0 = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
-            sfxPlaceTileSound = assetManager.get("Sound Effects/PlaceTileSound.wav");
-            sfxSelectionBuzzLooped = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
-            sfxTilePlacement = assetManager.get("Sound Effects/tilePlacement.wav");
+            BuildTileSoundSfx = assetManager.get("Sound Effects/buildTileSound.mp3");
+            CollectTileSoundSfx = assetManager.get("Sound Effects/collectTileSound.mp3");
+            RainSfx = assetManager.get("Sound Effects/rain.mp3");
+            DropSfx = assetManager.get("Sound Effects/drop.wav");
+            PickUpTileQuick0Sfx = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
+            PlaceTileSoundSfx = assetManager.get("Sound Effects/PlaceTileSound.wav");
+            SelectionBuzzLoopedSfx = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
+            TilePlacementSfx = assetManager.get("Sound Effects/tilePlacement.wav");
             AsteroidBlueTexture = assetManager.get("Textures/asteroid_blue.png");
             AsteroidGreenTexture = assetManager.get("Textures/asteroid_green.png");
             AsteroidOrangeTexture = assetManager.get("Textures/asteroid_orange.png");
@@ -116,6 +125,9 @@ public class Resources {
             AsteroidRedTexture = assetManager.get("Textures/asteroid_red.png");
             AsteroidSilverTexture = assetManager.get("Textures/asteroid_silver.png");
             AsteroidYellowTexture = assetManager.get("Textures/asteroid_yellow.png");
+            ConstallationMapTexture = assetManager.get("Textures/constallationMap.png");
+            CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
+            CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
             RobotV2Texture = assetManager.get("Textures/RobotV2.png");
             ShipTileBlueTexture = assetManager.get("Textures/ShipTileBlue.png");

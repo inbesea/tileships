@@ -1,0 +1,15 @@
+<LevelPack>
+    <Level number="1">
+        <Block x="0" y="0" rotation="90" color="#FF0000" />
+        <Block x="50" y="22" rotation="45" color="#00FF00" />
+    </Level>
+    <Level number="2">
+        ...
+    </Level>
+</LevelPack>
+<!--For each element in whatever
+placeTempBlock(data)
+
+This lets us augment map locations as well? but like... What do we do with that? We can build a ship after the top/bottom/left/right block in the ship?
+Maybe find the average location for all blocks and place in the top/bott/... space closest to that so the player can build a quick bridge over there and say hey? Obviously that would be
+kinda easy to break by the player placing a single block way out, but idk if that's a genuine issue? -->

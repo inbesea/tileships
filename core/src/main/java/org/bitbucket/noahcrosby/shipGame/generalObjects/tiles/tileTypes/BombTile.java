@@ -15,10 +15,9 @@ public class BombTile extends ShipTile {
      * @param position
      * @param id
      * @param typeData
-     * @param manager
      */
-    public BombTile(Vector2 position, ID id, TileTypeData typeData, ShipTilesManager manager) {
-        super(position, id, typeData, manager);
+    public BombTile(Vector2 position, ID id, TileTypeData typeData) {
+        super(position, id, typeData);
     }
 
     @Override

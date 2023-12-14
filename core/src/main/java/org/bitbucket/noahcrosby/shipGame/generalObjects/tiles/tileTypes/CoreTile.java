@@ -17,8 +17,8 @@ public class CoreTile extends ShipTile {
      * @param position
      * @param id
      */
-    public CoreTile(Vector2 position, ID id, TileTypeData typeData, ShipTilesManager manager) {
-        super(position, id, typeData, manager);
+    public CoreTile(Vector2 position, ID id, TileTypeData typeData) {
+        super(position, id, typeData);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class CoreTile extends ShipTile {
     public void pickedUp() {
 
     }
-    public CoreTile(Vector2 position, ShipTilesManager manager) {
-        super(position, ID.CoreTile, TileTypeData.CoreTile, manager);
+    public CoreTile(Vector2 position) {
+        super(position, ID.CoreTile, TileTypeData.CoreTile);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CoreTile extends ShipTile {
 
     @Override
     public boolean deleteFromGame() {
-        destroySelf();
+        setIsDeadTrue();
         return true;
     }
 }

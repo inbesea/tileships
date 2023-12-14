@@ -12,14 +12,12 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import org.apache.commons.lang3.ArrayUtils;
-import sun.security.util.ArrayUtil;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 /**
- * NOTE : If this fails with an error code it may be the name of the file having illegal chars somehow?
+ * NOTE : If this fails with an error code it may be the name of the file having illegal chars somehow
  *
  * This class automates resource management and retrieval.
  * When updating, adding or removing a resource this will need to be ran so core/src/com/javapoet/Resources.java is updated.
@@ -39,36 +37,33 @@ public class GenerateResources extends ApplicationAdapter {
     private FileHandle[] musicFiles;
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setBackBufferConfig(8,8,8,8,16,0,8);
         new Lwjgl3Application(new GenerateResources(), config);
     }
 
     @Override
     public void create(){
+        // Creates class
         typeSpecBuilder = TypeSpec.classBuilder(("Resources"))
             .addModifiers((Modifier.PUBLIC))
             .addField(AssetManager.class, "assetManager", Modifier.PUBLIC, Modifier.STATIC);
 
+        // Holds loading statements added into method
         loadAssetMethodSpecBuilder = MethodSpec.methodBuilder("loadAssets")
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             .addStatement("assetManager = new $T()", AssetManager.class);
 
+        // Holds update statements added into method
         updateAssetMethodSpecBuilder = MethodSpec.methodBuilder("updateAssets")
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
 
         // Get files
-        FileHandle sfxPath = new FileHandle(Paths.get("assets/Sound Effects").toFile());
-        sfxFiles = ArrayUtils.addAll(sfxPath.list("mp3"), sfxPath.list("wav"));
-
-        FileHandle texturePath = new FileHandle(Paths.get("assets/Textures").toFile());
-        textureFiles = texturePath.list("png");
-
-        FileHandle musicPath = new FileHandle(Paths.get("assets/Music").toFile());
-        musicFiles = musicPath.list("wav");
-
-        CreateFields();
-        CreateLoadingStatements();
-        CreateGetStatements();
+        updateAssetMethodSpecBuilder.beginControlFlow("if(assetManager.update())");
+        handleFileTypeLoading("sfx", new String[]{"mp3", "wav"}, new String[]{"Sound Effects"}, Sound.class);
+        handleFileTypeLoading("texture", new String[]{"png"}, new String[]{"Textures"}, Texture.class);
+        handleFileTypeLoading("music", new String[]{"wav"}, new String[]{"Music"}, Music.class);
+        updateAssetMethodSpecBuilder.endControlFlow();
 
         typeSpecBuilder.addMethod(loadAssetMethodSpecBuilder.build());
         typeSpecBuilder.addMethod(updateAssetMethodSpecBuilder.build());
@@ -86,50 +81,52 @@ public class GenerateResources extends ApplicationAdapter {
         Gdx.app.exit();
     }
 
-    private void CreateFields() {
-        // Create field with file name
-        for (FileHandle sfxFile : sfxFiles){
-            typeSpecBuilder.addField(Sound.class, toVariableName(sfxPrefix +
-                    upperFirstChar(sfxFile.nameWithoutExtension())),
-                Modifier.PUBLIC, Modifier.STATIC);
-        }
-        for (FileHandle textureFile : textureFiles){
-            typeSpecBuilder.addField(Texture.class, toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) + "Texture"),
-                Modifier.PUBLIC, Modifier.STATIC);
-        }
-        for(FileHandle musicFile : musicFiles){
-            typeSpecBuilder.addField(Music.class, toVariableName(upperFirstChar(musicFile.nameWithoutExtension()) + "Music"),
-                Modifier.PUBLIC, Modifier.STATIC);
-        }
-    }
-    private void CreateLoadingStatements() {
-        // Add loading statement
-        for (FileHandle sfxFile : sfxFiles) {
-            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)",
-                "Sound Effects/" + sfxFile.name(), Sound.class);
-        }
-        for (FileHandle textureFile : textureFiles) {
-            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Textures/" + textureFile.name(), Texture.class);
-        }
-        for (FileHandle musicFile : musicFiles) {
-            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)", "Music/" + musicFile.name(), Music.class);
-        }
-    }
+    /**
+     * Add all we can pass the file location, the file type, and the locations.
+     * @param filePostFix
+     * @param fileExtensions
+     * @param fileLocations
+     */
+    private void handleFileTypeLoading(String filePostFix, String[] fileExtensions, String[] fileLocations, Class classType) {
+        /*
+         * We need to implement this so
+         * I want to be able to feed the appended type, type extension, and the locations to add a new type of file to this system.
+         *
+         * Look for all types of files in all locations.
+         */
+        // Get file location, ready file handle array
+        FileHandle assetPath = new FileHandle(Paths.get("assets/" + fileLocations).toFile());
+        FileHandle[] assetFiles = new FileHandle[0];
 
-    private void CreateGetStatements() {
-        updateAssetMethodSpecBuilder.beginControlFlow("if(assetManager.update())");
-        for (FileHandle sfxFile : sfxFiles) {
-            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(sfxPrefix + upperFirstChar(sfxFile.nameWithoutExtension())), "Sound Effects/" + sfxFile.name());
+        // Populate filehandle array for locations and types.
+        for (String fileLocation : fileLocations) {
+            assetPath = new FileHandle(Paths.get("assets/" + fileLocation).toFile());
+            for (String fileExtension : fileExtensions) {
+                // Get files with each extension from this file location
+                assetFiles = ArrayUtils.addAll(assetFiles, assetPath.list(fileExtension));
+            }
         }
-        for (FileHandle textureFile : textureFiles) {
-            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(textureFile.nameWithoutExtension()) +
-                "Texture"), "Textures/" + textureFile.name());
+
+        // Create fields
+        for(FileHandle file : assetFiles){
+            typeSpecBuilder.addField(classType, toVariableName(upperFirstChar(file.nameWithoutExtension()) + upperFirstChar(filePostFix)),
+                Modifier.PUBLIC, Modifier.STATIC);
         }
-        for(FileHandle musicFile : musicFiles){
-            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)", toVariableName(upperFirstChar(musicFile.nameWithoutExtension()) +
-                "Music"), "Music/" + musicFile.name());
+
+        // Create Loading Statements
+        for(FileHandle file : assetFiles){
+            loadAssetMethodSpecBuilder.addStatement("assetManager.load($S, $T.class)",
+                file.parent().name() + "/" + file.name(), // Might not work, good debug location
+                classType);
         }
-        updateAssetMethodSpecBuilder.endControlFlow();
+
+        // Create Get Statements
+        for(FileHandle file : assetFiles){
+            updateAssetMethodSpecBuilder.addStatement("$L = assetManager.get($S)",
+                toVariableName(upperFirstChar(file.nameWithoutExtension() + upperFirstChar(filePostFix))),
+                file.parent().name() + "/" + file.name());
+        }
+
     }
 
     /**

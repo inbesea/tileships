@@ -1,5 +1,10 @@
-package org.bitbucket.noahcrosby.shipGame.generalObjects;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.HUD;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -7,33 +12,48 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import org.bitbucket.noahcrosby.Shapes.Line;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 
 /**
  * Layer of HUD elements. Is on a FitViewport to keep hud elements scaled correctly.
  */
 public class HUD {
-    private ExtendViewport HUDScreenLayer;
-    private TileShipGame game;
-    private Ship playerShip;
-    private boolean drawMenu = false;
-    private Stage menuOverlay;
-    private boolean showDebugHud = true;
+    protected ExtendViewport HUDScreenLayer;
+    protected ExtendViewport mapScreenLayer;
+    protected TileShipGame game;
+    protected Ship playerShip;
+    protected boolean drawMenu = false;
+    boolean drawMap = false;
+    protected Stage menuOverlay;
+    protected boolean showDebugHud = true;
 
-    private Label titleLabel;
-    private Label volumeMusicLabel;
-    private Label volumeSoundLabel;
-    private Label musicOnOffLabel;
-    private Label soundOnOffLabel;
+    protected Label titleLabel;
+    protected Label volumeMusicLabel;
+    protected Label volumeSoundLabel;
+    protected Label musicOnOffLabel;
+    protected Label soundOnOffLabel;
+    protected MapNavManager mapNavigator;
+
+    protected UIElement mapToggleUI;
+    protected UIElement tileCondenseUI;
+
 
     public HUD(TileShipGame game) {
         this.game = game;
         this.playerShip = game.getPlayerShip();
 
         HUDScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+        mapScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+
         createMenuOverlay();
+
+        mapToggleUI = new UIElement(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 20), new Vector2(64,64), Resources.ConstallationMapTexture);
+        tileCondenseUI = new UIElement(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 104), new Vector2(64,64) , Resources.CraftingIconTexture);
     }
 
     /**
@@ -42,26 +62,53 @@ public class HUD {
      */
     public void draw(){
         StringBuilder stringBuilder = new StringBuilder();
-        if(showDebugHud){
-            stringBuilder = buildDebugUI();
-        }
 
         //Secondly draw the Hud
         game.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
 
+        if(AppPreferences.getAppPreferences().getIsDebug()){
+            Line.drawRectangle(new Vector2(0,0),
+                new Vector2(HUDScreenLayer.getWorldWidth(), HUDScreenLayer.getWorldHeight()),
+                Color.GREEN,
+                false,
+                HUDScreenLayer.getCamera().combined);
+        }
+
         game.batch.begin();
 
-        if(showDebugHud){
+        if(AppPreferences.getAppPreferences().getIsDebug()){
+            stringBuilder.append("\n" + getDebugUIData());
             game.font.draw(game.batch, stringBuilder.toString() , 2,
                     (HUDScreenLayer.getWorldHeight() - 2)); // Worldheight gives the extendVeiwport hight
         }
 
-        if(this.drawMenu()){
+        if(this.isShowingMenu()){
             menuOverlay.act(Gdx.graphics.getDeltaTime());
             menuOverlay.draw();
         }
 
+        drawControls();
+
         game.batch.end();
+
+        if(showingMap()){
+            mapNavigator.drawMap(this.mapScreenLayer.getCamera().combined);
+        }
+    }
+
+    /**
+     * Draws Player input indicators
+     */
+    protected void drawControls() {
+        mapToggleUI.render(game);
+
+        if(playerShip.isCollectingTiles()){
+            tileCondenseUI.setTexture(Resources.CraftingIconPressedTexture);
+            tileCondenseUI.render(game);
+        }else {
+            tileCondenseUI.setTexture(Resources.CraftingIconTexture);
+            tileCondenseUI.render(game);
+        }
     }
 
     private void createMenuOverlay() {
@@ -158,7 +205,7 @@ public class HUD {
      * Gets data for debug hud UI stack
      * @return - StringBuilder representing the debug info
      */
-    private StringBuilder buildDebugUI() {
+    protected StringBuilder getDebugUIData() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
@@ -195,7 +242,11 @@ public class HUD {
         HUDScreenLayer.update(width, height, true);
     }
 
-    public boolean drawMenu() {
+    /**
+     * Checks if the menu should be drawn
+     * @return - true if menu should be drawn, else false
+     */
+    public boolean isShowingMenu() {
         return drawMenu;
     }
     public void toggleMenu(){
@@ -206,5 +257,31 @@ public class HUD {
             GameScreen gameScreen = (GameScreen) game.getCurrentScreen();
             gameScreen.setFocusToGame();
         }
+    }
+
+    /**
+     * Switches value of HUD.drawMap
+     * @return - true if map should be drawn, else false
+     */
+    public boolean toggleMap() {
+        drawMap = !drawMap;
+        mapNavigator.setDrawing(drawMap);
+        return drawMap;
+    }
+
+    /**
+     * Check if the map should be drawn
+     * @return - true if map should be drawn, else false
+     */
+    public boolean showingMap() {
+        return drawMap;
+    }
+
+    public void setMapNavigator(MapNavManager mapNavigator) {
+        this.mapNavigator = mapNavigator;
+    }
+
+    public Camera getCamera() {
+        return this.HUDScreenLayer.getCamera();
     }
 }
