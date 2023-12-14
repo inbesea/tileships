@@ -2,7 +2,6 @@ package org.bitbucket.noahcrosby;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 
 import static com.badlogic.gdx.Application.LOG_DEBUG;
 import static com.badlogic.gdx.Application.LOG_INFO;
@@ -62,6 +61,11 @@ public class AppPreferences {
         getPrefs().flush();
     }
 
+    /**
+     * Calls the IS_FULL_SCREEN location and returns the value if set, else returns default value.
+     * Sets the Gdx.graphics.screen mode depending on the passed boolean.
+     * @param isFullScreen
+     */
     public void setIsFullScreen(boolean isFullScreen) {
         if(isFullScreen){
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
@@ -72,6 +76,10 @@ public class AppPreferences {
         getPrefs().flush();
     }
 
+    /**
+     * Returns true if the game is in full screen mode else false
+     * @return - boolean representing fullscreen status
+     */
     public boolean isFullScreen() {
         return getPrefs().getBoolean(IS_FULL_SCREEN, false);
     }
