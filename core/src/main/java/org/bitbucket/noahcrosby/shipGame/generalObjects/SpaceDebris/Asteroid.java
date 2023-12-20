@@ -10,6 +10,7 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StandardTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StrongTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
@@ -125,7 +126,7 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	 */
 	@Override
 	public void collision(GameObject gameObject) {
-			bounce(gameObject);
+
 	}
 
 	@Override
@@ -133,23 +134,13 @@ public class Asteroid extends GameObject implements PhysicsObject {
 		return Resources.AsteroidPurpleTexture;
 	}
 
-	private void bounce(GameObject gameObject) {
-		System.out.println("Bouncing Asteroid , current velocity is " + velY + ", " + velX);
-		if(gameObject instanceof StrongTile){
-			StrongTile strongTile = (StrongTile) gameObject;
-//			strongTile.
-			// ToDO : We want the strong tile to bounce the asteroid correctly so it looks nice.
-			// It bounces dumb right now.
-		}
-		// Adjust positions to prevent repeat bounces
-		position.x -= velX;
-		position.y -= velY;
-		circle.x -= velX;
-		circle.y -= velY;
-
-		velX *= -1;
-		velY *= -1;
-	}
+    /**
+     * Returns the type of tile this produces
+     * @return
+     */
+    public Class getTileType(){
+        return StandardTile.class;
+    }
 
 	/**
 	 * Sets the position of the asteroid to the physics body's position

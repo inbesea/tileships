@@ -59,7 +59,7 @@ public class MapNavigationHandler extends InputAdapter {
             clearSelections();
         }
 
-        Gdx.app.log("MapNavigationHandler",  touch.x + " " + touch.y + " Found this MapNode " + closestNode.getPositionAsString());
+        Gdx.app.debug("MapNavigationHandler",  touch.x + " " + touch.y + " Found this MapNode " + closestNode.getPositionAsString());
         if(touch.dst(closestNode.getPosition()) < 20){
 //            temp.drawDebug();
         }

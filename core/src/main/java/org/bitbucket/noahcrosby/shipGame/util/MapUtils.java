@@ -7,8 +7,8 @@ import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
 public class MapUtils {
     public static SpaceMap getDefaultMap() {
         SpaceMap map = new SpaceMap();
-        map.addNode(new MapNode(new Vector2(200, 300)));
-        map.addNode(new MapNode(new Vector2(300, 300)), new int[]{0});
+        map.setEntryNode(map.addNode(200, 300));
+        map.addNode(300, 300, 1);
         map.addNode(new MapNode(new Vector2(400, 300)), new int[]{1});
         return map;
     }

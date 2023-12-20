@@ -215,7 +215,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
             TileShipGame.font.draw(TileShipGame.batch, "T\nI\nL\n" +
                 "E\nS\nH\nI\nP\nS", 500, 350);
             if(!afterLoadingMap){
-                map.addNode(new MapNode(new Vector2(460, 370)));
+                map.addNode(460, 370);
                 map.addNode(new MapNode(new Vector2(520, 370)), new int[]{map.getMapNodes().size - 1});
                 map.addNode(new MapNode(new Vector2(520, 150)), new int[]{map.getMapNodes().size - 1});
                 map.addNode(new MapNode(new Vector2(460, 150)), new int[]{map.getMapNodes().size - 1, map.getMapNodes().size - 3});
