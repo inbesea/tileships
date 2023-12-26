@@ -69,7 +69,7 @@ public class MapNavManager {
      * Notifies listeners that a new node has been arrived.
      */
     private void publishNewNode(){
-        publisher.dispatch(currentNode);
+        publisher.dispatch(currentNode); // This is passed to the GameScreen. Only relevant if you're using the GameScreen
     }
 
     /**

@@ -17,6 +17,10 @@ import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 import java.util.ArrayList;
 
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.maxSpeed;
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.minSpeed;
+import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.getRandomlyNegativeNumber;
+
 /*
 * Have a way to call this during render that will handle adding more asteroids.
 * Asteroids will handle themselves when added, but this will decide if they need to be added or removed.
@@ -49,7 +53,7 @@ public class AsteroidManager implements Manager {
      * @param camera - Orthographic camera used to see edges of screen
      */
     public AsteroidManager(Box2DWrapper box2DWrapper, OrthographicCamera camera){
-        asteroidLimit = 20;
+        asteroidLimit = 0;
         numberOfAsteroids = 0;
         spawning = true; // Assume spawning if using this constructor.
         this.camera = camera;  // Needed for seeing edges of screen?
@@ -61,7 +65,7 @@ public class AsteroidManager implements Manager {
 
     public AsteroidManager(Box2DWrapper box2DWrapper, OrthographicCamera camera, boolean spawning){
         this.spawning = spawning; // Set initial spawning state
-        asteroidLimit = 30;
+        asteroidLimit = 0;
         numberOfAsteroids = 0;
         this.camera = camera;  // Needed for seeing edges of screen?
         this.box2DWrapper = box2DWrapper;
@@ -106,6 +110,19 @@ public class AsteroidManager implements Manager {
                 numberOfAsteroids = asteroids.size();
             }
         }
+
+        for (int i = 0; i < finiteAsteroids.size; i++) {
+            temp = finiteAsteroids.get(i);
+            if(temp.isDead() || outOfBounds(temp)){
+                respawn(temp);
+            }
+        }
+    }
+
+    private void respawn(Asteroid temp) {
+        temp.setPosition(getVectorInValidSpawnArea());
+        temp.setVelX((int) getRandomlyNegativeNumber(minSpeed,maxSpeed));
+        temp.setVelY((int) getRandomlyNegativeNumber(minSpeed,maxSpeed));
     }
 
     /**
@@ -222,7 +239,7 @@ public class AsteroidManager implements Manager {
      * @return
      */
     public boolean canSpawn(){
-        return numberOfAsteroids <= asteroidLimit;
+        return numberOfAsteroids < asteroidLimit;
     }
 
     /**
@@ -286,6 +303,9 @@ public class AsteroidManager implements Manager {
      */
     public void setFiniteAsteroids(Array<Asteroid> asteroids) {
         finiteAsteroids = asteroids;
+        for(int i = 0; i < finiteAsteroids.size; i++){
+            addAsteroid(finiteAsteroids.get(i));
+        }
     }
 
     public void setSpawner(AsteroidSpawner asteroidSpawner) {

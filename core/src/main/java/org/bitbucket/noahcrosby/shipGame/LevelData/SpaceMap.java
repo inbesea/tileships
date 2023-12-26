@@ -35,6 +35,12 @@ public class SpaceMap {
         return mapNode;
     }
 
+    /**
+     * Adds basic node to a map location and returns it
+     * @param x - x position
+     * @param y - y position
+     * @return - the new node
+     */
     public MapNode addNode(int x, int y){
         MapNode mapNode = new MapNode(new Vector2(x, y));
         mapNodes.add(mapNode);
@@ -230,8 +236,9 @@ public class SpaceMap {
         this.exitNode = mapNode;
     }
 
-    public void setEntryNode(MapNode entryNode) {
+    public MapNode setEntryNode(MapNode entryNode) {
         this.entryNode = entryNode;
+        return entryNode;
     }
 
     /**

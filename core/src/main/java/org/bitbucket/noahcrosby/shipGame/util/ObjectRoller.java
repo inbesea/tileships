@@ -1,6 +1,8 @@
 package org.bitbucket.noahcrosby.shipGame.util;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,53 @@ public class ObjectRoller {
             }
 
             return generatedObjects;
+    }
+
+    public static Array<Object> generateRandomObjectsStatic(Map<Object, Integer> objectsAndPercentages, Integer count) {
+        Array<Object> generatedObjects = new Array<>();
+        List<Class<?>> classes = new ArrayList<>();
+        List<Integer> percentages = new ArrayList<>();
+
+        for (Map.Entry<Object, Integer> entry : objectsAndPercentages.entrySet()) {
+            classes.add(entry.getKey().getClass());
+            percentages.add(entry.getValue());
+        }
+
+        for (int i = 0; i < count; i++) {
+            generatedObjects.add(generateRandomObjectStatic(classes, percentages));
+        }
+
+        return generatedObjects;
+    }
+
+    public static Object generateRandomObjectStatic(List<Class<?>> classes, List<Integer> percentages) {
+        if (classes.isEmpty() || percentages.isEmpty() || classes.size() != percentages.size()) {
+            throw new IllegalStateException("Invalid configuration");
+        }
+
+        //
+        int totalPercentage = percentages.stream().mapToInt(Integer::intValue).sum();
+        int randomValue = new Random().nextInt(totalPercentage);
+
+        // Scales percentage up to summed value of all percentages
+        int cumulativePercentage = 0;
+        for (int i = 0; i < classes.size(); i++) { // Its stupid, but I don't like that we iterate through a list and add. That doesn't scale. :(
+            cumulativePercentage += percentages.get(i);
+            if (randomValue < cumulativePercentage) {
+                try {
+                    Class<?> clazz = classes.get(i);
+//                    Object object1 = clazz.
+                    Constructor<?> constructor = clazz.getDeclaredConstructor();
+                    Object object = constructor.newInstance();
+                    return object;
+                } catch (Exception e) {
+                    Gdx.app.error("ObjectRoller", "Failed to generate a random object!! \n" + e.getMessage());
+                    return null;
+                }
+            }
+        }
+
+        throw new IllegalStateException("Failed to generate a random object");
     }
 
     /**

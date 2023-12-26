@@ -25,6 +25,15 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	public static float radius = 0.5f;
 	Circle circle;
     private boolean isDead;
+
+    public Asteroid() {
+        super(new Vector2(0,0), new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid);
+
+        velX = getRandomlyNegativeNumber(minSpeed,maxSpeed);
+        velY = getRandomlyNegativeNumber(minSpeed,maxSpeed);
+        radius = size.y * 0.5f;
+        circle = new Circle(position.x + radius, position.y + radius, radius);
+    }
 	public Asteroid(Vector2 position, Vector2 size , ID id) {
 		super(position, size, id);
 
