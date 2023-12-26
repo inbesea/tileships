@@ -16,6 +16,7 @@ import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.LevelData.Maps;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -90,7 +91,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         asteroidManager = new AsteroidManager(box2DWrapper ,camera);
         mapNavigator = new MapNavManager();
         mapNavigator.getPublisher().add(this);// Get game screen to watch the new nodes.
-        mapNavigator.addMap(MapUtils.getDefaultMap());// Temp for testing
+        mapNavigator.addMap(Maps.getDefaultMap());// Temp for testing
         hud = new MainGameHUD(game, mapNavigator);
 
         // Add input event handling
