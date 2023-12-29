@@ -54,4 +54,9 @@ public class CoreTile extends ShipTile {
         setIsDeadTrue();
         return true;
     }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+
+    }
 }

@@ -46,4 +46,9 @@ public class StandardTile extends ShipTile{
         setIsDeadTrue();
         return true;
     }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+
+    }
 }

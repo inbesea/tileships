@@ -44,4 +44,9 @@ public class BombTile extends ShipTile {
     public void pickedUp() {
 
     }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+
+    }
 }

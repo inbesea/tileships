@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
@@ -191,7 +192,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         TileShipGame.batch.end();
 
-        drawGameObjects(asteroidManager.getAsteroids());
+        drawGameObjects(asteroidManager.getAllAsteroids());
 
         if(AppPreferences.getAppPreferences().getIsDebug()){ // This sucks because we're having these calls done outside the object. These
             // should be called where we can generalize the object behavior.
@@ -231,7 +232,38 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
             // This render should happen after a sweep attempt
             if (go.isDead()) {
-                System.out.println("ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                Gdx.app.error("drawGameObjects(args)","ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                continue;
+            }
+
+            drawGameObject(go); // Call helper to draw object
+        }
+
+        TileShipGame.batch.end();
+    }
+
+    /**
+     * Draws specific array[] of type-identical game objects
+     * @param gameObjects
+     */
+    private void drawGameObjects(Array<? extends GameObject> gameObjects) {
+        // tell the camera to update its matrices.
+        camera.update();
+
+        // tell the SpriteBatch to render in the
+        // coordinate system specified by the camera.
+        TileShipGame.batch.setProjectionMatrix(extendViewport.getCamera().combined);
+
+        // begin a new batch
+        // Loops through the game objects and draws them.
+        // Uses the game and camera context to handle drawing properly.
+        TileShipGame.batch.begin();
+
+        for (GameObject go : gameObjects) {
+
+            // This render should happen after a sweep attempt
+            if (go.isDead()) {
+                Gdx.app.error("drawGameObjects","ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
                 continue;
             }
 

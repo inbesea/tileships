@@ -34,7 +34,7 @@ public class MapNode extends GameObject {
     float rotation = generalUtil.getRandomNumber(0, 360);
     float rotationSpeed = generalUtil.getRandomlyNegativeNumber(3f, 8f);
     private boolean clicked;
-    private Array<Asteroid> asteroids;
+    private Array<Asteroid> asteroids = new Array<>();
 
     /**
      * General node of a map. Can be overridden for new visuals etc.

@@ -68,7 +68,19 @@ public class Asteroid extends GameObject implements PhysicsObject {
 		circle.setPosition(boundsPosition);
 	}
 
-	public Circle getCircleBounds() {
+    @Override
+    public void setPosition(Vector2 position) {
+        super.setPosition(position);
+        circle.setPosition(position.x + radius, position.y + radius);
+    }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+        velX = velocity.x;
+        velY = velocity.y;
+    }
+
+    public Circle getCircleBounds() {
 		return circle;
 	}
 
@@ -156,14 +168,4 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	 */
 	public void render(TileShipGame game) {
 	}
-
-    /**
-     * Update the asteroid to be at the physics sim position
-     */
-    public void updatePosition() {
-        // Can't directly update to body position because of the scale-up needed
-//        circle.setPosition(body.getPosition());
-//        setX(body.getPosition().x);
-//        setY(body.getPosition().y);
-    }
 }

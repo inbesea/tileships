@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.physics;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -13,5 +14,7 @@ public interface PhysicsObject {
     public void setBody(Body body);
 
     public Body getBody();
+    public void setPosition(Vector2 position);
+    public void setVelocity(Vector2 velocity);
 
 }

@@ -41,4 +41,9 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
         setIsDeadTrue();
         return true;
     }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+
+    }
 }

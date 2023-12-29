@@ -542,7 +542,7 @@ public class ShipTilesManager {
             logRemovedTile(tile);
 
             // Remove from simulation
-            box2DWrapper.removeObjectBody(tile.getBody());
+            box2DWrapper.deleteBody(tile.getBody());
         }
     }
 

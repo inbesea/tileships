@@ -11,6 +11,10 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.maxSpeed;
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.minSpeed;
+import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.getRandomlyNegativeNumber;
+
 // Handles drawing debug,
 public class Box2DWrapper implements Box2DWrapperInterface {
 
@@ -30,15 +34,6 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         this.box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
-    /**
-     * Removes body from simulation
-     *
-     * @param body The body to remove
-     */
-    public void removeObjectBody(Body body) {
-        bodies.removeValue(body, true);
-        world.destroyBody(body);
-    }
 
     /**
      * Draws the debug shapes.
@@ -57,9 +52,17 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
     }
 
+    /**
+     * Removes body from simulation
+     *
+     * @param body The body to remove
+     */
     @Override
     public void deleteBody(Body body) {
-
+        if(bodies.contains(body, true)){
+            bodies.removeValue(body, true);
+            world.destroyBody(body);
+        }
     }
 
     /**
@@ -174,5 +177,13 @@ public class Box2DWrapper implements Box2DWrapperInterface {
             System.out.println("Deleting not a tile");
             gameObject.deleteFromGame();
         }
+    }
+
+    public void resetPhysicsObject(PhysicsObject physicsObject, Vector2 position) {
+        this.deleteBody(physicsObject.getBody());
+        physicsObject.setPosition(position);
+        physicsObject.setVelocity(new Vector2((int) getRandomlyNegativeNumber(minSpeed,maxSpeed),
+            (int) getRandomlyNegativeNumber(minSpeed,maxSpeed)));
+        this.setObjectPhysics(physicsObject);
     }
 }

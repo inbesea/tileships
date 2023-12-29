@@ -161,6 +161,32 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
     }
 
     /**
+     * Draws specific array[] of type-identical game objects
+     * @param gameObjects
+     */
+    private void drawGameObjects(Array<? extends GameObject> gameObjects) {
+        // tell the camera to update its matrices.
+        camera.update();
+
+        game.batch.begin();
+        for (GameObject go : gameObjects) {
+
+            // This render should happen after a sweep attempt
+            if (go.isDead()) {
+                Gdx.app.error("SweepError","ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                continue;
+            }
+
+            if (go.getTexture() != null) {
+                Vector2 size = go.getSize();
+                TileShipGame.batch.draw(go.getTexture(), go.getX(), go.getY(), size.x, size.y);
+            }
+            go.render(this.game);
+        }
+        game.batch.end();
+    }
+
+    /**
      * Helper method holds rendering logic, takes game object
      * Expects to be called after game.batch.begin() and with a batch that has the correct camera location context
      */
