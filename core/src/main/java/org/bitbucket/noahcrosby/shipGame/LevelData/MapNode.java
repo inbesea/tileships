@@ -211,7 +211,7 @@ public class MapNode extends GameObject {
     }
 
     public AsteroidSpawner getAsteroidSpawner() {
-
+        Gdx.app.debug("MapNode", "DON'T FORGET TO IMPLEMENT MEEE");
         return null;
     }
 }

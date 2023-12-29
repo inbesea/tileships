@@ -94,28 +94,20 @@ public class AsteroidManager implements Manager {
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
         Asteroid temp;
-        for(int i = 0; i < asteroids.size; i++){
-            temp = asteroids.get(i);
+        Array<Asteroid> tempArray = getAllAsteroids();
+        for(int i = 0; i < tempArray.size; i++){
+            temp = tempArray.get(i);
 
             if(temp.getIsDead()){
                 deleteMember(temp);
             }
 
             if(outOfBounds(temp)){
-                deleteMember(temp);
-            }
-        }
-
-        for (int i = 0; i < finiteAsteroids.size; i++) {
-            temp = finiteAsteroids.get(i);
-            boolean isDead = temp.isDead();
-            boolean outOfBounds = outOfBounds(temp);
-            if(outOfBounds){
-                respawn(temp);
-                Gdx.app.log("cleanUp()", "spawned");
-            } else if (isDead) {
-                deleteMember(temp);
-                Gdx.app.log("cleanUp()", "deleted");
+                if(finiteAsteroids.contains(temp, false)){
+                    respawn(temp);
+                } else {
+                    deleteMember(temp);
+                }
             }
         }
     }
