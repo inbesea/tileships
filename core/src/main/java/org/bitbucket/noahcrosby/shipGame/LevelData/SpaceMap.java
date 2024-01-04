@@ -62,7 +62,7 @@ public class SpaceMap {
             return mapNode;
         }else {
             for(int i = 1; i < connections + 1; i++){ // Starts at one to not connect to itself
-                connectNodes(mapNode, getNClosestNode(new Vector2(x,y),i));
+                connectNodes(mapNode, getNthClosestNode(new Vector2(x,y),i));
             }
         }
         return mapNode;
@@ -81,7 +81,7 @@ public class SpaceMap {
      * @param n - The placement of the returned node
      * @return - The Nth closest node
      */
-    public MapNode getNClosestNode(Vector2 position, int n){
+    public MapNode getNthClosestNode(Vector2 position, int n){
         sortByDistance(mapNodes, position);
         return mapNodes.get(n);
     }
@@ -232,7 +232,7 @@ public class SpaceMap {
         }
     }
 
-    private void setExitNode(MapNode mapNode) {
+    public void setExitNode(MapNode mapNode) {
         this.exitNode = mapNode;
     }
 

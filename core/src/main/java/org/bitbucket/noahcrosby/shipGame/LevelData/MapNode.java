@@ -214,4 +214,20 @@ public class MapNode extends GameObject {
         Gdx.app.debug("MapNode", "DON'T FORGET TO IMPLEMENT MEEE");
         return null;
     }
+
+    /**
+     * Returns the edges of this node
+     * @return - Array of edges
+     */
+    public Array<MapNode> getEdges() {
+        return this.edges;
+    }
+
+    public void setVisited(boolean b) {
+        this.visited = b;
+    }
+
+    public boolean getVisited() {
+        return this.visited;
+    }
 }

@@ -91,7 +91,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         asteroidManager = new AsteroidManager(box2DWrapper ,camera);
         mapNavigator = new MapNavManager();
         mapNavigator.getPublisher().add(this);// Get game screen to watch the new nodes.
-        mapNavigator.addMap(Maps.getDefaultMap());// Temp for testing
+        mapNavigator.addMap(Maps.getBasicSpacemap(20));// Temp for testing
         hud = new MainGameHUD(game, mapNavigator);
 
         // Add input event handling
