@@ -46,4 +46,6 @@ public class AsteroidSpawner extends ObjectRoller {
 
         return generatedObjects;
     }
+
+    // generate Asteroids for nodes reutrns node for more? We would like the nodes to generally
 }
