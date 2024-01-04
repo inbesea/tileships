@@ -33,7 +33,6 @@ import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHand
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
 import java.util.ArrayList;
@@ -369,11 +368,10 @@ public class GameScreen implements Screen, Listener<MapNode> {
     public void toggleMap() {
         // If the game is showing the map we want to pause the game updates.
         boolean showingMap = this.hud.toggleMap();
-        this.setLocationUpdating(!showingMap);// Pause the game if map showing
-        if(showingMap) {
+        this.setMainScreenUpdates(!showingMap);// Pause the game if map showing
+        if(showingMap) { // Map is now showing...
             input.addProcessor(this.mapInputNavigator);
-            // Create input handler for the map nav. Put the nav into the HUD? Need to think about that
-            // Want to be able to change the game state based on the current location lol
+
         }else{
             input.removeProcessor(this.mapInputNavigator);
         }
@@ -384,7 +382,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
      * This includes the ship, asteroids, etc.
      * @param updateLocation - Whether or not to pause the game
      */
-    private void setLocationUpdating(boolean updateLocation) {
+    private void setMainScreenUpdates(boolean updateLocation) {
         this.updateLocalMapLocation = updateLocation;
         if(!updateLocation) {
             input.removeProcessor(zoomHandler);

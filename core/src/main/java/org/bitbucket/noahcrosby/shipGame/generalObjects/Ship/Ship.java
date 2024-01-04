@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.Ship;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -234,6 +235,11 @@ public class Ship extends GameObject {
         return null;
     }
 
+    /**
+     * This is called when the ship is removed from the game.
+     * NOT FINISHED. DO NOT USE. Not sure why I coded it this way.
+     * @return
+     */
     @Override
     public boolean deleteFromGame() {
         shipTilesManager.clearTileArrays();

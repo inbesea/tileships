@@ -25,7 +25,9 @@ public enum ID {
 	Hover( false),
 	StandardTile( true),
 	StrongTile( true),
-    ColorTile( true);
+    ColorTile( true),
+    EngineTile( true),
+    FuelTile( true);
 
 	private String texture;
 

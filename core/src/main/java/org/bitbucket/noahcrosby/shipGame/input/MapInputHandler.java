@@ -19,7 +19,6 @@ public class MapInputHandler extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.M) { // Open the map
-            // TODO : Open the map
             screen.toggleMap();
             Gdx.app.log("Map", "Toggling map - setting mapDraw to " + screen.showingMap());
         } else if (keycode == Input.Keys.ESCAPE) {

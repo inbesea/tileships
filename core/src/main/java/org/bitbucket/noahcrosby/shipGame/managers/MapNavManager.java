@@ -69,6 +69,7 @@ public class MapNavManager {
      * Notifies listeners that a new node has been arrived.
      */
     private void publishNewNode(){
+        // Notify the game screen that a new node has arrived
         publisher.dispatch(currentNode); // This is passed to the GameScreen. Only relevant if you're using the GameScreen
     }
 
@@ -127,6 +128,7 @@ public class MapNavManager {
      * @return
      */
     public boolean canMoveToNode(MapNode closestNode) {
+
         Gdx.app.debug("Unimplemented Method", "MapNavManager.canMoveToNode()");
         return true;
     }
@@ -143,4 +145,6 @@ public class MapNavManager {
     public MapNode getPreviousNode() {
         return previousNode;
     }
+
+
 }
