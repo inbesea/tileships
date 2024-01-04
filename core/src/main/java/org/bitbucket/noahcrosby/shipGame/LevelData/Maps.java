@@ -41,7 +41,7 @@ public class Maps {
             // We can have four produce some key asteroids and set the furthest one as a endpoint node later
         }
 
-        // Connect nodes
+        // Connect nodes that are close enough
         for(int i = 0; i < map.getMapNodes().size; i++){
             MapNode node = map.getMapNodes().get(i);
             for(int n = 0; n < map.getMapNodes().size; n++){
@@ -57,14 +57,15 @@ public class Maps {
             }
         }
 
+        // Fix groups of disconnected nodes in the map
         ArrayList<ArrayList<MapNode>> mapNodes = MapUtils.getMapGroups(map.getMapNodes());
         while(mapNodes.size() > 1){
             // Do something idk
             // Get the two nodes closest to each other and from the same group to connect up.
 
+            MapUtils.fixOrphanedMapGroups(map);
+
             mapNodes = MapUtils.getMapGroups(map.getMapNodes());
-
-
         }
 
         // Connect up orphaned nodes with the closest node lol

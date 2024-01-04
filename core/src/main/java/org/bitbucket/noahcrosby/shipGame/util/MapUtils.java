@@ -2,7 +2,9 @@ package org.bitbucket.noahcrosby.shipGame.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
 
 import java.util.*;
 
@@ -62,5 +64,59 @@ public class MapUtils {
         }
 
         return groups;
+    }
+
+    /**
+     * Takes a map and checks for multiple groups of interconnected nodes. If there are orphaned groups they are connected.
+     * @param map
+     * @return
+     */
+    public static SpaceMap fixOrphanedMapGroups(SpaceMap map){
+        ArrayList<ArrayList<MapNode>> groups = getMapGroups(map.getMapNodes());
+
+        while(groups.size() > 1) {
+            // Just fix the first group lol
+            ArrayList<MapNode> orphanedGroup = groups.get(0);
+
+            // Get all other nodes
+            ArrayList<MapNode> otherNodes = new ArrayList<>();
+            for(int n = 1; n < groups.size(); n++){
+                otherNodes.addAll(groups.get(n));
+            }
+
+            // Connect the two closest nodes between the first group and second lol.
+            connectClosestNodes(orphanedGroup, otherNodes);
+
+            // Update condition
+            groups = getMapGroups(map.getMapNodes());
+        }
+        return map;
+    }
+
+    /**
+     * Iterates through two lists of nodes and connects the closest two nodes, one from each list.
+     * @param nodes - a list of nodes
+     * @param otherNodes - another list of nodes
+     */
+    public static void connectClosestNodes(ArrayList<MapNode> nodes, ArrayList<MapNode> otherNodes){
+        MapNode firstNode;
+        MapNode secondNode;
+        Pair<MapNode, MapNode> theClosestNodes = Pair.of(null, null);
+        float minDistance = Integer.MAX_VALUE;
+
+        // Find the closest two nodes from the two lists
+        for(int i = 0; i < nodes.size(); i++){
+            // Check agaist all other nodes, noting the least distance
+            firstNode = nodes.get(i);
+            for(int n = 0; n < otherNodes.size(); n++){
+                secondNode = otherNodes.get(n);
+                if(firstNode.getPosition().dst(secondNode.getPosition()) < minDistance){
+                    minDistance = firstNode.getPosition().dst(secondNode.getPosition());
+                    theClosestNodes = Pair.of(firstNode, secondNode);
+                }
+            }
+        }
+        // Call SpaceMap to statically connect the two nodes
+        SpaceMap.connectNodes(theClosestNodes.getLeft(), theClosestNodes.getRight());
     }
 }

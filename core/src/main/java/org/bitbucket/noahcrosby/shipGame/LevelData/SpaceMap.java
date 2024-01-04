@@ -170,7 +170,7 @@ public class SpaceMap {
      * @param n1 - First node
      * @param n2 - Second node
      */
-    public void connectNodes(MapNode n1, MapNode n2){
+    public static void connectNodes(MapNode n1, MapNode n2){
         if(!n1.edges.contains(n2, true)){
             n1.edges.add(n2);
         }
