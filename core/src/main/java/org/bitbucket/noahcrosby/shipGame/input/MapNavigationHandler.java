@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
 import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
+import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 /**
@@ -17,6 +18,8 @@ public class MapNavigationHandler extends InputAdapter {
     protected MapNavManager navManager;
     protected SpaceMap currentMap;
     protected OrthographicCamera camera;
+
+    MapNode hoveredNode = null;
 
     public MapNavigationHandler(MapNavManager navManager, OrthographicCamera camera){
         this.navManager = navManager;
@@ -94,14 +97,22 @@ public class MapNavigationHandler extends InputAdapter {
     }
 
     public boolean mouseMoved(int screenX, int screenY) {
-
+        // issue with one node being hovered could be unhovered due to the one at a time hovering.
+        // Can we track hovered nodes?
         Vector2 touch = generalUtil.returnUnprojectedInputVector2(camera);
-        MapNode temp = generalUtil.getClosestObject(touch, currentMap.getMapNodes());
+        MapNode closestNodeToTouch = generalUtil.getClosestObject(touch, currentMap.getMapNodes());
+        if(closestNodeToTouch != hoveredNode && hoveredNode != null){
+            hoveredNode.setHovered(false);
+            hoveredNode = null;
+        }
 
-        if(temp.getPosition().dst(touch) < NODE_SELECT_DISTANCE){
-            temp.setHovered(true);
+        boolean closeEnoughToHover = closestNodeToTouch.getPosition().dst(touch) < NODE_SELECT_DISTANCE;
+        if(closeEnoughToHover){
+            closestNodeToTouch.setHovered(true);
+            hoveredNode = closestNodeToTouch;
         } else {
-            temp.setHovered(false);
+            closestNodeToTouch.setHovered(false);
+            hoveredNode = null;
         }
 
         return false;
