@@ -67,6 +67,7 @@ public class MapNavManager {
 
     /**
      * Notifies listeners that a new node has been arrived.
+     * Using the observer/watcher design pattern
      */
     private void publishNewNode(){
         // Notify the game screen that a new node has arrived

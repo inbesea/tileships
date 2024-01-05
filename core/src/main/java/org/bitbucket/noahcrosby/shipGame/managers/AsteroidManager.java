@@ -41,7 +41,7 @@ public class AsteroidManager implements Manager {
     OrthographicCamera camera;
     Box2DWrapper box2DWrapper;
     ObjectRoller asteroidRoller;
-    Array<Asteroid> finiteAsteroids;
+    Array<Asteroid> finiteAsteroids = new Array<>();
     boolean arcadeMode = false;
 
     /**
@@ -241,13 +241,13 @@ public class AsteroidManager implements Manager {
      * @return
      */
     public Asteroid addAsteroid(Asteroid asteroid, boolean isFinite){
+        // Asteroids are not already present
         if(asteroids.contains(asteroid, true) || finiteAsteroids.contains(asteroid, true)){
-            if(asteroid.getBody() == null){
+            if(asteroid.getBody() == null){ // Check for bodies
                 Vector2 spawnLocation = getVectorInValidSpawnArea();
 
                 asteroid.setPosition(spawnLocation);
                 box2DWrapper.setObjectPhysics(asteroid);
-                ;
             }
             return asteroid; // Don't double add an asteroid
         }
@@ -325,11 +325,19 @@ public class AsteroidManager implements Manager {
             deleteMember(asteroids.get(i));
         }
         if(asteroids.size > 0){
-            System.out.println("ERROR : removeAllAsteroids() did not clear asteroid array in AsteroidManager");
+            Gdx.app.debug("AsteroidManager.deleteAllAsteroids()","ERROR : deleteAllAsteroids() did not clear asteroid array in AsteroidManager");
         }
     }
 
-
+    private void deleteFiniteAsteroids() {
+        // Go through the asteroids and remove their reference from the local list and the screen object list
+        for(int i = 0; i < finiteAsteroids.size; i=i){
+            deleteMember(finiteAsteroids.get(i));
+        }
+        if(finiteAsteroids.size > 0){
+            Gdx.app.debug("AsteroidManager.deleteFiniteAsteroids()","ERROR : deleteFiniteAsteroids() did not clear finiteAsteroids array in AsteroidManager");
+        }
+    }
 
     /**
      * Returns array of asteroids
@@ -357,16 +365,38 @@ public class AsteroidManager implements Manager {
         return finiteAsteroids;
     }
 
+
+    public Array<Asteroid> returnFiniteAsteroids() {
+        Array<Asteroid> asteroids1 = new Array<>();
+        asteroids1.addAll(finiteAsteroids);
+        finiteAsteroids.clear();
+        return asteroids1;
+    }
+
     /**
      * set the array of limited asteroids that can be diminished.
      * @param asteroids
      */
     public void setFiniteAsteroids(Array<Asteroid> asteroids) {
+        softDeleteFiniteAsteroids();
+
+        // Reset the finite asteroids
         finiteAsteroids = asteroids;
         if(finiteAsteroids != null){
             for(int i = 0; i < finiteAsteroids.size; i++){
                 addAsteroid(finiteAsteroids.get(i), true);
             }
+        }
+    }
+
+    /**
+     * Removes the physics bodies and list of finite asteroids
+     */
+    public void softDeleteFiniteAsteroids(){
+        // Remove the old physics bodies
+        for(Asteroid finiteAsteroid : finiteAsteroids){
+            box2DWrapper.deleteBody(finiteAsteroid.getBody());
+            finiteAsteroid.setBody(null);
         }
     }
 

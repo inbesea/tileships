@@ -210,6 +210,16 @@ public class MapNode extends GameObject {
         return this.asteroids;
     }
 
+    /**
+     * Returns this nodes asteroids and clears the node asteroid instance list.
+     * @return
+     */
+    public Array<Asteroid> returnAsteroids() {
+        Array<Asteroid> asteroids1 = this.asteroids;
+        this.asteroids = new Array<>();
+        return asteroids1;
+    }
+
     public AsteroidSpawner getAsteroidSpawner() {
         Gdx.app.debug("MapNode", "DON'T FORGET TO IMPLEMENT MEEE");
         return null;

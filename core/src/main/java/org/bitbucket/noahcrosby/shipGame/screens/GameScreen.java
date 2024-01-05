@@ -428,7 +428,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
             pn.setAsteroids(asteroidManager.getFiniteAsteroids());
         }
         // VERY TODO : Get the spawners working so we can get a set of finite asteroids here lol
-        asteroidManager.setFiniteAsteroids(nn.getAsteroids());
+        asteroidManager.setFiniteAsteroids(nn.returnAsteroids() /* Empties the asteroids from the new node, to be reset later when switching nodes. */);
         asteroidManager.setSpawner(nn.getAsteroidSpawner()); // Need this to keep up basic spawning situations.
     }
 }
