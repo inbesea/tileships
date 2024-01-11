@@ -20,6 +20,7 @@ import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.LevelData.Maps;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.Background.GalaxyBackGround;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
@@ -68,7 +69,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     private boolean updateLocalMapLocation = true;
     private MapNavManager mapNavigator;
     private MapNavigationHandler mapInputNavigator;
-    Listener nodeListener;
+    GalaxyBackGround backGround;
 
     public GameScreen(final TileShipGame game) {
         this.game = game;
@@ -77,6 +78,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
+        backGround = new GalaxyBackGround((int)TileShipGame.defaultViewportSizeX, (int)TileShipGame.defaultViewportSizeY, 0.001f);
 
         box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
 
@@ -139,6 +141,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(new Color(0.00f, 0.00f, 0.10f, 1));
+
+        backGround.draw(hud.getCamera().combined);
 
         // Sets focus to drawn on extended viewport
         extendViewport.apply();
@@ -277,6 +281,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         extendViewport.update(width, height);
         hud.update(width, height);
+        backGround.update(width, height);
     }
 
     @Override

@@ -240,6 +240,9 @@ public class HUD {
      */
     public void update(int width, int height) {
         HUDScreenLayer.update(width, height, true);
+        // Updates the UI elements based on the new screen size
+        this.mapToggleUI.setPosition(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 20));
+        this.tileCondenseUI.setPosition(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 104));
     }
 
     /**
