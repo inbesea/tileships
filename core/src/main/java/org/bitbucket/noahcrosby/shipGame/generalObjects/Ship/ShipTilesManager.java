@@ -188,8 +188,8 @@ public class ShipTilesManager {
 
         indexXY = returnIndex(x, y); // Get index corresponding to x, y position
 
-        System.out.println("Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
-                "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
+        Gdx.app.debug("gridAlignedxyTilePlacement", "Create " + id + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
+            "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
 
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
@@ -215,8 +215,8 @@ public class ShipTilesManager {
         for (int i = 0; i < existingTiles.size; i++) {
             existingTile = existingTiles.get(i);
             if (newTile.getXIndex() == existingTile.getXIndex() && newTile.getYIndex() == existingTile.getYIndex()) {
-                throw new RuntimeException("New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
-                        existingTile.getPositionAsString() + " id : " + existingTile.getID());
+                Gdx.app.error("ValidateNewTileIndex","New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
+                    existingTile.getPositionAsString() + " id : " + existingTile.getID());
             }
         }
     }

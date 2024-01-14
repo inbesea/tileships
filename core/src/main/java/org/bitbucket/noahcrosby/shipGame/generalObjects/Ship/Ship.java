@@ -158,11 +158,10 @@ public class Ship extends GameObject {
      */
     public void removeTilesFromShip(Array<ShipTile> tiles) {
         ShipTile tile;
-        int size = tiles.size; // Array shrinks as time goes on, must use var
-        for (int i = 0; i < size; i++) {
-            tile = tiles.get(0); // Use first array as values are removed
-            if (tile.getID() == ID.CoreTile) continue; // Skip Core tile, don't remove core tiles
-            removeTileFromShip(tile);
+        for (int i = tiles.size - 1; i >= 0; i--) {
+            tile = tiles.get(i); // Use first array as values are removed
+            if (tile.getID() == ID.CoreTile) continue; // Core tiles aren't condensable, and can be a component
+            shipTilesManager.removeTileFromShip(tile); // Should this use the Ship middleman method? :/
         }
     }
 
