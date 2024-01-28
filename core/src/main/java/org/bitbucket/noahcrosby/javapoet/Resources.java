@@ -16,6 +16,8 @@ public class Resources {
 
     public static Sound DropSfx;
 
+    public static Sound MovingTileSoundSfx;
+
     public static Sound PickUpTileQuick0Sfx;
 
     public static Sound PlaceTileSoundSfx;
@@ -78,6 +80,7 @@ public class Resources {
         assetManager.load("Sound Effects/collectTileSound.mp3", Sound.class);
         assetManager.load("Sound Effects/rain.mp3", Sound.class);
         assetManager.load("Sound Effects/drop.wav", Sound.class);
+        assetManager.load("Sound Effects/MovingTileSound.wav", Sound.class);
         assetManager.load("Sound Effects/PickUpTileQuick0.wav", Sound.class);
         assetManager.load("Sound Effects/PlaceTileSound.wav", Sound.class);
         assetManager.load("Sound Effects/SelectionBuzzLooped.wav", Sound.class);
@@ -114,6 +117,7 @@ public class Resources {
             CollectTileSoundSfx = assetManager.get("Sound Effects/collectTileSound.mp3");
             RainSfx = assetManager.get("Sound Effects/rain.mp3");
             DropSfx = assetManager.get("Sound Effects/drop.wav");
+            MovingTileSoundSfx = assetManager.get("Sound Effects/MovingTileSound.wav");
             PickUpTileQuick0Sfx = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
             PlaceTileSoundSfx = assetManager.get("Sound Effects/PlaceTileSound.wav");
             SelectionBuzzLoopedSfx = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");

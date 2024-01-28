@@ -45,6 +45,7 @@ public class TileDragHandler extends InputAdapter {
             boolean selectedTileCanBeGrabbed = canGrabTile(pickedUpTile);
 
             if (selectedTileCanBeGrabbed) {
+                this.setDraggingSound(true);
                 pickUpTile(pickedUpTile);
                 pickedUpTile.pickedUp();
             }
@@ -53,9 +54,16 @@ public class TileDragHandler extends InputAdapter {
         return true;
     }
 
+    /**
+     * Handles dragging the input point around the screen.
+     * @param screenX
+     * @param screenY
+     * @param pointer the pointer for the event.
+     * @return
+     */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (!getDragging()) return false;
+        if (!getDragging()) return false; // Nothing to do if not dragging a tile
 
         // Need to handle dragging to collect more tiles
         ShipTile draggedTile = playerShip.getDraggedTile();
@@ -135,6 +143,7 @@ public class TileDragHandler extends InputAdapter {
         playerShip.addTileToShip(x, y, tempTile);
         tempTile.replaced();
         Resources.PlaceTileSoundSfx.play(AppPreferences.getAppPreferences().getSoundVolume());
+        this.setDraggingSound(false);
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);
     }
@@ -145,6 +154,18 @@ public class TileDragHandler extends InputAdapter {
      */
     public void setDragging(boolean dragging) {
         this.dragging = dragging;
+    }
+
+    /**
+     * Starts and loops the tile moving/dragging sound effect.
+     * @param makeSound - conditional to start or stop the moving tile sound effect.
+     */
+    private void setDraggingSound(boolean makeSound) {
+        if(makeSound){
+            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume());
+        } else {
+            Resources.MovingTileSoundSfx.stop();
+        }
     }
 
     /**

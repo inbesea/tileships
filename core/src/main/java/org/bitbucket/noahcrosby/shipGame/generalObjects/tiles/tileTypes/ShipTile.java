@@ -45,6 +45,10 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 
     public abstract boolean isInvulnerable();
     //These methods are for updating tiles when they're grabbing and placing a tile back.
+
+    /**
+     * Tile performs placement actions here as implemented.
+     */
     public abstract void replaced();
     public abstract void pickedUp();
 
