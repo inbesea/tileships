@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 
 public class DebugInputHandler extends InputAdapter {
 
@@ -57,7 +58,7 @@ public class DebugInputHandler extends InputAdapter {
         if (shipTileArray.isEmpty()) {
             System.out.println("Tiles collected : None");
         } else {
-            System.out.println("Tiles collected : " + shipTileArray + " Size : " + shipTileArray.size);
+            Gdx.app.log("attemptNewTileProduction","Tiles collected : " + TileTypeData.generateTileDescriptionString(shipTileArray) + " Size : " + shipTileArray.size);
             playerShip.buildNewTile(shipTileArray);
         }
     }

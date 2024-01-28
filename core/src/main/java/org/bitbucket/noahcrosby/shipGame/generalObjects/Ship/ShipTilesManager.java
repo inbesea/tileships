@@ -56,7 +56,7 @@ public class ShipTilesManager {
 
         placementLocationResult = getClosestPlacementVector2(tileLocation2);
         tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, tile);
-        box2DWrapper.setObjectPhysics(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
+        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
 
         validateEdgeSize();
 
@@ -198,7 +198,7 @@ public class ShipTilesManager {
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
 
-        box2DWrapper.setObjectPhysics(tempTile);
+        box2DWrapper.initPhysicsObject(tempTile);
 
         //setTilePhysics(tempTile);
         validateEdgeSize();

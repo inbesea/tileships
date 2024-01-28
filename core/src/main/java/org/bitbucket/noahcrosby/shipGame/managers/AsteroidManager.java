@@ -17,10 +17,6 @@ import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.util.ObjectRoller;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
-import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.maxSpeed;
-import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.minSpeed;
-import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.getRandomlyNegativeNumber;
-
 /*
 * Have a way to call this during render that will handle adding more asteroids.
 * Asteroids will handle themselves when added, but this will decide if they need to be added or removed.
@@ -144,7 +140,7 @@ public class AsteroidManager implements Manager {
             return;
         }
 
-        box2DWrapper.setObjectPhysics(asteroid);
+        box2DWrapper.initPhysicsObject(asteroid);
         //setAsteroidPhysics(asteroid);
 
         asteroids.add(asteroid);
@@ -220,7 +216,7 @@ public class AsteroidManager implements Manager {
             asteroid = new Asteroid(spawnLocation, new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid);
         }
 
-        box2DWrapper.setObjectPhysics(asteroid);
+        box2DWrapper.initPhysicsObject(asteroid);
         //setAsteroidPhysics(asteroid);
 
         asteroids.add(asteroid);
@@ -247,14 +243,14 @@ public class AsteroidManager implements Manager {
                 Vector2 spawnLocation = getVectorInValidSpawnArea();
 
                 asteroid.setPosition(spawnLocation);
-                box2DWrapper.setObjectPhysics(asteroid);
+                box2DWrapper.initPhysicsObject(asteroid);
             }
             return asteroid; // Don't double add an asteroid
         }
         Vector2 spawnLocation = getVectorInValidSpawnArea();
 
         asteroid.setPosition(spawnLocation);
-        box2DWrapper.setObjectPhysics(asteroid);
+        box2DWrapper.initPhysicsObject(asteroid);
 
         if(isFinite){
             finiteAsteroids.add(asteroid);

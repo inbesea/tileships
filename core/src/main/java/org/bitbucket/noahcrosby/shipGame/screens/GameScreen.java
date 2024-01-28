@@ -111,6 +111,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
      * Convenience method to initialize input event handling when starting game.
      */
     private void initializeInputEventHandling() {
+        AppPreferences.initLogging(); // Start debug logging
+
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
         tileDragHandler = new TileDragHandler(player);
@@ -142,14 +144,14 @@ public class GameScreen implements Screen, Listener<MapNode> {
     public void render(float delta) {
         ScreenUtils.clear(new Color(0.00f, 0.00f, 0.10f, 1));
 
-        backGround.draw(hud.getCamera().combined);
-
         // Sets focus to drawn on extended viewport
         extendViewport.apply();
 
         // Update game object positions
 //        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
+
+        backGround.draw(hud.getCamera().combined);
 
         // Draw game objects
         drawGameObjects();

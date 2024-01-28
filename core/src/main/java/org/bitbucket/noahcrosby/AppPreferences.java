@@ -134,4 +134,13 @@ public class AppPreferences {
             Gdx.app.setLogLevel(LOG_INFO);
         }
     }
+
+
+    public static void initLogging() {
+        if(getAppPreferences().getIsDebug()){
+            Gdx.app.setLogLevel(LOG_DEBUG);
+        } else {
+            Gdx.app.setLogLevel(LOG_INFO);
+        }
+    }
 }

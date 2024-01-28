@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 
 public class GalaxyBackGround {
     private Boolean[][] stars;
@@ -36,28 +38,22 @@ public class GalaxyBackGround {
         return;
     }
 
+    /**
+     * Simple draw statement that loops the stars giving them all the same texture and size lol
+     * @param matrix4
+     */
     public void draw(Matrix4 matrix4){
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        Gdx.gl.glLineWidth(2);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.setProjectionMatrix(matrix4);
-        shapeRenderer.setColor(Color.WHITE);
-
+        TileShipGame.batch.begin();
         for(int i = 0; i < (int) fieldSize.getLeft() ; i++){
             for (int n = 0; n < (int) fieldSize.getRight() ; n++){
                 Vector2 size = new Vector2(1,1);
                 if(stars[i][n]){
-                    shapeRenderer.rect(i, n, size.x, size.y);
+                    // Terrible star drawing method. Uses the silver asteroid texture
+                    TileShipGame.batch.draw(Resources.AsteroidSilverTexture, i, n, size.x, size.y);
                 }
             }
         }
-        Gdx.app.debug("HEY","Fix the GalaxyBackGround draw calls!!\n" +
-            "They cost too much dude. "); // Maybe also dim the stars a little, they're bright...
-        shapeRenderer.end();
-        Gdx.gl.glLineWidth(1);
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        TileShipGame.batch.end();
     }
 
     public void update(int width, int height) {

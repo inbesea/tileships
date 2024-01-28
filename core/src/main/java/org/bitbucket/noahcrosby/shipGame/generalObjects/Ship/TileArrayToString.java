@@ -152,14 +152,15 @@ public class TileArrayToString {
     }
 
     /**
-     * Prints array of tiles as a useful string
-     * @return
+     * Prints array of tiles as a descriptive string
+     * [abbv. - (x, y)]
+     * @return - String of tile abbrvs. and positions.
      */
     public String tileArrayToPrintString() {
         StringBuilder tileArrayString = new StringBuilder();
         for (ShipTile tile : tiles) {
             tileArrayString.append(tile.getTileInfoString() + "\n");
         }
-        return null;
+        return tileArrayString.toString();
     }
 }
