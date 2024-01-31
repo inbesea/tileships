@@ -16,6 +16,7 @@ import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.Directors.ShipDirector;
 import org.bitbucket.noahcrosby.Shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.LevelData.ForegroundObject;
 import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.LevelData.Maps;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
@@ -105,6 +106,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
         box2DWrapper.setWorldContactListener(collisionListener); // Get the world in contact with this collision listener
 
         textBoxHandler = new TextBoxManager();
+
+        backGround.addForegroundObject(new ForegroundObject(new Vector2(20,20), new Vector2(300,300), Resources.AsteroidRedTexture));
     }
 
     /**
@@ -151,7 +154,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 //        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
-        backGround.draw(hud.getCamera().combined);
+        backGround.draw(hud.getCamera().combined, game);
 
         // Draw game objects
         drawGameObjects();
@@ -421,6 +424,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     public void receive(Signal<MapNode> signal, MapNode newNode) {
         Gdx.app.log("Received Node", "GameScreen has received a new node " + newNode.getPositionAsString());
         transitionNodes(newNode, mapNavigator.getPreviousNode());
+//        backGround.updateForeground(newNode.getForeground());
     }
 
     /**

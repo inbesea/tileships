@@ -2,20 +2,27 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.Background;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.LevelData.ForegroundObject;
+import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 
 public class GalaxyBackGround {
     private Boolean[][] stars;
     Pair fieldSize;
     float density;
+    // Objects to draw infront of everything.
+    private Array<ForegroundObject> foregroundObjects = new Array<>();
+    private Box2DWrapper physics;
+
     public GalaxyBackGround(int x, int y, float percentStars){
+        physics = new Box2DWrapper(new Vector2(0,0), true);
         fieldSize = Pair.of(x, y);
         stars = new Boolean[x][y];
         this.density = percentStars;
@@ -42,18 +49,26 @@ public class GalaxyBackGround {
      * Simple draw statement that loops the stars giving them all the same texture and size lol
      * @param matrix4
      */
-    public void draw(Matrix4 matrix4){
+    public void draw(Matrix4 matrix4, TileShipGame game){
         TileShipGame.batch.begin();
+        Texture starTexture = Resources.AsteroidSilverTexture;
         for(int i = 0; i < (int) fieldSize.getLeft() ; i++){
             for (int n = 0; n < (int) fieldSize.getRight() ; n++){
                 Vector2 size = new Vector2(1,1);
                 if(stars[i][n]){
                     // Terrible star drawing method. Uses the silver asteroid texture
-                    TileShipGame.batch.draw(Resources.AsteroidSilverTexture, i, n, size.x, size.y);
+                    TileShipGame.batch.draw(starTexture, i, n, size.x, size.y);
                 }
             }
         }
+        ForegroundObject object;
+        for(int i = 0; i < foregroundObjects.size ; i++){
+            object = foregroundObjects.get(i);
+            object.render(game);
+        }
         TileShipGame.batch.end();
+
+        physics.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
     }
 
     public void update(int width, int height) {
@@ -82,5 +97,21 @@ public class GalaxyBackGround {
         stars = newStars;
 
         populateArray(); // Repopulate for new null spaces
+    }
+
+    /**
+     *
+     * @param newForegroundObjs
+     */
+    public void updateForeground(Array<ForegroundObject> newForegroundObjs) {
+        this.foregroundObjects = newForegroundObjs;
+
+        for(int i = 0; i < foregroundObjects.size; i++){
+
+        }
+    }
+
+    public void addForegroundObject(ForegroundObject foregroundObject) {
+        this.foregroundObjects.add(foregroundObject);
     }
 }

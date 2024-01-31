@@ -131,7 +131,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
     }
 
     /**
-     * Adds a collision Listener to this Box2D system. This will define how to handle collision events within this system.
+     * Sets the collision Listener to this Box2D system. This will define how to handle collision events within this system.
      * @param collisionListener
      */
     @Override
@@ -140,7 +140,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
     }
 
     /**
-     * Gives physicsObjects their physics attributes and hands the body values to the wrapper list.
+     * Gives physicsObjects their physics attributes and hands the body values to the simulation.
      *
      * @param physicsObject the PhysicsObject to set
      */

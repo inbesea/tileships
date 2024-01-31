@@ -27,7 +27,8 @@ public enum ID {
 	StrongTile( true),
     ColorTile( true),
     EngineTile( true),
-    FuelTile( true);
+    FuelTile( true),
+    ForegroundObject(false);
 
 	private String texture;
 

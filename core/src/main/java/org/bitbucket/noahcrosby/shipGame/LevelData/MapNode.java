@@ -240,4 +240,9 @@ public class MapNode extends GameObject {
     public boolean getVisited() {
         return this.visited;
     }
+
+    public MapNode getForeground() {
+        return null;
+        // TODO : halp
+    }
 }
