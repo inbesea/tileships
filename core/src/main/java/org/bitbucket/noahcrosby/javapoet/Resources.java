@@ -48,6 +48,10 @@ public class Resources {
 
     public static Texture HoverIndicatorTexture;
 
+    public static Texture PowerTilePoweredTexture;
+
+    public static Texture PowerTileUnpoweredTexture;
+
     public static Texture RobotV2Texture;
 
     public static Texture ShipTileBlueTexture;
@@ -96,6 +100,8 @@ public class Resources {
         assetManager.load("Textures/craftingIcon.png", Texture.class);
         assetManager.load("Textures/craftingIconPressed.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
+        assetManager.load("Textures/PowerTile_Powered.png", Texture.class);
+        assetManager.load("Textures/PowerTile_Unpowered.png", Texture.class);
         assetManager.load("Textures/RobotV2.png", Texture.class);
         assetManager.load("Textures/ShipTileBlue.png", Texture.class);
         assetManager.load("Textures/ShipTileGreen.png", Texture.class);
@@ -133,6 +139,8 @@ public class Resources {
             CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
             CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
+            PowerTilePoweredTexture = assetManager.get("Textures/PowerTile_Powered.png");
+            PowerTileUnpoweredTexture = assetManager.get("Textures/PowerTile_Unpowered.png");
             RobotV2Texture = assetManager.get("Textures/RobotV2.png");
             ShipTileBlueTexture = assetManager.get("Textures/ShipTileBlue.png");
             ShipTileGreenTexture = assetManager.get("Textures/ShipTileGreen.png");
