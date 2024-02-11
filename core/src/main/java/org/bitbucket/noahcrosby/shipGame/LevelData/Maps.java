@@ -2,6 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.LevelData;
 
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidSpawner;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidTable;
 import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 

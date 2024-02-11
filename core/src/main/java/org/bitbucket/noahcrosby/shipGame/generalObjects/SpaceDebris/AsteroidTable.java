@@ -1,4 +1,4 @@
-package org.bitbucket.noahcrosby.shipGame.LevelData;
+package org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris;
 
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.MetalAsteroid;

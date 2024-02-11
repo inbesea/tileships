@@ -166,7 +166,7 @@ public class TileDragHandler extends InputAdapter {
      */
     private void setDraggingSound(boolean makeSound) {
         if(makeSound){
-            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume());
+            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume() * 0.5f);
         } else {
             Resources.MovingTileSoundSfx.stop();
         }
