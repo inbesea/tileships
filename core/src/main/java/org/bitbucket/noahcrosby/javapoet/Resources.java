@@ -26,6 +26,8 @@ public class Resources {
 
     public static Sound TilePlacementSfx;
 
+    public static Texture AncientAsteroidTexture;
+
     public static Texture AsteroidBlueTexture;
 
     public static Texture AsteroidGreenTexture;
@@ -89,6 +91,7 @@ public class Resources {
         assetManager.load("Sound Effects/PlaceTileSound.wav", Sound.class);
         assetManager.load("Sound Effects/SelectionBuzzLooped.wav", Sound.class);
         assetManager.load("Sound Effects/tilePlacement.wav", Sound.class);
+        assetManager.load("Textures/ancientAsteroid.png", Texture.class);
         assetManager.load("Textures/asteroid_blue.png", Texture.class);
         assetManager.load("Textures/asteroid_green.png", Texture.class);
         assetManager.load("Textures/asteroid_orange.png", Texture.class);
@@ -128,6 +131,7 @@ public class Resources {
             PlaceTileSoundSfx = assetManager.get("Sound Effects/PlaceTileSound.wav");
             SelectionBuzzLoopedSfx = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
             TilePlacementSfx = assetManager.get("Sound Effects/tilePlacement.wav");
+            AncientAsteroidTexture = assetManager.get("Textures/ancientAsteroid.png");
             AsteroidBlueTexture = assetManager.get("Textures/asteroid_blue.png");
             AsteroidGreenTexture = assetManager.get("Textures/asteroid_green.png");
             AsteroidOrangeTexture = assetManager.get("Textures/asteroid_orange.png");
