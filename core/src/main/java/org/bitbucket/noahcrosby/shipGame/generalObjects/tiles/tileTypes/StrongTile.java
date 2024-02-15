@@ -17,7 +17,7 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
         return true;
     }
     /**
-     * Do this when placed
+     * Call this when this tile is placed
      */
     @Override
     public void replaced() {
