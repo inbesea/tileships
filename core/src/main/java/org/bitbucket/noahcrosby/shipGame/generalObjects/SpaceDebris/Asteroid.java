@@ -166,6 +166,10 @@ public class Asteroid extends GameObject implements PhysicsObject {
 		return Resources.AsteroidPurpleTexture;
 	}
 
+    public ID productionOutputID(){
+        return ID.StandardTile;
+    }
+
     /**
      * Returns the type of tile this produces
      * @return

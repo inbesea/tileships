@@ -10,7 +10,8 @@ public enum TileTypeData {
     CoreTile("COR"),
     StandardTile("STD"),
     StrongTile("STR"),
-    ColorTile("CLR");
+    ColorTile("CLR"),
+    AncientTile("ANC");
 
     public String getAbbreviation() {
         return abbreviation;

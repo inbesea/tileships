@@ -23,6 +23,10 @@ public class AncientTile extends ShipTile{
         super(position, id, typeData);
     }
 
+    public AncientTile(Vector2 vector2) {
+        super(vector2, ID.AncientTile, TileTypeData.AncientTile);
+    }
+
     @Override
     public Texture getTexture() {
         if(powered){

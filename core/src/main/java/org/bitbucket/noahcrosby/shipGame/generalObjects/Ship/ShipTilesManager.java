@@ -74,7 +74,6 @@ public class ShipTilesManager {
      * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
      */
     public ShipTile addTile(float x, float y, ID id) {
-
         // Use vector to set new tile
         Vector2 placementLocationResult; // We will add method to get this.
         Vector2 tileLocation2 = new Vector2(x, y);
@@ -86,7 +85,6 @@ public class ShipTilesManager {
         validateEdgeSize();
 
         return tempTile;
-
     }
 
     /**

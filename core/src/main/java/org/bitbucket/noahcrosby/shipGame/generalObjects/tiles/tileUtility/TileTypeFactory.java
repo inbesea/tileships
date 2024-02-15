@@ -29,6 +29,8 @@ public class TileTypeFactory {
                 return new StrongTile(vector2);
             case ColorTile:
                 return new ColorTile(vector2);
+            case AncientTile:
+                return new AncientTile(vector2);
             default: return null;
         }
     }
