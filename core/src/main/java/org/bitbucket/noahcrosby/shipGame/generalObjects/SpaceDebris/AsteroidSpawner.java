@@ -29,6 +29,12 @@ public class AsteroidSpawner extends ObjectRoller {
         return asteroid;
     }
 
+    /**
+     * Called to produce asteroids at a specific location, at a specific amount.
+     * @param objectsAndPercentages
+     * @param count
+     * @return
+     */
     public static Array<Asteroid> generateRandomAsteroidsStatic(Map<Class, Integer> objectsAndPercentages, Integer count){
         Array<Asteroid> generatedObjects = new Array<>();
         List<Class<?>> classes = new ArrayList<>();
