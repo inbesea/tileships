@@ -63,7 +63,18 @@ public class Asteroid extends GameObject implements PhysicsObject {
 		return null;
 	}
 
-	@Override
+    /**
+     * Returns the class this returns when created. Should be overridden.
+     * NOTE : This could take specific data about an asteroid and produce a specific tile instance?
+     * Nope, we want the asteroid to know what it can result in, and we could have another class determine the attributes
+     * of the tile.
+     * @return
+     */
+    public Class productionOutput(){
+        return StandardTile.class;
+    }
+
+    @Override
 	protected void setBoundsPosition(Vector2 boundsPosition) {
 		circle.setPosition(boundsPosition);
 	}
