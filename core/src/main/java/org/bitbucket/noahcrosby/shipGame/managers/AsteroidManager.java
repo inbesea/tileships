@@ -11,6 +11,7 @@ import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidSpawner;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidTable;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
@@ -39,6 +40,7 @@ public class AsteroidManager implements Manager {
     ObjectRoller asteroidRoller;
     Array<Asteroid> finiteAsteroids = new Array<>();
     boolean arcadeMode = false;
+    AsteroidTable spawnTable;
 
     /**
      * Spawns/cleans up asteroids and adds/removes them from passed physics simulation
@@ -406,5 +408,14 @@ public class AsteroidManager implements Manager {
         newList.addAll(this.asteroids);
 
         return newList;
+    }
+
+    // TODO : Finish giving tables to the asteroid manager if we need to spawn
+    public AsteroidTable getSpawnTable() {
+        return spawnTable;
+    }
+
+    public void setSpawnTable(AsteroidTable spawnTable) {
+        this.spawnTable = spawnTable;
     }
 }
