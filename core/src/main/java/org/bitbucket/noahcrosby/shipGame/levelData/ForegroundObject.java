@@ -70,4 +70,8 @@ public class ForegroundObject extends GameObject {
     public boolean deleteFromGame() {
         return false;
     }
+
+    public void update() {
+
+    }
 }

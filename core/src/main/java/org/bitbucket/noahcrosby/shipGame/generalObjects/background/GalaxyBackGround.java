@@ -3,7 +3,6 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.background;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.apache.commons.lang3.tuple.Pair;
@@ -12,15 +11,17 @@ import org.bitbucket.noahcrosby.shipGame.levelData.ForegroundObject;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 
+import java.util.Objects;
+
 public class GalaxyBackGround {
     private Boolean[][] stars;
-    Pair fieldSize;
+    Pair<Integer, Integer> fieldSize;
     float density;
     // Objects to draw infront of everything.
     private Array<ForegroundObject> foregroundObjects = new Array<>();
-    private Box2DWrapper physics;
+    private final Box2DWrapper physics;
 
-    public GalaxyBackGround(int x, int y, float percentStars){
+    public GalaxyBackGround(Integer x, Integer y, float percentStars){
         physics = new Box2DWrapper(new Vector2(0,0), true);
         fieldSize = Pair.of(x, y);
         stars = new Boolean[x][y];
@@ -30,29 +31,24 @@ public class GalaxyBackGround {
 
     private void populateArray(){
         // Take each element and set to 1 or 0, 1 being a star, and 0 being nothing
-        for(int i = 0; i < (int) fieldSize.getLeft() ; i++){
-            for (int n = 0; n < (int) fieldSize.getRight() ; n++){
+        for(int i = 0; i < fieldSize.getLeft(); i++){
+            for (int n = 0; n < fieldSize.getRight(); n++){
                 if(stars[i][n] != null) continue; // Don't repopulate
 
-                if(Math.random() < density){ // If the likelyhood is bigger than a random amount then get stuff.
-                    stars[i][n] = true; // is a star. If density was 0 we would never get anything.
-                } else {
-                    stars[i][n] = false;
-                }
+                // If the likelyhood is bigger than a random amount then get stuff.
+                stars[i][n] = Math.random() < density; // is a star. If density was 0 we would never get anything.
             }
         }
-        return;
     }
 
     /**
      * Simple draw statement that loops the stars giving them all the same texture and size lol
-     * @param matrix4
      */
-    public void draw(Matrix4 matrix4, TileShipGame game){
+    public void draw(TileShipGame game){
         TileShipGame.batch.begin();
         Texture starTexture = Resources.AsteroidSilverTexture;
-        for(int i = 0; i < (int) fieldSize.getLeft() ; i++){
-            for (int n = 0; n < (int) fieldSize.getRight() ; n++){
+        for(int i = 0; i < fieldSize.getLeft(); i++){
+            for (int n = 0; n < fieldSize.getRight(); n++){
                 Vector2 size = new Vector2(1,1);
                 if(stars[i][n]){
                     // Terrible star drawing method. Uses the silver asteroid texture
@@ -70,12 +66,12 @@ public class GalaxyBackGround {
         physics.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
     }
 
-    public void update(int width, int height) {
+    public void update(Integer width, Integer height) {
         Gdx.app.log("", "Resizing the galaxybackground " + width + "," + height);
         // First updating the bounds if they're bigger
-        Pair newSize = Pair.of(this.fieldSize);
-        boolean newWidthBigger = width > (int)this.fieldSize.getLeft();
-        boolean newHightBigger = height > (int)this.fieldSize.getRight();
+        Pair<Integer, Integer> newSize = Pair.of(this.fieldSize);
+        boolean newWidthBigger = width > this.fieldSize.getLeft();
+        boolean newHightBigger = height > this.fieldSize.getRight();
         if(newWidthBigger){ // Resizing the bounds, and trying to generate new values
             newSize = Pair.of(width, newSize.getRight());
         }
@@ -83,12 +79,12 @@ public class GalaxyBackGround {
             newSize = Pair.of(newSize.getLeft(), height);
         }
 
-        if(this.fieldSize.getRight() == newSize.getRight() &&
-        this.fieldSize.getLeft() == newSize.getLeft())return; // No changes needed if the new size is not different
+        if(Objects.equals(this.fieldSize.getRight(), newSize.getRight()) &&
+            Objects.equals(this.fieldSize.getLeft(), newSize.getLeft()))return; // No changes needed if the new size is not different
 
         this.fieldSize = newSize;
 
-        Boolean newStars[][] = new Boolean[(int)newSize.getLeft()][(int)newSize.getRight()];
+        Boolean[][] newStars = new Boolean[(int)newSize.getLeft()][(int)newSize.getRight()];
 
         for(int i = 0 ; i < stars.length ; i++){
             System.arraycopy(stars[i], 0 , newStars[i], 0, stars[i].length);
@@ -99,14 +95,15 @@ public class GalaxyBackGround {
     }
 
     /**
-     *
-     * @param newForegroundObjs
+     * Updates the foreground objects (Unimplemented)
+     * Could make each foreground object update itself.
      */
     public void updateForeground(Array<ForegroundObject> newForegroundObjs) {
         this.foregroundObjects = newForegroundObjs;
+        Gdx.app.debug("ForegroundObjects", "Updating foreground objects is unimplemented!");
 
         for(int i = 0; i < foregroundObjects.size; i++){
-
+            foregroundObjects.get(i).update();
         }
     }
 

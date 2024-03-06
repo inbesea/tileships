@@ -154,7 +154,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 //        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
-        backGround.draw(hud.getCamera().combined, game);
+        backGround.draw(game);
 
         // Draw game objects
         drawGameObjects();
