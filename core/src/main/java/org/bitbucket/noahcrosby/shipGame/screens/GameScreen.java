@@ -79,7 +79,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
-        backGround = new GalaxyBackGround((int)TileShipGame.defaultViewportSizeX, (int)TileShipGame.defaultViewportSizeY, 0.001f);
+        backGround = new GalaxyBackGround((int) TileShipGame.defaultViewportSizeX, (int) TileShipGame.defaultViewportSizeY, 0.001f);
 
         box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
 
@@ -91,7 +91,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // Give player the game reference
         player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, camera, this.game);
 
-        asteroidManager = new AsteroidManager(box2DWrapper ,camera);
+        asteroidManager = new AsteroidManager(box2DWrapper, camera);
         mapNavigator = new MapNavManager();
         mapNavigator.getPublisher().add(this);// Get game screen to watch the new nodes.
         mapNavigator.addMap(Maps.getBasicSpacemap(20));// Temp for testing
@@ -107,7 +107,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         textBoxHandler = new TextBoxManager();
 
-        backGround.addForegroundObject(new ForegroundObject(new Vector2(20,20), new Vector2(300,300), Resources.AsteroidRedTexture));
+        backGround.addForegroundObject(new ForegroundObject(new Vector2(20, 20), new Vector2(300, 300), Resources.AsteroidRedTexture));
     }
 
     /**
@@ -162,7 +162,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // Draws the hud
         hud.draw();
 
-        if(updateLocalMapLocation) {
+        if (updateLocalMapLocation) {
             // process user input
             if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
                 PlayerInput.handleKeyPressed(player, camera);
@@ -202,15 +202,15 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         drawGameObjects(asteroidManager.getAllAsteroids());
 
-        if(AppPreferences.getAppPreferences().getIsDebug()){ // This sucks because we're having these calls done outside the object. These
+        if (AppPreferences.getAppPreferences().getIsDebug()) { // This sucks because we're having these calls done outside the object. These
             // should be called where we can generalize the object behavior.
             box2DWrapper.drawDebug(camera);
             playerShip.drawDraggingPlacementIndicator();
             Circle spawnLimit = asteroidManager.getAsteroidSpawnZone();
-            Line.drawHollowCircle(new Vector2(spawnLimit.x, spawnLimit.y), spawnLimit.radius,0.5f , Color.WHITE, camera.combined);
+            Line.drawHollowCircle(new Vector2(spawnLimit.x, spawnLimit.y), spawnLimit.radius, 0.5f, Color.WHITE, camera.combined);
         }
 
-        if(updateLocalMapLocation){
+        if (updateLocalMapLocation) {
             box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
             // Call collision handling first and then sweep as objects are marked during this step lol
@@ -221,6 +221,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     /**
      * Draws specific array[] of type-identical game objects
+     *
      * @param gameObjects
      */
     private void drawGameObjects(ArrayList<? extends GameObject> gameObjects) {
@@ -240,7 +241,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
             // This render should happen after a sweep attempt
             if (go.isDead()) {
-                Gdx.app.error("drawGameObjects(args)","ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                Gdx.app.error("drawGameObjects(args)", "ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
                 continue;
             }
 
@@ -252,6 +253,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     /**
      * Draws specific array[] of type-identical game objects
+     *
      * @param gameObjects
      */
     private void drawGameObjects(Array<? extends GameObject> gameObjects) {
@@ -271,7 +273,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
             // This render should happen after a sweep attempt
             if (go.isDead()) {
-                Gdx.app.error("drawGameObjects","ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                Gdx.app.error("drawGameObjects", "ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
                 continue;
             }
 
@@ -364,11 +366,12 @@ public class GameScreen implements Screen, Listener<MapNode> {
     public void toggleInGameMenu() {
         this.hud.toggleMenu();
     }
-    public void setFocusToGame(){
+
+    public void setFocusToGame() {
         this.initializeInputEventHandling();
     }
 
-    public static OrthographicCamera getGameCamera(){
+    public static OrthographicCamera getGameCamera() {
         return camera;
     }
 
@@ -379,10 +382,10 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // If the game is showing the map we want to pause the game updates.
         boolean showingMap = this.hud.toggleMap();
         this.setMainScreenUpdates(!showingMap);// Pause the game if map showing
-        if(showingMap) { // Map is now showing...
+        if (showingMap) { // Map is now showing...
             input.addProcessor(this.mapInputNavigator);
 
-        }else{
+        } else {
             input.removeProcessor(this.mapInputNavigator);
         }
     }
@@ -390,11 +393,12 @@ public class GameScreen implements Screen, Listener<MapNode> {
     /**
      * Set the GameScreen to stop updating the current location, and disconnects local input handlers
      * This includes the ship, asteroids, etc.
+     *
      * @param updateLocation - Whether to pause the game
      */
     private void setMainScreenUpdates(boolean updateLocation) {
         this.updateLocalMapLocation = updateLocation;
-        if(!updateLocation) {
+        if (!updateLocation) {
             input.removeProcessor(zoomHandler);
             input.removeProcessor(debugInputHandler);
             input.removeProcessor(tileDragHandler);
@@ -417,7 +421,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
      * Receives new nodes from the MapNavManger
      * NOTE : This could be expanded with new implementations of the signal, or other implemented listeners.
      * Thinking the signal could have some way to affect the logic
-     * @param signal The Signal that triggered event
+     *
+     * @param signal  The Signal that triggered event
      * @param newNode The object passed on dispatch
      */
     @Override
@@ -431,11 +436,12 @@ public class GameScreen implements Screen, Listener<MapNode> {
      * Moves the game screen between two nodes.
      * Does not set the new node or anything
      * Might be difficult to edit in the future, but will work for us now.
+     *
      * @param nn
      * @param pn
      */
-    private void transitionNodes(MapNode nn, MapNode pn){
-        if(pn != null){
+    private void transitionNodes(MapNode nn, MapNode pn) {
+        if (pn != null) {
             pn.setAsteroids(asteroidManager.getFiniteAsteroids());
         }
         // VERY TODO : Get the spawners working so we can get a set of finite asteroids here lol
