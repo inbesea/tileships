@@ -3,7 +3,7 @@ package org.bitbucket.noahcrosby.shipGame.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 public class TileCollectHandler extends InputAdapter {

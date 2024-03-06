@@ -1,7 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame;
 
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.Interfaces.Tutorial;
+import org.bitbucket.noahcrosby.interfaces.Tutorial;
 import org.bitbucket.noahcrosby.shipGame.util.TextBubble;
 
 public class ArcadeModeTutorial implements Tutorial {

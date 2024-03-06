@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 

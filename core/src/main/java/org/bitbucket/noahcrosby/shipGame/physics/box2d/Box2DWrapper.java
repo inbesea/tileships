@@ -12,8 +12,8 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 
-import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.maxSpeed;
-import static org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid.minSpeed;
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid.maxSpeed;
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid.minSpeed;
 import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.getRandomlyNegativeNumber;
 
 /**
@@ -95,7 +95,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
             if (gameObject != null) {
 
-                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
+                // Meant to move the reference point to the bottom left a bit to align with the physics objects.
                 gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x / 2, b.getPosition().y - gameObject.getSize().y / 2);
                 // Scale up to actual game size
                 gameObjectNewPosition.x = gameObjectNewPosition.x * ShipTile.TILE_SIZE;

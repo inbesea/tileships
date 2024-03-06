@@ -1,13 +1,12 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
-import com.badlogic.ashley.signals.Listener;
 import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
-import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapDrawer;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 
 
 /**

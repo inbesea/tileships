@@ -1,12 +1,11 @@
 package org.bitbucket.noahcrosby.shipGame.util;
 
-import org.bitbucket.noahcrosby.Interfaces.TextBoxInterface;
-import org.bitbucket.noahcrosby.Shapes.Tentacle;
+import org.bitbucket.noahcrosby.interfaces.TextBoxInterface;
+import org.bitbucket.noahcrosby.shapes.Tentacle;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import space.earlygrey.shapedrawer.ShapeDrawer;
@@ -105,7 +104,6 @@ public class SoundTextBubble extends TextBubble implements TextBoxInterface {
 
     /**
      * Updates the text bubble's location for rendering
-     * @param textBoxLocation
      */
     public void update(){
         if(dead){return;} // Dont print text that's expired

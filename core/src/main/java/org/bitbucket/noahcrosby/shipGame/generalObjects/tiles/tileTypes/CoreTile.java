@@ -3,14 +3,13 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
 public class CoreTile extends ShipTile {
 
     /**
-     * These tiles will all need health, and a way to relate to tiles next to them..?
+     * These tiles will all need health, and a way to relate to tiles next to them?
      * But they will need to be stored in a 2d array.
      * So when the game initializes there will need to be an array of tiles built out.
      *

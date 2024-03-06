@@ -10,7 +10,7 @@ public class AncientTile extends ShipTile{
     public boolean powered;
 
     /**
-     * ShipTiles are the basic unit of a Ship. They are boxes of data, and can be extended to do more.
+     * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
      * The position needs to a multiple of TILE_SIZE or the index will be wrong.
      *
      * This tile represents the ancient powered tiles

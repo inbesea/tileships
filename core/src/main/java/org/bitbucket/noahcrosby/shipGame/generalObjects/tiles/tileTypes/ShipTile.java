@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
@@ -28,7 +27,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     private boolean isDead = false;
 
     /**
-     * ShipTiles are the basic unit of a Ship. They are boxes of data, and can be extended to do more.
+     * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
      * The position needs to a multiple of TILE_SIZE or the index will be wrong.
      */
     public ShipTile(Vector2 position, ID id, TileTypeData typeData) {
@@ -162,7 +161,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      * Method that handles setting the neighbors of a newly placed tile.
      * Keeps the edge calculations down in the tiles instead of on the ship level to keep the logic cleaner on the ship level
      * <p>
-     * Ship still determines the context by passing the adjacent tiles
+     * ship still determines the context by passing the adjacent tiles
      *
      * @param up
      * @param right

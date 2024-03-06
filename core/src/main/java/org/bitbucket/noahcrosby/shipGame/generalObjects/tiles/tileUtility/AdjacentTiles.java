@@ -5,8 +5,8 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 /**
- * Manages adjacent ShipTiles to a shiptile
- * Is a part of the ShipTile class, not the Ship.
+ * Manages adjacent ShipTiles to a ship-tile
+ * Is a part of the ShipTile class, not the ship.
  */
 public class AdjacentTiles {
     // Number associated with adjacency.

@@ -1,17 +1,14 @@
 package org.bitbucket.noahcrosby.shipGame.input;
 
-import com.badlogic.gdx.Gdx;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import org.bitbucket.noahcrosby.Shapes.Tentacle;
 import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.TileArrayToString;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.TileArrayToString;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 public class TileDragHandler extends InputAdapter {
@@ -124,7 +121,7 @@ public class TileDragHandler extends InputAdapter {
     }
 
     /**
-     * Removes the tile from the Ship and moves to the dragged tile variable
+     * Removes the tile from the ship and moves to the dragged tile variable
      *
      * @param pickedUpTile - Tile selected to drag
      */
@@ -138,7 +135,7 @@ public class TileDragHandler extends InputAdapter {
      * Adds the dragged tile back to the ship and sets dragged to null.
      * Note : This loses the identity of the original tile!! It is added via ID reference
      *
-     * @param playerShip - Ship to add tile to
+     * @param playerShip - ship to add tile to
      * @param x - x position of dragged tile
      * @param y - y position of dragged tile
      */

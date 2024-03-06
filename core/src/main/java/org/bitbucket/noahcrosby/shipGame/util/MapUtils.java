@@ -3,8 +3,8 @@ package org.bitbucket.noahcrosby.shipGame.util;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import org.apache.commons.lang3.tuple.Pair;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
-import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 
 import java.util.*;
 

@@ -13,18 +13,18 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
-import org.bitbucket.noahcrosby.Directors.ShipDirector;
-import org.bitbucket.noahcrosby.Shapes.Line;
+import org.bitbucket.noahcrosby.directors.ShipDirector;
+import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.LevelData.ForegroundObject;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
-import org.bitbucket.noahcrosby.shipGame.LevelData.Maps;
+import org.bitbucket.noahcrosby.shipGame.levelData.ForegroundObject;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.levelData.Maps;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Background.GalaxyBackGround;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.background.GalaxyBackGround;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
@@ -159,7 +159,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // Draw game objects
         drawGameObjects();
 
-        // Draws the HUD
+        // Draws the hud
         hud.draw();
 
         if(updateLocalMapLocation) {
@@ -331,7 +331,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     /**
      * Returns the current player ship
      *
-     * @return - Ship object assigned to the player
+     * @return - ship object assigned to the player
      */
     public Ship getPlayerShip() {
         return playerShip;
@@ -373,7 +373,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     }
 
     /**
-     * Toggles the map on or off in the HUD
+     * Toggles the map on or off in the hud
      */
     public void toggleMap() {
         // If the game is showing the map we want to pause the game updates.
@@ -390,7 +390,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     /**
      * Set the GameScreen to stop updating the current location, and disconnects local input handlers
      * This includes the ship, asteroids, etc.
-     * @param updateLocation - Whether or not to pause the game
+     * @param updateLocation - Whether to pause the game
      */
     private void setMainScreenUpdates(boolean updateLocation) {
         this.updateLocalMapLocation = updateLocation;

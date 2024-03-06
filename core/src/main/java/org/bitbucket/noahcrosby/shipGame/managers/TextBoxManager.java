@@ -1,8 +1,8 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
-import org.bitbucket.noahcrosby.Builders.TextBoxBuilder;
-import org.bitbucket.noahcrosby.Directors.TextBoxDirector;
-import org.bitbucket.noahcrosby.Interfaces.TextBoxInterface;
+import org.bitbucket.noahcrosby.builders.TextBoxBuilder;
+import org.bitbucket.noahcrosby.directors.TextBoxDirector;
+import org.bitbucket.noahcrosby.interfaces.TextBoxInterface;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 

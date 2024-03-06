@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 
 /**

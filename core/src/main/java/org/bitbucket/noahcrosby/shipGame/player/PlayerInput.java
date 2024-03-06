@@ -5,11 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 
 public class PlayerInput {
 

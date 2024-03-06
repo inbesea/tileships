@@ -1,7 +1,5 @@
 package org.bitbucket.noahcrosby.shipGame;
 
-import org.bitbucket.noahcrosby.shipGame.screens.MainMenuScreen;
-
 /**
  * Enums for easy identification of game objects
  * <p></p>
@@ -9,12 +7,12 @@ import org.bitbucket.noahcrosby.shipGame.screens.MainMenuScreen;
  * Asteroid
  * ShipTile
  * CoreTile
- * Ship
+ * ship
  */
 public enum ID {
 
 	/**
-	 * ID class to identify and classify different gameobjects.
+	 * ID class to identify and classify different game-objects.
 	 * Contains reference to asset for sprite texture.
 	 * Sprite selection happens here.
 	 */
@@ -31,22 +29,14 @@ public enum ID {
     AncientTile(true),
     ForegroundObject(false);
 
-	private String texture;
+    //Easy way to check if an object is a tile or not.
+	private final boolean isTileType;
 
-	//Easy way to check if an object is a tile or not.
-	private boolean isTileType;
-
-	ID(boolean isTileType){
-		this.texture = texture;
-		this.isTileType = isTileType;
+    ID(boolean isTileType){
+        this.isTileType = isTileType;
 	}
 
 	public boolean isTileType(){
 		return isTileType;
-	}
-
-
-	public void setTexture(String texture) {
-		this.texture = texture;
 	}
 }

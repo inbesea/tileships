@@ -15,9 +15,8 @@ public enum ArcadeColors {
     BLUE("blue"),
     PURPLE("purple"),
     SILVER("silver");
-    private String color;
+
     ArcadeColors(String color){
-        this.color = color;
     }
 
     public static Texture getTileTexture(ArcadeColors arcadeColors) {

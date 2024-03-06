@@ -17,11 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
-import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapDrawer;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 

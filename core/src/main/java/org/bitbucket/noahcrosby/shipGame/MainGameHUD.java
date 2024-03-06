@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.StringBuilder;
 import org.bitbucket.noahcrosby.AppPreferences;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
-import org.bitbucket.noahcrosby.Shapes.Line;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.HUD.HUD;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapDrawer;
+import org.bitbucket.noahcrosby.shapes.Line;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.hud.HUD;
 import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 
 public class MainGameHUD extends HUD {
@@ -18,12 +18,12 @@ public class MainGameHUD extends HUD {
         super(game);
 
         setMapNavigator(mapNavigator);
-        this.mapDrawer = new MapDrawer(mapNavigator.currentMap); // Put this into the navigator so the HUD can be less complicated.
+        this.mapDrawer = new MapDrawer(mapNavigator.currentMap); // Put this into the navigator so the hud can be less complicated.
     }
 
     /**
-     * Called to draw the HUD
-     * Has own internal batch draw call for hud to use HUD veiwport
+     * Called to draw the hud
+     * Has own internal batch draw call for hud to use hud veiwport
      */
     @Override
     public void draw(){

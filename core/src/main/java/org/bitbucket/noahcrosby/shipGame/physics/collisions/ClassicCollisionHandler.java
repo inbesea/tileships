@@ -1,8 +1,8 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.ShipTilesManager;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
@@ -96,7 +96,7 @@ public class ClassicCollisionHandler extends CollisionHandler {
         } else {
             tile.setIsDeadTrue();
             // destroy the tile
-            // This means the tile is not a core tile or a invulnerable tile.
+            // This means the tile is not a core tile or an invulnerable tile.
             // We will then conclude it can be destroyed.
         }
     }

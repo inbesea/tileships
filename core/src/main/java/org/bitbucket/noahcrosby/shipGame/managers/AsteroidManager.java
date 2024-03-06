@@ -8,11 +8,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidSpawner;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.AsteroidTable;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpawner;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidTable;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.util.ObjectRoller;
@@ -24,8 +24,8 @@ import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 */
 
 /**
- * Handles the creation and upkeep of a gameobject type.
- * Is a way to move the responsibilities of spawning to an object outside of the Gamescreen
+ * Handles the creation and upkeep of a game-object type.
+ * Is a way to move the responsibilities of spawning to an object outside the Game screen
  */
 public class AsteroidManager implements Manager {
     private boolean spawning;
@@ -281,7 +281,7 @@ public class AsteroidManager implements Manager {
         Vector2 position = new Vector2(x, y);
         return position;
 
-        // TODO : Check for spawing on a tile dude wtf
+        // TODO : Check for spawning on a tile dude wtf
     }
 
     /**
