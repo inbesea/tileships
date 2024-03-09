@@ -16,6 +16,7 @@ import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.directors.ShipDirector;
 import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.GoalChecker;
 import org.bitbucket.noahcrosby.shipGame.levelData.ForegroundObject;
 import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.levelData.Maps;
@@ -71,6 +72,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     private MapNavManager mapNavigator;
     private MapNavigationHandler mapInputNavigator;
     GalaxyBackGround backGround;
+    GoalChecker goalChecker;
 
     public GameScreen(final TileShipGame game) {
         this.game = game;
@@ -86,6 +88,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // init ship
         playerShip = new ShipDirector().buildClassicShip(box2DWrapper, new Vector2(TileInit.ORIGIN_X, TileInit.ORIGIN_Y));
         game.setPlayerShip(playerShip);
+        playerShip.publisher.add(goalChecker);
 
         // init player
         // Give player the game reference
@@ -168,6 +171,9 @@ public class GameScreen implements Screen, Listener<MapNode> {
                 PlayerInput.handleKeyPressed(player, camera);
             }
             PlayerInput.updateCameraOnPlayer(player, camera);
+        }
+        if(goalChecker.getWon()) {
+            goalChecker.renderWin();
         }
     }
 
@@ -419,13 +425,14 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     /**
      * Receives new nodes from the MapNavManger
-     * NOTE : This could be expanded with new implementations of the signal, or other implemented listeners.
+     * NOTE : This could be expanded with new implementations of the signal,
+     * or other implemented listeners.
      * Thinking the signal could have some way to affect the logic
      *
      * @param signal  The Signal that triggered event
      * @param newNode The object passed on dispatch
      */
-    @Override
+    @Override // Listener for the MapNavManager switching nodes.
     public void receive(Signal<MapNode> signal, MapNode newNode) {
         Gdx.app.log("Received Node", "GameScreen has received a new node " + newNode.getPositionAsString());
         transitionNodes(newNode, mapNavigator.getPreviousNode());

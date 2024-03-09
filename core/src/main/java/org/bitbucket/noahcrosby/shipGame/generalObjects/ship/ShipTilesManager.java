@@ -59,6 +59,7 @@ public class ShipTilesManager {
         box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
 
         validateEdgeSize();
+        ship.publishShip();
 
         return tempTile;
     }
@@ -83,6 +84,7 @@ public class ShipTilesManager {
         tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, id);
 
         validateEdgeSize();
+        ship.publishShip();
 
         return tempTile;
     }

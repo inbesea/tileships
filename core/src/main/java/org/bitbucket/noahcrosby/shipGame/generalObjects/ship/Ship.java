@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.ship;
 
+import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,7 +31,7 @@ import org.bitbucket.noahcrosby.shipGame.util.ShipBuilder;
  */
 public class Ship extends GameObject {
 
-
+    public Signal<Ship> publisher;
     private ShipTile draggedTile;
     public int destroyedTileCount = 0;
 
@@ -60,6 +61,7 @@ public class Ship extends GameObject {
         /* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
          *   that creates tiles based on a list of tile instances */
         mute = false;
+        publisher = new Signal<>();
     }
 
     /**
@@ -119,7 +121,15 @@ public class Ship extends GameObject {
      */
     public ShipTile addTileToShip(float x, float y, ID id) {
         ShipTile tile = shipTilesManager.addTile(x, y, id);
+
         return tile;
+    }
+
+    /**
+     * Signals the ship under certain circumstances.
+     */
+    public void publishShip() {
+        publisher.dispatch(this);
     }
 
     public ShipTile addTileToShip(float x, float y, ShipTile tile) {
