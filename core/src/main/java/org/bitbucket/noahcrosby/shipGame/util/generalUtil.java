@@ -57,7 +57,7 @@ public class generalUtil {
         Vector3 location3 = new Vector3(location.x, location.y, 0);
         Vector3 position;
 
-        //Loop through ship to find closest tile
+        //Loop through ship to find the closest tile
         for (int i = 0 ; i < vectors.size ; i++){
             tempV = vectors.get(i);
             position = new Vector3(tempV.x, tempV.y , 0);
@@ -199,7 +199,7 @@ public class generalUtil {
         // the point is above y = -x if the y is larger than the negation of x
         boolean aboveNxEy = normalPtY > -normalPtX;
 
-        // We can conceptualize this as as a four triangles converging in the center of the "closest tile"
+        // We can conceptualize this as four triangles converging in the center of the "closest tile"
         // We can use this framing to decide the side to place the tile.
         if(abovexEy){ // Check at halfway point of tile
             if(aboveNxEy){ // North = 0
@@ -280,7 +280,7 @@ public class generalUtil {
      * Returns the closest object extending GameObject in the array passed.
      * @param position - Position to compare array positions with
      * @param array - array of generic GameObjects utilizing a positional Vector2
-     * @return - @Nullable returns closest node if there is one.
+     * @return - @Nullable returns the closest node if there is one.
      * @param <T> - A generic object bounded to extend GameObject
      */
     public static <T extends GameObject> T getClosestObject(Vector2 position, Array<T> array){

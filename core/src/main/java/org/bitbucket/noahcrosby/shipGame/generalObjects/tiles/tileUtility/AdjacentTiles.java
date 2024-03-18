@@ -1,11 +1,12 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 /**
- * Manages adjacent ShipTiles to a shiptile
- * Is a part of the ShipTile class, not the Ship.
+ * Manages adjacent ShipTiles to a ship-tile
+ * Is a part of the ShipTile class, not the ship.
  */
 public class AdjacentTiles {
     // Number associated with adjacency.
@@ -108,5 +109,18 @@ public class AdjacentTiles {
         if(Right != null)results.add(Right);
         if(Left != null)results.add(Left);
         return results;
+    }
+
+    /**
+     * Checks if an ID is present in neighbors.
+     * @param id
+     * @return
+     */
+    public boolean contain(ID id) {
+        if(Up != null && Up.getID() == id) return true;
+        if(Down != null && Down.getID() == id) return true;
+        if(Right != null && Right.getID() == id) return true;
+        if(Left != null && Left.getID() == id) return true;
+        return false;
     }
 }

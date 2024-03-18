@@ -17,11 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapDrawer;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
-import org.bitbucket.noahcrosby.shipGame.LevelData.SpaceMap;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapDrawer;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 import org.bitbucket.noahcrosby.shipGame.util.SoundTextBubble;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
@@ -215,7 +215,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
             TileShipGame.font.draw(TileShipGame.batch, "T\nI\nL\n" +
                 "E\nS\nH\nI\nP\nS", 500, 350);
             if(!afterLoadingMap){
-                map.addNode(new MapNode(new Vector2(460, 370)));
+                map.addNode(460, 370);
                 map.addNode(new MapNode(new Vector2(520, 370)), new int[]{map.getMapNodes().size - 1});
                 map.addNode(new MapNode(new Vector2(520, 150)), new int[]{map.getMapNodes().size - 1});
                 map.addNode(new MapNode(new Vector2(460, 150)), new int[]{map.getMapNodes().size - 1, map.getMapNodes().size - 3});

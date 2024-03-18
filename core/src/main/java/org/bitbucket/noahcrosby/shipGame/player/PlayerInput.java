@@ -5,11 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 
 public class PlayerInput {
 
@@ -130,6 +128,13 @@ public class PlayerInput {
         Vector3 cameraPos = camera.position;
         Vector3 playerPos = new Vector3(player.getX(), player.getY(), 0);
 
+        // Fix huge time deltas when not focused on game screen
+        float delta = Gdx.graphics.getDeltaTime();
+        if(delta > 0.5f){
+            Gdx.app.debug("updateCameraOnPlayer", "Fixing delta " + delta + " reducing to 0.5f");
+            delta = 0.5f;
+        }
+
         // Give the position of the camera no update if player is close enough to camera.
         Vector3 diff = new Vector3(playerPos);
         Vector3 diff2 = new Vector3(cameraPos);
@@ -138,11 +143,11 @@ public class PlayerInput {
         // Issue is probably with this deltaTime check? If the delta is too big what happens?
         if(Math.abs(diff.x) > cameraFollow){
             cameraPos.x += (playerPos.x - cameraPos.x) *
-                    lerp * Gdx.graphics.getDeltaTime();
+                    lerp * delta;
         }
         if(Math.abs(diff.y) > cameraFollow) {
             cameraPos.y += (playerPos.y - cameraPos.y) *
-                    lerp * Gdx.graphics.getDeltaTime();
+                    lerp * delta;
         }
     }
 }

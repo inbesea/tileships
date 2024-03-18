@@ -9,18 +9,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import org.bitbucket.noahcrosby.AppPreferences;
-import org.bitbucket.noahcrosby.Directors.ShipDirector;
-import org.bitbucket.noahcrosby.Shapes.Line;
+import org.bitbucket.noahcrosby.directors.ShipDirector;
+import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.LevelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.GoalChecker;
+import org.bitbucket.noahcrosby.shipGame.levelData.ForegroundObject;
+import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
+import org.bitbucket.noahcrosby.shipGame.levelData.Maps;
 import org.bitbucket.noahcrosby.shipGame.MainGameHUD;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.background.GalaxyBackGround;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.input.*;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
@@ -31,7 +36,6 @@ import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHand
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
 import java.util.ArrayList;
@@ -67,7 +71,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
     private boolean updateLocalMapLocation = true;
     private MapNavManager mapNavigator;
     private MapNavigationHandler mapInputNavigator;
-    Listener nodeListener;
+    GalaxyBackGround backGround;
+    GoalChecker goalChecker;
 
     public GameScreen(final TileShipGame game) {
         this.game = game;
@@ -76,21 +81,23 @@ public class GameScreen implements Screen, Listener<MapNode> {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
+        backGround = new GalaxyBackGround((int) TileShipGame.defaultViewportSizeX, (int) TileShipGame.defaultViewportSizeY, 0.001f);
 
         box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
 
         // init ship
         playerShip = new ShipDirector().buildClassicShip(box2DWrapper, new Vector2(TileInit.ORIGIN_X, TileInit.ORIGIN_Y));
         game.setPlayerShip(playerShip);
+        playerShip.publisher.add(goalChecker);
 
         // init player
         // Give player the game reference
         player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, camera, this.game);
 
-        asteroidManager = new AsteroidManager(box2DWrapper ,camera);
+        asteroidManager = new AsteroidManager(box2DWrapper, camera);
         mapNavigator = new MapNavManager();
         mapNavigator.getPublisher().add(this);// Get game screen to watch the new nodes.
-        mapNavigator.addMap(MapUtils.getDefaultMap());// Temp for testing
+        mapNavigator.addMap(Maps.getBasicSpacemap(20));// Temp for testing
         hud = new MainGameHUD(game, mapNavigator);
 
         // Add input event handling
@@ -102,12 +109,16 @@ public class GameScreen implements Screen, Listener<MapNode> {
         box2DWrapper.setWorldContactListener(collisionListener); // Get the world in contact with this collision listener
 
         textBoxHandler = new TextBoxManager();
+
+        backGround.addForegroundObject(new ForegroundObject(new Vector2(20, 20), new Vector2(300, 300), Resources.AsteroidRedTexture));
     }
 
     /**
      * Convenience method to initialize input event handling when starting game.
      */
     private void initializeInputEventHandling() {
+        AppPreferences.initLogging(); // Start debug logging
+
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
         tileDragHandler = new TileDragHandler(player);
@@ -146,18 +157,23 @@ public class GameScreen implements Screen, Listener<MapNode> {
 //        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
+        backGround.draw(game);
+
         // Draw game objects
         drawGameObjects();
 
-        // Draws the HUD
+        // Draws the hud
         hud.draw();
 
-        if(updateLocalMapLocation) {
+        if (updateLocalMapLocation) {
             // process user input
             if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
                 PlayerInput.handleKeyPressed(player, camera);
             }
             PlayerInput.updateCameraOnPlayer(player, camera);
+        }
+        if(goalChecker.getWon()) {
+            goalChecker.renderWin();
         }
     }
 
@@ -190,17 +206,17 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         TileShipGame.batch.end();
 
-        drawGameObjects(asteroidManager.getAsteroids());
+        drawGameObjects(asteroidManager.getAllAsteroids());
 
-        if(AppPreferences.getAppPreferences().getIsDebug()){ // This sucks because we're having these calls done outside the object. These
+        if (AppPreferences.getAppPreferences().getIsDebug()) { // This sucks because we're having these calls done outside the object. These
             // should be called where we can generalize the object behavior.
             box2DWrapper.drawDebug(camera);
             playerShip.drawDraggingPlacementIndicator();
             Circle spawnLimit = asteroidManager.getAsteroidSpawnZone();
-            Line.drawHollowCircle(new Vector2(spawnLimit.x, spawnLimit.y), spawnLimit.radius,0.5f , Color.WHITE, camera.combined);
+            Line.drawHollowCircle(new Vector2(spawnLimit.x, spawnLimit.y), spawnLimit.radius, 0.5f, Color.WHITE, camera.combined);
         }
 
-        if(updateLocalMapLocation){
+        if (updateLocalMapLocation) {
             box2DWrapper.stepPhysicsSimulation(Gdx.graphics.getDeltaTime());
 
             // Call collision handling first and then sweep as objects are marked during this step lol
@@ -211,6 +227,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     /**
      * Draws specific array[] of type-identical game objects
+     *
      * @param gameObjects
      */
     private void drawGameObjects(ArrayList<? extends GameObject> gameObjects) {
@@ -230,7 +247,39 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
             // This render should happen after a sweep attempt
             if (go.isDead()) {
-                System.out.println("ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                Gdx.app.error("drawGameObjects(args)", "ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
+                continue;
+            }
+
+            drawGameObject(go); // Call helper to draw object
+        }
+
+        TileShipGame.batch.end();
+    }
+
+    /**
+     * Draws specific array[] of type-identical game objects
+     *
+     * @param gameObjects
+     */
+    private void drawGameObjects(Array<? extends GameObject> gameObjects) {
+        // tell the camera to update its matrices.
+        camera.update();
+
+        // tell the SpriteBatch to render in the
+        // coordinate system specified by the camera.
+        TileShipGame.batch.setProjectionMatrix(extendViewport.getCamera().combined);
+
+        // begin a new batch
+        // Loops through the game objects and draws them.
+        // Uses the game and camera context to handle drawing properly.
+        TileShipGame.batch.begin();
+
+        for (GameObject go : gameObjects) {
+
+            // This render should happen after a sweep attempt
+            if (go.isDead()) {
+                Gdx.app.error("drawGameObjects", "ERROR : GameObject " + go.getID() + " is dead and didn't get swept");
                 continue;
             }
 
@@ -245,6 +294,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         extendViewport.update(width, height);
         hud.update(width, height);
+        backGround.update(width, height);
     }
 
     @Override
@@ -289,7 +339,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     /**
      * Returns the current player ship
      *
-     * @return - Ship object assigned to the player
+     * @return - ship object assigned to the player
      */
     public Ship getPlayerShip() {
         return playerShip;
@@ -322,26 +372,26 @@ public class GameScreen implements Screen, Listener<MapNode> {
     public void toggleInGameMenu() {
         this.hud.toggleMenu();
     }
-    public void setFocusToGame(){
+
+    public void setFocusToGame() {
         this.initializeInputEventHandling();
     }
 
-    public static OrthographicCamera getGameCamera(){
+    public static OrthographicCamera getGameCamera() {
         return camera;
     }
 
     /**
-     * Toggles the map on or off in the HUD
+     * Toggles the map on or off in the hud
      */
     public void toggleMap() {
         // If the game is showing the map we want to pause the game updates.
         boolean showingMap = this.hud.toggleMap();
-        this.setLocationUpdating(!showingMap);// Pause the game if map showing
-        if(showingMap) {
+        this.setMainScreenUpdates(!showingMap);// Pause the game if map showing
+        if (showingMap) { // Map is now showing...
             input.addProcessor(this.mapInputNavigator);
-            // Create input handler for the map nav. Put the nav into the HUD? Need to think about that
-            // Want to be able to change the game state based on the current location lol
-        }else{
+
+        } else {
             input.removeProcessor(this.mapInputNavigator);
         }
     }
@@ -349,11 +399,12 @@ public class GameScreen implements Screen, Listener<MapNode> {
     /**
      * Set the GameScreen to stop updating the current location, and disconnects local input handlers
      * This includes the ship, asteroids, etc.
-     * @param updateLocation - Whether or not to pause the game
+     *
+     * @param updateLocation - Whether to pause the game
      */
-    private void setLocationUpdating(boolean updateLocation) {
+    private void setMainScreenUpdates(boolean updateLocation) {
         this.updateLocalMapLocation = updateLocation;
-        if(!updateLocation) {
+        if (!updateLocation) {
             input.removeProcessor(zoomHandler);
             input.removeProcessor(debugInputHandler);
             input.removeProcessor(tileDragHandler);
@@ -374,30 +425,34 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     /**
      * Receives new nodes from the MapNavManger
-     * NOTE : This could be expanded with new implementations of the signal, or other implemented listeners.
+     * NOTE : This could be expanded with new implementations of the signal,
+     * or other implemented listeners.
      * Thinking the signal could have some way to affect the logic
-     * @param signal The Signal that triggered event
+     *
+     * @param signal  The Signal that triggered event
      * @param newNode The object passed on dispatch
      */
-    @Override
+    @Override // Listener for the MapNavManager switching nodes.
     public void receive(Signal<MapNode> signal, MapNode newNode) {
         Gdx.app.log("Received Node", "GameScreen has received a new node " + newNode.getPositionAsString());
         transitionNodes(newNode, mapNavigator.getPreviousNode());
+//        backGround.updateForeground(newNode.getForeground());
     }
 
     /**
      * Moves the game screen between two nodes.
      * Does not set the new node or anything
      * Might be difficult to edit in the future, but will work for us now.
+     *
      * @param nn
      * @param pn
      */
-    private void transitionNodes(MapNode nn, MapNode pn){
-        if(pn != null){
+    private void transitionNodes(MapNode nn, MapNode pn) {
+        if (pn != null) {
             pn.setAsteroids(asteroidManager.getFiniteAsteroids());
         }
         // VERY TODO : Get the spawners working so we can get a set of finite asteroids here lol
-        asteroidManager.setFiniteAsteroids(nn.getAsteroids());
+        asteroidManager.setFiniteAsteroids(nn.returnAsteroids() /* Empties the asteroids from the new node, to be reset later when switching nodes. */);
         asteroidManager.setSpawner(nn.getAsteroidSpawner()); // Need this to keep up basic spawning situations.
     }
 }

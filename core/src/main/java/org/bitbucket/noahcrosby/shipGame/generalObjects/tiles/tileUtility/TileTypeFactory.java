@@ -2,7 +2,6 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility;
 
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.*;
 
 /**
@@ -29,6 +28,8 @@ public class TileTypeFactory {
                 return new StrongTile(vector2);
             case ColorTile:
                 return new ColorTile(vector2);
+            case AncientTile:
+                return new AncientTile(vector2);
             default: return null;
         }
     }

@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.Ship;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.TileArrayToString;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.TileArrayToString;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 public class TileDragHandler extends InputAdapter {
@@ -16,6 +16,7 @@ public class TileDragHandler extends InputAdapter {
     private final Player player;
     private final Ship playerShip;
     private boolean dragging;
+
 
     /**
      * Handles input from the player for grabbing tiles from the player's ship.
@@ -45,6 +46,7 @@ public class TileDragHandler extends InputAdapter {
             boolean selectedTileCanBeGrabbed = canGrabTile(pickedUpTile);
 
             if (selectedTileCanBeGrabbed) {
+                this.setDraggingSound(true);
                 pickUpTile(pickedUpTile);
                 pickedUpTile.pickedUp();
             }
@@ -53,9 +55,16 @@ public class TileDragHandler extends InputAdapter {
         return true;
     }
 
+    /**
+     * Handles dragging the input point around the screen.
+     * @param screenX
+     * @param screenY
+     * @param pointer the pointer for the event.
+     * @return
+     */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (!getDragging()) return false;
+        if (!getDragging()) return false; // Nothing to do if not dragging a tile
 
         // Need to handle dragging to collect more tiles
         ShipTile draggedTile = playerShip.getDraggedTile();
@@ -112,7 +121,7 @@ public class TileDragHandler extends InputAdapter {
     }
 
     /**
-     * Removes the tile from the Ship and moves to the dragged tile variable
+     * Removes the tile from the ship and moves to the dragged tile variable
      *
      * @param pickedUpTile - Tile selected to drag
      */
@@ -126,7 +135,7 @@ public class TileDragHandler extends InputAdapter {
      * Adds the dragged tile back to the ship and sets dragged to null.
      * Note : This loses the identity of the original tile!! It is added via ID reference
      *
-     * @param playerShip - Ship to add tile to
+     * @param playerShip - ship to add tile to
      * @param x - x position of dragged tile
      * @param y - y position of dragged tile
      */
@@ -135,6 +144,7 @@ public class TileDragHandler extends InputAdapter {
         playerShip.addTileToShip(x, y, tempTile);
         tempTile.replaced();
         Resources.PlaceTileSoundSfx.play(AppPreferences.getAppPreferences().getSoundVolume());
+        this.setDraggingSound(false);
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);
     }
@@ -145,6 +155,18 @@ public class TileDragHandler extends InputAdapter {
      */
     public void setDragging(boolean dragging) {
         this.dragging = dragging;
+    }
+
+    /**
+     * Starts and loops the tile moving/dragging sound effect.
+     * @param makeSound - conditional to start or stop the moving tile sound effect.
+     */
+    private void setDraggingSound(boolean makeSound) {
+        if(makeSound){
+            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume() * 0.5f);
+        } else {
+            Resources.MovingTileSoundSfx.stop();
+        }
     }
 
     /**

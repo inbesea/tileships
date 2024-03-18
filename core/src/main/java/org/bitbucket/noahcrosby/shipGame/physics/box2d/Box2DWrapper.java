@@ -2,6 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.physics.box2d;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -11,10 +12,19 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 
-// Handles drawing debug,
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid.maxSpeed;
+import static org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid.minSpeed;
+import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.getRandomlyNegativeNumber;
+
+/**
+ * Class meant to make creating game objects and drawing the debug easier
+ * wrapping a lot of the functionality, including :
+ *  - drawing debug
+ *  - creating bodies
+ *  - etc.
+ */
 public class Box2DWrapper implements Box2DWrapperInterface {
 
-    private boolean drawDebug = true;
     public static final float physicsFrameRate = 1 / 60f;
     public static final int velocityIterations = 6;
     public static final int positionIterations = 2;
@@ -30,15 +40,6 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         this.box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
-    /**
-     * Removes body from simulation
-     *
-     * @param body The body to remove
-     */
-    public void removeObjectBody(Body body) {
-        bodies.removeValue(body, true);
-        world.destroyBody(body);
-    }
 
     /**
      * Draws the debug shapes.
@@ -49,7 +50,17 @@ public class Box2DWrapper implements Box2DWrapperInterface {
     @Override
     public void drawDebug(OrthographicCamera orthoCamera) {
         // Need to scale this lol. This will not work on the scale we are drawing.
-        if (drawDebug) box2DDebugRenderer.render(world, orthoCamera.combined);
+        box2DDebugRenderer.render(world, orthoCamera.combined);
+    }
+
+    /**
+     * Draws the physics object shapes
+     *  *NOTE* : Does not scale to the game size.
+     * @param matrix4
+     */
+    public void drawDebug(Matrix4  matrix4) {
+        // Need to scale this lol. This will not work on the scale we are drawing.
+        box2DDebugRenderer.render(world, matrix4);
     }
 
     @Override
@@ -57,9 +68,17 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
     }
 
+    /**
+     * Removes body from simulation
+     *
+     * @param body The body to remove
+     */
     @Override
     public void deleteBody(Body body) {
-
+        if(bodies.contains(body, true)){
+            bodies.removeValue(body, true);
+            world.destroyBody(body);
+        }
     }
 
     /**
@@ -76,11 +95,11 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
             if (gameObject != null) {
 
-                // Meant to move the reference point to the bottom left a bit to allign with the physics objects.
+                // Meant to move the reference point to the bottom left a bit to align with the physics objects.
                 gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x / 2, b.getPosition().y - gameObject.getSize().y / 2);
+                // Scale up to actual game size
                 gameObjectNewPosition.x = gameObjectNewPosition.x * ShipTile.TILE_SIZE;
                 gameObjectNewPosition.y = gameObjectNewPosition.y * ShipTile.TILE_SIZE;
-                // Vector2 gameObjectNewPosition = new Vector2(b.getPosition().x, b.getPosition().y);
 
                 // Continue if the body is static (unmovable)
                 if (b.getType().equals(BodyDef.BodyType.StaticBody)) {
@@ -100,7 +119,6 @@ public class Box2DWrapper implements Box2DWrapperInterface {
      */
     @Override
     public void stepPhysicsSimulation(float deltaTime) {
-        // world.step(game.physicsFrameRate, velocityIterations, positionIterations);
         // fixed time step
         // max frame time to avoid spiral of death (on slow devices)
         float frameTime = Math.min(deltaTime, 0.25f);
@@ -112,25 +130,21 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         updateGameObjectsToPhysicsSimulation();
     }
 
+    /**
+     * Sets the collision Listener to this Box2D system. This will define how to handle collision events within this system.
+     * @param collisionListener
+     */
     @Override
     public void setWorldContactListener(CollisionListener collisionListener) {
         world.setContactListener(collisionListener);
     }
 
-    public void drawDebug() {
-        drawDebug = true;
-    }
-
-    public void stopDrawDebug() {
-        drawDebug = false;
-    }
-
     /**
-     * Gives physicsObjects their physics attributes and hands the body values to the wrapper list.
+     * Gives physicsObjects their physics attributes and hands the body values to the simulation.
      *
      * @param physicsObject the PhysicsObject to set
      */
-    public void setObjectPhysics(PhysicsObject physicsObject) {
+    public void initPhysicsObject(PhysicsObject physicsObject) {
         // Set unique physicsObject properties
         Body body = physicsObject.setPhysics(world);
 
@@ -174,5 +188,13 @@ public class Box2DWrapper implements Box2DWrapperInterface {
             System.out.println("Deleting not a tile");
             gameObject.deleteFromGame();
         }
+    }
+
+    public void resetPhysicsObject(PhysicsObject physicsObject, Vector2 position) {
+        this.deleteBody(physicsObject.getBody());
+        physicsObject.setPosition(position);
+        physicsObject.setVelocity(new Vector2((int) getRandomlyNegativeNumber(minSpeed,maxSpeed),
+            (int) getRandomlyNegativeNumber(minSpeed,maxSpeed)));
+        this.initPhysicsObject(physicsObject);
     }
 }

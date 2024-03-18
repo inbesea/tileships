@@ -3,7 +3,6 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
@@ -17,7 +16,7 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
         return true;
     }
     /**
-     * Do this when placed
+     * Call this when this tile is placed
      */
     @Override
     public void replaced() {
@@ -40,5 +39,10 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
     public boolean deleteFromGame() {
         setIsDeadTrue();
         return true;
+    }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+
     }
 }

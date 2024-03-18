@@ -16,6 +16,8 @@ public class Resources {
 
     public static Sound DropSfx;
 
+    public static Sound MovingTileSoundSfx;
+
     public static Sound PickUpTileQuick0Sfx;
 
     public static Sound PlaceTileSoundSfx;
@@ -23,6 +25,8 @@ public class Resources {
     public static Sound SelectionBuzzLoopedSfx;
 
     public static Sound TilePlacementSfx;
+
+    public static Texture AncientAsteroidTexture;
 
     public static Texture AsteroidBlueTexture;
 
@@ -45,6 +49,10 @@ public class Resources {
     public static Texture CraftingIconPressedTexture;
 
     public static Texture HoverIndicatorTexture;
+
+    public static Texture PowerTilePoweredTexture;
+
+    public static Texture PowerTileUnpoweredTexture;
 
     public static Texture RobotV2Texture;
 
@@ -78,10 +86,12 @@ public class Resources {
         assetManager.load("Sound Effects/collectTileSound.mp3", Sound.class);
         assetManager.load("Sound Effects/rain.mp3", Sound.class);
         assetManager.load("Sound Effects/drop.wav", Sound.class);
+        assetManager.load("Sound Effects/MovingTileSound.wav", Sound.class);
         assetManager.load("Sound Effects/PickUpTileQuick0.wav", Sound.class);
         assetManager.load("Sound Effects/PlaceTileSound.wav", Sound.class);
         assetManager.load("Sound Effects/SelectionBuzzLooped.wav", Sound.class);
         assetManager.load("Sound Effects/tilePlacement.wav", Sound.class);
+        assetManager.load("Textures/ancientAsteroid.png", Texture.class);
         assetManager.load("Textures/asteroid_blue.png", Texture.class);
         assetManager.load("Textures/asteroid_green.png", Texture.class);
         assetManager.load("Textures/asteroid_orange.png", Texture.class);
@@ -93,6 +103,8 @@ public class Resources {
         assetManager.load("Textures/craftingIcon.png", Texture.class);
         assetManager.load("Textures/craftingIconPressed.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
+        assetManager.load("Textures/PowerTile_Powered.png", Texture.class);
+        assetManager.load("Textures/PowerTile_Unpowered.png", Texture.class);
         assetManager.load("Textures/RobotV2.png", Texture.class);
         assetManager.load("Textures/ShipTileBlue.png", Texture.class);
         assetManager.load("Textures/ShipTileGreen.png", Texture.class);
@@ -114,10 +126,12 @@ public class Resources {
             CollectTileSoundSfx = assetManager.get("Sound Effects/collectTileSound.mp3");
             RainSfx = assetManager.get("Sound Effects/rain.mp3");
             DropSfx = assetManager.get("Sound Effects/drop.wav");
+            MovingTileSoundSfx = assetManager.get("Sound Effects/MovingTileSound.wav");
             PickUpTileQuick0Sfx = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
             PlaceTileSoundSfx = assetManager.get("Sound Effects/PlaceTileSound.wav");
             SelectionBuzzLoopedSfx = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
             TilePlacementSfx = assetManager.get("Sound Effects/tilePlacement.wav");
+            AncientAsteroidTexture = assetManager.get("Textures/ancientAsteroid.png");
             AsteroidBlueTexture = assetManager.get("Textures/asteroid_blue.png");
             AsteroidGreenTexture = assetManager.get("Textures/asteroid_green.png");
             AsteroidOrangeTexture = assetManager.get("Textures/asteroid_orange.png");
@@ -129,6 +143,8 @@ public class Resources {
             CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
             CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
+            PowerTilePoweredTexture = assetManager.get("Textures/PowerTile_Powered.png");
+            PowerTileUnpoweredTexture = assetManager.get("Textures/PowerTile_Unpowered.png");
             RobotV2Texture = assetManager.get("Textures/RobotV2.png");
             ShipTileBlueTexture = assetManager.get("Textures/ShipTileBlue.png");
             ShipTileGreenTexture = assetManager.get("Textures/ShipTileGreen.png");

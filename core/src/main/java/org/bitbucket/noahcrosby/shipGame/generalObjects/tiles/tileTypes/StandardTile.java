@@ -3,7 +3,6 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 
@@ -45,5 +44,10 @@ public class StandardTile extends ShipTile{
     public boolean deleteFromGame() {
         setIsDeadTrue();
         return true;
+    }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+
     }
 }

@@ -1,8 +1,8 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.Asteroid;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.ShipTilesManager;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
@@ -88,13 +88,15 @@ public class ClassicCollisionHandler extends CollisionHandler {
             // remove the asteroid and add a tile.
             System.out.println("CoreTile/Asteroid creation event. ~~~ Creating new tile "+ asteroid.getPosition().toString() +" and marking Asteroid for deletion!");
             asteroid.physicsDelete();
-            tilesManager.addTile(asteroid.getX() + asteroid.getWidth() / 2, asteroid.getY() + asteroid.getHeight() / 2, ID.StandardTile);
+            tilesManager.addTile(asteroid.getX() + asteroid.getWidth() / 2,
+                asteroid.getY() + asteroid.getHeight() / 2,
+                asteroid.productionOutputID());
         } else if (tile.isInvulnerable()){
             return; // Do nothing, the tile cannot be destroyed
         } else {
             tile.setIsDeadTrue();
             // destroy the tile
-            // This means the tile is not a core tile or a invulnerable tile.
+            // This means the tile is not a core tile or an invulnerable tile.
             // We will then conclude it can be destroyed.
         }
     }

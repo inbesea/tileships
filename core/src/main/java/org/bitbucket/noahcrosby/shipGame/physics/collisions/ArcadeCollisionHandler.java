@@ -1,11 +1,11 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.SpaceDebris.ColorAsteroid;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.ShipTilesManager;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ColorTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
-import org.bitbucket.noahcrosby.shipGame.ArcadeMode.ArcadeModeScreen;
+import org.bitbucket.noahcrosby.shipGame.arcadeMode.ArcadeModeScreen;
 
 public class ArcadeCollisionHandler extends  CollisionHandler {
 

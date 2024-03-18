@@ -1,9 +1,9 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 
 /**
@@ -20,7 +20,6 @@ public class ColorTile extends ShipTile{
      * Color tile allows a tile to change color on the fly
      *
      * @param position - the position of the tile
-     * @param manager - the shipTile's manager
      */
     public ColorTile(Vector2 position) {
         super(position, ID.ColorTile, TileTypeData.ColorTile);
@@ -78,5 +77,10 @@ public class ColorTile extends ShipTile{
 
     public ArcadeColors getColor() {
         return color;
+    }
+
+    @Override
+    public void setVelocity(Vector2 velocity) {
+        Gdx.app.log("Color Tile", "NOT SET");
     }
 }
