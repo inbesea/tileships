@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.input;
 
+import com.badlogic.gdx.Gdx;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -10,6 +11,10 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.TileArrayToString;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
+import org.bitbucket.noahcrosby.shipGame.util.SecondOrderDynamics;
+
+import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnprojectedInputPosition;
 
 public class TileDragHandler extends InputAdapter {
 
@@ -17,6 +22,9 @@ public class TileDragHandler extends InputAdapter {
     private final Ship playerShip;
     private boolean dragging;
 
+    SecondOrderDynamics sOD_x;
+    SecondOrderDynamics sOD_y;
+    Float f = 3f, z = 0.5f, r = 2f; // Second Order Dynamic constants
 
     /**
      * Handles input from the player for grabbing tiles from the player's ship.
@@ -28,6 +36,23 @@ public class TileDragHandler extends InputAdapter {
     public TileDragHandler(Player player) {
         this.player = player;
         this.playerShip = player.getPlayerShip();
+        sOD_x = new SecondOrderDynamics(f, z, r, 0f);
+        sOD_y = new SecondOrderDynamics(f, z, r, 0f);
+    }
+
+    /**
+     * Updates a dragged tile if playership has one.
+     * This update works with the second order dynamics model
+     */
+    public void update() {
+        if(playerShip.isDragging()) {
+            ShipTile draggedTile = playerShip.getDraggedTile();
+            Vector3 playerInputPosition = returnUnprojectedInputPosition(GameScreen.getGameCamera());
+            float targetX = playerInputPosition.x - ShipTile.TILE_SIZE / 2.0f;
+            float targetY = playerInputPosition.y - ShipTile.TILE_SIZE / 2.0f;
+            draggedTile.setX(sOD_x.Update(Gdx.graphics.getDeltaTime(), targetX , null));
+            draggedTile.setY(sOD_y.Update(Gdx.graphics.getDeltaTime(), targetY , null));
+        }
     }
 
     @Override
@@ -49,6 +74,12 @@ public class TileDragHandler extends InputAdapter {
                 this.setDraggingSound(true);
                 pickUpTile(pickedUpTile);
                 pickedUpTile.pickedUp();
+
+                // init new drag
+                sOD_x.setXp(pickedUpTile.getX());
+                sOD_x.setY(pickedUpTile.getX());
+                sOD_y.setXp(pickedUpTile.getY());
+                sOD_y.setY(pickedUpTile.getY());
             }
         }
 
@@ -73,9 +104,7 @@ public class TileDragHandler extends InputAdapter {
             // if it is then we can turn off collecting tiles. A fullStack Check is not needed.
             playerShip.updateCollect(new Vector3(screenX, screenY, 0));
         } else if (draggedTile != null) { // Dragging a tile
-            // Drag the tile with mouse
-            draggedTile.setX(screenX - ShipTile.TILE_SIZE / 2.0f);
-            draggedTile.setY(screenY - ShipTile.TILE_SIZE / 2.0f);
+            // the update for the dragged tile is handled each frame by update();
             //TODO : Add a sound here to make moving tiles feel better.
             // The sound can increase in pitch based on the distance moved (use play(volume, pitch, pan))
         }
@@ -128,7 +157,9 @@ public class TileDragHandler extends InputAdapter {
     private void pickUpTile(ShipTile pickedUpTile) {
         playerShip.removeTileFromShip(pickedUpTile);
         playerShip.setDraggedTile(pickedUpTile); // Set intermediate tile to *remove from existing tiles*
-        Resources.PickUpTileQuick0Sfx.play(AppPreferences.getAppPreferences().getSoundVolume());
+
+        Resources.PickUpTileQuick0Sfx.play(
+            AppPreferences.getAppPreferences().getSoundVolume()*8);
     }
 
     /**
@@ -163,7 +194,7 @@ public class TileDragHandler extends InputAdapter {
      */
     private void setDraggingSound(boolean makeSound) {
         if(makeSound){
-            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume() * 0.5f);
+            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume() * 0.1f);
         } else {
             Resources.MovingTileSoundSfx.stop();
         }

@@ -9,5 +9,7 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
   api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
-  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0' // Just to add arrays together
+  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'// Just to add arrays together
+    implementation 'org.jetbrains:annotations:20.1.0'
+  implementation 'org.jetbrains:annotations:20.1.0'
 }

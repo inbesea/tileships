@@ -88,6 +88,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // init ship
         playerShip = new ShipDirector().buildClassicShip(box2DWrapper, new Vector2(TileInit.ORIGIN_X, TileInit.ORIGIN_Y));
         game.setPlayerShip(playerShip);
+        goalChecker = new GoalChecker();
         playerShip.publisher.add(goalChecker);
 
         // init player
@@ -154,7 +155,6 @@ public class GameScreen implements Screen, Listener<MapNode> {
         extendViewport.apply();
 
         // Update game object positions
-//        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
         backGround.draw(game);
@@ -203,6 +203,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // Draw hud at this step
 
         textBoxHandler.render();
+
+        tileDragHandler.update();
 
         TileShipGame.batch.end();
 
