@@ -44,6 +44,10 @@ public class SecondOrderDynamics {
         return xp;
     }
 
+    /**
+     * Set previous input
+     * @param xp - new previous input
+     */
     public void setXp(Float xp) {
         this.xp = xp;
     }
