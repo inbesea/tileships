@@ -155,7 +155,6 @@ public class GameScreen implements Screen, Listener<MapNode> {
         extendViewport.apply();
 
         // Update game object positions
-//        box2DWrapper.updateGameObjectsToPhysicsSimulation();
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
         backGround.draw(game);
@@ -204,6 +203,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // Draw hud at this step
 
         textBoxHandler.render();
+
+        tileDragHandler.update();
 
         TileShipGame.batch.end();
 
