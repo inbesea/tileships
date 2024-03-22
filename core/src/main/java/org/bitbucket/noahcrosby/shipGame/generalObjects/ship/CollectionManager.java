@@ -2,6 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.ship;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
 import org.bitbucket.noahcrosby.javapoet.Resources;
@@ -70,7 +71,8 @@ public class CollectionManager {
     public void startCollect() {
         System.out.println("Begin collecting tiles");
 
-        collectionSoundID = Resources.SelectionBuzzLoopedSfx.loop();
+        collectionSoundID = Resources.SelectionBuzzLoopedSfx.loop(
+            AppPreferences.getAppPreferences().getSoundVolume()/100f);
 
         if (!collectedTiles.isEmpty()) collectedTiles.clear();
 

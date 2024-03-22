@@ -157,7 +157,9 @@ public class TileDragHandler extends InputAdapter {
     private void pickUpTile(ShipTile pickedUpTile) {
         playerShip.removeTileFromShip(pickedUpTile);
         playerShip.setDraggedTile(pickedUpTile); // Set intermediate tile to *remove from existing tiles*
-        Resources.PickUpTileQuick0Sfx.play(AppPreferences.getAppPreferences().getSoundVolume());
+
+        Resources.PickUpTileQuick0Sfx.play(
+            AppPreferences.getAppPreferences().getSoundVolume()*8);
     }
 
     /**
@@ -192,7 +194,7 @@ public class TileDragHandler extends InputAdapter {
      */
     private void setDraggingSound(boolean makeSound) {
         if(makeSound){
-            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume() * 0.5f);
+            Resources.MovingTileSoundSfx.loop(AppPreferences.getAppPreferences().getSoundVolume() * 0.1f);
         } else {
             Resources.MovingTileSoundSfx.stop();
         }
