@@ -12,11 +12,30 @@ public class SecondOrderDynamics {
     private Float xp; // previous input
     private Float y, yd; // State variables
     private Float k1, k2, k3; // Dynamics constants
+
+    private Float f;
+    private Float z;
+    private Float r;
+    private Float x0;
+
     public SecondOrderDynamics(Float f, Float z, Float r, Float x0){
+        this.f = f;
+        this.z = z;
+        this.r = r;
+        this.x0 = x0;
+
+        computeConstants();
+        initVars();
+    }
+
+    private void computeConstants(){
         // Compute constants
         k1 = z / (MathUtils.PI * f);
         k2 = 1 / ((2 * MathUtils.PI * f) * (2 * MathUtils.PI * f));
         k3 = r * z / (2 * MathUtils.PI * f);
+    }
+
+    private void initVars(){
         // Initialize variables
         xp = x0;
         y = x0;
@@ -58,5 +77,31 @@ public class SecondOrderDynamics {
 
     public void setY(Float y) {
         this.y = y;
+    }
+    public Float getF() {
+        return f;
+    }
+
+    public void setF(Float f) {
+        this.f = f;
+        computeConstants();
+    }
+
+    public Float getZ() {
+        return z;
+    }
+
+    public void setZ(Float z) {
+        this.z = z;
+        computeConstants();
+    }
+
+    public Float getR() {
+        return r;
+    }
+
+    public void setR(Float r) {
+        this.r = r;
+        computeConstants();
     }
 }

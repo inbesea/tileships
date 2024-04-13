@@ -19,7 +19,7 @@ import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnproject
 
 public class TileDragHandler extends InputAdapter {
 
-    private static final float PLACE_DRAG_GOAL = 10f;
+    private static final float PLACE_DRAG_GOAL = 50f;
     private final Player player;
     private final Ship playerShip;
     private boolean dragging;
@@ -27,6 +27,7 @@ public class TileDragHandler extends InputAdapter {
     SecondOrderDynamics sOD_x;
     SecondOrderDynamics sOD_y;
     Float f = 3f, z = 0.65f, r = 2f; // Second Order Dynamic constants
+    Float placementR = 4f;
     boolean placingTile = false;
     // Used at the end of the drag to place the tile smoothly
     private Vector2 placementIndicator;
@@ -58,15 +59,18 @@ public class TileDragHandler extends InputAdapter {
             draggedTile.setX(sOD_x.Update(Gdx.graphics.getDeltaTime(), targetX , null));
             draggedTile.setY(sOD_y.Update(Gdx.graphics.getDeltaTime(), targetY , null));
         }
-        if(placingTile){
+        if(placingTile){ // True after touchup()
             ShipTile draggedTile = playerShip.getDraggedTile();
-            if(placementIndicator.dst(new Vector2(draggedTile.getCenter().x, draggedTile.getCenter().y)) < PLACE_DRAG_GOAL){
+            boolean closeEnoughToPlace = placementIndicator.dst(new Vector2(draggedTile.getCenter().x, draggedTile.getCenter().y)) < PLACE_DRAG_GOAL;
+            if(closeEnoughToPlace){
                 placeDraggedTile();
                 placingTile = false;
-                return;
+                setDragSODVariables();
             } else {
+                // Use ship-determined vector for placement
                 float targetX = placementIndicator.x - ShipTile.TILE_SIZE / 2.0f;
                 float targetY = placementIndicator.y - ShipTile.TILE_SIZE / 2.0f;
+
                 draggedTile.setX(sOD_x.Update(Gdx.graphics.getDeltaTime(), targetX , null));
                 draggedTile.setY(sOD_y.Update(Gdx.graphics.getDeltaTime(), targetY , null));
                 Gdx.app.debug("Placement","Trying to go to " +
@@ -196,6 +200,7 @@ public class TileDragHandler extends InputAdapter {
         setDragging(false);
         placingTile = true;
         placementIndicator = playerShip.getTileManager().getPlacementVector();
+        setPlacementSODVariables();
 
 //        ShipTile tempTile = playerShip.getDraggedTile();
 //        /* We could produce a shiptile object here that moves into place with SOD movement.
@@ -208,6 +213,22 @@ public class TileDragHandler extends InputAdapter {
 //        playerShip.setDraggedTile(null);
     }
 
+    /**
+     * Sets the behavior variables for placing a tile
+     */
+    private void setPlacementSODVariables() {
+        sOD_x.setR(placementR);
+        sOD_y.setR(placementR);
+    }
+
+    private void setDragSODVariables(){
+        sOD_x.setR(r);
+        sOD_y.setR(r);
+    }
+
+    /**
+     * Places the dragged tile, playing the placement sound, etc.
+     */
     private void placeDraggedTile() {
         ShipTile tempTile = playerShip.getDraggedTile();
         /* We could produce a shiptile object here that moves into place with SOD movement.
