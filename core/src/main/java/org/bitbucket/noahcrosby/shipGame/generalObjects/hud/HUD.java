@@ -64,8 +64,9 @@ public class HUD {
         StringBuilder stringBuilder = new StringBuilder();
 
         //Secondly draw the Hud
-        game.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
+        TileShipGame.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
 
+        // Debug screen borders
         if(AppPreferences.getAppPreferences().getIsDebug()){
             Line.drawRectangle(new Vector2(0,0),
                 new Vector2(HUDScreenLayer.getWorldWidth(), HUDScreenLayer.getWorldHeight()),
@@ -74,11 +75,11 @@ public class HUD {
                 HUDScreenLayer.getCamera().combined);
         }
 
-        game.batch.begin();
+        TileShipGame.batch.begin();
 
         if(AppPreferences.getAppPreferences().getIsDebug()){
             stringBuilder.append("\n" + getDebugUIData());
-            game.font.draw(game.batch, stringBuilder.toString() , 2,
+            TileShipGame.font.draw(TileShipGame.batch, stringBuilder.toString() , 2,
                     (HUDScreenLayer.getWorldHeight() - 2)); // Worldheight gives the extendVeiwport hight
         }
 
@@ -88,12 +89,17 @@ public class HUD {
         }
 
         drawControls();
+        drawFuelAmount();
 
-        game.batch.end();
+        TileShipGame.batch.end();
 
         if(showingMap()){
             mapNavigator.drawMap(this.mapScreenLayer.getCamera().combined);
         }
+    }
+
+    private void drawFuelAmount() {
+        TileShipGame.font.draw(TileShipGame.batch, "Fuel: " + playerShip.fuelTank.getFuel(), 2,HUDScreenLayer.getWorldHeight() - 2);
     }
 
     /**

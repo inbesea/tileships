@@ -44,7 +44,8 @@ public class Ship extends GameObject {
     private final ShipTilesManager shipTilesManager;
     public boolean mute;
     public FuelTank fuelTank;
-    int initFuel, initFuelCapacity = 5;
+    int initFuel = 5;
+    int initFuelCapacity = 5;
 
     /**
      * ship keeps track of the tiles of the ship and has methods for
