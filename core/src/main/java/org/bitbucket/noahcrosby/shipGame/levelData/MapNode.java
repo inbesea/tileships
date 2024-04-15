@@ -16,6 +16,10 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpaw
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Basic element of the map
  */
@@ -253,5 +257,17 @@ public class MapNode extends GameObject {
             return false;
         }
         return this.edges.contains(node, true);
+    }
+
+    public int getWeight(){
+        return 1;
+    }
+
+    public List<MapNode> getEdgesAsList() {
+        List<MapNode> edges = new ArrayList<>();
+        for (MapNode node : this.edges) {
+            edges.add(node);
+        }
+        return edges;
     }
 }

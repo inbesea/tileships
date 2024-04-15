@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.github.tommyettinger.textra.TypingConfig;
 import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Gdx;
@@ -54,8 +55,10 @@ public class HUD {
         this.playerShip = game.getPlayerShip();
 
 //        String fuel = playerShip.fuelTank.getFuel().toString();
-        fuelLabel = new TypingLabel("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : " + playerShip.fuelTank.getFuel().toString() +
+        TypingConfig.GLOBAL_VARS.put("FUELAMT", playerShip.fuelTank.getFuel().toString());
+        fuelLabel = new TypingLabel("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : {VAR=FUELAMT}" +
                 " / " + playerShip.fuelTank.getFuelCapacity(), skin);
+        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuel().toString());
 //        fuelLabel.setVariable("fuel", fuel);
 
         HUDScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
@@ -86,6 +89,10 @@ public class HUD {
     public void draw(){
         StringBuilder stringBuilder = new StringBuilder();
 
+        fuelLabel.setText("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : {VAR=FUELAMT}" +
+                " / " + playerShip.fuelTank.getFuelCapacity());
+        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuel().toString());
+
         HUDTable.setDebug(AppPreferences.getAppPreferences().getIsDebug());
         HUDStage.getCamera().update();
         HUDStage.act(Gdx.graphics.getDeltaTime());
@@ -106,7 +113,7 @@ public class HUD {
         TileShipGame.batch.begin();
 
         if(AppPreferences.getAppPreferences().getIsDebug()){
-            stringBuilder.append("\n" + getFuelLabel());
+            stringBuilder.append("\n" + getDebugData());
             TileShipGame.font.draw(TileShipGame.batch, stringBuilder.toString() , 2,
                     (HUDScreenLayer.getWorldHeight() - 2)); // Worldheight gives the extendVeiwport hight
         }
@@ -234,7 +241,7 @@ public class HUD {
      * Gets data for debug hud UI stack
      * @return - StringBuilder representing the debug info
      */
-    protected StringBuilder getFuelLabel() {
+    protected StringBuilder getDebugData() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +

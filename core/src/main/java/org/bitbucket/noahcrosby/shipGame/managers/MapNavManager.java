@@ -4,9 +4,14 @@ import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.levelData.MapDrawer;
 import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
+import org.bitbucket.noahcrosby.utils.DijkstrasAlgo;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -21,12 +26,14 @@ public class MapNavManager {
     protected MapDrawer mapDrawer;
     protected MapNode selectedNode;
     protected Signal<MapNode> publisher;
+    Ship ship;
 
 
-    public MapNavManager(){
+    public MapNavManager(Ship ship){
         mapList = new Array<>();
         mapDrawer = new MapDrawer();
         publisher = new Signal<>();
+        this.ship = ship;
     }
 
     public void addMap(SpaceMap map){
@@ -130,11 +137,28 @@ public class MapNavManager {
      * @return
      */
     public boolean canMoveToNode(MapNode closestNode) {
-        if(currentNode.isNeighborsWith(closestNode)){
+        Boolean canMove = currentNode.isNeighborsWith(closestNode) &&
+            moveCost(currentNode, closestNode) <= ship.fuelTank.getFuel();
+
+        if(canMove){
+            ship.fuelTank.consumeFuel(moveCost(currentNode, closestNode));
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns shortest distance between two nodes
+     * @param currentNode
+     * @param closestNode
+     * @return
+     */
+    private Integer moveCost(MapNode currentNode, MapNode closestNode) {
+        // TODO: implement dijkstra to determine shortest path
+        Map<MapNode, Integer> shortestPath = DijkstrasAlgo.shortestPath(currentNode, closestNode, currentMap.getMapEdges());
+
+        return shortestPath.size() - 1;
     }
 
     public MapNode getSelectedNode() {
