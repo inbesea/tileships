@@ -43,6 +43,9 @@ public class Ship extends GameObject {
     private final TileCondenser tileCondenser;
     private final ShipTilesManager shipTilesManager;
     public boolean mute;
+    public FuelTank fuelTank;
+    int initFuel = 5;
+    int initFuelCapacity = 5;
 
     /**
      * ship keeps track of the tiles of the ship and has methods for
@@ -62,6 +65,8 @@ public class Ship extends GameObject {
          *   that creates tiles based on a list of tile instances */
         mute = false;
         publisher = new Signal<>();
+
+        fuelTank = new FuelTank(initFuel, initFuelCapacity);
     }
 
     /**

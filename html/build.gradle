@@ -44,6 +44,8 @@ dependencies {
   implementation "com.google.jsinterop:jsinterop-annotations:2.0.0:sources"
   implementation "space.earlygrey:shapedrawer:$shapeDrawerVersion:sources"
   implementation project(':core')
+  implementation "com.github.tommyettinger:textratypist:0.10.0:sources" // TextraTypist GWT stuff
+  implementation "com.github.tommyettinger:regexodus:0.1.15:sources"
 
 }
 

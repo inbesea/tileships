@@ -319,7 +319,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     @Override
     public void dispose() {
-
+        hud.dispose();
     }
 
     /**

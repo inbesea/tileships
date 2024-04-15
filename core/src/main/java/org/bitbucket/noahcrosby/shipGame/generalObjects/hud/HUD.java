@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -37,8 +38,13 @@ public class HUD {
     protected Label volumeSoundLabel;
     protected Label musicOnOffLabel;
     protected Label soundOnOffLabel;
+    Skin skin = new Skin(Gdx.files.internal("skin/neon/skin/uiskin.json"));
+    protected TypingLabel fuelLabel;
     protected MapNavManager mapNavigator;
+    protected Actor mapToggleActor;
 
+    protected Stage HUDStage;
+    protected Table HUDTable;
     protected UIElement mapToggleUI;
     protected UIElement tileCondenseUI;
 
@@ -47,8 +53,25 @@ public class HUD {
         this.game = game;
         this.playerShip = game.getPlayerShip();
 
+//        String fuel = playerShip.fuelTank.getFuel().toString();
+        fuelLabel = new TypingLabel("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : " + playerShip.fuelTank.getFuel().toString() +
+                " / " + playerShip.fuelTank.getFuelCapacity(), skin);
+//        fuelLabel.setVariable("fuel", fuel);
+
         HUDScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         mapScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+        HUDStage = new Stage(HUDScreenLayer);
+        HUDTable = new Table();
+        HUDTable.setFillParent(true);
+        HUDStage.addActor(HUDTable);
+
+        fuelLabel.skipToTheEnd();
+        HUDTable.add(fuelLabel).pad(25);
+        HUDTable.top().left();
+
+//        HUDStage.addActor(debugUIData);
+//        HUDTable.top().left();
+//        HUDStage.addActor(FuelAmt);
 
         createMenuOverlay();
 
@@ -63,9 +86,15 @@ public class HUD {
     public void draw(){
         StringBuilder stringBuilder = new StringBuilder();
 
-        //Secondly draw the Hud
-        game.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
+        HUDTable.setDebug(AppPreferences.getAppPreferences().getIsDebug());
+        HUDStage.getCamera().update();
+        HUDStage.act(Gdx.graphics.getDeltaTime());
+        HUDStage.draw();
 
+        //Secondly draw the Hud
+        TileShipGame.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
+
+        // Debug screen borders
         if(AppPreferences.getAppPreferences().getIsDebug()){
             Line.drawRectangle(new Vector2(0,0),
                 new Vector2(HUDScreenLayer.getWorldWidth(), HUDScreenLayer.getWorldHeight()),
@@ -74,11 +103,11 @@ public class HUD {
                 HUDScreenLayer.getCamera().combined);
         }
 
-        game.batch.begin();
+        TileShipGame.batch.begin();
 
         if(AppPreferences.getAppPreferences().getIsDebug()){
-            stringBuilder.append("\n" + getDebugUIData());
-            game.font.draw(game.batch, stringBuilder.toString() , 2,
+            stringBuilder.append("\n" + getFuelLabel());
+            TileShipGame.font.draw(TileShipGame.batch, stringBuilder.toString() , 2,
                     (HUDScreenLayer.getWorldHeight() - 2)); // Worldheight gives the extendVeiwport hight
         }
 
@@ -89,7 +118,7 @@ public class HUD {
 
         drawControls();
 
-        game.batch.end();
+        TileShipGame.batch.end();
 
         if(showingMap()){
             mapNavigator.drawMap(this.mapScreenLayer.getCamera().combined);
@@ -205,7 +234,7 @@ public class HUD {
      * Gets data for debug hud UI stack
      * @return - StringBuilder representing the debug info
      */
-    protected StringBuilder getDebugUIData() {
+    protected StringBuilder getFuelLabel() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
@@ -240,6 +269,7 @@ public class HUD {
      */
     public void update(int width, int height) {
         HUDScreenLayer.update(width, height, true);
+        HUDStage.getViewport().update(width, height, true);
         // Updates the UI elements based on the new screen size
         this.mapToggleUI.setPosition(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 20));
         this.tileCondenseUI.setPosition(new Vector2(HUDScreenLayer.getWorldWidth() - 100, 104));
@@ -252,6 +282,7 @@ public class HUD {
     public boolean isShowingMenu() {
         return drawMenu;
     }
+
     public void toggleMenu(){
         drawMenu = !drawMenu;
         if(drawMenu){
@@ -286,5 +317,9 @@ public class HUD {
 
     public Camera getCamera() {
         return this.HUDScreenLayer.getCamera();
+    }
+
+    public void dispose(){
+        HUDStage.dispose();
     }
 }

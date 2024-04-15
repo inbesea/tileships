@@ -92,23 +92,25 @@ public class MapNavManager {
     }
 
     /**
-     * Informs the node it has been selected and keeps the number of selected nodes to one
-     * @param newNode - node that is selected
+     * Selects the given node and updates the selected node to be the new one
+     * @param node - the node to be selected
+     * @return the selected node
      */
-    public MapNode selectNode(MapNode newNode) {
-        if(newNode == null){
-            Gdx.app.error("Null Error", "newNode is null MapNavManager.highlightNewNode()");
+    public MapNode selectNode(MapNode node) {
+        if(node == null){
             return null;
         }
-        if(!this.currentMap.getMapNodes().contains(newNode, true)){
-            Gdx.app.error("Missing Node", "Cannot find selected node in current SpaceMap");
+        Boolean notInMap = !this.currentMap.getMapNodes().contains(node, true);
+        if(notInMap){
             return null;
         }
-        if(this.selectedNode != null)this.selectedNode.clicked(false); // Check the highlit node is not null
+        if(this.selectedNode != null) {
+            this.selectedNode.clicked(false);
+        }
 
-        newNode.clicked(true);
-        this.selectedNode = newNode;
-        return newNode;
+        node.clicked(true);
+        this.selectedNode = node;
+        return node;
     }
 
     /**
