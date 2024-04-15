@@ -28,7 +28,7 @@ import java.nio.file.Paths;
  */
 public class GenerateResources extends ApplicationAdapter {
 
-    private String sfxPrefix = "sfx";
+    private final String sfxPrefix = "sfx";
 
     protected TypeSpec.Builder typeSpecBuilder;
     protected MethodSpec.Builder loadAssetMethodSpecBuilder;
