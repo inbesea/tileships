@@ -41,19 +41,14 @@ public class MapNavigationHandler extends InputAdapter {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // Get touch position and closest node to that position
-        Vector2 touch = generalUtil.returnUnprojectedInputVector2(camera);
-        MapNode closestNode = generalUtil.getClosestObject(touch, currentMap.getMapNodes());
+        Vector2 touchPosition = generalUtil.returnUnprojectedInputVector2(camera);
+        MapNode closestNode = generalUtil.getClosestObject(touchPosition, currentMap.getMapNodes());
 
-        // Selecting newly clicked node
-        boolean closestIsSelectable = touch.dst(closestNode.getPosition()) < NODE_SELECT_DISTANCE;
-        if(closestIsSelectable){
-            Gdx.app.log("MapNavigationHandler", "Selecting node " + closestNode.getPositionAsString());
+        boolean isSelectable = touchPosition.dst(closestNode.getPosition()) < NODE_SELECT_DISTANCE;
+        if(isSelectable){
             boolean alreadySelected = closestNode.equals(this.navManager.getSelectedNode());
-            if(alreadySelected){
-                if(!closestNode.playerIsHere()){
-                    moveToNewNode(closestNode);
-                }
+            if(alreadySelected && !closestNode.playerIsHere()){
+                moveToNewNode(closestNode);
             } else {
                 this.navManager.selectNode(closestNode);
             }
@@ -61,10 +56,6 @@ public class MapNavigationHandler extends InputAdapter {
             clearSelections();
         }
 
-        Gdx.app.debug("MapNavigationHandler",  touch.x + " " + touch.y + " Found this MapNode " + closestNode.getPositionAsString());
-        if(touch.dst(closestNode.getPosition()) < 20){
-//            temp.drawDebug();
-        }
         return false;
     }
 
