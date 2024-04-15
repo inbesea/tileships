@@ -21,8 +21,6 @@ public class Player extends GameObject {
     Ship playerShip;
     Random r = new Random();
     private TileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
-    private OrthographicCamera cam;
-    public boolean godMode = false;
 
     // Tiles the player holds - This should be reflected on the player's sprite
     public Array<ShipTile> heldShipTiles = new Array<>();
@@ -36,11 +34,10 @@ public class Player extends GameObject {
 
     private float playerSpeed = ShipTile.TILE_SIZE * 1.5f;
 
-    public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, TileShipGame game) {
+    public Player(Vector2 position, Vector2 size, ID id, TileShipGame game) {
         super(position, size, id);
 
         heldTileDisplay = new Circle(position.x, position.y, INIT_HELD_RADIUS);
-        this.cam = cam;
         this.game = game;
         this.heldTileLimit = 5;
         this.playerShip =  game.getPlayerShip();
@@ -148,16 +145,6 @@ public class Player extends GameObject {
 
     public void setHeldShipTiles(Array<ShipTile> heldShipTiles) {
         this.heldShipTiles = heldShipTiles;
-    }
-
-    /**
-     * Switches god mode to opposite state when called.
-     */
-    public void toggleGodMode() {
-        System.out.println("godMode is set to : " + godMode);
-        if (this.godMode == false) {
-            this.godMode = true;
-        } else this.godMode = false;
     }
 
     /**
