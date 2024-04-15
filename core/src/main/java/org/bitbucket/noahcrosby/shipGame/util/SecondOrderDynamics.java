@@ -28,6 +28,10 @@ public class SecondOrderDynamics {
         initVars();
     }
 
+    /**
+     * Calculates three constants k1, k2, and k3 used in second-order dynamics based on the values of z, f, and r.
+     * Can be re-run if f, z, or r are changed to update behavior.
+     */
     private void computeConstants(){
         // Compute constants
         k1 = z / (MathUtils.PI * f);
@@ -35,7 +39,22 @@ public class SecondOrderDynamics {
         k3 = r * z / (2 * MathUtils.PI * f);
     }
 
+    /**
+     * Initialize state variables
+     * Should only be called once.
+     */
     private void initVars(){
+        // Initialize variables
+        xp = x0;
+        y = x0;
+        yd = (float) 0;
+    }
+
+    /**
+     * Initialize state variables
+     * Can be called multiple times with new x0.
+     */
+    private void initVars(Float x0){
         // Initialize variables
         xp = x0;
         y = x0;
