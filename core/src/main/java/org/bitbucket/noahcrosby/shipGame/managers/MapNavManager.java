@@ -130,9 +130,11 @@ public class MapNavManager {
      * @return
      */
     public boolean canMoveToNode(MapNode closestNode) {
-
-        Gdx.app.debug("Unimplemented Method", "MapNavManager.canMoveToNode()");
-        return true;
+        if(currentNode.isNeighborsWith(closestNode)){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public MapNode getSelectedNode() {

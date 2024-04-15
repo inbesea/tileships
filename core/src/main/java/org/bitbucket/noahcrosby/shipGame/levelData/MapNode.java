@@ -245,4 +245,13 @@ public class MapNode extends GameObject {
         return null;
         // TODO : halp
     }
+
+    public Boolean isNeighborsWith(MapNode node) {
+        if(node == null){
+            return false;
+        } else if(node == this){
+            return false;
+        }
+        return this.edges.contains(node, true);
+    }
 }

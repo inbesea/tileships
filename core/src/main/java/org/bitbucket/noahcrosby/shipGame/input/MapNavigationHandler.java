@@ -10,7 +10,7 @@ import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 /**
- * Handles clicking on locations of the map and moving between nodes.
+ * Handles player input for clicking on locations of the map and moving between nodes.
  */
 public class MapNavigationHandler extends InputAdapter {
     private static final float NODE_SELECT_DISTANCE = 18;
