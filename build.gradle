@@ -59,6 +59,7 @@ project(":automation") {
     api ("org.junit.jupiter:junit-jupiter-api:5.9.0")
     api 'com.squareup:javapoet:1.13.0'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0' // Just to add arrays together
+    // Add new depend. to the core
   }
 }
 

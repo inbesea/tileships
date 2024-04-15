@@ -11,6 +11,8 @@
   <inherits name="com.badlogic.gdx.physics.box2d.box2d-gwt" />
   <inherits name="org.bitbucket.noahcrosby.TileShipGame" />
   <inherits name="space.earlygrey.shapedrawer" />
+  <inherits name="regexodus.regexodus" />
+  <inherits name="com.github.tommyettinger.textratypist" />
   <entry-point class="org.bitbucket.noahcrosby.gwt.GwtLauncher" />
   <set-configuration-property name="gdx.assetpath" value="../assets" />
   <set-configuration-property name="xsiframe.failIfScriptTag" value="FALSE"/>
