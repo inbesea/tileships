@@ -310,4 +310,16 @@ public class generalUtil {
         }
         return closestObject;
     }
+
+    /**
+     * Clamps an integer value between a minimum and maximum value.
+     *
+     * @param value the integer value to clamp
+     * @param min the minimum value
+     * @param max the maximum value
+     * @return the clamped integer value
+     */
+    public static int clamp(int value, int min, int max) {
+        return Math.min(Math.max(value, min), max);
+    }
 }
