@@ -18,8 +18,7 @@ import java.util.Random;
 import static com.badlogic.gdx.math.MathUtils.*;
 
 public class Player extends GameObject {
-    Ship playerShip;
-    Random r = new Random();
+    Ship playerShip; // Ship "owned" by player
     private TileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
 
     // Tiles the player holds - This should be reflected on the player's sprite
