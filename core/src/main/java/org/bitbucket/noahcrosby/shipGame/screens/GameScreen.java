@@ -93,7 +93,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         // init player
         // Give player the game reference
-        player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, camera, this.game);
+        player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, this.game);
 
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
         mapNavigator = new MapNavManager();

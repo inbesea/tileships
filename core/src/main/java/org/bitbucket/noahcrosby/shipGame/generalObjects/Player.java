@@ -18,31 +18,16 @@ import java.util.Random;
 import static com.badlogic.gdx.math.MathUtils.*;
 
 public class Player extends GameObject {
-    Ship playerShip;
-    Random r = new Random();
+    Ship playerShip; // Ship "owned" by player
     private TileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
-    private OrthographicCamera cam;
-    public boolean godMode = false;
-
-    // Tiles the player holds - This should be reflected on the player's sprite
-    public Array<ShipTile> heldShipTiles = new Array<>();
-    private int heldTileLimit;
-    // Circle to render held tiles on.
-    private Circle heldTileDisplay;
-    private float tileCircleRotationSpeed = 0.01f;
-    private float circleRotation = 0;
-    private final int INIT_HELD_RADIUS = 32; // one Radius
     private Rectangle bounds;
 
     private float playerSpeed = ShipTile.TILE_SIZE * 1.5f;
 
-    public Player(Vector2 position, Vector2 size, ID id, OrthographicCamera cam, TileShipGame game) {
+    public Player(Vector2 position, Vector2 size, ID id, TileShipGame game) {
         super(position, size, id);
 
-        heldTileDisplay = new Circle(position.x, position.y, INIT_HELD_RADIUS);
-        this.cam = cam;
         this.game = game;
-        this.heldTileLimit = 5;
         this.playerShip =  game.getPlayerShip();
     }
 
@@ -99,36 +84,6 @@ public class Player extends GameObject {
      */
     public void render(TileShipGame game) {
         TileShipGame.batch.draw(getTexture(), getPosition().x, getPosition().y, getSize().x, getSize().y);
-        renderCircleOfHeldTiles(); // Moved this logic out to allow render to be more flexible
-    }
-
-    /**
-     * Changes the radius of the held tile circle slowly over time.
-     *
-     * @param ROC - Rate of change to the radius
-     */
-    private void slowRadiusChange(float ROC) {
-
-        // targetRadius - current
-
-        float targetRadius = (INIT_HELD_RADIUS *  (((8.0f * heldShipTiles.size)) /
-                (heldShipTiles.size + 5.0f)));  // Target based on size of held tiles
-
-        float radius = heldTileDisplay.radius;
-
-        heldTileDisplay.radius += (
-                // need to fiddle with this exp. so the value stablizes and goes to 0.
-                (targetRadius - (radius)) * // display radius changes based on the size of the hand of tiles.
-                        ROC * Gdx.graphics.getDeltaTime()
-        );
-    }
-
-    /**
-     * Increases the circleRotation float used to display held tiles
-     */
-    private void rotateCircle(){
-        circleRotation += tileCircleRotationSpeed;
-        if(circleRotation > PI2) circleRotation = 0;
     }
 
     /**
@@ -142,96 +97,13 @@ public class Player extends GameObject {
 		return playerShip;
     }
 
-    public Array<ShipTile> getHeldShipTiles() {
-        return heldShipTiles;
-    }
-
-    public void setHeldShipTiles(Array<ShipTile> heldShipTiles) {
-        this.heldShipTiles = heldShipTiles;
-    }
-
-    /**
-     * Switches god mode to opposite state when called.
-     */
-    public void toggleGodMode() {
-        System.out.println("godMode is set to : " + godMode);
-        if (this.godMode == false) {
-            this.godMode = true;
-        } else this.godMode = false;
-    }
-
-    /**
-     * Adds a shipTile to the players' stack
-     *
-     * @param st
-     * @return
-     */
-    public boolean pickupTile(ShipTile st) {
-        if (heldShipTiles.size == heldTileLimit) {
-            System.out.println("Held tiles at limit!");
-            return false;
-        } else if (heldShipTiles.size > heldTileLimit) {
-            throw new RuntimeException("Holding more tiles than is possible to hold! HeldTilesSize : " + heldShipTiles.size
-                    + ", limit : " + heldTileLimit);
-        } else {
-            heldShipTiles.add(st);
-            return true;
-        }
-    }
-
-    /**
-     * Method that returns the currently held tile and removes it from the player.
-     *
-     * @return - Returns tile from stack if holding tile, else return NULL
-     */
-    public ShipTile popTile() {
-        if (heldShipTiles.size == 0) {
-            System.out.println("Holding (" + heldShipTiles.size + ") tiles!");
-            return null;
-        } else if (heldShipTiles.size > 0) {
-            System.out.println("Holding (" + heldShipTiles.size + ") tiles!\n" +
-                    " Returning tile with ID : " + heldShipTiles.peek().getID());
-            return heldShipTiles.pop();
-        } else {
-            throw new RuntimeException("Stack of tiles has negative size!");
-        }
-    }
-
-    /**
-     * Renders a circle of tiles around the playerCharacter
-     */
-    private void renderCircleOfHeldTiles(){
-
-        // Update radius and position of circle
-        slowRadiusChange(2.5f);
-        heldTileDisplay.setPosition(position);
-        Texture tempTexture;
-        rotateCircle();
-
-        // Get radians based on fractionalized circle
-        float radianFractions = (PI*2)/heldShipTiles.size;
-        // Draw tiny tiles from player stack
-        for (int i = 0; i < heldShipTiles.size; i++) {
-            ShipTile t = heldShipTiles.get(i);
-            tempTexture = null;
-//            tempTexture = new Texture(Gdx.files.internal(t.getID().getTexture()));
-
-            game.batch.draw(tempTexture,
-                    (heldTileDisplay.x + 32) + (sin((i * (radianFractions)) + circleRotation) * heldTileDisplay.radius),
-                    (heldTileDisplay.y + 32) + (cos((i * (radianFractions)) + circleRotation) * heldTileDisplay.radius),
-                    5 ,5);
-
-        }
-    }
-
     /**
      * Player checks if a position is out of bounds of their ship.
-     * @param possibleUpPosition - Vector 2 representing a position
+     * @param position - Vector 2 representing a position
      */
-    public boolean positionIsOffShip(Vector2 possibleUpPosition) {
-        return playerShip.isPositionOffShip(possibleUpPosition);
+    public boolean positionIsOffShip(Vector2 position) {
+        return playerShip.isPositionOffShip(position);
     }
-
 
     public float getPlayerSpeed() {
         return playerSpeed;
