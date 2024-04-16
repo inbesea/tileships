@@ -69,10 +69,18 @@ public class MapNavManager {
         node.setPlayerIsHere(true);
         currentNode = node;
 
+        checkForRefuel();
+
+        publishNewNode();
+    }
+
+    /**
+     * Checks if the player is at the entry node and refuels if true
+     */
+    private void checkForRefuel() {
         if(currentNode.equals(currentMap.getEntryNode())){
             ship.fuelTank.fill();
         }
-        publishNewNode();
     }
 
     /**
