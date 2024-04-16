@@ -19,15 +19,15 @@ import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnproject
 
 public class TileDragHandler extends InputAdapter {
 
-    private static final float PLACE_DRAG_GOAL = 50f;
+    private static final float PLACE_DRAG_GOAL = 20f;
     private final Player player;
     private final Ship playerShip;
     private boolean dragging;
+    private float placementSpeed = 15f;
 
     SecondOrderDynamics sOD_x;
     SecondOrderDynamics sOD_y;
     Float f = 3f, z = 0.65f, r = 2f; // Second Order Dynamic constants
-    Float placementR = 4f;
     boolean placingTile = false;
     // Used at the end of the drag to place the tile smoothly
     private Vector2 placementIndicator;
@@ -68,15 +68,16 @@ public class TileDragHandler extends InputAdapter {
                 setDragSODVariables();
             } else {
                 // Use ship-determined vector for placement
-                float targetX = placementIndicator.x - ShipTile.TILE_SIZE / 2.0f;
-                float targetY = placementIndicator.y - ShipTile.TILE_SIZE / 2.0f;
+                Vector2 draggedTilePosition = draggedTile.getPosition();
 
-                draggedTile.setX(sOD_x.Update(Gdx.graphics.getDeltaTime(), targetX , null));
-                draggedTile.setY(sOD_y.Update(Gdx.graphics.getDeltaTime(), targetY , null));
-                Gdx.app.debug("Placement","Trying to go to " +
-                    placementIndicator.x + ", " + placementIndicator.y + " Currently at " +
-                    draggedTile.getX() + ", " + draggedTile.getY() +
-                    " Target is " + targetX + ", " + targetY);
+                float dx = (placementIndicator.x - ShipTile.TILE_SIZE /2) - draggedTilePosition.x;
+                float dy = (placementIndicator.y - ShipTile.TILE_SIZE /2) - draggedTilePosition.y;
+
+                float newX = draggedTilePosition.x + (((dx * placementSpeed) * Gdx.graphics.getDeltaTime()));
+                float newY = draggedTilePosition.y + (((dy * placementSpeed) * Gdx.graphics.getDeltaTime()));
+
+                draggedTile.setX(newX);
+                draggedTile.setY(newY);
             }
         }
     }
@@ -91,7 +92,18 @@ public class TileDragHandler extends InputAdapter {
         if (playerShip.isCollectingTiles()) { // Begin collecting tiles for condensing
             playerShip.updateCollect(new Vector3(screenX, screenY, 0f));
         } else { // If not collecting, assume pick up and drag tile
-
+            if(placingTile) { // Handle tiles mid-placement
+                ShipTile pickedUpTile = playerShip.getDraggedTile();
+                setDragging(true);
+                placingTile = false;
+//                placementIndicator = playerShip.getTileManager().getPlacementVector();
+                pickUpTile(pickedUpTile);
+                sOD_x.setXp(pickedUpTile.getX());
+                sOD_x.setY(pickedUpTile.getX());
+                sOD_y.setXp(pickedUpTile.getY());
+                sOD_y.setY(pickedUpTile.getY());
+                return false; // Don't pick up if already dragging a tile
+            }
             // Get a tile and check if it can be picked up.
             ShipTile pickedUpTile = playerShip.returnTile(screenX, screenY);
             boolean selectedTileCanBeGrabbed = canGrabTile(pickedUpTile);
@@ -200,25 +212,6 @@ public class TileDragHandler extends InputAdapter {
         setDragging(false);
         placingTile = true;
         placementIndicator = playerShip.getTileManager().getPlacementVector();
-        setPlacementSODVariables();
-
-//        ShipTile tempTile = playerShip.getDraggedTile();
-//        /* We could produce a shiptile object here that moves into place with SOD movement.
-//        * Second Order Dynamics could make it look nice. Can we do that with a draw bool for the new tile? */
-//        playerShip.addTileToShip(x, y, tempTile);
-//        tempTile.replaced();
-//        Resources.PlaceTileSoundSfx.play(AppPreferences.getAppPreferences().getSoundVolume());
-//        this.setDraggingSound(false);
-//        // Dispose of used dragged tile references
-//        playerShip.setDraggedTile(null);
-    }
-
-    /**
-     * Sets the behavior variables for placing a tile
-     */
-    private void setPlacementSODVariables() {
-        sOD_x.setR(placementR);
-        sOD_y.setR(placementR);
     }
 
     private void setDragSODVariables(){
