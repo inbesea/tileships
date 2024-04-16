@@ -259,6 +259,11 @@ public class MapNode extends GameObject {
         return this.edges.contains(node, true);
     }
 
+    /**
+     * Weight is 1.
+     * Used for pathfinding, but we care about edges not weights
+     * @return
+     */
     public int getWeight(){
         return 1;
     }

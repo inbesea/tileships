@@ -155,10 +155,8 @@ public class MapNavManager {
      * @return
      */
     private Integer moveCost(MapNode currentNode, MapNode closestNode) {
-        // TODO: implement dijkstra to determine shortest path
         Map<MapNode, Integer> shortestPath = DijkstrasAlgo.shortestPath(currentNode, closestNode, currentMap.getMapEdges());
-
-        return shortestPath.size() - 1;
+        return shortestPath.size() - 1; // Subtract one, DijkstrasAlgo starts at 1
     }
 
     public MapNode getSelectedNode() {

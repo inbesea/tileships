@@ -2,6 +2,8 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.ship;
 
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
+// TODO: Pull functionality into a bucket class that can be inherited
+// Probably could make the tracked thing generic making it even more extensible
 public class FuelTank {
     Integer fuel = 0;
     Integer fuelCapacity = 5;
