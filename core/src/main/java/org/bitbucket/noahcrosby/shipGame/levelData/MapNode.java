@@ -16,6 +16,10 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpaw
 import org.bitbucket.noahcrosby.shipGame.util.AngleUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Basic element of the map
  */
@@ -244,5 +248,31 @@ public class MapNode extends GameObject {
     public MapNode getForeground() {
         return null;
         // TODO : halp
+    }
+
+    public Boolean isNeighborsWith(MapNode node) {
+        if(node == null){
+            return false;
+        } else if(node == this){
+            return false;
+        }
+        return this.edges.contains(node, true);
+    }
+
+    /**
+     * Weight is 1.
+     * Used for pathfinding, but we care about edges not weights
+     * @return
+     */
+    public int getWeight(){
+        return 1;
+    }
+
+    public List<MapNode> getEdgesAsList() {
+        List<MapNode> edges = new ArrayList<>();
+        for (MapNode node : this.edges) {
+            edges.add(node);
+        }
+        return edges;
     }
 }

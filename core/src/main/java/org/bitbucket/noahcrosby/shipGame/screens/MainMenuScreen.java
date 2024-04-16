@@ -199,7 +199,6 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
 
         stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
 
         camera.update();
         TileShipGame.batch.setProjectionMatrix(camera.combined);
@@ -221,7 +220,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
                 map.addNode(new MapNode(new Vector2(460, 150)), new int[]{map.getMapNodes().size - 1, map.getMapNodes().size - 3});
                 afterLoadingMap = true;
             }
-
+            stage.draw();
         } else {
             TileShipGame.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 0, camera.viewportHeight - 100);
         }

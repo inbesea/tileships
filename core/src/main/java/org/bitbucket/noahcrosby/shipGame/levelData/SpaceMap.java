@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
-import java.util.Comparator;
+import java.util.*;
 
 /**
  * Holds the map graph, relates to other map graphs
@@ -262,4 +262,26 @@ public class SpaceMap {
             this.disconnectNodes(mapNode, node);
         }
     }
+
+    public Map<MapNode, List<MapNode>> getMapEdges() {
+        Map<MapNode, List<MapNode>> map = new HashMap<>();
+        List<MapNode> edges = new ArrayList<>(); // <nodes>
+
+        for(MapNode node : mapNodes){
+            edges = node.getEdgesAsList();
+            map.put(node, edges);
+        }
+        return map;
+    }
+
+//    public Map<MapNode, List<MapNode>> getMapEdges() {
+//        Map<MapNode, List<MapNode>> map = new HashMap<>();
+//        List<MapNode> nodes = new ArrayList<>(); // <nodes>
+//
+//        for(MapNode node : mapNodes){
+//            nodes = node.edges.items;
+//            map.put(node, Arrays.asList(node.edges.toArray()));
+//        }
+//        return map;
+//    }
 }

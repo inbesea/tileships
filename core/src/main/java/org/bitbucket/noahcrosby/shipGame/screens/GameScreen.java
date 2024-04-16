@@ -96,7 +96,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, this.game);
 
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
-        mapNavigator = new MapNavManager();
+        mapNavigator = new MapNavManager(playerShip);
         mapNavigator.getPublisher().add(this);// Get game screen to watch the new nodes.
         mapNavigator.addMap(Maps.getBasicSpacemap(20));// Temp for testing
         hud = new MainGameHUD(game, mapNavigator);
