@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid;
@@ -135,7 +136,7 @@ public class AsteroidManager implements Manager {
         final Asteroid asteroid;
 
         try {
-            asteroid = clazz.getDeclaredConstructor().newInstance();
+            asteroid = (Asteroid) ClassReflection.getDeclaredConstructor(clazz).newInstance();
             asteroid.setPosition(spawnLocation);
         } catch (Exception e) {
             Gdx.app.error("Error", e.getMessage());
@@ -146,7 +147,6 @@ public class AsteroidManager implements Manager {
         //setAsteroidPhysics(asteroid);
 
         asteroids.add(asteroid);
-
     }
 
     /**
