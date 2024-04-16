@@ -68,6 +68,10 @@ public class MapNavManager {
         }
         node.setPlayerIsHere(true);
         currentNode = node;
+
+        if(currentNode.equals(currentMap.getEntryNode())){
+            ship.fuelTank.fill();
+        }
         publishNewNode();
     }
 

@@ -42,4 +42,11 @@ public class FuelTank {
         fuel -= amount;
         generalUtil.clamp(fuel, 0, fuelCapacity);
     }
+
+    /**
+     * Fills the tank to it's capacity
+     */
+    public void fill() {
+        fuel = fuelCapacity;
+    }
 }
