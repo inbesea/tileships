@@ -50,4 +50,9 @@ public class StandardTile extends ShipTile{
     public void setVelocity(Vector2 velocity) {
 
     }
+
+    @Override
+    public boolean isFuel() {
+        return true;
+    }
 }

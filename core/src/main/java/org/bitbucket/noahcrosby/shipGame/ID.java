@@ -24,10 +24,11 @@ public enum ID {
 	StandardTile( true),
 	StrongTile( true),
     ColorTile( true),
-    EngineTile( true),
+    FurnaceTile( true),
     FuelTile( true),
     AncientTile(true),
-    ForegroundObject(false);
+    ForegroundObject(false),
+    CommunicationTile(true);
 
     //Easy way to check if an object is a tile or not.
 	private final boolean isTileType;

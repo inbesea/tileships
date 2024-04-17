@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ArcadeColors;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ColorTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.CommunicationTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.arcadeMode.ArcadeModeScreen;
 
@@ -32,6 +33,29 @@ public class TileRecipes {
             ShipTile tile = tiles.get(i);
             System.out.println("Tetris match removing  : " + tile.getPositionAsString());
             tile.setIsDeadTrue();
+        }
+        return null;
+    };
+    public static LambdaRecipe addFuel = (Array<ShipTile> tiles) -> {
+        Array<ShipTile> fuel = new Array<>();
+        int furnace = 0;
+        for (int i = 0; i < tiles.size; i++) {
+            if (tiles.get(i).getID() == ID.FurnaceTile) {
+                furnace++;
+            } else if (tiles.get(i).isFuel()) {
+                fuel.add(tiles.get(i));
+            }
+        }
+        if (fuel.size > 0 && furnace > 0) {
+            int fuelAmt = 0;
+            for(int i = 0 ; i < fuel.size ; i++){
+                fuelAmt++; // Could make different tiles produce different amounts of fuel
+                fuel.get(i).setIsDeadTrue();
+            }
+            CommunicationTile communicationTile = new CommunicationTile();
+            communicationTile.setIdentity(CommunicationTile.FUELING_SHIP);
+            communicationTile.setIntValue(fuelAmt);
+            return communicationTile; // Add a communication tile
         }
         return null;
     };

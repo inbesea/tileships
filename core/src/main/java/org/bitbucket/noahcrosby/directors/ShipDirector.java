@@ -24,6 +24,7 @@ public class ShipDirector {
         shipBuilder.addTile((int)center.x + 2, (int)center.y, ID.StandardTile);
         shipBuilder.addTile((int)center.x + 1, (int)center.y + 1, ID.StandardTile);
         shipBuilder.addTile((int)center.x + 2, (int)center.y + 1, ID.StandardTile);
+        shipBuilder.addTile((int)center.x + 3, (int)center.y + 1, ID.FurnaceTile);
 
         return shipBuilder.buildProduct();
     }

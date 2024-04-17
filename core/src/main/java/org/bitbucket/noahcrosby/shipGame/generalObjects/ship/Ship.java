@@ -11,11 +11,11 @@ import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.CommunicationTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
 import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.util.ShipBuilder;
 
 /**
  * ship is a class of modules meant to simulate the core mechanics of a ship.
@@ -448,6 +448,9 @@ public class Ship extends GameObject {
         if (newTile == null) {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
             return null;
+        } else if(newTile.getID() == ID.CommunicationTile){
+            handleCommunicationTile((CommunicationTile) newTile, collectedTileArray);
+            return null;
         } else { // if Tile produced then swap the tiles used out of existence and return the new one.
             // TODO : Replace build tile sound
             Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
@@ -457,6 +460,12 @@ public class Ship extends GameObject {
             ShipTile result = addTileToShip(vector2.x, vector2.y, newTile);
             System.out.println("Building new tile " + result.getID());
             return result;
+        }
+    }
+
+    private void handleCommunicationTile(CommunicationTile newTile, Array<ShipTile> collectedTileArray) {
+        if(newTile.getIdentity() == CommunicationTile.FUELING_SHIP){
+            fuelTank.addFuel(newTile.getIntValue());
         }
     }
 
