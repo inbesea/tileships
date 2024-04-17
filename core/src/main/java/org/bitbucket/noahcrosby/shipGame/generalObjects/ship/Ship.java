@@ -101,18 +101,6 @@ public class Ship extends GameObject {
     }
 
     /**
-     * Sets the initial tiles.
-     * TODO : This can be another class that takes an argument to determine what ship will be initialized. MOVE IT OUT
-     */
-    public void initialize(ShipBuilder tiles) {
-        addTileToShip(position.x, position.y, ID.CoreTile);
-        addTileToShip(position.x + ShipTile.TILE_SIZE, position.y, ID.StandardTile);
-        addTileToShip(position.x + ShipTile.TILE_SIZE, position.y + ShipTile.TILE_SIZE, ID.StandardTile);
-        addTileToShip(position.x, position.y + ShipTile.TILE_SIZE, ID.StandardTile);
-        addTileToShip(position.x + ShipTile.TILE_SIZE * 2, position.y + ShipTile.TILE_SIZE, ID.StandardTile);
-    }
-
-    /**
      * This Method adds a tile to the ship with a reference to the tile's x and y
      * positions , the color, ID, and camera object for updating
      * the render location
