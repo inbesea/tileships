@@ -105,6 +105,7 @@ public class TileCondenser {
         ID temp = attemptArrayStringMatch(reverseCompareString);
         if (id != null && temp != null) throw new RuntimeException("Double recipe match error\n");
 
+        if(temp != null) id = temp;
         // Return result, will be null without match
         return id;
     }
