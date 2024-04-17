@@ -42,7 +42,6 @@ public class Ship extends GameObject {
     private final CollectionManager collectionManager;
     private final TileCondenser tileCondenser;
     private final ShipTilesManager shipTilesManager;
-    public boolean mute;
     public FuelTank fuelTank;
     int initFuel = 5;
     int initFuelCapacity = 5;
@@ -63,7 +62,6 @@ public class Ship extends GameObject {
         // Give new ship default tiles.
         /* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
          *   that creates tiles based on a list of tile instances */
-        mute = false;
         publisher = new Signal<>();
 
         fuelTank = new FuelTank(initFuel, initFuelCapacity);
