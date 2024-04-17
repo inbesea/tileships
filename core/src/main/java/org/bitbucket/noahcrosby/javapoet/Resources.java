@@ -48,6 +48,8 @@ public class Resources {
 
     public static Texture CraftingIconPressedTexture;
 
+    public static Texture FurnaceTexture;
+
     public static Texture HoverIndicatorTexture;
 
     public static Texture PowerTilePoweredTexture;
@@ -102,6 +104,7 @@ public class Resources {
         assetManager.load("Textures/constallationMap.png", Texture.class);
         assetManager.load("Textures/craftingIcon.png", Texture.class);
         assetManager.load("Textures/craftingIconPressed.png", Texture.class);
+        assetManager.load("Textures/furnace.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/PowerTile_Powered.png", Texture.class);
         assetManager.load("Textures/PowerTile_Unpowered.png", Texture.class);
@@ -142,6 +145,7 @@ public class Resources {
             ConstallationMapTexture = assetManager.get("Textures/constallationMap.png");
             CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
             CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
+            FurnaceTexture = assetManager.get("Textures/furnace.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
             PowerTilePoweredTexture = assetManager.get("Textures/PowerTile_Powered.png");
             PowerTileUnpoweredTexture = assetManager.get("Textures/PowerTile_Unpowered.png");
