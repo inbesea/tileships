@@ -46,11 +46,11 @@ public class TileRecipes {
                 fuel.add(tiles.get(i));
             }
         }
-        if (fuel.size > 0 && furnace > 0) {
+        if (fuel.size > 0 && furnace > 0) { // If there is fuel and a furnace
             int fuelAmt = 0;
             for(int i = 0 ; i < fuel.size ; i++){
                 fuelAmt++; // Could make different tiles produce different amounts of fuel
-                fuel.get(i).setIsDeadTrue();
+                // This is a complicated way to say fuelamt = fuel.size currently. It will probably change later.
             }
             CommunicationTile communicationTile = new CommunicationTile();
             communicationTile.setIdentity(CommunicationTile.FUELING_SHIP);

@@ -52,12 +52,12 @@ public class TileCondenser {
         ShipTile result;
         ID id;
 
-        // Faster check for single tile
+        // single tile check
         if (tiles.size == 1) return TileTypeFactory.getShipTileTypeInstance(new Vector2(0, 0), singleTileHandle(tiles));
 
         id = checkStringRecipeMatches(tiles);
 
-        result = checkCollectionRecipeMatches(tiles);
+        result = checkCollectionRecipeMatches(tiles); // Lambda recipes
         if(result != null) return result;
 
         if(id != null) { // This is too specific, we want to be able to produce more specific stuff than this.

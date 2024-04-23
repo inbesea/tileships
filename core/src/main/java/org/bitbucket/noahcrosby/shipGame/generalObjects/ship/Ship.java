@@ -465,7 +465,24 @@ public class Ship extends GameObject {
 
     private void handleCommunicationTile(CommunicationTile newTile, Array<ShipTile> collectedTileArray) {
         if(newTile.getIdentity() == CommunicationTile.FUELING_SHIP){
-            fuelTank.addFuel(newTile.getIntValue());
+            if(fuelTank.getFuelCapacity() >= newTile.getIntValue() + fuelTank.getFuel()){
+                fuelTank.addFuel(newTile.getIntValue());
+            } else {
+                int spaceLeft = fuelTank.getFuelCapacity() - (fuelTank.getFuel());
+                int i = 0;
+                while(i < spaceLeft){
+                    // remove tiles that would overflow the tank.
+                    ShipTile temp = collectedTileArray.get(i);
+                    if(temp.getID() != ID.FurnaceTile && temp.isFuel()){
+                        collectedTileArray.get(i).setIsDeadTrue();
+                        i++;
+                    } else {
+                        i++;
+                    }
+                }
+                fuelTank.addFuel(i);
+            }
+
         }
     }
 
