@@ -55,10 +55,10 @@ public class HUD {
         this.playerShip = game.getPlayerShip();
 
 //        String fuel = playerShip.fuelTank.getFuel().toString();
-        TypingConfig.GLOBAL_VARS.put("FUELAMT", playerShip.fuelTank.getFuel().toString());
+        TypingConfig.GLOBAL_VARS.put("FUELAMT", playerShip.fuelTank.getFuelCount().toString());
         fuelLabel = new TypingLabel("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : {VAR=FUELAMT}" +
                 " / " + playerShip.fuelTank.getFuelCapacity(), skin);
-        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuel().toString());
+        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuelCount().toString());
 //        fuelLabel.setVariable("fuel", fuel);
 
         HUDScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
@@ -91,7 +91,7 @@ public class HUD {
 
         fuelLabel.setText("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : {VAR=FUELAMT}" +
                 " / " + playerShip.fuelTank.getFuelCapacity());
-        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuel().toString());
+        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuelCount().toString());
 
         HUDTable.setDebug(AppPreferences.getAppPreferences().getIsDebug());
         HUDStage.getCamera().update();

@@ -24,7 +24,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     public final static float TILE_SIZE = 64f;
     private final Rectangle bounds;
     private final TileTypeData typeData; // Need for unique platonic form data
-    private boolean isDead = false;
+    private Boolean isDead = false;
 
     /**
      * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
@@ -302,7 +302,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     /**
      * Call to remove this tile from it's manager.
      */
-    public boolean setIsDeadTrue() {
+    public Boolean setIsDeadTrue() {
         setIsDead(true);
         return getIsDead();
     }
@@ -311,7 +311,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         return isDead;
     }
 
-    public boolean setIsDead(boolean isDead){
+    public Boolean setIsDead(Boolean isDead){
         this.isDead = isDead;
         return this.isDead;
     }
@@ -380,5 +380,14 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 
     public boolean isFuel() {
         return false;
+    }
+
+    /**
+     * Returns 1 for fuel
+     * Override later to make fuel value differ
+     * @return
+     */
+    public Integer fuelValue() {
+        return 1;
     }
 }
