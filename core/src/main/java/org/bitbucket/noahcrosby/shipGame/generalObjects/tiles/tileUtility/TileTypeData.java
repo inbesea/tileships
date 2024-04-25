@@ -13,7 +13,11 @@ public enum TileTypeData {
     ColorTile("CLR"),
     AncientTile("ANC"),
     CommunicationTile("ERR")/*Should not be used*/,
-    FurnaceTile("FRN");
+    FurnaceTile("FRN"),
+    GlassTile("GLS"),
+    MetalTile("MET"),
+    WoodTile("WOD"),
+    SprayPaintTile("SPR");
 
     public String getAbbreviation() {
         return abbreviation;
