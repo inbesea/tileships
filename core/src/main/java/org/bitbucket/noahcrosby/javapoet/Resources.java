@@ -50,6 +50,8 @@ public class Resources {
 
     public static Texture FurnaceTexture;
 
+    public static Texture GlassTileTexture;
+
     public static Texture HoverIndicatorTexture;
 
     public static Texture PowerTilePoweredTexture;
@@ -78,6 +80,8 @@ public class Resources {
 
     public static Texture ToBeCollapsedTexture;
 
+    public static Texture WoodTileTexture;
+
     public static Music MainMenuExtendedMessingaroundMusic;
 
     public static Music MainMenuTuneMusic;
@@ -105,6 +109,7 @@ public class Resources {
         assetManager.load("Textures/craftingIcon.png", Texture.class);
         assetManager.load("Textures/craftingIconPressed.png", Texture.class);
         assetManager.load("Textures/furnace.png", Texture.class);
+        assetManager.load("Textures/GlassTile.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/PowerTile_Powered.png", Texture.class);
         assetManager.load("Textures/PowerTile_Unpowered.png", Texture.class);
@@ -119,6 +124,7 @@ public class Resources {
         assetManager.load("Textures/ShipTile_Red.png", Texture.class);
         assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
         assetManager.load("Textures/ToBeCollapsed.png", Texture.class);
+        assetManager.load("Textures/WoodTile.png", Texture.class);
         assetManager.load("Music/MainMenu Extended Messingaround.wav", Music.class);
         assetManager.load("Music/MainMenuTune.wav", Music.class);
     }
@@ -146,6 +152,7 @@ public class Resources {
             CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
             CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
             FurnaceTexture = assetManager.get("Textures/furnace.png");
+            GlassTileTexture = assetManager.get("Textures/GlassTile.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
             PowerTilePoweredTexture = assetManager.get("Textures/PowerTile_Powered.png");
             PowerTileUnpoweredTexture = assetManager.get("Textures/PowerTile_Unpowered.png");
@@ -160,6 +167,7 @@ public class Resources {
             ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
             ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
             ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
+            WoodTileTexture = assetManager.get("Textures/WoodTile.png");
             MainMenuExtendedMessingaroundMusic = assetManager.get("Music/MainMenu Extended Messingaround.wav");
             MainMenuTuneMusic = assetManager.get("Music/MainMenuTune.wav");
         }
