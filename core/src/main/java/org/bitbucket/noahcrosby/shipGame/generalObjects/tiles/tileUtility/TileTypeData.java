@@ -11,7 +11,9 @@ public enum TileTypeData {
     StandardTile("STD"),
     StrongTile("STR"),
     ColorTile("CLR"),
-    AncientTile("ANC");
+    AncientTile("ANC"),
+    CommunicationTile("ERR")/*Should not be used*/,
+    FurnaceTile("FRN");
 
     public String getAbbreviation() {
         return abbreviation;

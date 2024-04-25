@@ -377,4 +377,8 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     public String getTileInfoString() {
         return this.getAbbreviation() + " at " + getPositionAsString();
     }
+
+    public boolean isFuel() {
+        return false;
+    }
 }

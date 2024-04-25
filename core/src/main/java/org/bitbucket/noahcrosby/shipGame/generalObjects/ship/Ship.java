@@ -11,11 +11,11 @@ import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.CommunicationTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.player.TileHoverIndicator;
 import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.util.ShipBuilder;
 
 /**
  * ship is a class of modules meant to simulate the core mechanics of a ship.
@@ -42,7 +42,6 @@ public class Ship extends GameObject {
     private final CollectionManager collectionManager;
     private final TileCondenser tileCondenser;
     private final ShipTilesManager shipTilesManager;
-    public boolean mute;
     public FuelTank fuelTank;
     int initFuel = 5;
     int initFuelCapacity = 5;
@@ -63,7 +62,6 @@ public class Ship extends GameObject {
         // Give new ship default tiles.
         /* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
          *   that creates tiles based on a list of tile instances */
-        mute = false;
         publisher = new Signal<>();
 
         fuelTank = new FuelTank(initFuel, initFuelCapacity);
@@ -100,18 +98,6 @@ public class Ship extends GameObject {
                         ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
             }
         }
-    }
-
-    /**
-     * Sets the initial tiles.
-     * TODO : This can be another class that takes an argument to determine what ship will be initialized. MOVE IT OUT
-     */
-    public void initialize(ShipBuilder tiles) {
-        addTileToShip(position.x, position.y, ID.CoreTile);
-        addTileToShip(position.x + ShipTile.TILE_SIZE, position.y, ID.StandardTile);
-        addTileToShip(position.x + ShipTile.TILE_SIZE, position.y + ShipTile.TILE_SIZE, ID.StandardTile);
-        addTileToShip(position.x, position.y + ShipTile.TILE_SIZE, ID.StandardTile);
-        addTileToShip(position.x + ShipTile.TILE_SIZE * 2, position.y + ShipTile.TILE_SIZE, ID.StandardTile);
     }
 
     /**
@@ -462,6 +448,9 @@ public class Ship extends GameObject {
         if (newTile == null) {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
             return null;
+        } else if(newTile.getID() == ID.CommunicationTile){
+            handleCommunicationTile((CommunicationTile) newTile, collectedTileArray);
+            return null;
         } else { // if Tile produced then swap the tiles used out of existence and return the new one.
             // TODO : Replace build tile sound
             Vector2 vector2 = collectedTileArray.get(collectedTileArray.size - 1).getPosition(); // Use last tile in line as new tile position
@@ -471,6 +460,29 @@ public class Ship extends GameObject {
             ShipTile result = addTileToShip(vector2.x, vector2.y, newTile);
             System.out.println("Building new tile " + result.getID());
             return result;
+        }
+    }
+
+    private void handleCommunicationTile(CommunicationTile newTile, Array<ShipTile> collectedTileArray) {
+        if(newTile.getIdentity() == CommunicationTile.FUELING_SHIP){
+            if(fuelTank.getFuelCapacity() >= newTile.getIntValue() + fuelTank.getFuel()){
+                fuelTank.addFuel(newTile.getIntValue());
+            } else {
+                int spaceLeft = fuelTank.getFuelCapacity() - (fuelTank.getFuel());
+                int i = 0;
+                while(i < spaceLeft){
+                    // remove tiles that would overflow the tank.
+                    ShipTile temp = collectedTileArray.get(i);
+                    if(temp.getID() != ID.FurnaceTile && temp.isFuel()){
+                        collectedTileArray.get(i).setIsDeadTrue();
+                        i++;
+                    } else {
+                        i++;
+                    }
+                }
+                fuelTank.addFuel(i);
+            }
+
         }
     }
 

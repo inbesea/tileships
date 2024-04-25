@@ -27,6 +27,7 @@ public class UnlockTracker {
         // TODO : Replace this static approach with a new approach
         allStringRecipes.add(new TileRecipes("STD0STD1STD2STD", ID.StrongTile));
         allLambdaRecipes.add(TileRecipes.arcadeRemove);
+        allLambdaRecipes.add(TileRecipes.addFuel);
     }
 
     public boolean unlockRecipe(ID newUnlock){

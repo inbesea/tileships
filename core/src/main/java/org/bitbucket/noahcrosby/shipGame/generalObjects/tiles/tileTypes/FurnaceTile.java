@@ -3,25 +3,25 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 
 /**
  * Classic engine. Gives the ship the power of movement.
  * Each engine can be given a block of fuel to produce a node of movement.
  */
-public class EngineTile extends ShipTile{
+public class FurnaceTile extends ShipTile{
 
     private boolean isFueled;
 
-    public EngineTile(Vector2 position, TileTypeData typeData) {
-        super(position, ID.EngineTile, typeData);
+    public FurnaceTile(Vector2 position) {
+        super(position, ID.FurnaceTile, TileTypeData.FurnaceTile);
     }
 
     @Override
     public Texture getTexture() {
-        return null;
+        return Resources.FurnaceTexture;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class EngineTile extends ShipTile{
 
     @Override
     public boolean isInvulnerable() {
-        return false;
+        return true;
     }
 
     /**
@@ -40,12 +40,7 @@ public class EngineTile extends ShipTile{
      */
     @Override
     public void replaced() {
-        AdjacentTiles adjacentTiles = this.getNeighbors();
-        if(adjacentTiles.contain(ID.FuelTile)){
-            this.setIsFuled(true);
-        }else{
-            this.setIsFuled(false);
-        }
+
     }
 
     private boolean setIsFuled(boolean b) {

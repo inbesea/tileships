@@ -163,7 +163,7 @@ public class TileDragHandler extends InputAdapter {
             without constructing anything.
             If the player doesn't make anything then we keep going, but the array is wiped.
             */
-            Array<ShipTile> collectedTileArray = playerShip.getCollapseCollect(); // Return collected
+            Array<ShipTile> collectedTileArray = playerShip.finishCollapseCollect(); // Return collected
             // Continue collect with clear array?
             if (collectedTileArray.isEmpty()) {
                 System.out.println("Tiles collected : None");

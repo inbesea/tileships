@@ -30,6 +30,8 @@ public class TileTypeFactory {
                 return new ColorTile(vector2);
             case AncientTile:
                 return new AncientTile(vector2);
+            case FurnaceTile:
+                return new FurnaceTile(vector2);
             default: return null;
         }
     }
