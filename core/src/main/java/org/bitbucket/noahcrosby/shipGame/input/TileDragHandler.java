@@ -55,10 +55,13 @@ public class TileDragHandler extends InputAdapter {
         if (getDragging() && playerShip.isDragging()) {
             ShipTile draggedTile = playerShip.getDraggedTile();
             Vector3 playerInputPosition = returnUnprojectedInputPosition(GameScreen.getGameCamera());
-            float targetX = playerInputPosition.x - ShipTile.TILE_SIZE / 2.0f;
-            float targetY = playerInputPosition.y - ShipTile.TILE_SIZE / 2.0f;
-            draggedTile.setX(sOD_x.Update(Gdx.graphics.getDeltaTime(), targetX, null));
-            draggedTile.setY(sOD_y.Update(Gdx.graphics.getDeltaTime(), targetY, null));
+            // TODO : Add wobbly tile dragging preferences option?
+            draggedTile.setX(playerInputPosition.x - ShipTile.TILE_SIZE / 2.0f);
+            draggedTile.setY(playerInputPosition.y - ShipTile.TILE_SIZE / 2.0f);
+//            float targetX = playerInputPosition.x - ShipTile.TILE_SIZE / 2.0f;
+//            float targetY = playerInputPosition.y - ShipTile.TILE_SIZE / 2.0f;
+//            draggedTile.setX(sOD_x.Update(Gdx.graphics.getDeltaTime(), targetX, null));
+//            draggedTile.setY(sOD_y.Update(Gdx.graphics.getDeltaTime(), targetY, null));
         }
         if (placingTile) { // True after touchup()
             ShipTile draggedTile = playerShip.getDraggedTile();
