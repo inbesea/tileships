@@ -78,6 +78,8 @@ public class MapNavManager {
     private void checkForRefuel() {
         if(currentNode.equals(currentMap.getEntryNode())){
             ship.fuelTank.fill();
+        } else if(currentNode.tryRefuel()){
+            ship.fuelTank.fill();
         }
     }
 
