@@ -24,8 +24,11 @@ public class AncientTile extends ShipTile{
     }
 
     public AncientTile(Vector2 vector2) {
-        super(vector2, ID.AncientTile, TileTypeData.AncientTile);
-        super.isInvulnerable = false;
+        super(
+            vector2,
+            ID.AncientTile,
+            TileTypeData.AncientTile
+        );
     }
 
     @Override

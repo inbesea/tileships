@@ -2,6 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 
@@ -30,7 +31,7 @@ public class MetalTile extends ShipTile {
 
     @Override
     public Texture getTexture() {
-        return null;
+        return Resources.MetalTileTexture;
     }
 
     @Override

@@ -54,6 +54,8 @@ public class Resources {
 
     public static Texture HoverIndicatorTexture;
 
+    public static Texture MetalTileTexture;
+
     public static Texture PowerTilePoweredTexture;
 
     public static Texture PowerTileUnpoweredTexture;
@@ -77,6 +79,8 @@ public class Resources {
     public static Texture ShipTileRedTexture;
 
     public static Texture ShipTileStrongTexture;
+
+    public static Texture SprayPaintTileTexture;
 
     public static Texture ToBeCollapsedTexture;
 
@@ -111,6 +115,7 @@ public class Resources {
         assetManager.load("Textures/furnace.png", Texture.class);
         assetManager.load("Textures/GlassTile.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
+        assetManager.load("Textures/MetalTile.png", Texture.class);
         assetManager.load("Textures/PowerTile_Powered.png", Texture.class);
         assetManager.load("Textures/PowerTile_Unpowered.png", Texture.class);
         assetManager.load("Textures/RobotV2.png", Texture.class);
@@ -123,6 +128,7 @@ public class Resources {
         assetManager.load("Textures/ShipTile_Core.png", Texture.class);
         assetManager.load("Textures/ShipTile_Red.png", Texture.class);
         assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
+        assetManager.load("Textures/SprayPaintTile.png", Texture.class);
         assetManager.load("Textures/ToBeCollapsed.png", Texture.class);
         assetManager.load("Textures/WoodTile.png", Texture.class);
         assetManager.load("Music/MainMenu Extended Messingaround.wav", Music.class);
@@ -154,6 +160,7 @@ public class Resources {
             FurnaceTexture = assetManager.get("Textures/furnace.png");
             GlassTileTexture = assetManager.get("Textures/GlassTile.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
+            MetalTileTexture = assetManager.get("Textures/MetalTile.png");
             PowerTilePoweredTexture = assetManager.get("Textures/PowerTile_Powered.png");
             PowerTileUnpoweredTexture = assetManager.get("Textures/PowerTile_Unpowered.png");
             RobotV2Texture = assetManager.get("Textures/RobotV2.png");
@@ -166,6 +173,7 @@ public class Resources {
             ShipTileCoreTexture = assetManager.get("Textures/ShipTile_Core.png");
             ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
             ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
+            SprayPaintTileTexture = assetManager.get("Textures/SprayPaintTile.png");
             ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
             WoodTileTexture = assetManager.get("Textures/WoodTile.png");
             MainMenuExtendedMessingaroundMusic = assetManager.get("Music/MainMenu Extended Messingaround.wav");
