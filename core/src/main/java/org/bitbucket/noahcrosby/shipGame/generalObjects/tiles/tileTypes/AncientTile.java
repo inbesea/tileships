@@ -25,6 +25,7 @@ public class AncientTile extends ShipTile{
 
     public AncientTile(Vector2 vector2) {
         super(vector2, ID.AncientTile, TileTypeData.AncientTile);
+        super.isInvulnerable = false;
     }
 
     @Override
@@ -38,11 +39,6 @@ public class AncientTile extends ShipTile{
 
     @Override
     public boolean deleteFromGame() {
-        return false;
-    }
-
-    @Override
-    public boolean isInvulnerable() {
         return false;
     }
 

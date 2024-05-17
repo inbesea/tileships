@@ -246,8 +246,13 @@ public class Ship extends GameObject {
         return true;
     }
 
-    public void setDraggedTile(ShipTile draggedTile) {
-        this.draggedTile = draggedTile;
+    /**
+     * Sets the tile that is currently being dragged by the player.
+     *
+     * @param tile The tile being dragged.
+     */
+    public void setDraggedTile(ShipTile tile) {
+        this.draggedTile = tile;
     }
 
     /**

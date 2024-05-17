@@ -28,7 +28,7 @@ public enum TileTypeData {
     }
 
     private String abbreviation;
-    TileTypeData(String abbreviation){
+    TileTypeData(String abbreviation) {
         this.abbreviation = abbreviation;
     }
 

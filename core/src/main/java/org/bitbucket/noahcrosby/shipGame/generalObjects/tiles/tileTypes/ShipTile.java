@@ -25,6 +25,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     private final Rectangle bounds;
     private final TileTypeData typeData; // Need for unique platonic form data
     private Boolean isDead = false;
+    protected Boolean isInvulnerable = false;
 
     /**
      * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
@@ -42,9 +43,11 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         // Need to knit together the shiptile to adjacent tiles connectAdjacent();
     }
 
-    public abstract boolean isInvulnerable();
-    //These methods are for updating tiles when they're grabbing and placing a tile back.
+    public boolean isInvulnerable(){
+        return isInvulnerable;
+    }
 
+    //These methods are for updating tiles when they're grabbing and placing a tile back.
     /**
      * Tile performs placement actions here as implemented.
      */
@@ -88,8 +91,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     public String getAbbreviation() {
         return typeData.getAbbreviation();
     }
-
-    ;
 
     /**
      * Renders text specifying the shipTile's indices
