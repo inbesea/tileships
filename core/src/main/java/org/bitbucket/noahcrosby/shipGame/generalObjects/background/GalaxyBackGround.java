@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.levelData.ForegroundObject;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
@@ -15,7 +14,9 @@ import java.util.Objects;
 
 public class GalaxyBackGround {
     private Boolean[][] stars;
-    Pair<Integer, Integer> fieldSize;
+
+    Integer fieldSizeX;
+    Integer fieldSizeY;
     float density;
     // Objects to draw infront of everything.
     private Array<ForegroundObject> foregroundObjects = new Array<>();
@@ -23,7 +24,8 @@ public class GalaxyBackGround {
 
     public GalaxyBackGround(Integer x, Integer y, float percentStars){
         physics = new Box2DWrapper(new Vector2(0,0), true);
-        fieldSize = Pair.of(x, y);
+        fieldSizeX = x;
+        fieldSizeY = y;
         stars = new Boolean[x][y];
         this.density = percentStars;
         populateArray();
@@ -31,8 +33,8 @@ public class GalaxyBackGround {
 
     private void populateArray(){
         // Take each element and set to 1 or 0, 1 being a star, and 0 being nothing
-        for(int i = 0; i < fieldSize.getLeft(); i++){
-            for (int n = 0; n < fieldSize.getRight(); n++){
+        for(int i = 0; i < fieldSizeX; i++){
+            for (int n = 0; n < fieldSizeY; n++){
                 if(stars[i][n] != null) continue; // Don't repopulate
 
                 // If the likelyhood is bigger than a random amount then get stuff.
@@ -47,8 +49,8 @@ public class GalaxyBackGround {
     public void draw(TileShipGame game){
         TileShipGame.batch.begin();
         Texture starTexture = Resources.AsteroidSilverTexture;
-        for(int i = 0; i < fieldSize.getLeft(); i++){
-            for (int n = 0; n < fieldSize.getRight(); n++){
+        for(int i = 0; i < fieldSizeX; i++){
+            for (int n = 0; n < fieldSizeY; n++){
                 Vector2 size = new Vector2(1,1);
                 if(stars[i][n]){
                     // Terrible star drawing method. Uses the silver asteroid texture
@@ -69,22 +71,24 @@ public class GalaxyBackGround {
     public void update(Integer width, Integer height) {
         Gdx.app.log("", "Resizing the galaxybackground " + width + "," + height);
         // First updating the bounds if they're bigger
-        Pair<Integer, Integer> newSize = Pair.of(this.fieldSize);
-        boolean newWidthBigger = width > this.fieldSize.getLeft();
-        boolean newHightBigger = height > this.fieldSize.getRight();
+        Integer newX = this.fieldSizeX;
+        Integer newY = this.fieldSizeY;
+        boolean newWidthBigger = width > this.fieldSizeX;
+        boolean newHightBigger = height > this.fieldSizeY;
         if(newWidthBigger){ // Resizing the bounds, and trying to generate new values
-            newSize = Pair.of(width, newSize.getRight());
+            newX = width;
         }
         if(newHightBigger){
-            newSize = Pair.of(newSize.getLeft(), height);
+            newY = height;
         }
 
-        if(Objects.equals(this.fieldSize.getRight(), newSize.getRight()) &&
-            Objects.equals(this.fieldSize.getLeft(), newSize.getLeft()))return; // No changes needed if the new size is not different
+        if(Objects.equals(this.fieldSizeY, newY) &&
+            Objects.equals(this.fieldSizeX, newX))return; // No changes needed if the new size is not different
 
-        this.fieldSize = newSize;
+        this.fieldSizeY = newY;
+        this.fieldSizeX = newX;
 
-        Boolean[][] newStars = new Boolean[(int)newSize.getLeft()][(int)newSize.getRight()];
+        Boolean[][] newStars = new Boolean[(int)newX][(int)newY];
 
         for(int i = 0 ; i < stars.length ; i++){
             System.arraycopy(stars[i], 0 , newStars[i], 0, stars[i].length);
