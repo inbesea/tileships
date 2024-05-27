@@ -29,6 +29,7 @@ public class TileShipGame extends Game {
 	private Ship playerShip;
 	public static int zoomSpeed = 5;
 	public static float defaultViewportSizeX = 700f, defaultViewportSizeY = 500f;
+    public static float spawnRadius = 700f;
 	public static float meterLength = 64f;
 	private Array<GameObject> gameObjects = new Array<>();
 

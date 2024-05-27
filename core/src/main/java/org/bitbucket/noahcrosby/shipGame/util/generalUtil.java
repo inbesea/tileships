@@ -218,6 +218,12 @@ public class generalUtil {
         }
     }
 
+    /**
+     * Creates new dynamic body definition using the passed location values.
+     * @param x - x location
+     * @param y - y location
+     * @return - Dynamic BodyDef
+     */
     public static BodyDef newDynamicBodyDef(float x, float y) {
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();

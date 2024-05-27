@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.physics.box2d;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
@@ -53,6 +54,11 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         box2DDebugRenderer.render(world, orthoCamera.combined);
     }
 
+    @Override
+    public void newBody(GameObject object) {
+        Gdx.app.debug("spawnAsteroid", "NOT IMPLEMENTED");
+    }
+
     /**
      * Draws the physics object shapes
      *  *NOTE* : Does not scale to the game size.
@@ -63,9 +69,11 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         box2DDebugRenderer.render(world, matrix4);
     }
 
-    @Override
-    public void newBody(GameObject gameObject) {
-
+    public BodyDef newBody(PhysicsObject physicsObject) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = physicsObject.getBodyType();
+        bodyDef.position.set(physicsObject.getPhysicsPosition());
+        return bodyDef;
     }
 
     /**
@@ -97,6 +105,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
 
                 // Meant to move the reference point to the bottom left a bit to align with the physics objects.
                 gameObjectNewPosition = new Vector2(b.getPosition().x - gameObject.getSize().x / 2, b.getPosition().y - gameObject.getSize().y / 2);
+
                 // Scale up to actual game size
                 gameObjectNewPosition.x = gameObjectNewPosition.x * ShipTile.TILE_SIZE;
                 gameObjectNewPosition.y = gameObjectNewPosition.y * ShipTile.TILE_SIZE;
@@ -145,11 +154,33 @@ public class Box2DWrapper implements Box2DWrapperInterface {
      * @param physicsObject the PhysicsObject to set
      */
     public void initPhysicsObject(PhysicsObject physicsObject) {
-        // Set unique physicsObject properties
-        Body body = physicsObject.setPhysics(world);
 
+        // Set up bodyDef
+        BodyDef bodyDef = newBody(physicsObject);
+
+        // Create body
+        Body body = this.world.createBody(bodyDef);
+        if(body.getType().equals(BodyDef.BodyType.DynamicBody)){
+            body.setLinearVelocity(physicsObject.getInitVelocity());
+        }
+        Shape shape = physicsObject.getShape();
+
+        // Set up fixture
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = physicsObject.getDensity();
+        fixtureDef.friction = physicsObject.getFriction();
+        fixtureDef.restitution = physicsObject.getRestitution();
+        fixtureDef.filter.categoryBits = physicsObject.getCategoryBits();
+        fixtureDef.filter.maskBits = physicsObject.getMaskBits();
+        Fixture fixture = body.createFixture(fixtureDef);
+
+        // Finish up and clean up.
+        fixture.setUserData(physicsObject);
         body.setUserData(physicsObject);
         physicsObject.setBody(body);
+
+        shape.dispose();
 
         // This step makes the body available to use on the screen level.
         this.bodies.add(body);

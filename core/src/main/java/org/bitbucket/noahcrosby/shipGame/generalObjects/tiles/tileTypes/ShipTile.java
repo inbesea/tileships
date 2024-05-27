@@ -327,33 +327,45 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         return new Vector2(position.x + this.size.x / 2f, position.y + this.size.y / 2f);
     }
 
-    public Body setPhysics(World world) {
-        // Adjust init position to center the box on the tile
-        BodyDef bodyDef = generalUtil.newStaticBodyDef(
-                (position.x / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f, // Position and size scaled up to game size.
-                (position.y / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f
+    public Shape getShape() {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(0.5f, 0.5f);
+
+        // Position and size scaled up to game size.
+        return shape;
+    }
+
+    @Override
+    public float getDensity() {
+        return 0.0f;
+    }
+
+    @Override
+    public float getFriction() {
+        return 1.0f;
+    }
+
+    @Override
+    public float getRestitution() {
+        return 0.0f;
+    }
+
+    @Override
+    public Vector2 getPhysicsPosition() {
+        return new Vector2(
+            (position.x / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f, // Position and size scaled up to game size.
+            (position.y / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f
         );
-        Body body = world.createBody(bodyDef);
+    }
 
-        PolygonShape tileShape = new PolygonShape();
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return BodyDef.BodyType.StaticBody;
+    }
 
-        // Specific to tiles. This is too specific.
-        tileShape.setAsBox(0.5f, 0.5f);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = tileShape;
-        fixtureDef.density = 0.0f;
-        fixtureDef.friction = 1.0f;
-        fixtureDef.restitution = 0.0f;
-
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(this);
-
-        // Remember to dispose of any shapes after you're done with them!
-        // BodyDef and FixtureDef don't need disposing, but shapes do.
-        tileShape.dispose();
-
-        return body;
+    @Override
+    public Vector2 getInitVelocity() {
+        return null;
     }
 
     @Override
