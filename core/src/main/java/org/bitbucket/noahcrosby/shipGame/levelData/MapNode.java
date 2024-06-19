@@ -208,8 +208,9 @@ public class MapNode extends GameObject {
     /**
      * Set the asteroids in this MapNode
      */
-    public void setAsteroids(Array<Asteroid> asteroids){
+    public MapNode setAsteroids(Array<Asteroid> asteroids){
         this.asteroids = asteroids;
+        return this;
     }
 
     public Array<Asteroid> getAsteroids() {

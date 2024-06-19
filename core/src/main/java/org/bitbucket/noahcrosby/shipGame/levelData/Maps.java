@@ -35,8 +35,16 @@ public class Maps {
      * @return
      */
     public static SpaceMap getBasicSpacemap(int nodes){
+
         SpaceMap map = new SpaceMap();
-        map.setEntryNode(map.addNode(10,10)).setAsteroids(AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME()));
+
+        // Add entry node, add asteroids to node
+        MapNode entryNode = map.addNode(10,10);
+        map.setEntryNode(entryNode);
+        entryNode.setAsteroids(
+            AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME())
+        );
+
         // Generate a bunch of nodes
         for(int i = 0; i < nodes; i++){
             map.addNode(generalUtil.getRandomNumber(10, 500), generalUtil.getRandomNumber(10, 500))

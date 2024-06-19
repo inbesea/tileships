@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
+import com.badlogic.gdx.Gdx;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -91,6 +92,11 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      */
     public String getAbbreviation() {
         return typeData.getAbbreviation();
+    }
+
+    public Integer getPrice(){
+        Gdx.app.debug("ShipTile.java", "Default tile price being used!");
+        return 10;
     }
 
     /**
