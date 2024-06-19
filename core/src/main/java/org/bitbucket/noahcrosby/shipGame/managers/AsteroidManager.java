@@ -58,7 +58,6 @@ public class AsteroidManager implements Manager {
 
         this.asteroidSpawnZone = new Circle();
         asteroidSpawnZone.setRadius(spawnRadius);
-        //test
     }
 
     public AsteroidManager(Box2DWrapper box2DWrapper, OrthographicCamera camera, boolean spawning){
