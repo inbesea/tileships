@@ -70,7 +70,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     Box2DWrapper box2DWrapper;
     private boolean updateLocalMapLocation = true;
     private MapNavManager mapNavigator;
-    private MapNavigationHandler mapInputNavigator;
+    private MapNavigationInputHandler mapInputNavigator;
     GalaxyBackGround backGround;
     GoalChecker goalChecker;
 
@@ -123,7 +123,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
         tileDragHandler = new TileDragHandler(player);
-        mapInputNavigator = new MapNavigationHandler(mapNavigator, (OrthographicCamera) hud.getCamera());
+        mapInputNavigator = new MapNavigationInputHandler(mapNavigator, (OrthographicCamera) hud.getCamera());
         input.addProcessor(tileDragHandler);
         input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.playerShip, this.tileDragHandler));
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
