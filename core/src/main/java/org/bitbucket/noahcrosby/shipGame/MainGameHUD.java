@@ -50,6 +50,9 @@ public class MainGameHUD extends HUD {
         }
     }
 
+    /**
+     * Delegate method calling draw map
+     */
     protected void drawMap() {
         // Opaque block for aesthetics
         Line.drawRectangle(new Vector2(0,0), new Vector2(HUDScreenLayer.getWorldWidth(), HUDScreenLayer.getWorldHeight()),
