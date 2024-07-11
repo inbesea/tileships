@@ -41,6 +41,7 @@ public class MapNode extends GameObject {
     private Array<Asteroid> asteroids = new Array<>();
 
     protected Integer refuels = 0;
+    Boolean storeLocation = false;
 
     /**
      * General node of a map. Can be overridden for new visuals etc.
@@ -294,5 +295,13 @@ public class MapNode extends GameObject {
 
     public void setRefuels(Integer refuels) {
         this.refuels = refuels;
+    }
+
+    public Boolean isStoreLocation() {
+        return storeLocation;
+    }
+
+    public void setStoreLocation(Boolean isStoreLocation){
+        this.storeLocation = isStoreLocation;
     }
 }

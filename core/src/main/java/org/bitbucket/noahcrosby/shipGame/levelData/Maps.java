@@ -41,7 +41,7 @@ public class Maps {
 
         // Add entry node, add asteroids to node
         MapNode entryNode = map.addNode(10,10);
-        map.setEntryNode(entryNode);
+        map.setEntryNode(entryNode).setStoreLocation(true);
         entryNode.setAsteroids(
             AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME())
         );

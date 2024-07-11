@@ -1,9 +1,11 @@
 package org.bitbucket.noahcrosby.shipGame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.StringBuilder;
-import org.bitbucket.noahcrosby.AppPreferences;
+import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.shipGame.levelData.MapDrawer;
 import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.hud.HUD;
@@ -11,14 +13,20 @@ import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 
 public class MainGameHUD extends HUD {
 
-    private MapNavManager mapNavigator;
     private MapDrawer mapDrawer; // We can put this here because it's the only place we draw the map
+    protected TypingLabel storeLabel;
+    Skin skin = new Skin(Gdx.files.internal("skin/neon/skin/uiskin.json"));
 
     public MainGameHUD(TileShipGame game, MapNavManager mapNavigator) {
         super(game);
 
         setMapNavigator(mapNavigator);
         this.mapDrawer = new MapDrawer(mapNavigator.currentMap); // Put this into the navigator so the hud can be less complicated.
+
+        storeLabel = new TypingLabel("Is Store Location : {VAR=ISSTORE}",
+            skin);
+        storeLabel.skipToTheEnd();
+        HUDTable.add(storeLabel).pad(25);
     }
 
     /**
@@ -31,10 +39,11 @@ public class MainGameHUD extends HUD {
         StringBuilder stringBuilder = new StringBuilder();
 
         //Secondly draw the Hud
-        game.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
+        TileShipGame.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
 
-        if(AppPreferences.getAppPreferences().getIsDebug()){
-        }
+        storeLabel.setText("Is Store Location : {VAR=ISSTORE}");
+        storeLabel.setVariable("ISSTORE",
+            mapNavigator.getCurrentNode().isStoreLocation().toString());
 
         if(this.showingMap()){
             drawMap();
