@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
@@ -34,6 +35,7 @@ public class Ship extends GameObject {
     public Signal<Ship> publisher;
     private ShipTile draggedTile;
     public int destroyedTileCount = 0;
+    private Boolean atStoreNode = false;
 
     public CollectionManager getCollectionManager() {
         return collectionManager;
@@ -43,8 +45,9 @@ public class Ship extends GameObject {
     private final TileCondenser tileCondenser;
     private final ShipTilesManager shipTilesManager;
     public FuelTank fuelTank;
-    int initFuel = 5;
-    int initFuelCapacity = 5;
+    Double initFuel = 5d;
+    Double initFuelCapacity = 5d;
+    public FuelTank bank;
 
     /**
      * ship keeps track of the tiles of the ship and has methods for
@@ -65,6 +68,7 @@ public class Ship extends GameObject {
         publisher = new Signal<>();
 
         fuelTank = new FuelTank(initFuel, initFuelCapacity);
+        bank = new FuelTank(initFuel, initFuelCapacity);
     }
 
     /**
@@ -83,11 +87,31 @@ public class Ship extends GameObject {
                 tempTile.getSize().x, tempTile.getSize().y);
             tempTile.render(game);
         }
+
+        // Draw tile sell values if valid
+        if (this.atStoreNode) {
+            for (int i = 0; i < existing.size; i++) {
+                ShipTile tempTile = existing.get(i);
+                TypingLabel value = new TypingLabel("{SIZE=50%}{COLOR=GOLD}{STYLE=SHINE}$" + tempTile.getTileSellValue(), TileShipGame.defaultSkin);
+                value.skipToTheEnd();
+                value.setPosition(tempTile.getX() + 4, tempTile.getY() + tempTile.getSize().y - 12);
+                value.draw(TileShipGame.batch, 1f);
+            }
+        }
+
         // Draw dragged tile
         if (draggedTile != null) {
             TileShipGame.batch.draw(draggedTile.getTexture(),
                 draggedTile.getX(), draggedTile.getY(), draggedTile.getSize().x, draggedTile.getSize().y);
+            if(atStoreNode){
+                TypingLabel value = new TypingLabel("{SIZE=50%}{COLOR=GOLD}{STYLE=SHINE}$" + this.draggedTile.getTileSellValue(),
+                    TileShipGame.defaultSkin);
+                value.skipToTheEnd();
+                value.setPosition(draggedTile.getX() + 4, draggedTile.getY() + draggedTile.getSize().y - 12);
+                value.draw(TileShipGame.batch, 1f);
+            }
         }
+
         // Draw collected tile overlay
         if (collectionManager.isCollectingTiles()) {
             Array<ShipTile> tiles = collectionManager.getTileArray();
@@ -501,6 +525,14 @@ public class Ship extends GameObject {
      */
     public boolean isDragging() {
         return draggedTile != null;
+    }
+
+    public Boolean getAtStoreNode() {
+        return atStoreNode;
+    }
+
+    public void setAtStoreNode(Boolean atSellNode) {
+        this.atStoreNode = atSellNode;
     }
 
     /**

@@ -208,6 +208,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
 
         TileShipGame.batch.begin();
         if(Resources.assetManager.update()){
+            TileShipGame.defaultSkin = new Skin(Gdx.files.internal("skin/neon/skin/uiskin.json"));
 //            if(welcome == null)welcome = new SoundTextBubble(str, 100, Resources.sfxCollectTileSound, null);
 
 //            welcome.update(new Vector2(250,350));

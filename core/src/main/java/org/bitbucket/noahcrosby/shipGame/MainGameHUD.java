@@ -26,6 +26,7 @@ public class MainGameHUD extends HUD {
         storeLabel = new TypingLabel("Is Store Location : {VAR=ISSTORE}",
             skin);
         storeLabel.skipToTheEnd();
+        HUDTable.row().pad(25);
         HUDTable.add(storeLabel).pad(25);
     }
 
@@ -41,7 +42,7 @@ public class MainGameHUD extends HUD {
         //Secondly draw the Hud
         TileShipGame.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
 
-        storeLabel.setText("Is Store Location : {VAR=ISSTORE}");
+        storeLabel.setText("{VAR=FIRE}{SIZE=75%}{STYLE=JOSTLE}Is Store {STYLE=SHINY}Location? : {CROWD}{VAR=ISSTORE}");
         storeLabel.setVariable("ISSTORE",
             mapNavigator.getCurrentNode().isStoreLocation().toString());
 
