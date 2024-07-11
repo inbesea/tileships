@@ -159,7 +159,8 @@ public class TileArrayToString {
     public String tileArrayToPrintString() {
         StringBuilder tileArrayString = new StringBuilder();
         for (ShipTile tile : tiles) {
-            tileArrayString.append(tile.getTileInfoString() + "\n");
+            tileArrayString.append(tile.getTileInfoString())
+                .append("\n");
         }
         return tileArrayString.toString();
     }

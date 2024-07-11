@@ -5,17 +5,18 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpaw
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidTable;
 import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
-import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 
 import java.util.ArrayList;
 
-
+/**
+ * initmaps, initialize maps, etc.
+ * We create maps here statically so we can programatically produce random maps with specific params.
+ * TODO: create params we can tweak and feed new values into to get more specific maps. Could even pass in lambdas to adjust things more granularly.
+ */
 public class Maps {
 
     public static org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap getTestMap(){
         SpaceMap map = new SpaceMap();
-
-
 
         return map;
     }

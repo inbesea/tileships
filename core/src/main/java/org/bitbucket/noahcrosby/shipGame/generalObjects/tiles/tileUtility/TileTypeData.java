@@ -44,7 +44,9 @@ public enum TileTypeData {
         builder.append("[");
         for(int i = 0 ; i < tiles.size ; i++){
             tile = tiles.get(i);
-            builder.append(tile.getAbbreviation() + " - " + tile.getPositionAsString());
+            builder.append(tile.getAbbreviation())
+                .append(" - ")
+                .append(tile.getPositionAsString());
             if(i != tiles.size-1)builder.append(", ");
         }
         builder.append("]");
