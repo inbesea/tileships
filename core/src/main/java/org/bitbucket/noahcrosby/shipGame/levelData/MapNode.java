@@ -289,6 +289,10 @@ public class MapNode extends GameObject {
     }
 
 
+    /**
+     * Returns number of refuels remaining
+     * @return
+     */
     public Integer getRefuels() {
         return refuels;
     }
