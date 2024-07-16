@@ -91,8 +91,8 @@ public class HUD {
 
         // Update fuelLabel with new info
         fuelLabel.setText("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : {VAR=FUELAMT}" +
-                " / " + playerShip.fuelTank.getFuelCapacity());
-        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuelCount().toString());
+                " / " + String.valueOf(playerShip.fuelTank.getFuelCapacity().intValue()));
+        fuelLabel.setVariable("FUELAMT", String.valueOf(playerShip.fuelTank.getFuelCount().intValue()));
 
         HUDTable.setDebug(AppPreferences.getAppPreferences().getIsDebug());
         HUDStage.getCamera().update();

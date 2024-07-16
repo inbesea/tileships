@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
@@ -20,6 +21,7 @@ import org.bitbucket.noahcrosby.javapoet.Resources;
  * We need the logic to be referenced from this point.
  */
 public class TileShipGame extends Game {
+    public static Skin defaultSkin = null;
     private AppPreferences appPreferences;
 	public static float zoomMax = 5;
 	public static float zoomMin = 0.5f;

@@ -153,7 +153,7 @@ public class MapNavManager {
             moveCost(currentNode, closestNode) <= ship.fuelTank.getFuelCount();
 
         if(canMove){
-            ship.fuelTank.consumeFuel(moveCost(currentNode, closestNode));
+            ship.fuelTank.consumeFuel(Double.valueOf(moveCost(currentNode, closestNode)));
             return true;
         } else {
             return false;

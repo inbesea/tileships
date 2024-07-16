@@ -360,4 +360,11 @@ public class generalUtil {
         return new Vector2(newX, newY);
 
     }
+
+    public static Double clamp(Double value, Double max, Double min) {
+
+        if (value > max) value = max;
+        if (value < min) value = min;
+        return value;
+    }
 }

@@ -10,10 +10,10 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.FuelTank;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
-import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 public abstract class ShipTile extends GameObject implements PhysicsObject {
 
@@ -27,6 +27,8 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     private final TileTypeData typeData; // Need for unique platonic form data
     private Boolean isDead = false;
     protected Boolean isInvulnerable = false;
+
+    protected FuelTank tileValue = new FuelTank(10d);
 
     /**
      * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
@@ -405,9 +407,38 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     /**
      * Returns 1 for fuel
      * Override later to make fuel value differ
+     *
      * @return
      */
-    public Integer fuelValue() {
-        return 1;
+    public Double fuelValue() {
+        return 1d;
+    }
+
+    /**
+     * Get value object of tile
+     * @return
+     */
+    public FuelTank getTileValueObject() {
+        return tileValue;
+    }
+
+    public Integer getTileSellValue() {
+        return tileValue.getFuelCount().intValue();
+    }
+
+    /**
+     * Set value object of tile
+     * @param tileValue
+     */
+    public void setTileValue(FuelTank tileValue) {
+        this.tileValue = tileValue;
+    }
+
+    /**
+     * Sets value of tile
+     * @param tileValue
+     */
+    public void setTileValue(Integer tileValue) {
+        this.tileValue.setFuelCount(Double.valueOf(tileValue));
     }
 }
