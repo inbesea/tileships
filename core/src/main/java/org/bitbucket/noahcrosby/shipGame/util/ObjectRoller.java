@@ -1,8 +1,10 @@
 package org.bitbucket.noahcrosby.shipGame.util;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class ObjectRoller {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public Array<Object> generateRandomObjects(Map<Object, Integer> objectsAndPercentages, Integer count) throws IllegalAccessException, InstantiationException {
+    public Array<Object> generateRandomObjects(Map<Object, Integer> objectsAndPercentages, Integer count) throws IllegalAccessException {
             reset();
 
             Array<Object> generatedObjects = new Array<>();
@@ -45,7 +47,11 @@ public class ObjectRoller {
             }
 
             for (int i = 0; i < count; i++) {
-                generatedObjects.add(generateRandomObject());
+                try {
+                    generatedObjects.add(generateRandomObject());
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             return generatedObjects;
@@ -85,8 +91,10 @@ public class ObjectRoller {
                 try {
                     Class<?> clazz = classes.get(i);
 //                    Object object1 = clazz.
-                    Constructor<?> constructor = clazz.getDeclaredConstructor();
-                    Object object = constructor.newInstance();
+                    Constructor constructor = ClassReflection.getDeclaredConstructor(
+                        clazz
+                    );
+                        Object object = constructor.newInstance();
                     return object;
                 } catch (Exception e) {
                     Gdx.app.error("ObjectRoller", "Failed to generate a random object!! \n" + e.getMessage());
@@ -117,7 +125,7 @@ public class ObjectRoller {
             percentages.clear();
         }
 
-        public Object generateRandomObject() throws IllegalAccessException, InstantiationException {
+        public Object generateRandomObject() throws IllegalAccessException {
             if (classes.isEmpty() || percentages.isEmpty() || classes.size() != percentages.size()) {
                 throw new IllegalStateException("Invalid configuration");
             }
@@ -131,7 +139,11 @@ public class ObjectRoller {
             for (int i = 0; i < classes.size(); i++) { // Its stupid, but I don't like that we iterate through a list and add. That doesn't scale. :(
                 cumulativePercentage += percentages.get(i);
                 if (randomValue < cumulativePercentage) {
-                    return classes.get(i).newInstance();
+                    try{
+                        return ClassReflection.newInstance(classes.get(i));
+                    } catch (ReflectionException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 

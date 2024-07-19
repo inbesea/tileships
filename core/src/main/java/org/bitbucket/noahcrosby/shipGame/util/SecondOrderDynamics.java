@@ -1,7 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.util;
 
 import com.badlogic.gdx.math.MathUtils;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * f = vibe frequency/response to changes in input (Can be )
@@ -68,7 +67,7 @@ public class SecondOrderDynamics {
      * @param xd - change in target location (velocity)
      * @return
      */
-    public Float Update(Float T, Float x, @Nullable Float xd){
+    public Float Update(Float T, Float x, Float xd){
         if(xd == null){ // Estimate Velocity
             xd = (x - xp) / T;
             xp = x;

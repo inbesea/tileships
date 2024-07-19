@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class AsteroidSpawner extends ObjectRoller {
-    protected int limitedAsteroidGoal;
-    protected int replaceAsteroidMinimum; // Keep asteroids here
     // protected
     public AsteroidSpawner(){
 

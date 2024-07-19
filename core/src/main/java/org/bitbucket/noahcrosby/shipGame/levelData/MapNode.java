@@ -40,6 +40,9 @@ public class MapNode extends GameObject {
     private boolean clicked;
     private Array<Asteroid> asteroids = new Array<>();
 
+    protected Integer refuels = 0;
+    Boolean storeLocation = false;
+
     /**
      * General node of a map. Can be overridden for new visuals etc.
      * @param position
@@ -206,8 +209,9 @@ public class MapNode extends GameObject {
     /**
      * Set the asteroids in this MapNode
      */
-    public void setAsteroids(Array<Asteroid> asteroids){
+    public MapNode setAsteroids(Array<Asteroid> asteroids){
         this.asteroids = asteroids;
+        return this;
     }
 
     public Array<Asteroid> getAsteroids() {
@@ -274,5 +278,35 @@ public class MapNode extends GameObject {
             edges.add(node);
         }
         return edges;
+    }
+
+    public boolean tryRefuel() {
+        if(refuels > 0){
+            refuels--;
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Returns number of refuels remaining
+     *
+     * @return Integer of refuels remaining test
+     */
+    public Integer getRefuels() {
+        return refuels;
+    }
+
+    public void setRefuels(Integer refuels) {
+        this.refuels = refuels;
+    }
+
+    public Boolean isStoreLocation() {
+        return storeLocation;
+    }
+
+    public void setStoreLocation(Boolean isStoreLocation){
+        this.storeLocation = isStoreLocation;
     }
 }

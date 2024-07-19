@@ -2,7 +2,6 @@ package org.bitbucket.noahcrosby.shipGame.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 
@@ -101,7 +100,8 @@ public class MapUtils {
     public static void connectClosestNodes(ArrayList<MapNode> nodes, ArrayList<MapNode> otherNodes){
         MapNode firstNode;
         MapNode secondNode;
-        Pair<MapNode, MapNode> theClosestNodes = Pair.of(null, null);
+        MapNode close1 = null;
+        MapNode close2 = null;
         float minDistance = Integer.MAX_VALUE;
 
         // Find the closest two nodes from the two lists
@@ -112,11 +112,12 @@ public class MapUtils {
                 secondNode = otherNodes.get(n);
                 if(firstNode.getPosition().dst(secondNode.getPosition()) < minDistance){
                     minDistance = firstNode.getPosition().dst(secondNode.getPosition());
-                    theClosestNodes = Pair.of(firstNode, secondNode);
+                    close1 = firstNode;
+                    close2 = secondNode;
                 }
             }
         }
         // Call SpaceMap to statically connect the two nodes
-        SpaceMap.connectNodes(theClosestNodes.getLeft(), theClosestNodes.getRight());
+        SpaceMap.connectNodes(close1, close2);
     }
 }

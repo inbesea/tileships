@@ -42,6 +42,10 @@ public class Resources {
 
     public static Texture AsteroidYellowTexture;
 
+    public static Texture BigMetalTileTexture;
+
+    public static Texture BigWoodTileTexture;
+
     public static Texture ConstallationMapTexture;
 
     public static Texture CraftingIconTexture;
@@ -50,7 +54,13 @@ public class Resources {
 
     public static Texture FurnaceTexture;
 
+    public static Texture GlassAsteroidTexture;
+
+    public static Texture GlassTileTexture;
+
     public static Texture HoverIndicatorTexture;
+
+    public static Texture MetalTileTexture;
 
     public static Texture PowerTilePoweredTexture;
 
@@ -76,7 +86,17 @@ public class Resources {
 
     public static Texture ShipTileStrongTexture;
 
+    public static Texture SprayPaintAsteroidTexture;
+
+    public static Texture SprayPaintBigTileTexture;
+
+    public static Texture SprayPaintTileTexture;
+
     public static Texture ToBeCollapsedTexture;
+
+    public static Texture WoodAsteroidTexture;
+
+    public static Texture WoodTileTexture;
 
     public static Music MainMenuExtendedMessingaroundMusic;
 
@@ -101,11 +121,16 @@ public class Resources {
         assetManager.load("Textures/asteroid_red.png", Texture.class);
         assetManager.load("Textures/asteroid_silver.png", Texture.class);
         assetManager.load("Textures/asteroid_yellow.png", Texture.class);
+        assetManager.load("Textures/BigMetalTile.png", Texture.class);
+        assetManager.load("Textures/BigWoodTile.png", Texture.class);
         assetManager.load("Textures/constallationMap.png", Texture.class);
         assetManager.load("Textures/craftingIcon.png", Texture.class);
         assetManager.load("Textures/craftingIconPressed.png", Texture.class);
         assetManager.load("Textures/furnace.png", Texture.class);
+        assetManager.load("Textures/glassAsteroid.png", Texture.class);
+        assetManager.load("Textures/GlassTile.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
+        assetManager.load("Textures/MetalTile.png", Texture.class);
         assetManager.load("Textures/PowerTile_Powered.png", Texture.class);
         assetManager.load("Textures/PowerTile_Unpowered.png", Texture.class);
         assetManager.load("Textures/RobotV2.png", Texture.class);
@@ -118,7 +143,12 @@ public class Resources {
         assetManager.load("Textures/ShipTile_Core.png", Texture.class);
         assetManager.load("Textures/ShipTile_Red.png", Texture.class);
         assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
+        assetManager.load("Textures/SprayPaintAsteroid.png", Texture.class);
+        assetManager.load("Textures/SprayPaintBigTile.png", Texture.class);
+        assetManager.load("Textures/SprayPaintTile.png", Texture.class);
         assetManager.load("Textures/ToBeCollapsed.png", Texture.class);
+        assetManager.load("Textures/WoodAsteroid.png", Texture.class);
+        assetManager.load("Textures/WoodTile.png", Texture.class);
         assetManager.load("Music/MainMenu Extended Messingaround.wav", Music.class);
         assetManager.load("Music/MainMenuTune.wav", Music.class);
     }
@@ -142,11 +172,16 @@ public class Resources {
             AsteroidRedTexture = assetManager.get("Textures/asteroid_red.png");
             AsteroidSilverTexture = assetManager.get("Textures/asteroid_silver.png");
             AsteroidYellowTexture = assetManager.get("Textures/asteroid_yellow.png");
+            BigMetalTileTexture = assetManager.get("Textures/BigMetalTile.png");
+            BigWoodTileTexture = assetManager.get("Textures/BigWoodTile.png");
             ConstallationMapTexture = assetManager.get("Textures/constallationMap.png");
             CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
             CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
             FurnaceTexture = assetManager.get("Textures/furnace.png");
+            GlassAsteroidTexture = assetManager.get("Textures/glassAsteroid.png");
+            GlassTileTexture = assetManager.get("Textures/GlassTile.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
+            MetalTileTexture = assetManager.get("Textures/MetalTile.png");
             PowerTilePoweredTexture = assetManager.get("Textures/PowerTile_Powered.png");
             PowerTileUnpoweredTexture = assetManager.get("Textures/PowerTile_Unpowered.png");
             RobotV2Texture = assetManager.get("Textures/RobotV2.png");
@@ -159,7 +194,12 @@ public class Resources {
             ShipTileCoreTexture = assetManager.get("Textures/ShipTile_Core.png");
             ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
             ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
+            SprayPaintAsteroidTexture = assetManager.get("Textures/SprayPaintAsteroid.png");
+            SprayPaintBigTileTexture = assetManager.get("Textures/SprayPaintBigTile.png");
+            SprayPaintTileTexture = assetManager.get("Textures/SprayPaintTile.png");
             ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
+            WoodAsteroidTexture = assetManager.get("Textures/WoodAsteroid.png");
+            WoodTileTexture = assetManager.get("Textures/WoodTile.png");
             MainMenuExtendedMessingaroundMusic = assetManager.get("Music/MainMenu Extended Messingaround.wav");
             MainMenuTuneMusic = assetManager.get("Music/MainMenuTune.wav");
         }

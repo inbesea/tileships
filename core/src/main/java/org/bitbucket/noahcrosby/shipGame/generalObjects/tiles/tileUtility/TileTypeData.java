@@ -13,7 +13,11 @@ public enum TileTypeData {
     ColorTile("CLR"),
     AncientTile("ANC"),
     CommunicationTile("ERR")/*Should not be used*/,
-    FurnaceTile("FRN");
+    FurnaceTile("FRN"),
+    GlassTile("GLS"),
+    MetalTile("MET"),
+    WoodTile("WOD"),
+    SprayPaintTile("SPR");
 
     public String getAbbreviation() {
         return abbreviation;
@@ -24,7 +28,7 @@ public enum TileTypeData {
     }
 
     private String abbreviation;
-    TileTypeData(String abbreviation){
+    TileTypeData(String abbreviation) {
         this.abbreviation = abbreviation;
     }
 
@@ -40,7 +44,9 @@ public enum TileTypeData {
         builder.append("[");
         for(int i = 0 ; i < tiles.size ; i++){
             tile = tiles.get(i);
-            builder.append(tile.getAbbreviation() + " - " + tile.getPositionAsString());
+            builder.append(tile.getAbbreviation())
+                .append(" - ")
+                .append(tile.getPositionAsString());
             if(i != tiles.size-1)builder.append(", ");
         }
         builder.append("]");

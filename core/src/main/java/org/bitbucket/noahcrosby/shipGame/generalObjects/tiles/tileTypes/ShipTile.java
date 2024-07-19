@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes;
 
+import com.badlogic.gdx.Gdx;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,10 +10,10 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.FuelTank;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
-import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 public abstract class ShipTile extends GameObject implements PhysicsObject {
 
@@ -24,7 +25,10 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     public final static float TILE_SIZE = 64f;
     private final Rectangle bounds;
     private final TileTypeData typeData; // Need for unique platonic form data
-    private boolean isDead = false;
+    private Boolean isDead = false;
+    protected Boolean isInvulnerable = false;
+
+    protected FuelTank tileValue = new FuelTank(10d);
 
     /**
      * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
@@ -42,11 +46,14 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         // Need to knit together the shiptile to adjacent tiles connectAdjacent();
     }
 
-    public abstract boolean isInvulnerable();
-    //These methods are for updating tiles when they're grabbing and placing a tile back.
+    public boolean isInvulnerable(){
+        return isInvulnerable;
+    }
 
+    //These methods are for updating tiles when they're grabbing and placing a tile back.
     /**
      * Tile performs placement actions here as implemented.
+     * // TODO : Add default sound for placement
      */
     public abstract void replaced();
     public abstract void pickedUp();
@@ -89,7 +96,10 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         return typeData.getAbbreviation();
     }
 
-    ;
+    public Integer getPrice(){
+        Gdx.app.debug("ShipTile.java", "Default tile price being used!");
+        return 10;
+    }
 
     /**
      * Renders text specifying the shipTile's indices
@@ -302,7 +312,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     /**
      * Call to remove this tile from it's manager.
      */
-    public boolean setIsDeadTrue() {
+    public Boolean setIsDeadTrue() {
         setIsDead(true);
         return getIsDead();
     }
@@ -311,7 +321,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         return isDead;
     }
 
-    public boolean setIsDead(boolean isDead){
+    public Boolean setIsDead(Boolean isDead){
         this.isDead = isDead;
         return this.isDead;
     }
@@ -325,33 +335,45 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         return new Vector2(position.x + this.size.x / 2f, position.y + this.size.y / 2f);
     }
 
-    public Body setPhysics(World world) {
-        // Adjust init position to center the box on the tile
-        BodyDef bodyDef = generalUtil.newStaticBodyDef(
-                (position.x / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f, // Position and size scaled up to game size.
-                (position.y / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f
+    public Shape getShape() {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(0.5f, 0.5f);
+
+        // Position and size scaled up to game size.
+        return shape;
+    }
+
+    @Override
+    public float getDensity() {
+        return 0.0f;
+    }
+
+    @Override
+    public float getFriction() {
+        return 1.0f;
+    }
+
+    @Override
+    public float getRestitution() {
+        return 0.0f;
+    }
+
+    @Override
+    public Vector2 getPhysicsPosition() {
+        return new Vector2(
+            (position.x / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f, // Position and size scaled up to game size.
+            (position.y / ShipTile.TILE_SIZE) + ShipTile.TILE_SIZE / 2f
         );
-        Body body = world.createBody(bodyDef);
+    }
 
-        PolygonShape tileShape = new PolygonShape();
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return BodyDef.BodyType.StaticBody;
+    }
 
-        // Specific to tiles. This is too specific.
-        tileShape.setAsBox(0.5f, 0.5f);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = tileShape;
-        fixtureDef.density = 0.0f;
-        fixtureDef.friction = 1.0f;
-        fixtureDef.restitution = 0.0f;
-
-        Fixture fixture = body.createFixture(fixtureDef);
-        fixture.setUserData(this);
-
-        // Remember to dispose of any shapes after you're done with them!
-        // BodyDef and FixtureDef don't need disposing, but shapes do.
-        tileShape.dispose();
-
-        return body;
+    @Override
+    public Vector2 getInitVelocity() {
+        return null;
     }
 
     @Override
@@ -380,5 +402,43 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
 
     public boolean isFuel() {
         return false;
+    }
+
+    /**
+     * Returns 1 for fuel
+     * Override later to make fuel value differ
+     *
+     * @return
+     */
+    public Double fuelValue() {
+        return 1d;
+    }
+
+    /**
+     * Get value object of tile
+     * @return
+     */
+    public FuelTank getTileValueObject() {
+        return tileValue;
+    }
+
+    public Integer getTileSellValue() {
+        return tileValue.getFuelCount().intValue();
+    }
+
+    /**
+     * Set value object of tile
+     * @param tileValue
+     */
+    public void setTileValue(FuelTank tileValue) {
+        this.tileValue = tileValue;
+    }
+
+    /**
+     * Sets value of tile
+     * @param tileValue
+     */
+    public void setTileValue(Integer tileValue) {
+        this.tileValue.setFuelCount(Double.valueOf(tileValue));
     }
 }

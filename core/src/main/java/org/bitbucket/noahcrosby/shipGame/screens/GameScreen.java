@@ -70,7 +70,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     Box2DWrapper box2DWrapper;
     private boolean updateLocalMapLocation = true;
     private MapNavManager mapNavigator;
-    private MapNavigationHandler mapInputNavigator;
+    private MapNavigationInputHandler mapInputNavigator;
     GalaxyBackGround backGround;
     GoalChecker goalChecker;
 
@@ -123,7 +123,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
         tileDragHandler = new TileDragHandler(player);
-        mapInputNavigator = new MapNavigationHandler(mapNavigator, (OrthographicCamera) hud.getCamera());
+        mapInputNavigator = new MapNavigationInputHandler(mapNavigator, (OrthographicCamera) hud.getCamera());
         input.addProcessor(tileDragHandler);
         input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.playerShip, this.tileDragHandler));
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
@@ -426,7 +426,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     }
 
     /**
-     * Receives new nodes from the MapNavManger
+     * Receives new nodes from the MapNavManger to subscribers
      * NOTE : This could be expanded with new implementations of the signal,
      * or other implemented listeners.
      * Thinking the signal could have some way to affect the logic
@@ -450,11 +450,13 @@ public class GameScreen implements Screen, Listener<MapNode> {
      * @param pn
      */
     private void transitionNodes(MapNode nn, MapNode pn) {
+        // Hand over asteroids if previous node is not null
         if (pn != null) {
             pn.setAsteroids(asteroidManager.getFiniteAsteroids());
         }
         // VERY TODO : Get the spawners working so we can get a set of finite asteroids here lol
         asteroidManager.setFiniteAsteroids(nn.returnAsteroids() /* Empties the asteroids from the new node, to be reset later when switching nodes. */);
         asteroidManager.setSpawner(nn.getAsteroidSpawner()); // Need this to keep up basic spawning situations.
+        playerShip.setAtStoreNode(nn.isStoreLocation());
     }
 }

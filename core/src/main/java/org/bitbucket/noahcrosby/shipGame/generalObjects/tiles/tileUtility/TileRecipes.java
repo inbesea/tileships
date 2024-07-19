@@ -71,23 +71,18 @@ public class TileRecipes {
     }
 
     private void initValidation(String recipe, ID id) {
-        try{
             String firstDirection =  recipe.substring(3,4); // We want to check that the first directional int is 0, example : STD0COR
             int firstDirectionInt = Integer.parseInt(firstDirection); // To confirm the formatting is followed
             if(firstDirectionInt != AdjacentTiles.UP){
                 throw new IllegalArgumentException("Cannot init tileRecipe with disoriented recipe");
             }
-        }catch (ClassCastException classCastException){
-
-        }
-
     }
 
 
     /**
      * Recipe check to get ID if match
-     * @param compareString
-     * @return
+     * @param compareString - String to compare with recipe string
+     * @return - ID if a match is found, else null.
      */
     public ID tileIfMatch(String compareString) {
         if (compareString.equals(recipe)) {

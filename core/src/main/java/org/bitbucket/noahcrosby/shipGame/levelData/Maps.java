@@ -5,17 +5,18 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpaw
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidTable;
 import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
-import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 
 import java.util.ArrayList;
 
-
+/**
+ * initmaps, initialize maps, etc.
+ * We create maps here statically so we can programatically produce random maps with specific params.
+ * TODO: create params we can tweak and feed new values into to get more specific maps. Could even pass in lambdas to adjust things more granularly.
+ */
 public class Maps {
 
     public static org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap getTestMap(){
         SpaceMap map = new SpaceMap();
-
-
 
         return map;
     }
@@ -23,7 +24,16 @@ public class Maps {
     public static SpaceMap getDefaultMap() {
         SpaceMap map = new SpaceMap();
         map.setEntryNode(map.addNode(200, 300))
-            .setAsteroids(AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME()));
+            .setAsteroids(
+                AsteroidSpawner.generateRandomAsteroidsStatic(
+                AsteroidTable.EntryNodeStd(),
+                AsteroidTable.SOME()));
+        // How tf did I write code this bad.
+        /*
+        This should be an optionally simple call
+        setAsteroids(ENTRY_NODE_ASTEROIDS)
+        There you go. Much better jesus.
+         */
         map.addNode(300, 300, 1);
         map.addNode(new MapNode(new Vector2(400, 300)), new int[]{1});
         return map;
@@ -35,8 +45,16 @@ public class Maps {
      * @return
      */
     public static SpaceMap getBasicSpacemap(int nodes){
+
         SpaceMap map = new SpaceMap();
-        map.setEntryNode(map.addNode(10,10)).setAsteroids(AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME()));
+
+        // Add entry node, add asteroids to node
+        MapNode entryNode = map.addNode(10,10);
+        map.setEntryNode(entryNode).setStoreLocation(true);
+        entryNode.setAsteroids(
+            AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME())
+        );
+
         // Generate a bunch of nodes
         for(int i = 0; i < nodes; i++){
             map.addNode(generalUtil.getRandomNumber(10, 500), generalUtil.getRandomNumber(10, 500))

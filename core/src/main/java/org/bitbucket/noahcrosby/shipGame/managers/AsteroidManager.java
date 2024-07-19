@@ -35,7 +35,7 @@ public class AsteroidManager implements Manager {
     private Array<Asteroid> asteroids = new Array<>();
     // Needed for physics simulation
     Circle asteroidSpawnZone;
-    float spawnRadius = TileShipGame.defaultViewportSizeX;
+    float spawnRadius = TileShipGame.spawnRadius;
     OrthographicCamera camera;
     Box2DWrapper box2DWrapper;
     ObjectRoller asteroidRoller;
@@ -130,25 +130,6 @@ public class AsteroidManager implements Manager {
 //        box2DWrapper.setObjectPhysics(temp);
     }
 
-    public void spawnAsteroid(Class<Asteroid> clazz) {
-        Vector2 spawnLocation = getVectorInValidSpawnArea();
-
-        final Asteroid asteroid;
-
-        try {
-            asteroid = (Asteroid) ClassReflection.getDeclaredConstructor(clazz).newInstance();
-            asteroid.setPosition(spawnLocation);
-        } catch (Exception e) {
-            Gdx.app.error("Error", e.getMessage());
-            return;
-        }
-
-        box2DWrapper.initPhysicsObject(asteroid);
-        //setAsteroidPhysics(asteroid);
-
-        asteroids.add(asteroid);
-    }
-
     /**
      * Removes asteroid instance by identity.
      * Meant to be called from an agnostic point of view allowing us to remove objects from a generic GameObject call.
@@ -194,7 +175,7 @@ public class AsteroidManager implements Manager {
     private boolean outOfBounds(Asteroid asteroid) {
 
         // This is dumb, but the circles aren't being updated properly, while the position is. Deal with it
-        asteroid.setPosition(asteroid.getPosition());
+        asteroid.setCirclePosition(asteroid.getPosition());
 
         Circle inBoundsRadius = new Circle(asteroidSpawnZone);
         inBoundsRadius.setRadius(spawnRadius);
@@ -219,7 +200,6 @@ public class AsteroidManager implements Manager {
         }
 
         box2DWrapper.initPhysicsObject(asteroid);
-        //setAsteroidPhysics(asteroid);
 
         asteroids.add(asteroid);
     }

@@ -55,10 +55,10 @@ public class HUD {
         this.playerShip = game.getPlayerShip();
 
 //        String fuel = playerShip.fuelTank.getFuel().toString();
-        TypingConfig.GLOBAL_VARS.put("FUELAMT", playerShip.fuelTank.getFuel().toString());
+        TypingConfig.GLOBAL_VARS.put("FUELAMT", playerShip.fuelTank.getFuelCount().toString());
         fuelLabel = new TypingLabel("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : {VAR=FUELAMT}" +
                 " / " + playerShip.fuelTank.getFuelCapacity(), skin);
-        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuel().toString());
+        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuelCount().toString());
 //        fuelLabel.setVariable("fuel", fuel);
 
         HUDScreenLayer = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
@@ -89,9 +89,10 @@ public class HUD {
     public void draw(){
         StringBuilder stringBuilder = new StringBuilder();
 
+        // Update fuelLabel with new info
         fuelLabel.setText("[ORANGE]{VAR=FIRE}{CROWD}{SIZE=150%}Fuel : {VAR=FUELAMT}" +
-                " / " + playerShip.fuelTank.getFuelCapacity());
-        fuelLabel.setVariable("FUELAMT", playerShip.fuelTank.getFuel().toString());
+                " / " + String.valueOf(playerShip.fuelTank.getFuelCapacity().intValue()));
+        fuelLabel.setVariable("FUELAMT", String.valueOf(playerShip.fuelTank.getFuelCount().intValue()));
 
         HUDTable.setDebug(AppPreferences.getAppPreferences().getIsDebug());
         HUDStage.getCamera().update();
@@ -113,7 +114,7 @@ public class HUD {
         TileShipGame.batch.begin();
 
         if(AppPreferences.getAppPreferences().getIsDebug()){
-            stringBuilder.append("\n" + getDebugData());
+            stringBuilder.append("\n").append(String.valueOf(getDebugData()));
             TileShipGame.font.draw(TileShipGame.batch, stringBuilder.toString() , 2,
                     (HUDScreenLayer.getWorldHeight() - 2)); // Worldheight gives the extendVeiwport hight
         }
@@ -244,10 +245,12 @@ public class HUD {
     protected StringBuilder getDebugData() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("FPS " + Gdx.graphics.getFramesPerSecond() + "\n" +
-                "ShipTile number : " + playerShip.shipSize());
+        stringBuilder.append("FPS ").append(String.valueOf(Gdx.graphics.getFramesPerSecond()))
+            .append("\n").append("ShipTile number : ")
+            .append(String.valueOf(playerShip.shipSize()));
         if(playerShip.destroyedTileCount > 0){
-            stringBuilder.append("\nTiles Destroyed : " + playerShip.destroyedTileCount);
+            stringBuilder.append("\nTiles Destroyed : ")
+                .append(String.valueOf(playerShip.destroyedTileCount));
         }
 
         return stringBuilder;

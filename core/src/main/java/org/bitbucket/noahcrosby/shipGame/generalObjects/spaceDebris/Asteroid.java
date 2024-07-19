@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -108,39 +109,47 @@ public class Asteroid extends GameObject implements PhysicsObject {
         return this.isDead;
     }
 
-	@Override
-	public Body setPhysics(World world) {
+    @Override
+    public Shape getShape() {
+        CircleShape circle = new CircleShape();
+        circle.setRadius(Asteroid.radius / ShipTile.TILE_SIZE);
+        return circle;
+    }
 
-		BodyDef bodyDef = generalUtil.newDynamicBodyDef(
-				(position.x / ShipTile.TILE_SIZE) + this.getCircleBounds().radius,
-				(position.y / ShipTile.TILE_SIZE) + this.getCircleBounds().radius
-		);
-		Body body = world.createBody(bodyDef);
+    @Override
+    public float getDensity() {
+        return 0.5f;
+    }
 
-		body.setLinearVelocity(getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
-				getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
-		// Create circle to add to asteroid
-		CircleShape circle = new CircleShape();
-		circle.setRadius(Asteroid.radius / ShipTile.TILE_SIZE);
-		// Create a fixture definition to apply our shape to
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = circle;
-		fixtureDef.density = 0.5f;
-		fixtureDef.friction = 0.4f;
-		fixtureDef.restitution = 0.0f; // Make it bounce a little bit
+    @Override
+    public float getFriction() {
+        return 0.4f;
+    }
 
-		// Create our fixture and attach it to the body
-		Fixture fixture = body.createFixture(fixtureDef);
-		fixture.setUserData(this);
+    @Override
+    public float getRestitution() {
+        return 0;
+    }
 
-		// Remember to dispose of any shapes after you're done with them!
-		// BodyDef and FixtureDef don't need disposing, but shapes do.
-		circle.dispose();
+    @Override
+    public Vector2 getInitVelocity() {
+        Vector2 vector2 = new Vector2( getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed),
+            getRandomlyNegativeNumber(Asteroid.minSpeed, Asteroid.maxSpeed));
+        return vector2;
+    }
 
-		return body;
-	}
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return BodyDef.BodyType.DynamicBody;
+    }
 
-	@Override
+    @Override
+    public Vector2 getPhysicsPosition() {
+        return new Vector2((this.position.x / ShipTile.TILE_SIZE) + this.getCircleBounds().radius,
+        (position.y / ShipTile.TILE_SIZE) + this.getCircleBounds().radius);
+    }
+
+    @Override
 	public void setBody(Body body) {
 		this.body = body;
 	}
@@ -165,6 +174,7 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	}
 
     public ID productionOutputID(){
+        Gdx.app.debug("Production Output ID", "Warning, default production output ID return");
         return ID.StandardTile;
     }
 
@@ -181,4 +191,8 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	 */
 	public void render(TileShipGame game) {
 	}
+
+    public void setCirclePosition(Vector2 position) {
+        circle.setPosition(position.x + radius, position.y + radius);
+    }
 }

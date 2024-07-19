@@ -12,7 +12,7 @@ import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 /**
  * Handles player input for clicking on locations of the map and moving between nodes.
  */
-public class MapNavigationHandler extends InputAdapter {
+public class MapNavigationInputHandler extends InputAdapter {
     private static final float NODE_SELECT_DISTANCE = 18;
     protected MapNavManager navManager;
     protected SpaceMap currentMap;
@@ -20,7 +20,7 @@ public class MapNavigationHandler extends InputAdapter {
 
     MapNode hoveredNode = null;
 
-    public MapNavigationHandler(MapNavManager navManager, OrthographicCamera camera){
+    public MapNavigationInputHandler(MapNavManager navManager, OrthographicCamera camera){
         this.navManager = navManager;
         this.camera = camera;
         if(this.navManager.currentMap != null){

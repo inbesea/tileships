@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
@@ -34,6 +35,7 @@ public class Ship extends GameObject {
     public Signal<Ship> publisher;
     private ShipTile draggedTile;
     public int destroyedTileCount = 0;
+    private Boolean atStoreNode = false;
 
     public CollectionManager getCollectionManager() {
         return collectionManager;
@@ -43,8 +45,9 @@ public class Ship extends GameObject {
     private final TileCondenser tileCondenser;
     private final ShipTilesManager shipTilesManager;
     public FuelTank fuelTank;
-    int initFuel = 5;
-    int initFuelCapacity = 5;
+    Double initFuel = 5d;
+    Double initFuelCapacity = 5d;
+    public FuelTank bank;
 
     /**
      * ship keeps track of the tiles of the ship and has methods for
@@ -53,7 +56,7 @@ public class Ship extends GameObject {
     public Ship(Vector2 position, Box2DWrapper box2DWrapper) {
         super(position, new Vector2(0, 0), ID.Ship);
 
-        shipTilesManager = new ShipTilesManager(box2DWrapper ,this);
+        shipTilesManager = new ShipTilesManager(box2DWrapper, this);
         collectionManager = new CollectionManager();
 
         UnlockTracker unlockTracker = new UnlockTracker();
@@ -65,6 +68,7 @@ public class Ship extends GameObject {
         publisher = new Signal<>();
 
         fuelTank = new FuelTank(initFuel, initFuelCapacity);
+        bank = new FuelTank(initFuel, initFuelCapacity);
     }
 
     /**
@@ -79,23 +83,43 @@ public class Ship extends GameObject {
         for (int i = 0; i < existing.size; i++) {
             ShipTile tempTile = existing.get(i);
             TileShipGame.batch.draw(tempTile.getTexture(),
-                    tempTile.getX(), tempTile.getY(),
-                    tempTile.getSize().x, tempTile.getSize().y);
+                tempTile.getX(), tempTile.getY(),
+                tempTile.getSize().x, tempTile.getSize().y);
             tempTile.render(game);
         }
+
+        // Draw tile sell values if valid
+        if (this.atStoreNode) {
+            for (int i = 0; i < existing.size; i++) {
+                ShipTile tempTile = existing.get(i);
+                TypingLabel value = new TypingLabel("{SIZE=50%}{COLOR=GOLD}{STYLE=SHINE}$" + tempTile.getTileSellValue(), TileShipGame.defaultSkin);
+                value.skipToTheEnd();
+                value.setPosition(tempTile.getX() + 4, tempTile.getY() + tempTile.getSize().y - 12);
+                value.draw(TileShipGame.batch, 1f);
+            }
+        }
+
         // Draw dragged tile
         if (draggedTile != null) {
             TileShipGame.batch.draw(draggedTile.getTexture(),
-                    draggedTile.getX(), draggedTile.getY(), draggedTile.getSize().x, draggedTile.getSize().y);
+                draggedTile.getX(), draggedTile.getY(), draggedTile.getSize().x, draggedTile.getSize().y);
+            if(atStoreNode){
+                TypingLabel value = new TypingLabel("{SIZE=50%}{COLOR=GOLD}{STYLE=SHINE}$" + this.draggedTile.getTileSellValue(),
+                    TileShipGame.defaultSkin);
+                value.skipToTheEnd();
+                value.setPosition(draggedTile.getX() + 4, draggedTile.getY() + draggedTile.getSize().y - 12);
+                value.draw(TileShipGame.batch, 1f);
+            }
         }
+
         // Draw collected tile overlay
         if (collectionManager.isCollectingTiles()) {
             Array<ShipTile> tiles = collectionManager.getTileArray();
             for (int i = 0; tiles.size > i; i++) {
                 ShipTile tile = tiles.get(i);
                 TileShipGame.batch.draw(Resources.ToBeCollapsedTexture,
-                        tile.getX(), tile.getY(),
-                        ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
+                    tile.getX(), tile.getY(),
+                    ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
             }
         }
     }
@@ -237,6 +261,7 @@ public class Ship extends GameObject {
     /**
      * This is called when the ship is removed from the game.
      * NOT FINISHED. DO NOT USE. Not sure why I coded it this way.
+     *
      * @return
      */
     @Override
@@ -245,8 +270,13 @@ public class Ship extends GameObject {
         return true;
     }
 
-    public void setDraggedTile(ShipTile draggedTile) {
-        this.draggedTile = draggedTile;
+    /**
+     * Sets the tile that is currently being dragged by the player.
+     *
+     * @param tile The tile being dragged.
+     */
+    public void setDraggedTile(ShipTile tile) {
+        this.draggedTile = tile;
     }
 
     /**
@@ -448,7 +478,7 @@ public class Ship extends GameObject {
         if (newTile == null) {
             collectionManager.cancelCurrentCollectArray(); // Reset the stack due to failed production
             return null;
-        } else if(newTile.getID() == ID.CommunicationTile){
+        } else if (newTile.getID() == ID.CommunicationTile) {
             handleCommunicationTile((CommunicationTile) newTile, collectedTileArray);
             return null;
         } else { // if Tile produced then swap the tiles used out of existence and return the new one.
@@ -464,25 +494,15 @@ public class Ship extends GameObject {
     }
 
     private void handleCommunicationTile(CommunicationTile newTile, Array<ShipTile> collectedTileArray) {
-        if(newTile.getIdentity() == CommunicationTile.FUELING_SHIP){
-            if(fuelTank.getFuelCapacity() >= newTile.getIntValue() + fuelTank.getFuel()){
-                fuelTank.addFuel(newTile.getIntValue());
-            } else {
-                int spaceLeft = fuelTank.getFuelCapacity() - (fuelTank.getFuel());
-                int i = 0;
-                while(i < spaceLeft){
-                    // remove tiles that would overflow the tank.
-                    ShipTile temp = collectedTileArray.get(i);
-                    if(temp.getID() != ID.FurnaceTile && temp.isFuel()){
-                        collectedTileArray.get(i).setIsDeadTrue();
-                        i++;
-                    } else {
-                        i++;
-                    }
-                }
-                fuelTank.addFuel(i);
-            }
+        if (newTile.getIdentity() == CommunicationTile.FUELING_SHIP) {
 
+            for (int i = 0; i < collectedTileArray.size; i++) {
+                if (fuelTank.isFull()) break;
+                if (collectedTileArray.get(i).getID() != ID.FurnaceTile && collectedTileArray.get(i).isFuel()) { // Add fuel
+                    fuelTank.addFuel(collectedTileArray.get(i).fuelValue());
+                    collectedTileArray.get(i).setIsDeadTrue();
+                }
+            }
         }
     }
 
@@ -500,18 +520,27 @@ public class Ship extends GameObject {
 
     /**
      * Returns true if a tile is being dragged.
+     *
      * @return
      */
     public boolean isDragging() {
         return draggedTile != null;
     }
 
+    public Boolean getAtStoreNode() {
+        return atStoreNode;
+    }
+
+    public void setAtStoreNode(Boolean atSellNode) {
+        this.atStoreNode = atSellNode;
+    }
+
     /**
      * Draws a line to the center of the tile location placement would happen at if a dragged tile was dropped.
      */
     public void drawDraggingPlacementIndicator() {
-        if(!isDragging())return;
+        if (!isDragging()) return;
         Vector2 placementIndicator = this.shipTilesManager.getPlacementVector();
-        Line.DrawDebugLine(draggedTile.getCenter(), placementIndicator, 1 , Color.WHITE, TileShipGame.batch.getProjectionMatrix());
+        Line.DrawDebugLine(draggedTile.getCenter(), placementIndicator, 1, Color.WHITE, TileShipGame.batch.getProjectionMatrix());
     }
 }

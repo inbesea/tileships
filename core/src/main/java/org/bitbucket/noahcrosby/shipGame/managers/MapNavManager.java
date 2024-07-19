@@ -1,7 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
 import com.badlogic.ashley.signals.Signal;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
@@ -10,7 +9,6 @@ import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.levelData.SpaceMap;
 import org.bitbucket.noahcrosby.utils.DijkstrasAlgo;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -79,6 +77,8 @@ public class MapNavManager {
      */
     private void checkForRefuel() {
         if(currentNode.equals(currentMap.getEntryNode())){
+            ship.fuelTank.fill();
+        } else if(currentNode.tryRefuel()){
             ship.fuelTank.fill();
         }
     }
@@ -150,10 +150,10 @@ public class MapNavManager {
      */
     public boolean canMoveToNode(MapNode closestNode) {
         Boolean canMove = currentNode.isNeighborsWith(closestNode) &&
-            moveCost(currentNode, closestNode) <= ship.fuelTank.getFuel();
+            moveCost(currentNode, closestNode) <= ship.fuelTank.getFuelCount();
 
         if(canMove){
-            ship.fuelTank.consumeFuel(moveCost(currentNode, closestNode));
+            ship.fuelTank.consumeFuel(Double.valueOf(moveCost(currentNode, closestNode)));
             return true;
         } else {
             return false;
