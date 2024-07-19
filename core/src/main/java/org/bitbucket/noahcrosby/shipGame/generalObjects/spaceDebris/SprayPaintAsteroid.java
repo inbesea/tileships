@@ -7,30 +7,30 @@ import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.GlassTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.WoodTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.SprayPaintTile;
 
-public class GlassAsteroid extends Asteroid{
-    public GlassAsteroid() {
+public class SprayPaintAsteroid extends Asteroid {
+    public SprayPaintAsteroid() {
         super(new Vector2(0,0), new Vector2(ShipTile.TILE_SIZE,ShipTile.TILE_SIZE), ID.Asteroid);
     }
-    public GlassAsteroid(Vector2 position, Vector2 size, ID id) {
+    public SprayPaintAsteroid(Vector2 position, Vector2 size, ID id) {
         super(position, size, id);
     }
 
     // What tile is made
     @Override
-    public Class getTileType() {
-        return GlassTile.class;
+    public Class<?> getTileType() {
+        return SprayPaintTile.class;
     }
 
     @Override
     public ID productionOutputID(){
         Gdx.app.debug("Production Output ID", "Warning, default production output ID return");
-        return ID.GlassTile;
+        return ID.SprayPaintTile;
     }
     // What texture this is
     @Override
     public Texture getTexture() {
-        return Resources.GlassAsteroidTexture;
+        return Resources.SprayPaintAsteroidTexture;
     }
 }

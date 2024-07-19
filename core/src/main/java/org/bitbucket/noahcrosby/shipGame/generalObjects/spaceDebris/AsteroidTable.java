@@ -60,6 +60,7 @@ public class AsteroidTable {
         map.put(Asteroid.class, 50);
         map.put(WoodAsteroid.class, 50);
         map.put(GlassAsteroid.class, 50);
+        map.put(SprayPaintAsteroid.class, 50);
         return map;
     }
 }

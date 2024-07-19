@@ -86,6 +86,8 @@ public class Resources {
 
     public static Texture ShipTileStrongTexture;
 
+    public static Texture SprayPaintAsteroidTexture;
+
     public static Texture SprayPaintBigTileTexture;
 
     public static Texture SprayPaintTileTexture;
@@ -141,6 +143,7 @@ public class Resources {
         assetManager.load("Textures/ShipTile_Core.png", Texture.class);
         assetManager.load("Textures/ShipTile_Red.png", Texture.class);
         assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
+        assetManager.load("Textures/SprayPaintAsteroid.png", Texture.class);
         assetManager.load("Textures/SprayPaintBigTile.png", Texture.class);
         assetManager.load("Textures/SprayPaintTile.png", Texture.class);
         assetManager.load("Textures/ToBeCollapsed.png", Texture.class);
@@ -191,6 +194,7 @@ public class Resources {
             ShipTileCoreTexture = assetManager.get("Textures/ShipTile_Core.png");
             ShipTileRedTexture = assetManager.get("Textures/ShipTile_Red.png");
             ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
+            SprayPaintAsteroidTexture = assetManager.get("Textures/SprayPaintAsteroid.png");
             SprayPaintBigTileTexture = assetManager.get("Textures/SprayPaintBigTile.png");
             SprayPaintTileTexture = assetManager.get("Textures/SprayPaintTile.png");
             ToBeCollapsedTexture = assetManager.get("Textures/ToBeCollapsed.png");
