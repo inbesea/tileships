@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StandardTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeFactory;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
@@ -82,6 +86,21 @@ public class ShipTilesManager {
 
         placementLocationResult = getClosestPlacementVector2(tileLocation2);
         tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, id);
+
+        validateEdgeSize();
+        ship.publishShip();
+
+        return tempTile;
+    }
+
+    public ShipTile addTile(float x, float y, Class<?> clazz) {
+        // Use vector to set new tile
+        Vector2 placementLocationResult; // We will add method to get this.
+        Vector2 tileLocation2 = new Vector2(x, y);
+        ShipTile tempTile;
+
+        placementLocationResult = getClosestPlacementVector2(tileLocation2);
+        tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, clazz);
 
         validateEdgeSize();
         ship.publishShip();
@@ -194,6 +213,48 @@ public class ShipTilesManager {
         // Create tile subtype based on ID using factory static call.
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
         tempTile = TileTypeFactory.getShipTileTypeInstance(vector2, id);
+        validateNewTileIndex(tempTile);
+        this.existingTiles.add(tempTile);
+        setNeighbors(tempTile); // Setting tile neighbors within ship
+
+        box2DWrapper.initPhysicsObject(tempTile);
+
+        //setTilePhysics(tempTile);
+        validateEdgeSize();
+
+        return tempTile;
+    }
+
+    /**
+     * Adds a tile expecting the x,y to be a valid placement location
+     */
+    private ShipTile gridAlignedxyTilePlacement(float x, float y, Class<?> clazz) {
+
+        // There are some DRY issues here, but I'm moving on for now.
+        int indexXY[];
+        ShipTile tempTile;
+
+        indexXY = returnIndex(x, y); // Get index corresponding to x, y position
+
+        Gdx.app.debug("gridAlignedxyTilePlacement", "Create " + clazz + " at [" + indexXY[0] + ", " + indexXY[1] + "] (" + x + "," + y + ")" +
+            "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
+
+        // Create tile subtype based on ID using factory static call.
+        Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
+
+        // Instantiate object from class constructor
+        try {
+            // Need to pass in required params for the constructor to work
+            Constructor constructor = ClassReflection.getDeclaredConstructor(
+                clazz,
+                vector2.getClass()
+            );
+            tempTile = (ShipTile) constructor.newInstance(vector2);
+        } catch (ReflectionException e) {
+            Gdx.app.error("GridAlignedxyTilePlacement", "Failed to create tile " + clazz);
+            return new StandardTile(vector2);
+        }
+
         validateNewTileIndex(tempTile);
         this.existingTiles.add(tempTile);
         setNeighbors(tempTile); // Setting tile neighbors within ship
