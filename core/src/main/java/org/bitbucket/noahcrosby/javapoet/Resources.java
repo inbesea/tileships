@@ -54,6 +54,8 @@ public class Resources {
 
     public static Texture FurnaceTexture;
 
+    public static Texture GlassAsteroidTexture;
+
     public static Texture GlassTileTexture;
 
     public static Texture HoverIndicatorTexture;
@@ -123,6 +125,7 @@ public class Resources {
         assetManager.load("Textures/craftingIcon.png", Texture.class);
         assetManager.load("Textures/craftingIconPressed.png", Texture.class);
         assetManager.load("Textures/furnace.png", Texture.class);
+        assetManager.load("Textures/glassAsteroid.png", Texture.class);
         assetManager.load("Textures/GlassTile.png", Texture.class);
         assetManager.load("Textures/HoverIndicator.png", Texture.class);
         assetManager.load("Textures/MetalTile.png", Texture.class);
@@ -172,6 +175,7 @@ public class Resources {
             CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
             CraftingIconPressedTexture = assetManager.get("Textures/craftingIconPressed.png");
             FurnaceTexture = assetManager.get("Textures/furnace.png");
+            GlassAsteroidTexture = assetManager.get("Textures/glassAsteroid.png");
             GlassTileTexture = assetManager.get("Textures/GlassTile.png");
             HoverIndicatorTexture = assetManager.get("Textures/HoverIndicator.png");
             MetalTileTexture = assetManager.get("Textures/MetalTile.png");

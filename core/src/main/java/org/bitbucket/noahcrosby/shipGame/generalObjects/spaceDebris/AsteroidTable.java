@@ -58,6 +58,8 @@ public class AsteroidTable {
         Map<Class, Integer> map = new java.util.HashMap<>();
         map.put(MetalAsteroid.class, 50);
         map.put(Asteroid.class, 50);
+        map.put(WoodAsteroid.class, 50);
+        map.put(GlassAsteroid.class, 50);
         return map;
     }
 }

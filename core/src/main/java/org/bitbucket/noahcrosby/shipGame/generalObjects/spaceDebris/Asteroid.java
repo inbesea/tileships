@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -173,6 +174,7 @@ public class Asteroid extends GameObject implements PhysicsObject {
 	}
 
     public ID productionOutputID(){
+        Gdx.app.debug("Production Output ID", "Warning, default production output ID return");
         return ID.StandardTile;
     }
 
