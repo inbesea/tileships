@@ -24,7 +24,16 @@ public class Maps {
     public static SpaceMap getDefaultMap() {
         SpaceMap map = new SpaceMap();
         map.setEntryNode(map.addNode(200, 300))
-            .setAsteroids(AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME()));
+            .setAsteroids(
+                AsteroidSpawner.generateRandomAsteroidsStatic(
+                AsteroidTable.EntryNodeStd(),
+                AsteroidTable.SOME()));
+        // How tf did I write code this bad.
+        /*
+        This should be an optionally simple call
+        setAsteroids(ENTRY_NODE_ASTEROIDS)
+        There you go. Much better jesus.
+         */
         map.addNode(300, 300, 1);
         map.addNode(new MapNode(new Vector2(400, 300)), new int[]{1});
         return map;
