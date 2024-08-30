@@ -10,7 +10,9 @@ buildscript {
   }
   dependencies {
     classpath "org.wisepersist:gwt-gradle-plugin:$gwtPluginVersion"
-
+    classpath "junit:junit:4.11"
+    classpath('org.junit.jupiter:junit-jupiter-api:5.8.1')
+    classpath('org.junit.jupiter:junit-jupiter-engine:5.8.1')
   }
 }
 
@@ -22,6 +24,9 @@ allprojects {
 configure(subprojects) {
   apply plugin: 'java-library'
   sourceCompatibility = 11
+  java {
+    sourceCompatibility = JavaVersion.VERSION_11
+  }
   compileJava {
     options.incremental = true
   }
