@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.FuelTank;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Counter;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
@@ -28,7 +28,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     private Boolean isDead = false;
     protected Boolean isInvulnerable = false;
 
-    protected FuelTank tileValue = new FuelTank(10d);
+    protected Counter tileValue = new Counter(10d);
 
     /**
      * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
@@ -418,19 +418,19 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      * Get value object of tile
      * @return
      */
-    public FuelTank getTileValueObject() {
+    public Counter getTileValueObject() {
         return tileValue;
     }
 
     public Integer getTileSellValue() {
-        return tileValue.getFuelCount().intValue();
+        return tileValue.getCount().intValue();
     }
 
     /**
      * Set value object of tile
      * @param tileValue
      */
-    public void setTileValue(FuelTank tileValue) {
+    public void setTileValue(Counter tileValue) {
         this.tileValue = tileValue;
     }
 
@@ -439,6 +439,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      * @param tileValue
      */
     public void setTileValue(Integer tileValue) {
-        this.tileValue.setFuelCount(Double.valueOf(tileValue));
+        this.tileValue.setCount(Double.valueOf(tileValue));
     }
 }

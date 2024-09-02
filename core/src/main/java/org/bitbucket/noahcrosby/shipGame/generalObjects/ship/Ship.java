@@ -44,10 +44,10 @@ public class Ship extends GameObject {
     private final CollectionManager collectionManager;
     private final TileCondenser tileCondenser;
     private final ShipTilesManager shipTilesManager;
-    public FuelTank fuelTank;
+    public Counter counter;
     Double initFuel = 5d;
     Double initFuelCapacity = 5d;
-    public FuelTank bank;
+    public Counter bank;
 
     /**
      * ship keeps track of the tiles of the ship and has methods for
@@ -67,8 +67,8 @@ public class Ship extends GameObject {
          *   that creates tiles based on a list of tile instances */
         publisher = new Signal<>();
 
-        fuelTank = new FuelTank(initFuel, initFuelCapacity);
-        bank = new FuelTank(initFuel, initFuelCapacity);
+        counter = new Counter(initFuel, initFuelCapacity);
+        bank = new Counter(initFuel, initFuelCapacity);
     }
 
     /**
@@ -497,9 +497,9 @@ public class Ship extends GameObject {
         if (newTile.getIdentity() == CommunicationTile.FUELING_SHIP) {
 
             for (int i = 0; i < collectedTileArray.size; i++) {
-                if (fuelTank.isFull()) break;
+                if (counter.isFull()) break;
                 if (collectedTileArray.get(i).getID() != ID.FurnaceTile && collectedTileArray.get(i).isFuel()) { // Add fuel
-                    fuelTank.addFuel(collectedTileArray.get(i).fuelValue());
+                    counter.add(collectedTileArray.get(i).fuelValue());
                     collectedTileArray.get(i).setIsDeadTrue();
                 }
             }

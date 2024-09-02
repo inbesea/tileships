@@ -77,9 +77,9 @@ public class MapNavManager {
      */
     private void checkForRefuel() {
         if(currentNode.equals(currentMap.getEntryNode())){
-            ship.fuelTank.fill();
+            ship.counter.fill();
         } else if(currentNode.tryRefuel()){
-            ship.fuelTank.fill();
+            ship.counter.fill();
         }
     }
 
@@ -150,10 +150,10 @@ public class MapNavManager {
      */
     public boolean canMoveToNode(MapNode closestNode) {
         Boolean canMove = currentNode.isNeighborsWith(closestNode) &&
-            moveCost(currentNode, closestNode) <= ship.fuelTank.getFuelCount();
+            moveCost(currentNode, closestNode) <= ship.counter.getCount();
 
         if(canMove){
-            ship.fuelTank.consumeFuel(Double.valueOf(moveCost(currentNode, closestNode)));
+            ship.counter.remove(Double.valueOf(moveCost(currentNode, closestNode)));
             return true;
         } else {
             return false;
