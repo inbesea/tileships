@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.ship;
 
 import com.badlogic.ashley.signals.Signal;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -401,9 +402,7 @@ public class Ship extends GameObject {
         if (collectionManager.isCollectingTiles()) {
             ShipTile tile = shipTilesManager.returnTile(new Vector2(vector3.x, vector3.y));
             if (tile != null) {
-                Sound collectTileSound;
-//				collectTileSound = Gdx.audio.newSound( Gdx.files.internal("Sound Effects/zapsplat_science_fiction_robot_tiny_fast_mechanical_motorised_whirr_movement_003_72910.mp3"));
-//				collectTileSound.play();
+                // Resources.CollectTileSoundSfx.play();
                 return collectionManager.addTile(tile);
             } else {
                 System.out.println("updateCollect getting null tile reference");
