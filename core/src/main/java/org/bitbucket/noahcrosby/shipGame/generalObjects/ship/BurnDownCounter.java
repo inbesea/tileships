@@ -41,4 +41,11 @@ public class BurnDownCounter extends Counter{
         super.capacity -= burndownAmt;
     }
 
+    /**
+     * 
+     * @return
+     */
+    public boolean isBurnedOut() {
+        return super.capacity <= super.count;
+    }
 }
