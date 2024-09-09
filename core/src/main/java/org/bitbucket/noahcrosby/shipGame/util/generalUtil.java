@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class generalUtil {
 
     /**
@@ -366,5 +369,10 @@ public class generalUtil {
         if (value > max) value = max;
         if (value < min) value = min;
         return value;
+    }
+
+    public static float round(float d, int decimalPlace)
+    {
+        return BigDecimal.valueOf(d).setScale(decimalPlace, RoundingMode.HALF_UP ).floatValue();
     }
 }
