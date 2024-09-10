@@ -331,6 +331,7 @@ public class ShipTilesManager {
         // tie the tiles together
         int numberOfNeighbors = tile.setNeighbors(up, right, down, left);
 
+        // Validating edge tiles
         checkIfAdjustEdgeArray(up);
         checkIfAdjustEdgeArray(right);
         checkIfAdjustEdgeArray(down);

@@ -23,7 +23,7 @@ public class GalaxyBackGround {
     private final Box2DWrapper physics;
 
     public GalaxyBackGround(Integer x, Integer y, float percentStars){
-        physics = new Box2DWrapper(new Vector2(0,0), true);
+        physics = new Box2DWrapper();
         fieldSizeX = x;
         fieldSizeY = y;
         stars = new Boolean[x][y];

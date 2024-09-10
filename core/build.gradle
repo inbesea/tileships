@@ -25,6 +25,19 @@ dependencies {
 }
 
 testing {
+  dependencies {
+    implementation 'org.lwjgl:lwjgl:3.3.1'
+    implementation 'org.lwjgl:lwjgl-glfw:3.3.1'
+    api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+    api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    api "org.junit.jupiter:junit-jupiter:5.9.0"
+    api ("org.junit.jupiter:junit-jupiter-api:5.9.0")
+    api 'com.squareup:javapoet:1.13.0'
+//    implementation 'com.github.czyzby:gdx-lml:1.9.1.9.6'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0' // Just to add arrays together
+  }
     suites {
         test {
                 useJUnit('4.13.2')

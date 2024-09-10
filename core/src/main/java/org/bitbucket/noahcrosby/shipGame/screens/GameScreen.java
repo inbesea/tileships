@@ -83,7 +83,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
         backGround = new GalaxyBackGround((int) TileShipGame.defaultViewportSizeX, (int) TileShipGame.defaultViewportSizeY, 0.001f);
 
-        box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
+        box2DWrapper = new Box2DWrapper();
 
         // init ship
         playerShip = new ShipDirector().buildClassicShip(box2DWrapper, new Vector2(TileInit.ORIGIN_X, TileInit.ORIGIN_Y));

@@ -32,7 +32,7 @@ public class Box2DWrapper implements Box2DWrapperInterface {
     private float accumulator = 0;
 
     private final World world;
-    private final Box2DDebugRenderer box2DDebugRenderer;
+    private Box2DDebugRenderer box2DDebugRenderer = null;
     private final Array<Body> bodies = new Array<>();
 
     public Box2DWrapper(Vector2 gravity, boolean doSleep) {
@@ -41,6 +41,23 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         this.box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
+    /**
+     * Default Box2DWrapper has no gravity and does not simulate inactive bodies.
+     */
+    public Box2DWrapper() {
+        Box2D.init();
+        this.world = new World(new Vector2(0,0), true);
+        this.box2DDebugRenderer = new Box2DDebugRenderer();
+    }
+
+    /**
+     * Default Box2DWrapper has no gravity and does not simulate inactive bodies.
+     */
+    public Box2DWrapper(boolean debugRenderer) {
+        Box2D.init();
+        this.world = new World(new Vector2(0,0), true);
+        if(debugRenderer)this.box2DDebugRenderer = new Box2DDebugRenderer();
+    }
 
     /**
      * Draws the debug shapes.
@@ -50,6 +67,9 @@ public class Box2DWrapper implements Box2DWrapperInterface {
      */
     @Override
     public void drawDebug(OrthographicCamera orthoCamera) {
+        if(box2DDebugRenderer == null){
+            this.box2DDebugRenderer = new Box2DDebugRenderer();
+        }
         // Need to scale this lol. This will not work on the scale we are drawing.
         box2DDebugRenderer.render(world, orthoCamera.combined);
     }
@@ -65,6 +85,9 @@ public class Box2DWrapper implements Box2DWrapperInterface {
      * @param matrix4
      */
     public void drawDebug(Matrix4  matrix4) {
+        if(box2DDebugRenderer == null){
+            this.box2DDebugRenderer = new Box2DDebugRenderer();
+        }
         // Need to scale this lol. This will not work on the scale we are drawing.
         box2DDebugRenderer.render(world, matrix4);
     }

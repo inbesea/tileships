@@ -73,6 +73,28 @@ public class Ship extends GameObject {
     }
 
     /**
+     * Generates a default ship object
+     * Defaults ship "location" to 0,0
+     */
+    public Ship(Box2DWrapper box2DWrapper) {
+        super(new Vector2(0,0), new Vector2(0, 0), ID.Ship);
+
+        shipTilesManager = new ShipTilesManager(box2DWrapper, this);
+        collectionManager = new CollectionManager();
+
+        UnlockTracker unlockTracker = new UnlockTracker();
+        tileCondenser = new TileCondenser(unlockTracker);
+
+        // Give new ship default tiles.
+        /* TODO : Create more flexible init tile placements. Possibly a setInitTiles(<ShipTiles> st)
+         *   that creates tiles based on a list of tile instances */
+        publisher = new Signal<>();
+
+        counter = new Counter(initFuel, initFuelCapacity);
+        bank = new Counter(initFuel, initFuelCapacity);
+    }
+
+    /**
      * Loops the list of existing tiles and renders them
      *  TODO : Scale tile locations by the ship position to allow ship movement.
      */

@@ -60,8 +60,8 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         // Create hud
         hud = new HUD(game);
 
-        // Create Box2D
-        box2DWrapper = new Box2DWrapper(new Vector2(0, 0), true);
+        // Create default Box2D
+        box2DWrapper = new Box2DWrapper();
 
 
         arcadeShip = new ShipDirector().buildArcadeShip(box2DWrapper, new Vector2(0, 0));
