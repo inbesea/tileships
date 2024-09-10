@@ -2,7 +2,10 @@ package org.bitbucket.noahcrosby.shipGame.screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StrongTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
@@ -13,12 +16,22 @@ import org.bitbucket.noahcrosby.shipGame.util.TileInit;
  */
 public class MainMenu  extends ScreenAdapter implements Screen {
 
+    final TileShipGame game;
+    final OrthographicCamera camera;
+
     private Ship ship;
     private final Box2DWrapper box2DWrapper = new Box2DWrapper();
 
-    public MainMenu() {
-
+    public MainMenu(final TileShipGame game) {
         initShipMenu();
+
+        this.game = game;
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+
+//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        Resources.loadAssets();
     }
 
     private void initShipMenu(){
