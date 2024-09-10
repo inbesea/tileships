@@ -35,7 +35,7 @@ public class ShipTilesManager {
      *
      * @param ship
      */
-    public ShipTilesManager(Box2DWrapper box2DWrapper ,Ship ship) {
+    public ShipTilesManager(Box2DWrapper box2DWrapper, Ship ship) {
         this.ship = ship;
         this.existingTiles = new Array<>();
         this.edgeTiles = new Array<>();
@@ -48,81 +48,30 @@ public class ShipTilesManager {
      * NOTE : The body is removed, and recreated in this implementation.
      * We could add filters somehow, but I'm not learning that now.
      *
-     * @param x - x position
-     * @param y - y position
+     * @param x    - x position
+     * @param y    - y position
      * @param tile - Existing tile to replace
      * @return replaced, updated tile
      */
-    public ShipTile addTile(float x, float y, ShipTile tile){
-        // Use vector to set new tile
-        Vector2 placementLocationResult; // We will add method to get this.
-        Vector2 tileLocation2 = new Vector2(x, y);
-        ShipTile tempTile;
-
-        placementLocationResult = getClosestPlacementVector2(tileLocation2);
-        tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, tile);
-
-        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
-
-        validateEdgeSize();
-        ship.publishShip();
-
-        return tempTile;
-    }
-
-    public ShipTile addTileNoSnap(float x, float y, ShipTile tile){
+    public ShipTile addTile(float x, float y, ShipTile tile) {
         TileProductionData tileData = new TileProductionData(x, y, tile);
-        tileData.setCanFloat(true);
-        ShipTile tempTile;
 
-        tempTile = gridAlignedxyTilePlacement(tileData);
-        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
-
-        validateEdgeSize();
-        ship.publishShip();
-
-        return tempTile;
-    }
-
-    // We might validate neighbors on a higher level.
-    // That way we can skip it if needed.
-    // If nothing permanent happens during that overall check?... Like, we need to be able to handle this situation
-    // gracefully anyways.
-    protected ShipTile gridAlignedxyTilePlacement_NoSnap(float x, float y, ShipTile tile){
-        ShipTile tempTile;
-
-        tempTile = gridAlignedxyTilePlacement(x, y, tile);
-        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
-
-        validateEdgeSize();
-        ship.publishShip();
-
-        return tempTile;
+        return handleTileProductionData(tileData);
     }
 
     /**
      * This Method adds a tile to the ship with a reference to the tile's x and y
-     * positions , the color, ID, and camera object for updating
-     * the render location
+     * positions , ID
      *
      * @param x  - The unaligned x coordinate this tile will be added to
      * @param y  - The unaligned y coordinate this tile will be added to
      * @param id - The ID of the tile
-     * @return shipTile - this will be null if the space added to is not occupied, else will return the tile blocking
+     * @return shipTile - returns the tile placed if successful and null if not.
      */
     public ShipTile addTile(float x, float y, ID id) {
-        // Use vector to set new tile
-        Vector2 placementLocationResult; // We will add method to get this.
-        Vector2 tileLocation2 = new Vector2(x, y);
-        ShipTile tempTile;
+        TileProductionData tileData = new TileProductionData(x, y, id);
 
-        placementLocationResult = getClosestPlacementVector2(tileLocation2);
-        tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, id);
-
-        validateEdgeSize();
-        ship.publishShip();
-
-        return tempTile;
+        return handleTileProductionData(tileData);
     }
 
     public ShipTile addTile(float x, float y, Class<?> clazz) {
@@ -142,6 +91,7 @@ public class ShipTilesManager {
 
     /**
      * Returns a Vector2 position representing the valid placement ShipTile vacancy to the passed location.
+     *
      * @param location - Location checked for closest placement
      * @return - Vector2 position representing the closest valid placement location.
      */
@@ -157,6 +107,40 @@ public class ShipTilesManager {
         } else { // Released on Shiptile
             return closestInternalVacancy(location); // Get closest Vacancy on edge tiles
         }
+    }
+
+
+    public ShipTile addTileNoSnap(float x, float y, ShipTile tile) {
+        TileProductionData tileData = new TileProductionData(x, y, tile);
+        tileData.setCanFloat(true);
+
+        return handleTileProductionData(tileData);
+    }
+
+    public ShipTile addTileNoSnap(float x, float y, ID id) {
+        TileProductionData tileData = new TileProductionData(x, y, id);
+        tileData.setCanFloat(true);
+
+        return handleTileProductionData(tileData);
+    }
+
+    private ShipTile handleTileProductionData(TileProductionData tileData) {
+        ShipTile tempTile;
+
+        if (!tileData.getCanFloat()) {
+            // Tile needs to snap to ship
+            Vector2 snapToHere = getClosestPlacementVector2(new Vector2(tileData.getX(), tileData.getY()));
+            tileData.setX(snapToHere.x);
+            tileData.setY(snapToHere.y);
+        }
+
+        tempTile = gridAlignedxyTilePlacement(tileData);
+        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
+
+        validateEdgeSize();
+        ship.publishShip();
+
+        return tempTile;
     }
 
     /**
@@ -230,17 +214,12 @@ public class ShipTilesManager {
 
     private ShipTile gridAlignedxyTilePlacement(TileProductionData tileData) {
 
-        int indexXY[];
+        int[] indexXY;
 
         indexXY = returnIndex(tileData.getX(), tileData.getY()); // Get index corresponding to x, y position
         Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
 
-        if(tileData.getTileLiteral() != null){
-            // Stating the old tile with old position and index.
-            System.out.println("Replacing " + tileData.getTileLiteral().getID() + " at [" + indexXY[0] + ", " + indexXY[1] +
-                "] (" + tileData.getTileLiteral().getX()
-                + "," + tileData.getTileLiteral().getY() + ")" +
-                "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
+        if (tileData.getTileLiteral() != null) {
 
             tileData.getTileLiteral().setPosition(vector2); // Set existing tile position
             validateNewTileIndex(tileData.getTileLiteral());
@@ -250,10 +229,43 @@ public class ShipTilesManager {
             // We don't need to set physics for grid aligned tiles, but there could be race condition eventually.
             validateEdgeSize();
 
+            printNewTileMessage(tileData);
+
+            return tileData.getTileLiteral();
+        } else if (tileData.getId() != null) {
+
+            // There are some DRY issues here, but I'm moving on for now.
+            ShipTile tempTile;
+
+            indexXY = returnIndex(tileData.getX(), tileData.getY()); // Get index corresponding to x, y position
+
+            // Create tile subtype based on ID using factory static call.
+            tileData.setTileLiteral(TileTypeFactory.getShipTileTypeInstance(vector2, tileData.getId()));
+            validateNewTileIndex(tileData.getTileLiteral());
+            this.existingTiles.add(tileData.getTileLiteral());
+            setNeighbors(tileData); // Setting tile neighbors within ship
+
+            box2DWrapper.initPhysicsObject(tileData.getTileLiteral());
+
+            printNewTileMessage(tileData);
+
+            validateEdgeSize();
+
             return tileData.getTileLiteral();
         } else {
             System.out.println("cannot get tile literal!");
             throw new RuntimeException("Need to handle this situation! Hint implement other situations.");
+        }
+    }
+
+    private void printNewTileMessage(TileProductionData tileData) {
+        try { // Trycatch to run unit testing because the "headless backend" is not real and cannot hurt me
+            Gdx.app.debug("gridAlignedxyTilePlacement", "Create " + tileData.getTileLiteral().getID() + " at [" +
+                tileData.getTileLiteral().getXIndex() + ", " + tileData.getTileLiteral().getYIndex() + "] (" +
+                tileData.getX() + "," + tileData.getY() + ")" + "\n(All tiles, Edge) -> (" + existingTiles.size +
+                ", " + edgeTiles.size + ")");
+        } catch (NullPointerException npe) {
+
         }
     }
 
@@ -330,6 +342,7 @@ public class ShipTilesManager {
 
     /**
      * Checks if the new tile index overlaps with an existing tile
+     *
      * @param newTile - new tile to validate against existing tiles
      */
     private void validateNewTileIndex(ShipTile newTile) {
@@ -337,7 +350,7 @@ public class ShipTilesManager {
         for (int i = 0; i < existingTiles.size; i++) {
             existingTile = existingTiles.get(i);
             if (newTile.getXIndex() == existingTile.getXIndex() && newTile.getYIndex() == existingTile.getYIndex()) {
-                Gdx.app.error("ValidateNewTileIndex","New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
+                Gdx.app.error("ValidateNewTileIndex", "New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
                     existingTile.getPositionAsString() + " id : " + existingTile.getID());
             }
         }
@@ -435,7 +448,7 @@ public class ShipTilesManager {
         ShipTile tile = tileData.getTileLiteral();
 
         boolean tilesButNoNeighborsAndNoFloat =
-                tile != null &&
+            tile != null &&
                 existingTiles.size > 1 &&
                 tile.numberOfNeighbors() == 0 &&
                 !tileData.getCanFloat();
@@ -477,8 +490,8 @@ public class ShipTilesManager {
                 edgeTiles.add(tile);
                 if (existingTiles.size < edgeTiles.size) {
                     throw new RuntimeException("More edgeTiles than existing!" +
-                            "\nexistingTiles.size : " + existingTiles.size +
-                            "\nedgeTiles.size : " + edgeTiles.size);
+                        "\nexistingTiles.size : " + existingTiles.size +
+                        "\nedgeTiles.size : " + edgeTiles.size);
                 }
             } else if (!tile.isEdge && edgeTiles.contains(tile, true) && existingTiles.contains(tile, true)) {
                 edgeTiles.removeValue(tile, true);
@@ -712,7 +725,7 @@ public class ShipTilesManager {
     public void removeTileFromShip(ShipTile tile) {
         if (!this.existingTiles.contains(tile, true)) { // If not in existing tiles
             Gdx.app.error("Removing Tile Error", "Error: Tile was not present in ship!\n-> " + tile.getAbbreviation() +
-                    " - " + tile.getPositionAsString());
+                " - " + tile.getPositionAsString());
         } else {
             Gdx.app.debug("Removing Tile", "Removing tile from the ship" + tile.getAbbreviation() + " " + tile.getPositionAsString());
             this.existingTiles.removeValue(tile, true);
@@ -816,8 +829,8 @@ public class ShipTilesManager {
 
         if (existingTiles.size < edgeTiles.size) {
             throw new RuntimeException("More edgeTiles than existing! " +
-                    " existingTiles.size : " + existingTiles.size +
-                    "edgeTiles.size : " + edgeTiles.size);
+                " existingTiles.size : " + existingTiles.size +
+                "edgeTiles.size : " + edgeTiles.size);
         }
     }
 
@@ -826,7 +839,7 @@ public class ShipTilesManager {
      */
     private void logRemovedTile(ShipTile tile) {
         System.out.println("Removing tile (" + tile.getXIndex() + ", " +
-                tile.getYIndex() + ") of type " + tile.getID().name() + " from ship : " + ship.getID());
+            tile.getYIndex() + ") of type " + tile.getID().name() + " from ship : " + ship.getID());
     }
 
     public int size() {
@@ -862,6 +875,7 @@ public class ShipTilesManager {
 
     /**
      * Returns the vector a tile should be placed at based on current input position.
+     *
      * @return a vector2 representing the placement location from the input position
      */
     public Vector2 getPlacementVector() {
@@ -872,11 +886,11 @@ public class ShipTilesManager {
     /**
      * Removes dead tiles when called
      */
-    public void purgeDead(){
+    public void purgeDead() {
         ShipTile tile;
-        for(int i = 0 ; i < this.existingTiles.size ; i++){
+        for (int i = 0; i < this.existingTiles.size; i++) {
             tile = existingTiles.get(i);
-            if(tile.getIsDead()){
+            if (tile.getIsDead()) {
                 this.removeTileFromShip(tile);
             }
         }
