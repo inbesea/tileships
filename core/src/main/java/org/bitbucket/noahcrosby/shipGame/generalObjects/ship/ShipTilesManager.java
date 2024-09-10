@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.TileProductionData;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StandardTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
@@ -60,6 +61,37 @@ public class ShipTilesManager {
 
         placementLocationResult = getClosestPlacementVector2(tileLocation2);
         tempTile = gridAlignedxyTilePlacement(placementLocationResult.x, placementLocationResult.y, tile);
+
+        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
+
+        validateEdgeSize();
+        ship.publishShip();
+
+        return tempTile;
+    }
+
+    public ShipTile addTileNoSnap(float x, float y, ShipTile tile){
+        TileProductionData tileData = new TileProductionData(x, y, tile);
+        tileData.setCanFloat(true);
+        ShipTile tempTile;
+
+        tempTile = gridAlignedxyTilePlacement(tileData);
+        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
+
+        validateEdgeSize();
+        ship.publishShip();
+
+        return tempTile;
+    }
+
+    // We might validate neighbors on a higher level.
+    // That way we can skip it if needed.
+    // If nothing permanent happens during that overall check?... Like, we need to be able to handle this situation
+    // gracefully anyways.
+    protected ShipTile gridAlignedxyTilePlacement_NoSnap(float x, float y, ShipTile tile){
+        ShipTile tempTile;
+
+        tempTile = gridAlignedxyTilePlacement(x, y, tile);
         box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
 
         validateEdgeSize();
@@ -194,6 +226,35 @@ public class ShipTilesManager {
         validateEdgeSize();
 
         return tile;
+    }
+
+    private ShipTile gridAlignedxyTilePlacement(TileProductionData tileData) {
+
+        int indexXY[];
+
+        indexXY = returnIndex(tileData.getX(), tileData.getY()); // Get index corresponding to x, y position
+        Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
+
+        if(tileData.getTileLiteral() != null){
+            // Stating the old tile with old position and index.
+            System.out.println("Replacing " + tileData.getTileLiteral().getID() + " at [" + indexXY[0] + ", " + indexXY[1] +
+                "] (" + tileData.getTileLiteral().getX()
+                + "," + tileData.getTileLiteral().getY() + ")" +
+                "\n(All tiles, Edge) -> (" + existingTiles.size + ", " + edgeTiles.size + ")");
+
+            tileData.getTileLiteral().setPosition(vector2); // Set existing tile position
+            validateNewTileIndex(tileData.getTileLiteral());
+            this.existingTiles.add(tileData.getTileLiteral());
+
+            setNeighbors(tileData); // Setting tile neighbors within ship
+            // We don't need to set physics for grid aligned tiles, but there could be race condition eventually.
+            validateEdgeSize();
+
+            return tileData.getTileLiteral();
+        } else {
+            System.out.println("cannot get tile literal!");
+            throw new RuntimeException("Need to handle this situation! Hint implement other situations.");
+        }
     }
 
     /**
@@ -343,13 +404,71 @@ public class ShipTilesManager {
         return numberOfNeighbors;
     }
 
+    private int setNeighbors(TileProductionData tileData) {
+
+        // Init vars
+        float x = tileData.getTileLiteral().getX();
+        float y = tileData.getTileLiteral().getY();
+
+        // Get adjacent tile references
+        ShipTile up = returnTile(new Vector2(x, y + ShipTile.TILE_SIZE * 1.5f));
+        ShipTile right = returnTile(new Vector2(x + ShipTile.TILE_SIZE * 1.5f, y));
+        ShipTile down = returnTile(new Vector2(x, y - ShipTile.TILE_SIZE / 2.0f));
+        ShipTile left = returnTile(new Vector2(x - ShipTile.TILE_SIZE / 2.0f, y));
+
+        // tie the tiles together
+        int numberOfNeighbors = tileData.getTileLiteral().setNeighbors(up, right, down, left);
+
+        // Validating edge tiles
+        checkIfAdjustEdgeArray(up);
+        checkIfAdjustEdgeArray(right);
+        checkIfAdjustEdgeArray(down);
+        checkIfAdjustEdgeArray(left);
+        checkIfAdjustEdgeArray(tileData);
+
+        validateEdgeSize();
+
+        return numberOfNeighbors;
+    }
+
+    private void checkIfAdjustEdgeArray(TileProductionData tileData) {
+        ShipTile tile = tileData.getTileLiteral();
+
+        boolean tilesButNoNeighborsAndNoFloat =
+                tile != null &&
+                existingTiles.size > 1 &&
+                tile.numberOfNeighbors() == 0 &&
+                !tileData.getCanFloat();
+
+        if (tilesButNoNeighborsAndNoFloat) {
+            throw new RuntimeException("Tile was placed that has no neighbors despite other tiles existing");
+        } else if (tile != null) {
+            boolean tileExistsAndShouldBeEdge = tile.isEdge && !edgeTiles.contains(tile, true) && existingTiles.contains(tile, true); // Gotta confirm the tile exists lol
+
+            if (tileExistsAndShouldBeEdge) {
+                edgeTiles.add(tile);
+                if (existingTiles.size < edgeTiles.size) {
+                    throw new RuntimeException("More edgeTiles than existing!" +
+                        "\nexistingTiles.size : " + existingTiles.size +
+                        "\nedgeTiles.size : " + edgeTiles.size);
+                }
+            } else if (!tile.isEdge && edgeTiles.contains(tile, true) && existingTiles.contains(tile, true)) {
+                edgeTiles.removeValue(tile, true);
+            } else {
+                // The
+            }
+        }
+    }
+
     /**
      * Checks if tile should be removed or added to edge array.
      * <p>
      * Assumes that the neighbors have been updated and reflect the current shipstate
      */
     private void checkIfAdjustEdgeArray(ShipTile tile) {
-        if (tile != null && existingTiles.size > 1 && tile.numberOfNeighbors() == 0) {
+        boolean tilesButNoNeighbors = tile != null && existingTiles.size > 1 && tile.numberOfNeighbors() == 0;
+
+        if (tilesButNoNeighbors) {
             throw new RuntimeException("Tile was placed that has no neighbors despite other tiles existing");
         } else if (tile != null) {
             boolean tileExistsAndShouldBeEdge = tile.isEdge && !edgeTiles.contains(tile, true) && existingTiles.contains(tile, true); // Gotta confirm the tile exists lol

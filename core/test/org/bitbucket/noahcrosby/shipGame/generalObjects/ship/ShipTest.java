@@ -30,12 +30,13 @@ class ShipTest {
         assertNotNull(ship);
     }
 
-//    @Test
-//    void testAddTileNoSnap() {
-//        ship.getTileManager().addTileNoSnap(300, 300, new StandardTile(new Vector2(0,0)));
-//        ship.getTileManager().addTileNoSnap(-300, -300, new StandardTile(new Vector2(0,0)));
-//
-//        assertNotEquals(0, ship.getTileManager().getExistingTiles().size);
-//        assertEquals(0 , ship.getTileManager().getExistingTiles().get(0).numberOfNeighbors());
-//    }
+    @Test
+    void testAddTileNoSnap() {
+        ship.getTileManager().addTileNoSnap(300, 300, new StandardTile(new Vector2(0,0)));
+        ship.getTileManager().addTileNoSnap(-300, -300, new StandardTile(new Vector2(0,0)));
+
+        assertNotEquals(0, ship.getTileManager().getExistingTiles().size);
+        assertEquals(0 , ship.getTileManager().getExistingTiles().get(0).numberOfNeighbors());
+        assertEquals(2, ship.getExistingTiles().size);
+    }
 }
