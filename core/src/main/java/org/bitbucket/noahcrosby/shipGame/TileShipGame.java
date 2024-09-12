@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Game;
@@ -12,6 +13,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.arcadeMode.ArcadeModeScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
+import org.bitbucket.noahcrosby.shipGame.screens.MainMenu;
 import org.bitbucket.noahcrosby.shipGame.screens.MainMenuScreen;
 import org.bitbucket.noahcrosby.shipGame.screens.PreferencesScreen;
 import org.bitbucket.noahcrosby.javapoet.Resources;
@@ -37,9 +39,14 @@ public class TileShipGame extends Game {
 
     private Screen mainGameScreen;
     private Screen mainMenuScreen;
+    private Screen mainMenu;
     private ArcadeModeScreen arcadeModeScreen;
     private Screen preferencesScreen;
-    public final static int MENU = 0;
+
+    private static OrthographicCamera currentCamera;
+
+    public final static int MENU = 6;
+    public final static int OLD_MENU = 0;
     public final static int PREFERENCES = 1;
     public final static int CLASSIC_MODE = 2;
     public final static int ENDGAME = 3;
@@ -63,9 +70,13 @@ public class TileShipGame extends Game {
     public void changeScreen(int screen) {
         Gdx.app.log("Screen Change", "Changing screen to " + screen);
         switch (screen){
-            case MENU:
+            case OLD_MENU:
                 if(mainMenuScreen == null) mainMenuScreen = new MainMenuScreen(this);
                 this.setGameScreen(mainMenuScreen);
+                break;
+            case MENU:
+                if(mainMenu == null) mainMenu = new MainMenu(this);
+                this.setGameScreen(mainMenu);
                 break;
             case PREFERENCES:
                 if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
@@ -142,5 +153,13 @@ public class TileShipGame extends Game {
 
     public AppPreferences getPreferences(){
         return this.appPreferences;
+    }
+
+    public static OrthographicCamera getCurrentCamera() {
+        return TileShipGame.currentCamera;
+    }
+
+    public static void setCurrentCamera(OrthographicCamera newCamera){
+        TileShipGame.currentCamera = newCamera;
     }
 }

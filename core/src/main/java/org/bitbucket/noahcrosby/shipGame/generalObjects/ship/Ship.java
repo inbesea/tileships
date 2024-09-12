@@ -1,8 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.ship;
 
 import com.badlogic.ashley.signals.Signal;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.*;
@@ -409,7 +407,7 @@ public class Ship extends GameObject {
      * @param tile - Tile to add to manager stack
      * @return boolean signifying success
      */
-    public boolean updateCollect(ShipTile tile) {
+    public boolean lookForTileToCollect(ShipTile tile) {
         boolean result = collectionManager.addTile(tile);
         return result;
     }
@@ -420,7 +418,7 @@ public class Ship extends GameObject {
      * @param vector3 -  a position in space.
      * @return - boolean signifying success
      */
-    public boolean updateCollect(Vector3 vector3) {
+    public boolean lookForTileToCollect(Vector3 vector3) {
         if (collectionManager.isCollectingTiles()) {
             ShipTile tile = shipTilesManager.returnTile(new Vector2(vector3.x, vector3.y));
             if (tile != null) {

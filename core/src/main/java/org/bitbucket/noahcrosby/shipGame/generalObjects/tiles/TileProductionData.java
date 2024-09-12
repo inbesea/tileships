@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.tiles;
 
+import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
@@ -7,8 +8,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile
  * Intermediate Parameter Object representing the tile being produced.
  */
 public class TileProductionData {
-
-    private float x,y;
+    private Vector2 location;
     private int[] index;
     private ShipTile tileLiteral;
     private ID id;
@@ -25,8 +25,7 @@ public class TileProductionData {
     }
 
     private void initDefault(float x, float y){
-        this.x = x;
-        this.y = y;
+        location = new Vector2(x, y);
     }
 
     // TODO: Add constructors for class and ID data later.
@@ -47,19 +46,19 @@ public class TileProductionData {
     }
 
     public float getX() {
-        return x;
+        return location.x;
     }
 
     public void setX(float x) {
-        this.x = x;
+        this.location.x = x;
     }
 
     public float getY() {
-        return y;
+        return location.y;
     }
 
     public void setY(float y) {
-        this.y = y;
+        this.location.y = y;
     }
 
     public ID getId() {
@@ -78,4 +77,11 @@ public class TileProductionData {
         this.index = index;
     }
 
+    public Vector2 getLocation() {
+        return location;
+    }
+
+    public void setLocation(Vector2 location) {
+        this.location = location;
+    }
 }

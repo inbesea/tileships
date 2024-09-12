@@ -29,6 +29,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     protected Boolean isInvulnerable = false;
 
     protected Counter tileValue = new Counter(10d);
+    private boolean isLocked = false;
 
     /**
      * ShipTiles are the basic unit of a ship. They are boxes of data, and can be extended to do more.
@@ -440,5 +441,14 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
      */
     public void setTileValue(Integer tileValue) {
         this.tileValue.setCount(Double.valueOf(tileValue));
+    }
+
+    public boolean isLocked() {
+        return this.isLocked;
+    }
+
+    public ShipTile setLocked(boolean locked) {
+        isLocked = locked;
+        return this;
     }
 }

@@ -57,6 +57,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
     private final Ship playerShip;
     private TileDragHandler tileDragHandler;
     private MapInputHandler gameScreenMapInputHandler;
+    private PlayerInput playerInput;
     public static final float spawnAreaMax = TileShipGame.convertPixelsToMeters(300);
     private final ClassicCollisionHandler collisionHandler;
 
@@ -122,8 +123,10 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
-        tileDragHandler = new TileDragHandler(player);
+        tileDragHandler = new TileDragHandler(playerShip);
         mapInputNavigator = new MapNavigationInputHandler(mapNavigator, (OrthographicCamera) hud.getCamera());
+        playerInput = new PlayerInput();
+        input.addProcessor(playerInput);
         input.addProcessor(tileDragHandler);
         input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.playerShip, this.tileDragHandler));
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
@@ -136,6 +139,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         Resources.MainMenuExtendedMessingaroundMusic.play();
         Resources.MainMenuExtendedMessingaroundMusic.setVolume(game.getPreferences().getMusicVolume());
         Resources.MainMenuExtendedMessingaroundMusic.setLooping(true);
+        TileShipGame.setCurrentCamera(camera);
     }
 
     private void checkForSpeechBubble() {
@@ -168,9 +172,9 @@ public class GameScreen implements Screen, Listener<MapNode> {
         if (updateLocalMapLocation) {
             // process user input
             if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-                PlayerInput.handleKeyPressed(player, camera);
+                playerInput.handleKeyPressed(player, camera);
             }
-            PlayerInput.updateCameraOnPlayer(player, camera);
+            playerInput.updateCameraOnPlayer(player, camera);
         }
         if(goalChecker.getWon()) {
             goalChecker.renderWin();

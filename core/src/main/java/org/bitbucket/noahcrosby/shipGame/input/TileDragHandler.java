@@ -8,11 +8,10 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.javapoet.Resources;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.TileArrayToString;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
-import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 import org.bitbucket.noahcrosby.shipGame.util.SecondOrderDynamics;
 
 import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnprojectedInputPosition;
@@ -20,10 +19,10 @@ import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnproject
 public class TileDragHandler extends InputAdapter {
 
     private static final float PLACE_DRAG_GOAL = 20f;
-    private final Player player;
     private final Ship playerShip;
     private boolean dragging;
     private float placementSpeed = 15f;
+    private ShipTile draggedTile;
 
     SecondOrderDynamics sOD_x;
     SecondOrderDynamics sOD_y;
@@ -37,12 +36,9 @@ public class TileDragHandler extends InputAdapter {
      * <p>
      * TODO : This should be moved to the multiple input class and reworked. It could even be dissolved into other classes
      * Probably a case of Shotgun Surgery <a href="https://refactoring.guru/smells/shotgun-surgery">...</a>
-     *
-     * @param player - Player object that will use this handler
      */
-    public TileDragHandler(Player player) {
-        this.player = player;
-        this.playerShip = player.getPlayerShip();
+    public TileDragHandler(Ship playerShip) {
+        this.playerShip = playerShip;
         sOD_x = new SecondOrderDynamics(f, z, r, 0f);
         sOD_y = new SecondOrderDynamics(f, z, r, 0f);
     }
@@ -52,16 +48,12 @@ public class TileDragHandler extends InputAdapter {
      * This update works with the second order dynamics model
      */
     public void update() {
-        if (getDragging() && playerShip.isDragging()) {
+        if (getDragging() && playerShip.isDragging()) { // We only need to check is dragging in one place god damnit.
             ShipTile draggedTile = playerShip.getDraggedTile();
-            Vector3 playerInputPosition = returnUnprojectedInputPosition(GameScreen.getGameCamera());
-            // TODO : Add wobbly tile dragging preferences option?
+            Vector3 playerInputPosition = returnUnprojectedInputPosition(TileShipGame.getCurrentCamera());
+
             draggedTile.setX(playerInputPosition.x - ShipTile.TILE_SIZE / 2.0f);
             draggedTile.setY(playerInputPosition.y - ShipTile.TILE_SIZE / 2.0f);
-//            float targetX = playerInputPosition.x - ShipTile.TILE_SIZE / 2.0f;
-//            float targetY = playerInputPosition.y - ShipTile.TILE_SIZE / 2.0f;
-//            draggedTile.setX(sOD_x.Update(Gdx.graphics.getDeltaTime(), targetX, null));
-//            draggedTile.setY(sOD_y.Update(Gdx.graphics.getDeltaTime(), targetY, null));
         }
         if (placingTile) { // True after touchup()
             ShipTile draggedTile = playerShip.getDraggedTile();
@@ -90,42 +82,52 @@ public class TileDragHandler extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button != Input.Buttons.LEFT) return false;
         // Set init values
-        setDragging(true);
+        setIsDraggingTile(true); // This is setting dragging to true before we start dragging.
 
         // Handle init collect click
         if (playerShip.isCollectingTiles()) { // Begin collecting tiles for condensing
-            playerShip.updateCollect(new Vector3(screenX, screenY, 0f));
+            playerShip.lookForTileToCollect(new Vector3(screenX, screenY, 0f));
         } else { // If not collecting, assume pick up and drag tile
-            if (placingTile) { // Handle tiles mid-placement
-                ShipTile pickedUpTile = playerShip.getDraggedTile();
-                setDragging(true);
-                placingTile = false;
 
-                pickUpTile(pickedUpTile);
-                sOD_x.setXp(pickedUpTile.getX());
-                sOD_x.setY(pickedUpTile.getX());
-                sOD_y.setXp(pickedUpTile.getY());
-                sOD_y.setY(pickedUpTile.getY());
+            if (placingTile) { // Handle tiles mid-placement
+                catchTileMidPlacement();
                 return false; // Don't pick up if already dragging a tile
             }
+
             // Get a tile and check if it can be picked up.
             ShipTile pickedUpTile = playerShip.returnTile(screenX, screenY);
-            boolean selectedTileCanBeGrabbed = canGrabTile(pickedUpTile);
 
-            if (selectedTileCanBeGrabbed) {
-                this.setDraggingSound(true);
+            if (canGrabTile(pickedUpTile)) {
                 pickUpTile(pickedUpTile);
-                pickedUpTile.pickedUp();
 
                 // init new drag
-                sOD_x.setXp(pickedUpTile.getX());
-                sOD_x.setY(pickedUpTile.getX());
-                sOD_y.setXp(pickedUpTile.getY());
-                sOD_y.setY(pickedUpTile.getY());
+                initDraggedTilesSmoothMovement(pickedUpTile);
             }
         }
 
         return true;
+    }
+
+    /**
+     * Sets SOD variables for smooth movements
+     * @param pickedUpTile - tile to get location info from
+     */
+    private void initDraggedTilesSmoothMovement(ShipTile pickedUpTile) {
+        sOD_x.setXp(pickedUpTile.getX());
+        sOD_x.setY(pickedUpTile.getX());
+        sOD_y.setXp(pickedUpTile.getY());
+        sOD_y.setY(pickedUpTile.getY());
+    }
+
+    private void catchTileMidPlacement() {
+        ShipTile pickedUpTile = playerShip.getDraggedTile();
+        if(pickedUpTile == null)return;
+
+        setIsDraggingTile(true);
+        placingTile = false;
+
+        pickUpTile(pickedUpTile);
+        initDraggedTilesSmoothMovement(pickedUpTile);
     }
 
     /**
@@ -145,7 +147,7 @@ public class TileDragHandler extends InputAdapter {
         if (playerShip.isCollectingTiles() && !playerShip.collapseStackIsFull()) {
             // After get a tile we can check if the stack is complete or not.
             // if it is then we can turn off collecting tiles. A fullStack Check is not needed.
-            playerShip.updateCollect(new Vector3(screenX, screenY, 0));
+            playerShip.lookForTileToCollect(new Vector3(screenX, screenY, 0));
         } else if (draggedTile != null) { // Dragging a tile
             // the update for the dragged tile is handled each frame by update();
             //TODO : Add a sound here to make moving tiles feel better.
@@ -178,29 +180,33 @@ public class TileDragHandler extends InputAdapter {
         } else if (playerShip.getDraggedTile() != null) { // If there is a tile being dragged
             beginPlacingDragged(playerShip, screenX, screenY);
         }
-        setDragging(false);
+        setIsDraggingTile(false);
         return true;
     }
 
     private boolean canGrabTile(ShipTile tile) {
         if (tile == null) return false; // Check if a tile was grabbed
+        return !tile.isLocked();
 
-        // Is player on the tile in question?
-        boolean leftCornerOff = playerShip.returnTile(player.getX(), player.getY()) != tile;
-        boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(), player.getY()) != tile;
-
-        return leftCornerOff && rightCornerOff;// Check if tile is same as tile that is stood on
+//        // Is player on the tile in question?
+//        boolean leftCornerOff = playerShip.returnTile(player.getX(), player.getY()) != tile;
+//        boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(), player.getY()) != tile;
+//
+//        return leftCornerOff && rightCornerOff;// Check if tile is same as tile that is stood on
     }
 
     /**
      * Removes the tile from the ship and moves to the dragged tile variable
-     *
+     *  Handles other background changes
      * @param pickedUpTile - Tile selected to drag
      */
     private void pickUpTile(ShipTile pickedUpTile) {
+        this.setDraggingSound(true);
+
         playerShip.removeTileFromShip(pickedUpTile);
         playerShip.setDraggedTile(pickedUpTile); // Set intermediate tile to *remove from existing tiles*
-
+        pickedUpTile.pickedUp();
+        setIsDraggingTile(true);
         Resources.PickUpTileQuick0Sfx.play(
             AppPreferences.getAppPreferences().getSoundVolume() * 8);
     }
@@ -214,7 +220,7 @@ public class TileDragHandler extends InputAdapter {
      * @param y          - y position of dragged tile
      */
     private void beginPlacingDragged(Ship playerShip, float x, float y) {
-        setDragging(false);
+        setIsDraggingTile(false);
         placingTile = true;
         placementIndicator = playerShip.getTileManager().getPlacementVector();
     }
@@ -244,7 +250,7 @@ public class TileDragHandler extends InputAdapter {
      *
      * @param dragging
      */
-    public void setDragging(boolean dragging) {
+    public void setIsDraggingTile(boolean dragging) {
         this.dragging = dragging;
     }
 
@@ -267,6 +273,9 @@ public class TileDragHandler extends InputAdapter {
      * @return
      */
     public boolean getDragging() {
+//        if(this.dragging == (playerShip.getDraggedTile() == null)) {
+//            throw new RuntimeException("Dragging without dragged tile!");
+//        }
         return this.dragging;
     }
 }

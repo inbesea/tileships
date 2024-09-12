@@ -31,7 +31,7 @@ public class DebugInputHandler extends InputAdapter {
             if (draggedTile != null) { // If holding tile
                 playerShip.addTileToShip(draggedTile.getX(), draggedTile.getY(), draggedTile.getID());
                 playerShip.setDraggedTile(null);
-                tileDragHandler.setDragging(false);
+                tileDragHandler.setIsDraggingTile(false);
             }
             playerShip.startCollapseCollect(); // Begins ship collecting
         } else if (keycode == Input.Keys.ESCAPE) {

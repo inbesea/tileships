@@ -2,14 +2,16 @@ package org.bitbucket.noahcrosby.shipGame.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
-public class PlayerInput {
+public class PlayerInput extends InputAdapter {
 
     /**
      * Holy cow pie this is a terrible class.
@@ -18,6 +20,7 @@ public class PlayerInput {
      */
 
     public static float cameraFollow = 0.95f;
+    private ShipTile left,right;
 
     /**
      * Handle key presses from GameScreen
@@ -27,7 +30,7 @@ public class PlayerInput {
      *
      * @param player - player Rectangle to update
      */
-    public static void handleKeyPressed(Player player, OrthographicCamera camera){
+    public void handleKeyPressed(Player player, OrthographicCamera camera){
 
         Vector3 playerPos = new Vector3(player.getX(), player.getY(), 0);
         Ship ship = player.getPlayerShip();
@@ -93,6 +96,22 @@ public class PlayerInput {
         if(Gdx.input.isKeyPressed(Input.Keys.E)){
             localZoomClamp(true, camera);
         }
+
+        // We want to lock the tiles the player is standing on, and unlock tiles he leaves.
+        lockAndUnlockTiles(player);
+    }
+
+    private void lockAndUnlockTiles(Player player) {
+        // We need to be careful not to unlock tiles that need to be locked for other reasons.
+        // Not sure how you would do that.
+        // Is player on the tile in question?
+        Ship playerShip = player.getPlayerShip();
+
+        if(left != null) left.setLocked(false);
+        if(right != null) right.setLocked(false);
+
+        left =  playerShip.returnTile(player.getX(), player.getY()).setLocked(true);
+        right = playerShip.returnTile(player.getX() + player.getWidth(), player.getY()).setLocked(true);
     }
 
     /**

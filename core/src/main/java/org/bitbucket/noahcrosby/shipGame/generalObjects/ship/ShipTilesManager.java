@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects.ship;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.TileProductionData;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StandardTile;
@@ -127,11 +129,18 @@ public class ShipTilesManager {
     private ShipTile handleTileProductionData(TileProductionData tileData) {
         ShipTile tempTile;
 
-        if (!tileData.getCanFloat()) {
+        if (!tileData.getCanFloat()) { // Snap tile
             // Tile needs to snap to ship
             Vector2 snapToHere = getClosestPlacementVector2(new Vector2(tileData.getX(), tileData.getY()));
             tileData.setX(snapToHere.x);
             tileData.setY(snapToHere.y);
+        } else { // Check for float tile placed on a tile
+            ShipTile destinationTile = returnTile(tileData.getX(),tileData.getY());
+
+            boolean placingOnExistingTile = destinationTile != null;
+            if (placingOnExistingTile) { // Released on tile
+                tileData.setLocation(closestInternalVacancy(tileData.getLocation()));
+            }
         }
 
         tempTile = gridAlignedxyTilePlacement(tileData);
@@ -350,8 +359,12 @@ public class ShipTilesManager {
         for (int i = 0; i < existingTiles.size; i++) {
             existingTile = existingTiles.get(i);
             if (newTile.getXIndex() == existingTile.getXIndex() && newTile.getYIndex() == existingTile.getYIndex()) {
-                Gdx.app.error("ValidateNewTileIndex", "New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
-                    existingTile.getPositionAsString() + " id : " + existingTile.getID());
+                try {
+                    Gdx.app.error("ValidateNewTileIndex", "New tile " + newTile.getPositionAsString() + " id: " + newTile.getID() + " is being placed into existing tile location " +
+                        existingTile.getPositionAsString() + " id : " + existingTile.getID());
+                } catch (NullPointerException nullPointerException){
+                    // Terrible try catch to allow unit testing with logging
+                }
             }
         }
     }
@@ -508,7 +521,11 @@ public class ShipTilesManager {
      * @return - Returns a ShipTile object. Will return null on spaces without tiles.
      */
     public ShipTile returnTile(Vector2 position) {
-        return findTile(position);
+        return findTile(position); // Code smell? Message chain?
+    }
+
+    public ShipTile returnTile(float x, float y) {
+        return findTile(new Vector2(x,y));
     }
 
     /**
@@ -879,7 +896,7 @@ public class ShipTilesManager {
      * @return a vector2 representing the placement location from the input position
      */
     public Vector2 getPlacementVector() {
-        Vector3 playerInputPosition = returnUnprojectedInputPosition(GameScreen.getGameCamera());
+        Vector3 playerInputPosition = returnUnprojectedInputPosition(TileShipGame.getCurrentCamera());
         return this.getClosestPlacementVector2(generalUtil.flattenVector(playerInputPosition));
     }
 

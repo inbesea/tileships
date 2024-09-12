@@ -36,6 +36,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
     TileCollectHandler tileCollectHandler;
     ZoomHandler zoomHandler;
     DebugInputHandler debugInputHandler;
+    PlayerInput playerInput;
     private Player player;
     TileShipGame game;
     ExtendViewport extendViewport;
@@ -101,9 +102,9 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         box2DWrapper.sweepForDeadBodies();
         // process user input
         if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            PlayerInput.handleKeyPressed(player, camera);
+            playerInput.handleKeyPressed(player, camera);
         }
-        PlayerInput.updateCameraOnPlayer(player, camera);
+        playerInput.updateCameraOnPlayer(player, camera);
     }
 
     private void drawGame() {
@@ -126,9 +127,10 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
     private void initializeInputEventHandling() {
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(arcadeShip));
-        TileDragHandler tileDragHandler = new TileDragHandler(player);
+        TileDragHandler tileDragHandler = new TileDragHandler(arcadeShip);
         input.addProcessor(tileDragHandler);
         input.addProcessor(debugInputHandler = new DebugInputHandler(game, this.arcadeShip, tileDragHandler));
+        input.addProcessor(playerInput = new PlayerInput());
         input.addProcessor(zoomHandler = new ZoomHandler(camera));
         Gdx.input.setInputProcessor(input);
     }

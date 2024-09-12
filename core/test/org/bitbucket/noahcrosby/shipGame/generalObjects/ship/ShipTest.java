@@ -64,4 +64,24 @@ class ShipTest {
 
     // TODO : Add test and implement add no snap tile with class
     // TODO : Refactor all tile adding to use tile data objects.
+
+    @Test
+    void test_addTwoTilesInSameSpaceNoSnap() {
+        ship.getTileManager().addTileNoSnap(10, 10, ID.StandardTile);
+        ship.getTileManager().addTileNoSnap(10, 10, new StandardTile(new Vector2(0,0)));
+
+        assertNotEquals(0, ship.getTileManager().getExistingTiles().size);
+        assertEquals(1 , ship.getTileManager().getExistingTiles().get(0).numberOfNeighbors());
+        assertEquals(2, ship.getExistingTiles().size);
+    }
+
+    @Test
+    void test_addTwoTilesInSameSpace() {
+        ship.getTileManager().addTile(10, 10, ID.StandardTile);
+        ship.getTileManager().addTile(10, 10, new StandardTile(new Vector2(0,0)));
+
+        assertNotEquals(0, ship.getTileManager().getExistingTiles().size);
+        assertEquals(1 , ship.getTileManager().getExistingTiles().get(0).numberOfNeighbors());
+        assertEquals(2, ship.getExistingTiles().size);
+    }
 }
