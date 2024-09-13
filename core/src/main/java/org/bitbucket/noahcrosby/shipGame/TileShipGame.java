@@ -49,7 +49,7 @@ public class TileShipGame extends Game {
     public final static int OLD_MENU = 0;
     public final static int PREFERENCES = 1;
     public final static int CLASSIC_MODE = 2;
-    public final static int ENDGAME = 3;
+    public final static int GAMEOVER = 3;
     public final static int LOADING = 4;
     public final static int ARCADE_MODE = 5;
 
@@ -64,9 +64,14 @@ public class TileShipGame extends Game {
 
         appPreferences = AppPreferences.getAppPreferences();
 
-        this.changeScreen(MENU);
+        this.changeScreen(OLD_MENU);
     }
 
+    /**
+     * Switch screens using only int pointer/static var references.
+     * Can be called from anywhere with game instance reference.
+     * @param screen - Int representing screen to switch to.
+     */
     public void changeScreen(int screen) {
         Gdx.app.log("Screen Change", "Changing screen to " + screen);
         switch (screen){
@@ -92,7 +97,7 @@ public class TileShipGame extends Game {
                 break;
             case LOADING:
                 break;
-            case ENDGAME:
+            case GAMEOVER:
                 break;
             default :
                 throw new RuntimeException();

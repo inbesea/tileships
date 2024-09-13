@@ -110,8 +110,14 @@ public class PlayerInput extends InputAdapter {
         if(left != null) left.setLocked(false);
         if(right != null) right.setLocked(false);
 
-        left =  playerShip.returnTile(player.getX(), player.getY()).setLocked(true);
-        right = playerShip.returnTile(player.getX() + player.getWidth(), player.getY()).setLocked(true);
+        // If the tile is already locked we won't set it to these vars.
+        // This way already locked tiles won't unlock when arriving/leaving.
+        ShipTile newLeft = playerShip.returnTile(player.getX(), player.getY());
+        ShipTile newRight = playerShip.returnTile(player.getX() + player.getWidth(), player.getY());
+
+        // Dont playerlock or save tiles that are already locked.
+        if(!newLeft.isLocked())left = newLeft.setLocked(true);
+        if(!newRight.isLocked())right = newRight.setLocked(true);
     }
 
     /**

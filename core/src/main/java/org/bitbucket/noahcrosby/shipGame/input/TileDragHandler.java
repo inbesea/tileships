@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.TileArrayToString;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
@@ -30,6 +31,7 @@ public class TileDragHandler extends InputAdapter {
     boolean placingTile = false;
     // Used at the end of the drag to place the tile smoothly
     private Vector2 placementIndicator;
+    private Player player;
 
     /**
      * Handles input from the player for grabbing tiles from the player's ship.
@@ -38,6 +40,13 @@ public class TileDragHandler extends InputAdapter {
      * Probably a case of Shotgun Surgery <a href="https://refactoring.guru/smells/shotgun-surgery">...</a>
      */
     public TileDragHandler(Ship playerShip) {
+        this.playerShip = playerShip;
+        sOD_x = new SecondOrderDynamics(f, z, r, 0f);
+        sOD_y = new SecondOrderDynamics(f, z, r, 0f);
+    }
+
+    public TileDragHandler(Ship playerShip, Player player) {
+        this.player = player;
         this.playerShip = playerShip;
         sOD_x = new SecondOrderDynamics(f, z, r, 0f);
         sOD_y = new SecondOrderDynamics(f, z, r, 0f);
@@ -186,13 +195,15 @@ public class TileDragHandler extends InputAdapter {
 
     private boolean canGrabTile(ShipTile tile) {
         if (tile == null) return false; // Check if a tile was grabbed
-        return !tile.isLocked();
 
-//        // Is player on the tile in question?
-//        boolean leftCornerOff = playerShip.returnTile(player.getX(), player.getY()) != tile;
-//        boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(), player.getY()) != tile;
-//
-//        return leftCornerOff && rightCornerOff;// Check if tile is same as tile that is stood on
+        if(player == null){
+            return !tile.isLocked();
+        } else {// Is player on the tile in question?
+            boolean leftCornerOff = playerShip.returnTile(player.getX(), player.getY()) != tile;
+            boolean rightCornerOff = playerShip.returnTile(player.getX() + player.getWidth(), player.getY()) != tile;
+
+            return !tile.isLocked() && leftCornerOff && rightCornerOff;// Check if tile is same as tile that is stood on
+        }
     }
 
     /**

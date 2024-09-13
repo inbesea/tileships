@@ -123,7 +123,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         input = new InputPreProcessor(camera);
         input.addProcessor(tileCollectHandler = new TileCollectHandler(playerShip));
-        tileDragHandler = new TileDragHandler(playerShip);
+        tileDragHandler = new TileDragHandler(playerShip, player);
         mapInputNavigator = new MapNavigationInputHandler(mapNavigator, (OrthographicCamera) hud.getCamera());
         playerInput = new PlayerInput();
         input.addProcessor(playerInput);

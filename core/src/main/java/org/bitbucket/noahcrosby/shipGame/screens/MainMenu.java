@@ -39,7 +39,8 @@ public class MainMenu  extends ScreenAdapter implements Screen {
     private Ship ship;
     private final Box2DWrapper box2DWrapper = new Box2DWrapper();
 
-    private ShipTile startTile;
+    private ShipTile startTile, settingsTile, exitTile;
+
 
     public MainMenu(final TileShipGame game) {
         initShipMenu();
@@ -64,8 +65,13 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         // The tiles can have labels above them. Polish would be making some physics letters that move out of the way and snap back after tile
         // moves away.
         startTile = ship.getTileManager().addTileNoSnap(300,500, new StrongTile(new Vector2(0,0)));
-        ship.getTileManager().addTileNoSnap(500,500, new StrongTile(new Vector2(0,0)));
-        ship.getTileManager().addTileNoSnap(125,500, new StrongTile(new Vector2(0,0)));
+        startTile.setLocked(true);
+        settingsTile = ship.getTileManager().addTileNoSnap(500,500, new StrongTile(new Vector2(0,0)));
+        settingsTile.setLocked(true);
+        exitTile = ship.getTileManager().addTileNoSnap(125,500, new StrongTile(new Vector2(0,0)));
+        exitTile.setLocked(true);
+        ship.getTileManager().addTileNoSnap(300,20, new StrongTile(new Vector2(0,0)));
+        ship.getTileManager().addTileNoSnap(300,70, new StrongTile(new Vector2(0,0)));
 
         Gdx.input.setInputProcessor(input);
 //        input.addProcessor(dragHandler);
