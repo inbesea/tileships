@@ -6,7 +6,8 @@ import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 
 /**
- * Not meant to be a physical part of the ship. Only used for communication.
+ * Not meant to be a physical part of the ship. Only used for communicating tile condensations that are complicated.
+ * Like fueling the ship for example.
  */
 public class CommunicationTile extends ShipTile {
 
