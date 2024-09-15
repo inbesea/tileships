@@ -14,6 +14,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Counter;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.AdjacentTiles;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileUtility.TileTypeData;
 import org.bitbucket.noahcrosby.shipGame.physics.PhysicsObject;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class ShipTile extends GameObject implements PhysicsObject {
 
@@ -211,20 +212,37 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     }
 
 
-    public void setUp(ShipTile up) {
+    public void setUp(@Nullable ShipTile up) {
         neighbors.setUp(up);
+
+        if (up != null) {
+            up.newNeighbor(this);
+            this.newNeighbor(up);
+        }
     }
 
-    public void setRight(ShipTile right) {
+    public void setRight(@Nullable ShipTile right) {
         neighbors.setRight(right);
+        if (right != null) {
+            right.newNeighbor(this);
+            this.newNeighbor(right);
+        }
     }
 
-    public void setDown(ShipTile down) {
+    public void setDown(@Nullable ShipTile down) {
         neighbors.setDown(down);
+        if (down != null) {
+            down.newNeighbor(this);
+            this.newNeighbor(down);
+        }
     }
 
-    public void setLeft(ShipTile left) {
+    public void setLeft(@Nullable ShipTile left) {
         neighbors.setLeft(left);
+        if (left != null) {
+            left.newNeighbor(this);
+            this.newNeighbor(left);
+        }
     }
 
     /**
@@ -451,4 +469,6 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
         isLocked = locked;
         return this;
     }
+
+    public abstract void newNeighbor(ShipTile newNeighbor);
 }

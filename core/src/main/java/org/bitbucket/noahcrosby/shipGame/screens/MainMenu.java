@@ -7,19 +7,18 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.CoreTile;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ScreenSwapTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StrongTile;
 import org.bitbucket.noahcrosby.shipGame.input.InputPreProcessor;
 import org.bitbucket.noahcrosby.shipGame.input.TileDragHandler;
-import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
@@ -36,16 +35,20 @@ public class MainMenu  extends ScreenAdapter implements Screen {
     Music mainMenuMusic;
     boolean afterLoadingMap = false;
 
+    Skin skin;
+    TypingLabel gameLabel;
+
     private Ship ship;
     private final Box2DWrapper box2DWrapper = new Box2DWrapper();
 
-    private ShipTile startTile, settingsTile, exitTile;
+    private ShipTile startTile, settingsTile, exitTile
+        , moveTile;
 
 
     public MainMenu(final TileShipGame game) {
-        initShipMenu();
-
         this.game = game;
+
+        initShipMenu();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
@@ -64,14 +67,15 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         // We want to add in several tiles gapped by 2 spaces that change the game state when attaching the block to it.
         // The tiles can have labels above them. Polish would be making some physics letters that move out of the way and snap back after tile
         // moves away.
-        startTile = ship.getTileManager().addTileNoSnap(300,500, new StrongTile(new Vector2(0,0)));
-        startTile.setLocked(true);
-        settingsTile = ship.getTileManager().addTileNoSnap(500,500, new StrongTile(new Vector2(0,0)));
-        settingsTile.setLocked(true);
-        exitTile = ship.getTileManager().addTileNoSnap(125,500, new StrongTile(new Vector2(0,0)));
-        exitTile.setLocked(true);
-        ship.getTileManager().addTileNoSnap(300,20, new StrongTile(new Vector2(0,0)));
-        ship.getTileManager().addTileNoSnap(300,70, new StrongTile(new Vector2(0,0)));
+        startTile = ship.getTileManager().addTileNoSnap(300,500, new ScreenSwapTile(new Vector2(0,0), game, TileShipGame.CLASSIC_MODE ))
+            .setLocked(true);
+        settingsTile = ship.getTileManager().addTileNoSnap(500,500, new StrongTile(new Vector2(0,0)))
+            .setLocked(true);
+        exitTile = ship.getTileManager().addTileNoSnap(125,500, new StrongTile(new Vector2(0,0)))
+            .setLocked(true);
+        ship.getTileManager().addTileNoSnap(300,20, new StrongTile(new Vector2(0,0)))
+            .setLocked(true);
+        moveTile = ship.getTileManager().addTileNoSnap(300,70, new CoreTile(new Vector2(0,0)));
 
         Gdx.input.setInputProcessor(input);
 //        input.addProcessor(dragHandler);
@@ -100,6 +104,7 @@ public class MainMenu  extends ScreenAdapter implements Screen {
 
         boolean doneLoading = Resources.assetManager.update();
         if(doneLoading){
+            TileShipGame.defaultSkin = new Skin(Gdx.files.internal("skin/neon/skin/uiskin.json"));
 
             TileShipGame.font.draw(TileShipGame.batch, "T\nI\nL\n" +
                 "E\nS\nH\nI\nP\nS", 600, 350);
@@ -108,9 +113,14 @@ public class MainMenu  extends ScreenAdapter implements Screen {
 
             dragHandler.update();
 
+
             if(!afterLoadingMap){
                 input.addProcessor(dragHandler);
                 afterLoadingMap = true;
+
+                skin = new Skin(Gdx.files.internal("skin/neon/skin/uiskin.json"));
+                gameLabel = new TypingLabel("GAME", skin);
+                gameLabel.draw(TileShipGame.batch, 1);
             }
 
         } else {
@@ -135,5 +145,8 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         Gdx.input.setInputProcessor(input);
 
         TileShipGame.setCurrentCamera(camera);
+
+        // Replaces the tile for starting the game.
+        ship.addTileToShip(290, 70, moveTile);
     }
 }

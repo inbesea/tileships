@@ -64,7 +64,7 @@ public class TileShipGame extends Game {
 
         appPreferences = AppPreferences.getAppPreferences();
 
-        this.changeScreen(OLD_MENU);
+        this.changeScreen(MENU);
     }
 
     /**

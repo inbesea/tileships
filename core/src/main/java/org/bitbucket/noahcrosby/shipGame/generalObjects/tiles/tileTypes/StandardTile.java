@@ -55,4 +55,9 @@ public class StandardTile extends ShipTile{
     public boolean isFuel() {
         return true;
     }
+
+    @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
 }

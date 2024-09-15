@@ -129,6 +129,12 @@ public class ShipTilesManager {
     private ShipTile handleTileProductionData(TileProductionData tileData) {
         ShipTile tempTile;
 
+        // Remove tile from the ship if it is already there. This avoids possible conflicts.
+        if(tileData.getTileLiteral() != null && this.existingTiles.contains(tileData.getTileLiteral(), true)){
+            removeTileFromShip(tileData.getTileLiteral());
+        }
+
+
         if (!tileData.getCanFloat()) { // Snap tile
             // Tile needs to snap to ship
             Vector2 snapToHere = getClosestPlacementVector2(new Vector2(tileData.getX(), tileData.getY()));
@@ -737,9 +743,11 @@ public class ShipTilesManager {
      * Removes a tile by reference to the tile instance
      * Should only be used when a tile instance is found. Handles flushing the adjacency relationships between tiles.
      *
+     * Does not fully remove tile from game.
+     *
      * @param tile - Tile to remove from ship
      */
-    public void removeTileFromShip(ShipTile tile) {
+    public ShipTile removeTileFromShip(ShipTile tile) {
         if (!this.existingTiles.contains(tile, true)) { // If not in existing tiles
             Gdx.app.error("Removing Tile Error", "Error: Tile was not present in ship!\n-> " + tile.getAbbreviation() +
                 " - " + tile.getPositionAsString());
@@ -754,7 +762,9 @@ public class ShipTilesManager {
 
             // Remove from simulation
             box2DWrapper.deleteBody(tile.getBody());
+            return tile;
         }
+        return null;
     }
 
     /**

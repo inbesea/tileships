@@ -30,6 +30,11 @@ public class MetalTile extends ShipTile {
     }
 
     @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
+
+    @Override
     public Texture getTexture() {
         return Resources.MetalTileTexture;
     }

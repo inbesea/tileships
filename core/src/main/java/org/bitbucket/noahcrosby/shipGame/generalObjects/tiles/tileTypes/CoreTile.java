@@ -39,6 +39,12 @@ public class CoreTile extends ShipTile {
     public void pickedUp() {
 
     }
+
+    @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
+
     public CoreTile(Vector2 position) {
         super(position, ID.CoreTile, TileTypeData.CoreTile);
     }

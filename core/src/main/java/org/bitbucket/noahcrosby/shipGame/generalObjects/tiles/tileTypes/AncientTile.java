@@ -56,6 +56,11 @@ public class AncientTile extends ShipTile{
     }
 
     @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
+
+    @Override
     public void setVelocity(Vector2 velocity) {
 
     }

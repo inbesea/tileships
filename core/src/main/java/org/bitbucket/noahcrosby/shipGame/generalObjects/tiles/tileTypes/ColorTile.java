@@ -67,6 +67,11 @@ public class ColorTile extends ShipTile{
 
     }
 
+    @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
+
     /**
      * Setter method to set the invulnerability
      * @param isInvulnerable

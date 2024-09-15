@@ -58,6 +58,11 @@ public class FurnaceTile extends ShipTile{
     }
 
     @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
+
+    @Override
     public void setVelocity(Vector2 velocity) {
         Gdx.app.log("EngineTile", "Velocity: " + velocity + " Should not have been set.");
     }

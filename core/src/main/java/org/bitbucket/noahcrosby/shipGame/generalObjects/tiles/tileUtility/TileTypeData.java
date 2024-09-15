@@ -17,7 +17,8 @@ public enum TileTypeData {
     GlassTile("GLS"),
     MetalTile("MET"),
     WoodTile("WOD"),
-    SprayPaintTile("SPR");
+    SprayPaintTile("SPR"),
+    ScreenSwapTile("SWT");
 
     public String getAbbreviation() {
         return abbreviation;

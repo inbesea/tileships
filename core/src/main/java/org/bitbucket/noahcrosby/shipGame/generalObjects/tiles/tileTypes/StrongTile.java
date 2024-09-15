@@ -30,6 +30,12 @@ public class StrongTile extends ShipTile implements ShipTileInterface{
     public void pickedUp() {
 
     }
+
+    @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
+
     @Override
     public Texture getTexture() {
         return Resources.ShipTileStrongTexture;

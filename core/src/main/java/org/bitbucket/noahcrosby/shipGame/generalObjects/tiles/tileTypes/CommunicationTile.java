@@ -37,6 +37,11 @@ public class CommunicationTile extends ShipTile {
     }
 
     @Override
+    public void newNeighbor(ShipTile newNeighbor) {
+
+    }
+
+    @Override
     public Texture getTexture() {
         return null;
     }

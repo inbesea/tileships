@@ -32,7 +32,8 @@ public enum ID {
     GlassTile(true),
     MetalTile(true),
     WoodTile(true),
-    SprayPaintTile(true);
+    SprayPaintTile(true),
+    ScreenSwapTile(true);
 
     //Easy way to check if an object is a tile or not.
 	private final boolean isTileType;
