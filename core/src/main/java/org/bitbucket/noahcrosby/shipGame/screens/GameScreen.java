@@ -16,6 +16,7 @@ import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.directors.ShipDirector;
 import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.effects.EffectsHandler;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GoalChecker;
 import org.bitbucket.noahcrosby.shipGame.levelData.ForegroundObject;
 import org.bitbucket.noahcrosby.shipGame.levelData.MapNode;
@@ -75,6 +76,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
     GalaxyBackGround backGround;
     GoalChecker goalChecker;
 
+    EffectsHandler effects;
+
     public GameScreen(final TileShipGame game) {
         this.game = game;
 
@@ -82,6 +85,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
         this.extendViewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
+
         backGround = new GalaxyBackGround((int) TileShipGame.defaultViewportSizeX, (int) TileShipGame.defaultViewportSizeY, 0.001f);
 
         box2DWrapper = new Box2DWrapper();
@@ -105,6 +109,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // Add input event handling
         initializeInputEventHandling();
 
+        initEffects();
+
         // Create collision listener
         collisionHandler = new ClassicCollisionHandler(asteroidManager, playerShip.getTileManager());// Handler has manager to manage stuff
         CollisionListener collisionListener = new CollisionListener(collisionHandler);// Listener can give collisions to collision handler
@@ -113,6 +119,12 @@ public class GameScreen implements Screen, Listener<MapNode> {
         textBoxHandler = new TextBoxManager();
 
         backGround.addForegroundObject(new ForegroundObject(new Vector2(20, 20), new Vector2(300, 300), Resources.AsteroidRedTexture));
+    }
+
+    private void initEffects() {
+        effects = new EffectsHandler();
+        effects.setCamera(camera);
+        tileDragHandler.publisher.add(effects);
     }
 
     /**
@@ -162,6 +174,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         asteroidManager.checkForSpawn(); // Handle the asteroid spawning
 
         backGround.draw(game);
+        effects.update();
 
         // Draw game objects
         drawGameObjects();
@@ -174,7 +187,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
             if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
                 playerInput.handleKeyPressed(player, camera);
             }
-            playerInput.updateCameraOnPlayer(player, camera);
+            PlayerInput.updateCameraOnPlayer(player, camera);
         }
         if(goalChecker.getWon()) {
             goalChecker.renderWin();

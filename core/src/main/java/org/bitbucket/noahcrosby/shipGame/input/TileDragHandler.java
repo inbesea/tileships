@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.input;
 
+import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.AppPreferences;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.effects.EffectContent;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Player;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.TileArrayToString;
@@ -20,9 +22,11 @@ import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnproject
 public class TileDragHandler extends InputAdapter {
 
     private static final float PLACE_DRAG_GOAL = 20f;
-    private final Ship playerShip;
+    private Ship playerShip;
     private boolean dragging;
     private float placementSpeed = 15f;
+    private int shake = 0;
+    public Signal<EffectContent> publisher;
     private ShipTile draggedTile;
 
     SecondOrderDynamics sOD_x;
@@ -40,16 +44,20 @@ public class TileDragHandler extends InputAdapter {
      * Probably a case of Shotgun Surgery <a href="https://refactoring.guru/smells/shotgun-surgery">...</a>
      */
     public TileDragHandler(Ship playerShip) {
-        this.playerShip = playerShip;
-        sOD_x = new SecondOrderDynamics(f, z, r, 0f);
-        sOD_y = new SecondOrderDynamics(f, z, r, 0f);
+        initCommonElements(playerShip);
     }
 
     public TileDragHandler(Ship playerShip, Player player) {
         this.player = player;
+        initCommonElements(playerShip);
+    }
+
+    // Keep it DRY
+    private void initCommonElements(Ship playerShip){
         this.playerShip = playerShip;
         sOD_x = new SecondOrderDynamics(f, z, r, 0f);
         sOD_y = new SecondOrderDynamics(f, z, r, 0f);
+        publisher = new Signal<>();
     }
 
     /**
@@ -57,7 +65,7 @@ public class TileDragHandler extends InputAdapter {
      * This update works with the second order dynamics model
      */
     public void update() {
-        if (getDragging() && playerShip.isDragging()) { // We only need to check is dragging in one place god damnit.
+        if (getDragging() && playerShip.isDragging()) { // We should only need to check is dragging in one place god damnit.
             ShipTile draggedTile = playerShip.getDraggedTile();
             Vector3 playerInputPosition = returnUnprojectedInputPosition(TileShipGame.getCurrentCamera());
 
@@ -254,6 +262,16 @@ public class TileDragHandler extends InputAdapter {
         this.setDraggingSound(false);
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);
+
+        publishTilePlacement(new EffectContent(EffectContent.BLOCK_PLACEMENT, tempTile));
+    }
+
+    /**
+     * Emit publish data
+     * @param effectsContent
+     */
+    private void publishTilePlacement(EffectContent effectsContent) {
+        publisher.dispatch(effectsContent);
     }
 
     /**

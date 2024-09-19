@@ -69,7 +69,7 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         // moves away.
         startTile = ship.getTileManager().addTileNoSnap(300,500, new ScreenSwapTile(new Vector2(0,0), game, TileShipGame.CLASSIC_MODE ))
             .setLocked(true);
-        settingsTile = ship.getTileManager().addTileNoSnap(500,500, new StrongTile(new Vector2(0,0)))
+        settingsTile = ship.getTileManager().addTileNoSnap(500,500, new ScreenSwapTile(new Vector2(0,0), game, TileShipGame.PREFERENCES ))
             .setLocked(true);
         exitTile = ship.getTileManager().addTileNoSnap(125,500, new StrongTile(new Vector2(0,0)))
             .setLocked(true);
@@ -148,5 +148,15 @@ public class MainMenu  extends ScreenAdapter implements Screen {
 
         // Replaces the tile for starting the game.
         ship.addTileToShip(290, 70, moveTile);
+    }
+
+    @Override
+    public void pause() {
+        mainMenuMusic.pause();
+    }
+
+    @Override
+    public void resume() {
+        mainMenuMusic.play();
     }
 }
