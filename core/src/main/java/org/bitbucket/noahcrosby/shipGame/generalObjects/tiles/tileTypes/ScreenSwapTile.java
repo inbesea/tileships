@@ -29,7 +29,11 @@ public class ScreenSwapTile extends ShipTile{
 
     @Override
     public Texture getTexture() {
-        return Resources.AncientAsteroidTexture;
+        if(this.texture == null){
+            return Resources.AncientAsteroidTexture;
+        } else {
+            return this.texture;
+        }
     }
 
     @Override

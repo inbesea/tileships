@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 
@@ -21,6 +22,7 @@ public abstract class GameObject {
 	protected Body body;
 	protected float rotation;
 	protected boolean physicsDeletable;
+    protected Texture texture = null;
 
 	public GameObject(Vector2 position, Vector2 size , ID id) {
 		// set location and id to define basics of the game object.
@@ -107,7 +109,13 @@ public abstract class GameObject {
 	 *
 	 * @return - Texture of relevant concrete type
 	 */
-	public abstract Texture getTexture();
+	public Texture getTexture(){
+        if(this.texture == null){
+            return Resources.FurnaceTexture;
+        } else {
+            return this.texture;
+        }
+    };
 	public Vector2 getSize() {
 		return size;
 	}
@@ -161,4 +169,8 @@ public abstract class GameObject {
 	 * @return
 	 */
 	public abstract boolean deleteFromGame();
+
+    public void setTexture(Texture texture){
+        this.texture = texture;
+    }
 }

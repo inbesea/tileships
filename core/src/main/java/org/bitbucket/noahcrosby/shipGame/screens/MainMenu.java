@@ -73,7 +73,6 @@ public class MainMenu  extends ScreenAdapter implements Screen {
             .setLocked(true);
         exitTile = ship.getTileManager().addTileNoSnap(125,500, new ScreenSwapTile(new Vector2(0,0), game, TileShipGame.EXIT_GAME ))
             .setLocked(true);
-//            .setTexture(Resources.BigWoodTileTexture);
         ship.getTileManager().addTileNoSnap(300,20, new StrongTile(new Vector2(0,0)))
             .setLocked(true);
         moveTile = ship.getTileManager().addTileNoSnap(300,70, new CoreTile(new Vector2(0,0)));
@@ -110,12 +109,10 @@ public class MainMenu  extends ScreenAdapter implements Screen {
             TileShipGame.font.draw(TileShipGame.batch, "T\nI\nL\n" +
                 "E\nS\nH\nI\nP\nS", 600, 350);
 
-            ship.render(game);
-
-            dragHandler.update();
-
 
             if(!afterLoadingMap){
+                exitTile.setTexture(Resources.ExitTileTexture);
+
                 input.addProcessor(dragHandler);
                 afterLoadingMap = true;
 
@@ -123,6 +120,10 @@ public class MainMenu  extends ScreenAdapter implements Screen {
                 gameLabel = new TypingLabel("GAME", skin);
                 gameLabel.draw(TileShipGame.batch, 1);
             }
+
+            ship.render(game);
+
+            dragHandler.update();
 
         } else {
             TileShipGame.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 0, camera.viewportHeight - 100);
