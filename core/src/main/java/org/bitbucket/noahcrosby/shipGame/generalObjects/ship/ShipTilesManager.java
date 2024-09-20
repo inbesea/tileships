@@ -134,7 +134,22 @@ public class ShipTilesManager {
             removeTileFromShip(tileData.getTileLiteral());
         }
 
+        setTileDataPlacementLocation(tileData);
+        tempTile = gridAlignedxyTilePlacement(tileData);
+        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
 
+        validateEdgeSize();
+        ship.publishShip();
+
+        return tempTile;
+    }
+
+    /**
+     * Sets the tile data using the ship's existing tiles.
+     * Hide implementation in here.
+     * @param tileData
+     */
+    private void setTileDataPlacementLocation(TileProductionData tileData){
         if (!tileData.getCanFloat()) { // Snap tile
             // Tile needs to snap to ship
             Vector2 snapToHere = getClosestPlacementVector2(new Vector2(tileData.getX(), tileData.getY()));
@@ -148,14 +163,6 @@ public class ShipTilesManager {
                 tileData.setLocation(closestInternalVacancy(tileData.getLocation()));
             }
         }
-
-        tempTile = gridAlignedxyTilePlacement(tileData);
-        box2DWrapper.initPhysicsObject(tempTile); // Critical since the removal of tile from ship explodes the body attibute and must be recreated.
-
-        validateEdgeSize();
-        ship.publishShip();
-
-        return tempTile;
     }
 
     /**
@@ -232,11 +239,11 @@ public class ShipTilesManager {
         int[] indexXY;
 
         indexXY = returnIndex(tileData.getX(), tileData.getY()); // Get index corresponding to x, y position
-        Vector2 vector2 = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
+        Vector2 gameSpaceIndex = new Vector2(getGameSpacePositionFromIndex(indexXY[0]), getGameSpacePositionFromIndex(indexXY[1]));
 
         if (tileData.getTileLiteral() != null) {
 
-            tileData.getTileLiteral().setPosition(vector2); // Set existing tile position
+            tileData.getTileLiteral().setPosition(gameSpaceIndex); // Set existing tile position
             validateNewTileIndex(tileData.getTileLiteral());
             this.existingTiles.add(tileData.getTileLiteral());
 
@@ -249,18 +256,11 @@ public class ShipTilesManager {
             return tileData.getTileLiteral();
         } else if (tileData.getId() != null) {
 
-            // There are some DRY issues here, but I'm moving on for now.
-            ShipTile tempTile;
-
-            indexXY = returnIndex(tileData.getX(), tileData.getY()); // Get index corresponding to x, y position
-
             // Create tile subtype based on ID using factory static call.
-            tileData.setTileLiteral(TileTypeFactory.getShipTileTypeInstance(vector2, tileData.getId()));
+            tileData.setTileLiteral(TileTypeFactory.getShipTileTypeInstance(gameSpaceIndex, tileData.getId()));
             validateNewTileIndex(tileData.getTileLiteral());
             this.existingTiles.add(tileData.getTileLiteral());
             setNeighbors(tileData); // Setting tile neighbors within ship
-
-            box2DWrapper.initPhysicsObject(tileData.getTileLiteral());
 
             printNewTileMessage(tileData);
 
