@@ -125,7 +125,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
                 if(Resources.assetManager.update()){
                     mainMenuMusic.setLooping(false);
                     mainMenuMusic.dispose();
-                    game.changeScreen(TileShipGame.CLASSIC_MODE);
+                    game.gameFlowControl(TileShipGame.CLASSIC_MODE);
                     dispose();}
             }
         });
@@ -136,7 +136,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
                 if(Resources.assetManager.update()){
                     mainMenuMusic.setLooping(false);
                     mainMenuMusic.dispose();
-                    game.changeScreen(TileShipGame.ARCADE_MODE);
+                    game.gameFlowControl(TileShipGame.ARCADE_MODE);
                     dispose();}
             }
         });
@@ -144,7 +144,7 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(TileShipGame.PREFERENCES);
+                game.gameFlowControl(TileShipGame.PREFERENCES);
             }
         });
         debug.addListener(new ChangeListener() {

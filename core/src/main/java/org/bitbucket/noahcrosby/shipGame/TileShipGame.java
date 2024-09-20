@@ -52,6 +52,7 @@ public class TileShipGame extends Game {
     public final static int GAMEOVER = 3;
     public final static int LOADING = 4;
     public final static int ARCADE_MODE = 5;
+    public final static int EXIT_GAME = 7;
 
 
     /**
@@ -64,7 +65,7 @@ public class TileShipGame extends Game {
 
         appPreferences = AppPreferences.getAppPreferences();
 
-        this.changeScreen(MENU);
+        this.gameFlowControl(MENU);
     }
 
     /**
@@ -72,7 +73,7 @@ public class TileShipGame extends Game {
      * Can be called from anywhere with game instance reference.
      * @param screen - Int representing screen to switch to.
      */
-    public void changeScreen(int screen) {
+    public void gameFlowControl(int screen) {
         Gdx.app.log("Screen Change", "Changing screen to " + screen);
         switch (screen){
             case OLD_MENU:
@@ -98,6 +99,9 @@ public class TileShipGame extends Game {
             case LOADING:
                 break;
             case GAMEOVER:
+                break;
+            case EXIT_GAME:
+                Gdx.app.exit();
                 break;
             default :
                 throw new RuntimeException();

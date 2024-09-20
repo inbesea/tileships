@@ -96,7 +96,7 @@ public class InGameMenuHandler {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(TileShipGame.MENU);
+                game.gameFlowControl(TileShipGame.MENU);
 
             }
         });

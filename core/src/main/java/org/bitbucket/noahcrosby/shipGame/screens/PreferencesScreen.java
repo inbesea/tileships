@@ -20,6 +20,7 @@ public class PreferencesScreen implements Screen {
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
     private Label fullScreenLabel;
+    private Label debugLabel;
     private Music preferencesScreenMusic;
 
     public PreferencesScreen(final TileShipGame game){
@@ -105,15 +106,25 @@ public class PreferencesScreen implements Screen {
             }
         });
 
+        final CheckBox debug = new CheckBox("Debug Mode", skin);
+        debug.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                AppPreferences.getAppPreferences().toggleIsDebug();
+            }
+
+        });
+
         // return to main screen button
         final TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(TileShipGame.MENU);
+                game.gameFlowControl(TileShipGame.MENU);
 
             }
         });
+
 
         // Create labels
         titleLabel = new Label( "Preferences", skin );
@@ -122,6 +133,7 @@ public class PreferencesScreen implements Screen {
         musicOnOffLabel = new Label( "Music", skin );
         soundOnOffLabel = new Label( "Sound Effect", skin );
         fullScreenLabel = new Label( "Full Screen", skin );
+        debugLabel = new Label( "Debug Mode", skin );
 
 
         // Add to table
@@ -142,6 +154,8 @@ public class PreferencesScreen implements Screen {
         table.add(fullScreenLabel).left();
         table.add(fullScreenCheckbox);
         table.row().pad(10,0,0,10);
+        table.add(debugLabel).left();
+        table.add(debug);
         table.add(backButton).colspan(2);
     }
 

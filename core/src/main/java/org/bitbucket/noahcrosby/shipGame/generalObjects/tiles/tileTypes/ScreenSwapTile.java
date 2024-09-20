@@ -50,10 +50,10 @@ public class ScreenSwapTile extends ShipTile{
     }
 
     private void swapScreen(int screenNumber){
-        game.changeScreen(screenNumber);
+        game.gameFlowControl(screenNumber);
     }
 
     public void swapScreen(){
-        game.changeScreen(this.screenNumber);
+        game.gameFlowControl(this.screenNumber);
     }
 }

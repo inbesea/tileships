@@ -35,7 +35,7 @@ public class DebugInputHandler extends InputAdapter {
             }
             playerShip.startCollapseCollect(); // Begins ship collecting
         } else if (keycode == Input.Keys.ESCAPE) {
-            game.changeScreen(TileShipGame.MENU);
+            game.gameFlowControl(TileShipGame.MENU);
             // TODO : Lets change this and the .pause() on screens to pause the game. We can clean this up to bring up an ingame menu very easily.
         }
         return false;

@@ -71,8 +71,9 @@ public class MainMenu  extends ScreenAdapter implements Screen {
             .setLocked(true);
         settingsTile = ship.getTileManager().addTileNoSnap(500,500, new ScreenSwapTile(new Vector2(0,0), game, TileShipGame.PREFERENCES ))
             .setLocked(true);
-        exitTile = ship.getTileManager().addTileNoSnap(125,500, new StrongTile(new Vector2(0,0)))
+        exitTile = ship.getTileManager().addTileNoSnap(125,500, new ScreenSwapTile(new Vector2(0,0), game, TileShipGame.EXIT_GAME ))
             .setLocked(true);
+//            .setTexture(Resources.BigWoodTileTexture);
         ship.getTileManager().addTileNoSnap(300,20, new StrongTile(new Vector2(0,0)))
             .setLocked(true);
         moveTile = ship.getTileManager().addTileNoSnap(300,70, new CoreTile(new Vector2(0,0)));
