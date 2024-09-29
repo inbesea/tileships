@@ -6,12 +6,16 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.effects.EffectsHandler;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.CoreTile;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ScreenSwapTile;
@@ -34,6 +38,7 @@ public class MainMenu  extends ScreenAdapter implements Screen {
     TileDragHandler dragHandler;
     Music mainMenuMusic;
     boolean afterLoadingMap = false;
+    EffectsHandler effects;
 
     Skin skin;
     TypingLabel gameLabel;
@@ -43,10 +48,19 @@ public class MainMenu  extends ScreenAdapter implements Screen {
 
     private ShipTile startTile, settingsTile, exitTile
         , moveTile;
+    TextureAtlas textureAtlas;
+    Sprite sprite;
+    Animation<Sprite> coinAnimate;
+    float animateTime = 0f;
 
 
     public MainMenu(final TileShipGame game) {
         this.game = game;
+
+        textureAtlas = new TextureAtlas("coinAnimate.txt");
+        sprite = textureAtlas.createSprite("Coins");
+//        coinAnimate = new Animation<Sprite>(0.2f, textureAtlas.createSprites());
+        coinAnimate = new Animation<Sprite>(0.2f, textureAtlas.createSprites(), Animation.PlayMode.LOOP_PINGPONG);
 
         initShipMenu();
 
@@ -58,6 +72,10 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         Resources.loadAssets();
         input = new InputPreProcessor(camera);
         dragHandler = new TileDragHandler(ship);
+
+        effects = new EffectsHandler();
+        effects.setCamera(camera);
+        dragHandler.publisher.add(effects);
     }
 
     private void initShipMenu(){
@@ -100,7 +118,20 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         // Call to load textures to asset manager
         Resources.updateAssets();
 
+        effects.update();
+
         TileShipGame.batch.begin();
+
+        if(sprite != null){
+            sprite.setPosition(10,10);
+            sprite.draw(TileShipGame.batch);
+        } else {
+//            System.out.println("SPRITE IS NULL");
+        }
+
+        animateTime += Gdx.graphics.getDeltaTime();
+        sprite = coinAnimate.getKeyFrame(animateTime, true);
+
 
         boolean doneLoading = Resources.assetManager.update();
         if(doneLoading){
@@ -114,6 +145,7 @@ public class MainMenu  extends ScreenAdapter implements Screen {
                 exitTile.setTexture(Resources.ExitTileTexture);
 
                 input.addProcessor(dragHandler);
+
                 afterLoadingMap = true;
 
                 skin = new Skin(Gdx.files.internal("skin/neon/skin/uiskin.json"));

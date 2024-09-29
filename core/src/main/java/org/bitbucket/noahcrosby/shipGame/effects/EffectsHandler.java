@@ -11,7 +11,7 @@ public class EffectsHandler implements Listener<EffectContent> {
 
     private OrthographicCamera camera;
     int screenshakeDuration = 0;
-    int shake = 6;
+    int defaultShakeIntensity = 6;
     int defaultShakeDuration = 60;
     private Vector3 originalPosition = new Vector3();
 
@@ -46,10 +46,12 @@ public class EffectsHandler implements Listener<EffectContent> {
             System.out.println(Gdx.graphics.getDeltaTime()*1000);
             float msDelta = Gdx.graphics.getDeltaTime()*1000;
             screenshakeDuration -= msDelta;
-            camera.position.add(generalUtil.getRandomNumber(-shake, shake), generalUtil.getRandomNumber(-shake, shake), 0);
-            if(screenshakeDuration <= 0){
-                camera.position.x = originalPosition.x;
-                camera.position.y = originalPosition.y;
+            if(camera != null){
+                camera.position.add(generalUtil.getRandomNumber(-defaultShakeIntensity, defaultShakeIntensity), generalUtil.getRandomNumber(-defaultShakeIntensity, defaultShakeIntensity), 0);
+                if(screenshakeDuration <= 0){
+                    camera.position.x = originalPosition.x;
+                    camera.position.y = originalPosition.y;
+                }
             }
         }
     }

@@ -2,7 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.levelData;
 
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpawner;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidTable;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpawnVariables;
 import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
@@ -26,8 +26,8 @@ public class Maps {
         map.setEntryNode(map.addNode(200, 300))
             .setAsteroids(
                 AsteroidSpawner.generateRandomAsteroidsStatic(
-                AsteroidTable.EntryNodeStd(),
-                AsteroidTable.SOME()));
+                AsteroidSpawnVariables.EntryPlanetStandard(),
+                AsteroidSpawnVariables.SOME()));
         // How tf did I write code this bad.
         /*
         This should be an optionally simple call
@@ -52,13 +52,13 @@ public class Maps {
         MapNode entryNode = map.addNode(10,10);
         map.setEntryNode(entryNode).setStoreLocation(true);
         entryNode.setAsteroids(
-            AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.SOME())
+            AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidSpawnVariables.EntryPlanetStandard(), AsteroidSpawnVariables.SOME())
         );
 
         // Generate a bunch of nodes
         for(int i = 0; i < nodes; i++){
             map.addNode(generalUtil.getRandomNumber(10, 500), generalUtil.getRandomNumber(10, 500))
-                .setAsteroids(AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidTable.EntryNodeStd(), AsteroidTable.FEW()));// The map should be Zoomable.
+                .setAsteroids(AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidSpawnVariables.EntryPlanetStandard(), AsteroidSpawnVariables.FEW()));// The map should be Zoomable.
             // We can have four produce some key asteroids and set the furthest one as a endpoint node later
         }
 

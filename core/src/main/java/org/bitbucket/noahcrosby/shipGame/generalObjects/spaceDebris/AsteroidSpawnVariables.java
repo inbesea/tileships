@@ -3,7 +3,7 @@ package org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 import java.util.Map;
 
-public class AsteroidTable {
+public class AsteroidSpawnVariables {
     // AMOUNTS OF ASTEROIDS
     public static final int NONE = 0;
 
@@ -54,14 +54,14 @@ public class AsteroidTable {
      * Spawns asteroids with 50% metal and 50% default
      * @return
      */
-    public static final Map<Class, Integer> EntryNodeStd(){
-        Map<Class, Integer> map = new java.util.HashMap<>();
-        map.put(MetalAsteroid.class, 50);
-        map.put(Asteroid.class, 50);
-        map.put(WoodAsteroid.class, 50);
-        map.put(GlassAsteroid.class, 50);
-        map.put(SprayPaintAsteroid.class, 50);
-        return map;
+    public static final Map<Class, Integer> EntryPlanetStandard(){
+        Map<Class, Integer> entryPlanet = new java.util.HashMap<>();
+        entryPlanet.put(MetalAsteroid.class, 50);
+        entryPlanet.put(Asteroid.class, 50);
+        entryPlanet.put(WoodAsteroid.class, 50);
+        entryPlanet.put(GlassAsteroid.class, 50);
+        entryPlanet.put(SprayPaintAsteroid.class, 50);
+        return entryPlanet;
     }
 }
 

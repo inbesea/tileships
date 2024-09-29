@@ -116,7 +116,7 @@ public class ArcadeModeScreen extends ScreenAdapter  implements Screen {
         player.render(game);
         TileShipGame.batch.end();
 
-        drawGameObjects(asteroidManager.getAsteroids());
+        drawGameObjects(asteroidManager.getTransientAsteroids());
 
         if(AppPreferences.getAppPreferences().getIsDebug()){
             box2DWrapper.drawDebug(camera);

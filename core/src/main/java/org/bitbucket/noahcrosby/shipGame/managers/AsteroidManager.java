@@ -6,13 +6,11 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpawner;
-import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidTable;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
@@ -32,16 +30,15 @@ public class AsteroidManager implements Manager {
     private boolean spawning;
     private int asteroidLimit;
     // Keep managed asteroid within manager
-    private Array<Asteroid> asteroids = new Array<>();
+    private Array<Asteroid> transientAsteroids = new Array<>();
+    Array<Asteroid> respawingAsteroids = new Array<>();
     // Needed for physics simulation
     Circle asteroidSpawnZone;
     float spawnRadius = TileShipGame.spawnRadius;
     OrthographicCamera camera;
     Box2DWrapper box2DWrapper;
     ObjectRoller asteroidRoller;
-    Array<Asteroid> finiteAsteroids = new Array<>();
     boolean arcadeMode = false;
-    AsteroidTable spawnTable;
 
     /**
      * Spawns/cleans up asteroids and adds/removes them from passed physics simulation
@@ -92,20 +89,21 @@ public class AsteroidManager implements Manager {
         // Check asteroids and remove any outside of the "zoneOfPlay"
         // how to handle that... We could have that be an explicitly set value defining a box that removes asteroids
         // Or it could be a value that tells you how much space will be outside the viewport that can be used.
-        Asteroid temp;
-        Array<Asteroid> tempArray = getAllAsteroids();
-        for(int i = 0; i < tempArray.size; i++){
-            temp = tempArray.get(i);
+        Asteroid asteroid;
+        Array<Asteroid> currentAsteroids = getAllAsteroids();
+        for(int i = 0; i < currentAsteroids.size; i++){
 
-            if(temp.getIsDead()){
-                deleteMember(temp);
+            asteroid = currentAsteroids.get(i);
+
+            if(asteroid.getIsDead()){
+                deleteMember(asteroid);
             }
 
-            if(outOfBounds(temp)){
-                if(finiteAsteroids.contains(temp, false)){
-                    respawn(temp);
+            if(outOfBounds(asteroid)){
+                if(respawingAsteroids.contains(asteroid, false)){
+                    respawn(asteroid);
                 } else {
-                    deleteMember(temp);
+                    deleteMember(asteroid);
                 }
             }
         }
@@ -113,7 +111,7 @@ public class AsteroidManager implements Manager {
 
     /**
      * Reasserts an asteroid's speed and position while resetting the physics body.
-     * @param temp
+     * @param temp - Asteroid to respawn (move to new location
      */
     private void respawn(Asteroid temp) {
         Body body = temp.getBody();
@@ -133,25 +131,34 @@ public class AsteroidManager implements Manager {
     /**
      * Removes asteroid instance by identity.
      * Meant to be called from an agnostic point of view allowing us to remove objects from a generic GameObject call.
-     * @param gameObject
+     *
+     * We can expand this if we want to add other space junk. We can actually add space junk as asteroid with new textures lol.
+     *
+     * @param gameObject - Only Asteroids allowed currently
      * @return
      */
     @Override
     public boolean deleteMember(GameObject gameObject) {
-        if(gameObject.getID() != ID.Asteroid){
-            Gdx.app.debug("AsteroidManager", "Object is not an Asteroid");
+
+        if(gameObject.getID() == ID.Asteroid){ // Expected ID
+            try{
+                Asteroid asteroid = (Asteroid) gameObject;
+                respawingAsteroids.removeValue(asteroid, true);
+                transientAsteroids.removeValue(asteroid, true);
+                box2DWrapper.deleteBody(asteroid.getBody());
+                return true;
+            } catch (ClassCastException cce){
+                System.out.println(cce);
+                return false;
+            }
+        } else {
+            if(Gdx.app != null){
+                Gdx.app.debug("AsteroidManager", "Object is not an Asteroid");
+            }
             return false;
         }
-        try{
-            Asteroid asteroid = (Asteroid) gameObject;
-            finiteAsteroids.removeValue(asteroid, true);
-            asteroids.removeValue(asteroid, true);
-            box2DWrapper.deleteBody(asteroid.getBody());
-            return true;
-        } catch (ClassCastException cce){
-            System.out.println(cce);
-            return false;
-        }
+
+
     }
 
     /**
@@ -161,7 +168,7 @@ public class AsteroidManager implements Manager {
      */
     public Asteroid removeMember(Asteroid asteroid){
         if(asteroid.getID() != ID.Asteroid)return null;
-        asteroids.removeValue(asteroid, true);
+        transientAsteroids.removeValue(asteroid, true);
         box2DWrapper.deleteBody(asteroid.getBody());
         return asteroid;
     }
@@ -201,7 +208,7 @@ public class AsteroidManager implements Manager {
 
         box2DWrapper.initPhysicsObject(asteroid);
 
-        asteroids.add(asteroid);
+        transientAsteroids.add(asteroid);
     }
 
     public void spawnAsteroid(Asteroid asteroid){
@@ -218,9 +225,9 @@ public class AsteroidManager implements Manager {
      * @param asteroid
      * @return
      */
-    public Asteroid addAsteroid(Asteroid asteroid, boolean isFinite){
+    public Asteroid addAsteroid(Asteroid asteroid, boolean isRespawning){
         // Asteroids are not already present
-        if(asteroids.contains(asteroid, true) || finiteAsteroids.contains(asteroid, true)){
+        if(transientAsteroids.contains(asteroid, true) || respawingAsteroids.contains(asteroid, true)){
             if(asteroid.getBody() == null){ // Check for bodies
                 Vector2 spawnLocation = getVectorInValidSpawnArea();
 
@@ -234,10 +241,10 @@ public class AsteroidManager implements Manager {
         asteroid.setPosition(spawnLocation);
         box2DWrapper.initPhysicsObject(asteroid);
 
-        if(isFinite){
-            finiteAsteroids.add(asteroid);
+        if(isRespawning){
+            respawingAsteroids.add(asteroid);
         }else {
-            asteroids.add(asteroid);
+            transientAsteroids.add(asteroid);
         }
 
         return asteroid;
@@ -277,7 +284,7 @@ public class AsteroidManager implements Manager {
      * @return
      */
     public int getContinuousAsteroidCount() {
-        return asteroids.size;
+        return transientAsteroids.size;
     }
 
     /**
@@ -299,20 +306,20 @@ public class AsteroidManager implements Manager {
      */
     public void deleteAllAsteroids(){
         // Go through the asteroids and remove their reference from the local list and the screen object list
-        for(int i = 0; i < asteroids.size; i++){
-            deleteMember(asteroids.get(i));
+        for(int i = 0; i < transientAsteroids.size; i++){
+            deleteMember(transientAsteroids.get(i));
         }
-        if(asteroids.size > 0){
+        if(transientAsteroids.size > 0){
             Gdx.app.debug("AsteroidManager.deleteAllAsteroids()","ERROR : deleteAllAsteroids() did not clear asteroid array in AsteroidManager");
         }
     }
 
     private void deleteFiniteAsteroids() {
         // Go through the asteroids and remove their reference from the local list and the screen object list
-        for(int i = 0; i < finiteAsteroids.size; i=i){
-            deleteMember(finiteAsteroids.get(i));
+        for(int i = 0; i < respawingAsteroids.size; i=i){
+            deleteMember(respawingAsteroids.get(i));
         }
-        if(finiteAsteroids.size > 0){
+        if(respawingAsteroids.size > 0){
             Gdx.app.debug("AsteroidManager.deleteFiniteAsteroids()","ERROR : deleteFiniteAsteroids() did not clear finiteAsteroids array in AsteroidManager");
         }
     }
@@ -322,8 +329,8 @@ public class AsteroidManager implements Manager {
      *
      * @return - Array of asteroids
      */
-    public Array<Asteroid> getAsteroids() {
-        return asteroids;
+    public Array<Asteroid> getTransientAsteroids() {
+        return transientAsteroids;
     }
 
 
@@ -339,15 +346,15 @@ public class AsteroidManager implements Manager {
         return asteroidSpawnZone;
     }
 
-    public Array<Asteroid> getFiniteAsteroids() {
-        return finiteAsteroids;
+    public Array<Asteroid> getRespawingAsteroids() {
+        return respawingAsteroids;
     }
 
 
     public Array<Asteroid> returnFiniteAsteroids() {
         Array<Asteroid> asteroids1 = new Array<>();
-        asteroids1.addAll(finiteAsteroids);
-        finiteAsteroids.clear();
+        asteroids1.addAll(respawingAsteroids);
+        respawingAsteroids.clear();
         return asteroids1;
     }
 
@@ -355,14 +362,14 @@ public class AsteroidManager implements Manager {
      * set the array of limited asteroids that can be diminished.
      * @param asteroids
      */
-    public void setFiniteAsteroids(Array<Asteroid> asteroids) {
+    public void setRespawingAsteroids(Array<Asteroid> asteroids) {
         softDeleteFiniteAsteroids();
 
         // Reset the finite asteroids
-        finiteAsteroids = asteroids;
-        if(finiteAsteroids != null){
-            for(int i = 0; i < finiteAsteroids.size; i++){
-                addAsteroid(finiteAsteroids.get(i), true);
+        respawingAsteroids = asteroids;
+        if(respawingAsteroids != null){
+            for(int i = 0; i < respawingAsteroids.size; i++){
+                addAsteroid(respawingAsteroids.get(i), true);
             }
         }
     }
@@ -372,7 +379,7 @@ public class AsteroidManager implements Manager {
      */
     public void softDeleteFiniteAsteroids(){
         // Remove the old physics bodies
-        for(Asteroid finiteAsteroid : finiteAsteroids){
+        for(Asteroid finiteAsteroid : respawingAsteroids){
             box2DWrapper.deleteBody(finiteAsteroid.getBody());
             finiteAsteroid.setBody(null);
         }
@@ -384,18 +391,9 @@ public class AsteroidManager implements Manager {
 
     public Array<Asteroid> getAllAsteroids() {
         Array<Asteroid> newList = new Array<>();
-        newList.addAll(this.finiteAsteroids);
-        newList.addAll(this.asteroids);
+        newList.addAll(this.respawingAsteroids);
+        newList.addAll(this.transientAsteroids);
 
         return newList;
-    }
-
-    // TODO : Finish giving tables to the asteroid manager if we need to spawn
-    public AsteroidTable getSpawnTable() {
-        return spawnTable;
-    }
-
-    public void setSpawnTable(AsteroidTable spawnTable) {
-        this.spawnTable = spawnTable;
     }
 }
