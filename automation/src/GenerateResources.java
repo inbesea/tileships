@@ -86,9 +86,10 @@ public class GenerateResources extends ApplicationAdapter {
 
     /**
      * Add all we can pass the file location, the file type, and the locations.
-     * @param filePostFix
-     * @param fileExtensions
-     * @param fileLocations
+     * @param filePostFix - String to apply on final static variable names
+     * @param fileExtensions - dot-separated file names to search for
+     * @param fileLocations - Folders to use when searching for the files
+     * @param classType - Class to interpret files as
      */
     private void handleFileTypeLoading(String filePostFix, String[] fileExtensions, String[] fileLocations, Class classType) {
         /*

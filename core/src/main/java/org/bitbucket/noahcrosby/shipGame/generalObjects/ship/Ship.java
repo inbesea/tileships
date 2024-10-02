@@ -36,6 +36,7 @@ public class Ship extends GameObject {
     public int destroyedTileCount = 0;
     private Boolean atStoreNode = false;
 
+
     public CollectionManager getCollectionManager() {
         return collectionManager;
     }
@@ -120,6 +121,18 @@ public class Ship extends GameObject {
             }
         }
 
+        // Draw collected tile overlay
+        if (collectionManager.isCollectingTiles()) {
+            Array<ShipTile> tiles = collectionManager.getTileArray();
+            for (int i = 0; tiles.size > i; i++) {
+                ShipTile tile = tiles.get(i);
+                TileShipGame.batch.draw(Resources.ToBeCollapsedTexture,
+                    tile.getX(), tile.getY(),
+                    ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
+            }
+        }
+
+
         // Draw dragged tile
         if (draggedTile != null) {
             TileShipGame.batch.draw(draggedTile.getTexture(),
@@ -130,17 +143,6 @@ public class Ship extends GameObject {
                 value.skipToTheEnd();
                 value.setPosition(draggedTile.getX() + 4, draggedTile.getY() + draggedTile.getSize().y - 12);
                 value.draw(TileShipGame.batch, 1f);
-            }
-        }
-
-        // Draw collected tile overlay
-        if (collectionManager.isCollectingTiles()) {
-            Array<ShipTile> tiles = collectionManager.getTileArray();
-            for (int i = 0; tiles.size > i; i++) {
-                ShipTile tile = tiles.get(i);
-                TileShipGame.batch.draw(Resources.ToBeCollapsedTexture,
-                    tile.getX(), tile.getY(),
-                    ShipTile.TILE_SIZE, ShipTile.TILE_SIZE);
             }
         }
     }

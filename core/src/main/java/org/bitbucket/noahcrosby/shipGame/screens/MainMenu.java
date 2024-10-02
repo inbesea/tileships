@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -24,6 +23,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.StrongTi
 import org.bitbucket.noahcrosby.shipGame.input.InputPreProcessor;
 import org.bitbucket.noahcrosby.shipGame.input.TileDragHandler;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.util.Animator;
 import org.bitbucket.noahcrosby.shipGame.util.TileInit;
 
 /**
@@ -49,18 +49,17 @@ public class MainMenu  extends ScreenAdapter implements Screen {
     private ShipTile startTile, settingsTile, exitTile
         , moveTile;
     TextureAtlas textureAtlas;
-    Sprite sprite;
-    Animation<Sprite> coinAnimate;
-    float animateTime = 0f;
+    Animator coinAnimation;
+//    Animator coinAnimation2;
+//    static TextureAtlas coinAnimate = new TextureAtlas("Animations/coinAnimate.txt");
 
 
     public MainMenu(final TileShipGame game) {
         this.game = game;
 
-        textureAtlas = new TextureAtlas("coinAnimate.txt");
-        sprite = textureAtlas.createSprite("Coins");
-//        coinAnimate = new Animation<Sprite>(0.2f, textureAtlas.createSprites());
-        coinAnimate = new Animation<Sprite>(0.2f, textureAtlas.createSprites(), Animation.PlayMode.LOOP_PINGPONG);
+        textureAtlas = new TextureAtlas("Animations/coinAnimate.txt");
+        coinAnimation = new Animator(textureAtlas, new Vector2( 100, 100),
+            0.2f, Animation.PlayMode.LOOP_PINGPONG);
 
         initShipMenu();
 
@@ -122,16 +121,6 @@ public class MainMenu  extends ScreenAdapter implements Screen {
 
         TileShipGame.batch.begin();
 
-        if(sprite != null){
-            sprite.setPosition(10,10);
-            sprite.draw(TileShipGame.batch);
-        } else {
-//            System.out.println("SPRITE IS NULL");
-        }
-
-        animateTime += Gdx.graphics.getDeltaTime();
-        sprite = coinAnimate.getKeyFrame(animateTime, true);
-
 
         boolean doneLoading = Resources.assetManager.update();
         if(doneLoading){
@@ -160,6 +149,8 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         } else {
             TileShipGame.font.draw(TileShipGame.batch, "~~~Loading Assets " + Resources.assetManager.getProgress() + " ~~~", 0, camera.viewportHeight - 100);
         }
+//        coinAnimation.setPosition(coinAnimation.getPosition().add(1,1));
+        coinAnimation.render(TileShipGame.batch);
         TileShipGame.batch.end();
     }
 
