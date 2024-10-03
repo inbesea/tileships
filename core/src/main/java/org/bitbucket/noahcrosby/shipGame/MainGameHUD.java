@@ -4,17 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.github.tommyettinger.textra.TypingLabel;
 import org.bitbucket.noahcrosby.shipGame.levelData.MapDrawer;
 import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.hud.HUD;
 import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 public class MainGameHUD extends HUD {
 
     private MapDrawer mapDrawer; // We can put this here because it's the only place we draw the map
     protected TypingLabel storeLabel;
+    protected TypingLabel moneyLabel;
     Skin skin = new Skin(Gdx.files.internal("skin/neon/skin/uiskin.json"));
 
     public MainGameHUD(TileShipGame game, MapNavManager mapNavigator) {
@@ -26,8 +27,12 @@ public class MainGameHUD extends HUD {
         storeLabel = new TypingLabel("Is Store Location : {VAR=ISSTORE}",
             skin);
         storeLabel.skipToTheEnd();
-        HUDTable.row().pad(25);
+        moneyLabel = new TypingLabel("${VAR=MONEYCOUNT}",skin);
+        moneyLabel.skipToTheEnd();
+        HUDTable.row().pad(10);
         HUDTable.add(storeLabel).pad(25);
+        HUDTable.row().pad(10);
+        HUDTable.add(moneyLabel).pad(25);
     }
 
     /**
@@ -37,14 +42,18 @@ public class MainGameHUD extends HUD {
     @Override
     public void draw(){
         super.draw();// Call basic hud draw before doing specific draws to MainGame
-        StringBuilder stringBuilder = new StringBuilder();
 
         //Secondly draw the Hud
         TileShipGame.batch.setProjectionMatrix(HUDScreenLayer.getCamera().combined); //set the spriteBatch to draw what our stageViewport sees
 
         storeLabel.setText("{VAR=FIRE}{SIZE=75%}{STYLE=JOSTLE}Is Store {STYLE=SHINY}Location? : {CROWD}{VAR=ISSTORE}");
         storeLabel.setVariable("ISSTORE",
-            mapNavigator.getCurrentNode().isStoreLocation().toString());
+        mapNavigator.getCurrentNode().isStoreLocation().toString());
+
+        moneyLabel.setText("${VAR=MONEYCOUNT}");
+        moneyLabel.setVariable("MONEYCOUNT",
+            generalUtil.round(Money.getMoney(),2).toString());
+
 
         if(this.showingMap()){
             drawMap();

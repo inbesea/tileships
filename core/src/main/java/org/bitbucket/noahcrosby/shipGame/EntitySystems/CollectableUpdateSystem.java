@@ -7,6 +7,7 @@ import org.bitbucket.noahcrosby.shipGame.Components.CollectableComponent;
 import org.bitbucket.noahcrosby.shipGame.Components.CollectorComponent;
 import org.bitbucket.noahcrosby.shipGame.Components.IDComponent;
 import org.bitbucket.noahcrosby.shipGame.Components.PositionComponent;
+import org.bitbucket.noahcrosby.shipGame.Money;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 
 /**
@@ -88,6 +89,8 @@ public class CollectableUpdateSystem extends EntitySystem {
 
     private void collectCurrent() {
         TileShipGame.engine.removeEntity(collectable);
+
+        Money.addCoin();
     }
 
     private void MoveCloser() {

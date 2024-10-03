@@ -371,7 +371,7 @@ public class generalUtil {
         return value;
     }
 
-    public static float round(float d, int decimalPlace)
+    public static Float round(float d, int decimalPlace)
     {
         return BigDecimal.valueOf(d).setScale(decimalPlace, RoundingMode.HALF_UP ).floatValue();
     }
