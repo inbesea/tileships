@@ -50,6 +50,7 @@ public class CollectableUpdateSystem extends EntitySystem {
 
         for (int i = 0 ; i < collectableEntities.size() ; i++){
             collectable = collectableEntities.get(i);
+            getCollectablePosition();
 
             // Get collectable's collector object
             // 1.
@@ -57,9 +58,7 @@ public class CollectableUpdateSystem extends EntitySystem {
                 collector = collectors.get(n);
 
                 if(!IDsMatch()){continue;} // Skip non-matchers
-
-                collectablePosition = collectable.getComponent(PositionComponent.class).position;
-                collectorPosition = collector.getComponent(PositionComponent.class).position;
+                getCollectorPosition();
 
                 int closeness = entitiesAreClose();
                 if(closeness == 0){
@@ -73,6 +72,14 @@ public class CollectableUpdateSystem extends EntitySystem {
             }
         }
 
+    }
+
+    private void getCollectorPosition() {
+        collectorPosition = collector.getComponent(PositionComponent.class).position;
+    }
+
+    private void getCollectablePosition() {
+        collectablePosition = collectable.getComponent(PositionComponent.class).position;
     }
 
     private void stopMovement() {
