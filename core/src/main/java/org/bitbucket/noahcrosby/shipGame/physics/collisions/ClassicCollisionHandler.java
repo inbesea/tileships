@@ -1,11 +1,14 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
 import org.bitbucket.noahcrosby.shipGame.ID;
+import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.Coin;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.ShipTilesManager;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
+import org.bitbucket.noahcrosby.shipGame.util.ShipTileUtility;
 
 /**
  * Handles collisions in Classic mode
@@ -77,7 +80,7 @@ public class ClassicCollisionHandler extends CollisionHandler {
         if(a.getID() == ID.Asteroid){
             asteroid = (Asteroid) a;
             tile = (ShipTile) b;
-        } else {
+        } else { // TODO : Why is this check here at all. What does this do.
             asteroid = (Asteroid) b;
             tile = (ShipTile) a;
         }
@@ -89,9 +92,11 @@ public class ClassicCollisionHandler extends CollisionHandler {
             System.out.println("CoreTile/Asteroid creation event. ~~~ Creating new tile "+ asteroid.getPosition().toString() +" and marking Asteroid for deletion!");
             asteroid.physicsDelete();
 
-            tilesManager.addTile(asteroid.getX() + asteroid.getWidth() / 2,
+            ShipTile newTile = tilesManager.addTile(asteroid.getX() + asteroid.getWidth() / 2,
                 asteroid.getY() + asteroid.getHeight() / 2,
                 asteroid.getTileType());
+
+            TileShipGame.engine.addEntity(new Coin(ShipTileUtility.getRandomPointOnTile(newTile)));
 
         } else if (tile.isInvulnerable()){
             return; // Do nothing, the tile cannot be destroyed

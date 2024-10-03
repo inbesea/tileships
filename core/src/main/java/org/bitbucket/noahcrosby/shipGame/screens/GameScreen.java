@@ -34,6 +34,7 @@ import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 import org.bitbucket.noahcrosby.shipGame.managers.TextBoxManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHandler;
+import org.bitbucket.noahcrosby.shipGame.physics.collisions.Collision;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.javapoet.Resources;
@@ -78,6 +79,9 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
     EffectsHandler effects;
 
+    // We need to create a system that listens for collisions. When it gets the location of the collision and creates a coin there.
+    // We would probably want to include the ship in that, so we need to add the ship, and the collision to the engine.
+
     public GameScreen(final TileShipGame game) {
         this.game = game;
 
@@ -99,6 +103,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // init player
         // Give player the game reference
         player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, this.game);
+        TileShipGame.engine.addEntity(player);
 
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
         mapNavigator = new MapNavManager(playerShip);
@@ -154,10 +159,6 @@ public class GameScreen implements Screen, Listener<MapNode> {
         TileShipGame.setCurrentCamera(camera);
     }
 
-    private void checkForSpeechBubble() {
-
-    }
-
     /**
      * Draw the game
      *
@@ -178,6 +179,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         // Draw game objects
         drawGameObjects();
+
 
         // Draws the hud
         hud.draw();
@@ -222,6 +224,8 @@ public class GameScreen implements Screen, Listener<MapNode> {
         textBoxHandler.render();
 
         tileDragHandler.update();
+
+        TileShipGame.engine.update(Gdx.graphics.getDeltaTime());
 
         TileShipGame.batch.end();
 
@@ -457,6 +461,10 @@ public class GameScreen implements Screen, Listener<MapNode> {
         transitionNodes(newNode, mapNavigator.getPreviousNode());
 //        backGround.updateForeground(newNode.getForeground());
     }
+
+//    public void receive(Signal<ShipCollisionSignal> collisionSignal){
+//
+//    }
 
     /**
      * Moves the game screen between two nodes.

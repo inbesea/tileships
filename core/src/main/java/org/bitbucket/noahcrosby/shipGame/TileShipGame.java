@@ -1,5 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -9,6 +11,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.shipGame.EntitySystems.CollectableUpdateSystem;
+import org.bitbucket.noahcrosby.shipGame.EntitySystems.DrawSystem;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.Coin;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.arcadeMode.ArcadeModeScreen;
@@ -23,6 +28,9 @@ import org.bitbucket.noahcrosby.javapoet.Resources;
  * We need the logic to be referenced from this point.
  */
 public class TileShipGame extends Game {
+
+    public static Engine engine = new Engine();
+
     public static Skin defaultSkin = null;
     private AppPreferences appPreferences;
 	public static float zoomMax = 5;
@@ -65,7 +73,17 @@ public class TileShipGame extends Game {
 
         appPreferences = AppPreferences.getAppPreferences();
 
+        setBasicEngineSystems();
+
         this.gameFlowControl(MENU);
+    }
+
+    /**
+     * Give the engine basic systems
+     */
+    private void setBasicEngineSystems() {
+        engine.addSystem(new DrawSystem());
+        engine.addSystem(new CollectableUpdateSystem());
     }
 
     /**

@@ -43,7 +43,6 @@ public class EffectsHandler implements Listener<EffectContent> {
 
     public void update(){
         if(screenshakeDuration > 0){
-            System.out.println(Gdx.graphics.getDeltaTime()*1000);
             float msDelta = Gdx.graphics.getDeltaTime()*1000;
             screenshakeDuration -= msDelta;
             if(camera != null){

@@ -9,7 +9,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
@@ -66,6 +65,7 @@ public class GenerateResources extends ApplicationAdapter {
         handleFileTypeLoading("texture", new String[]{"png"}, new String[]{"Textures"}, Texture.class);
         handleFileTypeLoading("music", new String[]{"wav"}, new String[]{"Music"}, Music.class);
         handleFileTypeLoading("particle", new String[]{"p"}, new String[]{"ParticleEffects"}, ParticleEffect.class);
+
         updateAssetMethodSpecBuilder.endControlFlow();
 
         typeSpecBuilder.addMethod(loadAssetMethodSpecBuilder.build());

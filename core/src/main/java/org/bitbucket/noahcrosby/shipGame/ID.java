@@ -1,5 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame;
 
+import com.badlogic.ashley.core.Component;
+
 /**
  * Enums for easy identification of game objects
  * <p></p>
@@ -9,7 +11,7 @@ package org.bitbucket.noahcrosby.shipGame;
  * CoreTile
  * ship
  */
-public enum ID {
+public enum ID implements Component {
 
 	/**
 	 * ID class to identify and classify different game-objects.

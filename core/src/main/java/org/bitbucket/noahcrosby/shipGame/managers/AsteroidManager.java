@@ -121,11 +121,6 @@ public class AsteroidManager implements Manager {
         }
         // TODO : Encapsulate this behavior so we can update a physics game object's position and velocity
         box2DWrapper.resetPhysicsObject(temp, getVectorInValidSpawnArea());
-//        box2DWrapper.deleteBody(body);
-//        temp.setPosition(getVectorInValidSpawnArea());
-//        temp.setVelX((int) getRandomlyNegativeNumber(minSpeed,maxSpeed));
-//        temp.setVelY((int) getRandomlyNegativeNumber(minSpeed,maxSpeed));
-//        box2DWrapper.setObjectPhysics(temp);
     }
 
     /**

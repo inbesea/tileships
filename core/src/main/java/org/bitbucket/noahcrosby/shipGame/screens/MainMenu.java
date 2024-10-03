@@ -48,7 +48,7 @@ public class MainMenu  extends ScreenAdapter implements Screen {
 
     private ShipTile startTile, settingsTile, exitTile
         , moveTile;
-    TextureAtlas textureAtlas;
+    public static TextureAtlas textureAtlas = new TextureAtlas("Animations/coinAnimate.atlas");
     Animator coinAnimation;
 //    Animator coinAnimation2;
 //    static TextureAtlas coinAnimate = new TextureAtlas("Animations/coinAnimate.txt");
@@ -57,7 +57,6 @@ public class MainMenu  extends ScreenAdapter implements Screen {
     public MainMenu(final TileShipGame game) {
         this.game = game;
 
-        textureAtlas = new TextureAtlas("Animations/coinAnimate.txt");
         coinAnimation = new Animator(textureAtlas, new Vector2( 100, 100),
             0.2f, Animation.PlayMode.LOOP_PINGPONG);
 

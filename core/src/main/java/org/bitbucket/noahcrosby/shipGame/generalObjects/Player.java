@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.Components.CollectorComponent;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
@@ -29,6 +30,8 @@ public class Player extends GameObject {
 
         this.game = game;
         this.playerShip =  game.getPlayerShip();
+
+        add(new CollectorComponent(150));
     }
 
     /**

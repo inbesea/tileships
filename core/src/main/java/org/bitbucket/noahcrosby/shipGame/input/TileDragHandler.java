@@ -56,7 +56,7 @@ public class TileDragHandler extends InputAdapter {
     private void initCommonElements(Ship playerShip){
         this.playerShip = playerShip;
         sOD_x = new SecondOrderDynamics(f, z, r, 0f);
-        sOD_y = new SecondOrderDynamics(f, z, r, 0f);
+//        sOD_y = new SecondOrderDynamics(f, z, r, 0f);
         publisher = new Signal<>();
     }
 
@@ -132,8 +132,8 @@ public class TileDragHandler extends InputAdapter {
     private void initDraggedTilesSmoothMovement(ShipTile pickedUpTile) {
         sOD_x.setXp(pickedUpTile.getX());
         sOD_x.setY(pickedUpTile.getX());
-        sOD_y.setXp(pickedUpTile.getY());
-        sOD_y.setY(pickedUpTile.getY());
+//        sOD_y.setXp(pickedUpTile.getY());
+//        sOD_y.setY(pickedUpTile.getY());
     }
 
     private void catchTileMidPlacement() {
@@ -246,7 +246,7 @@ public class TileDragHandler extends InputAdapter {
 
     private void setDragSODVariables() {
         sOD_x.setR(r);
-        sOD_y.setR(r);
+//        sOD_y.setR(r);
     }
 
     /**

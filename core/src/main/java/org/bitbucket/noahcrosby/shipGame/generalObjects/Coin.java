@@ -1,62 +1,43 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects;
 
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.shipGame.Components.CollectableComponent;
+import org.bitbucket.noahcrosby.shipGame.Components.PositionComponent;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.screens.MainMenu;
 import org.bitbucket.noahcrosby.shipGame.util.Animator;
 
-public class Coin extends Collectable {
+public class Coin extends Entity {
+    float animationSpeed = 0.1f;
 
-    Animator coinAnimation;
-    public Coin(Vector2 position, Array<GameObject> collectors, int driftDistance, int collectDistance, Vector2 size, ID id) {
-        super(position, collectors, driftDistance, collectDistance, size, id);
-//        coinAnimation = new Animator();
+    public static class CoinComponent implements Component {
+
     }
 
-    @Override
+    Animator coinAnimation;
+    public Coin(Vector2 position) {
+//        coinAnimation = new Animator();
+        add(new CoinComponent());
+        add(new Animator(MainMenu.textureAtlas, position,
+            animationSpeed, Animation.PlayMode.LOOP_PINGPONG));
+        add(new PositionComponent(position));
+        add(new CollectableComponent(ID.Player));
+    }
+
     public void render(TileShipGame game) {
-        update();
 
     }
 
     private void update() {
-        for(int i = 0 ; i < collectors.size ; i++){
-            GameObject obj = collectors.get(i);
-            if(obj.position.dst(this.position) < collectDistance){
-                collect();
-            }
-        }
+
     }
 
     private void collect() {
 
     }
 
-    @Override
-    public Rectangle getBounds() {
-        return null;
-    }
-
-    @Override
-    protected void setBoundsPosition(Vector2 boundsPosition) {
-
-    }
-
-    @Override
-    public void collision(GameObject gameObject) {
-
-    }
-
-    @Override
-    public Circle getCircleBounds() {
-        return null;
-    }
-
-    @Override
-    public boolean deleteFromGame() {
-        return false;
-    }
 }

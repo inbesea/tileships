@@ -6,12 +6,14 @@ import com.badlogic.gdx.math.MathUtils;
  * f = vibe frequency/response to changes in input (Can be )
  * z = dampening - 0 < z <= 1 underdamped, will stop vibrating. z > 1 no vibration, slow x approach.
  * r = initial responsiveness -> r = 0 delayed response. 0 < r <= 1 responds quicker. r > 1 overshoots x. r < 0 anticipates action
+ * x0 = initial previous position, and output
  */
 public class SecondOrderDynamics {
     private Float xp; // previous input
     private Float y, yd; // State variables
     private Float k1, k2, k3; // Dynamics constants
 
+    // Nature of SoD behaviour
     private Float f;
     private Float z;
     private Float r;
@@ -100,24 +102,44 @@ public class SecondOrderDynamics {
         return f;
     }
 
+    /**
+     * Set frequency variable
+     * @param f
+     */
     public void setF(Float f) {
         this.f = f;
         computeConstants();
     }
 
+    /**
+     * get dampening variable
+     * @return
+     */
     public Float getZ() {
         return z;
     }
 
+    /**
+     * set dampening variable
+     * @return
+     */
     public void setZ(Float z) {
         this.z = z;
         computeConstants();
     }
 
+    /**
+     * get responsiveness variable
+     * @return
+     */
     public Float getR() {
         return r;
     }
 
+    /**
+     * set responsiveness variable
+     * @return
+     */
     public void setR(Float r) {
         this.r = r;
         computeConstants();

@@ -3,6 +3,8 @@ eclipse.project.name = appName + '-core'
 
 repositories {
     mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 }
 
 dependencies {
@@ -22,6 +24,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-engine:5.8.1")
   implementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
   implementation("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+  implementation "com.badlogicgames.ashley:ashley:1.7.3"
 }
 
 testing {

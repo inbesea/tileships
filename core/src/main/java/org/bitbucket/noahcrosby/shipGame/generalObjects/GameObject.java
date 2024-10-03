@@ -1,22 +1,24 @@
 package org.bitbucket.noahcrosby.shipGame.generalObjects;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shipGame.Components.IDComponent;
+import org.bitbucket.noahcrosby.shipGame.Components.PositionComponent;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 
 /**
  * Class to handle the basic game object needs.
  */
-public abstract class GameObject {
+public abstract class GameObject extends Entity {
 	protected Vector2 position = new Vector2();
 	protected Vector2 size = new Vector2();
 	// From Enum list, needs a type
-	protected ID id;
 	protected float velX, velY;
 	protected boolean debugMode = true;
 	protected Body body;
@@ -30,7 +32,8 @@ public abstract class GameObject {
 		this.position.y = position.y;
 		this.size.x = size.x;
 		this.size.y = size.y;
-		this.id = id;
+        add(new PositionComponent(position));
+        add(new IDComponent(id));
 
 		physicsDeletable = false;
 	}
@@ -44,6 +47,7 @@ public abstract class GameObject {
 		// set location and id to define basics of the game object.
 		this.position.x = position.x;
 		this.position.y = position.y;
+        add(new PositionComponent(position));
 		this.size.x = size.x;
 		this.size.y = size.y;
 	}
@@ -59,25 +63,31 @@ public abstract class GameObject {
 	// Meant to reflect the physical bounds of the gameObject
 	protected abstract void setBoundsPosition(Vector2 boundsPosition);
 	public abstract void collision(GameObject gameObject);
+
 	public void setX(float x) {
 		this.position.x = x;
+        getComponent(PositionComponent.class).position.x = x;
 	}
 	public float getX() {
-		return position.x;
+        return getComponent(PositionComponent.class).position.x;
+//		return position.x;
 	}
 
 	public void setY(float y) {
+        getComponent(PositionComponent.class).position.y = y;
 		this.position.y = y;
 	}
 	public float getY() {
+//        return getComponent(PositionComponent.class).position.y;
 		return position.y;
 	}
 
 	public void setID(ID id) {
-		this.id = id;
+        getComponent(IDComponent.class).id = id;
 	}
+
 	public ID getID() {
-		return id;
+        return getComponent(IDComponent.class).id;
 	}
 
 	public void setVelX(int velX) {
@@ -101,6 +111,7 @@ public abstract class GameObject {
 	public void setPosition(Vector2 position) {
 		this.position = position;
 		this.setBoundsPosition(position);
+        getComponent(PositionComponent.class).position = position;
 	}
 
 	/**

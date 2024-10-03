@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Resources {
     public static AssetManager assetManager;
@@ -104,6 +105,8 @@ public class Resources {
 
     public static Music MainMenuExtendedMessingaroundMusic;
 
+//    public static TextureAtlas CoinAnimateAnimation;
+
     public static void loadAssets() {
         assetManager = new AssetManager();
         assetManager.load("Sound Effects/rain.mp3", Sound.class);
@@ -154,6 +157,7 @@ public class Resources {
         assetManager.load("Textures/furnace.png", Texture.class);
         assetManager.load("Music/MainMenuTune.wav", Music.class);
         assetManager.load("Music/MainMenu Extended Messingaround.wav", Music.class);
+//        assetManager.load("Animations/coinAnimate.atlas", TextureAtlas.class);
     }
 
     public static void updateAssets() {
@@ -206,6 +210,7 @@ public class Resources {
             FurnaceTexture = assetManager.get("Textures/furnace.png");
             MainMenuTuneMusic = assetManager.get("Music/MainMenuTune.wav");
             MainMenuExtendedMessingaroundMusic = assetManager.get("Music/MainMenu Extended Messingaround.wav");
+//            CoinAnimateAnimation = assetManager.get("Animations/coinAnimate.txt");
         }
     }
 }

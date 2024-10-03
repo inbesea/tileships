@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.shipGame.Components.PositionComponent;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -78,6 +79,7 @@ public abstract class ShipTile extends GameObject implements PhysicsObject {
     @Override
     public void setPosition(Vector2 position) {
         this.position = position;
+        getComponent(PositionComponent.class).position = position;
         this.xIndex = determineIndex(position.x);
         this.yIndex = determineIndex(position.y);
     }

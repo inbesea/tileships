@@ -15,10 +15,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 public class TileHoverIndicator extends GameObject {
     boolean drawHover = false;
     public TileHoverIndicator(Vector2 position, Vector2 size) {
-        super(position, size);
-
-        // Hover Indicator will always use the same texture
-        this.id = ID.Hover;
+        super(position, size, ID.Hover);        // Hover Indicator will always use the same texture
     }
 
     @Override

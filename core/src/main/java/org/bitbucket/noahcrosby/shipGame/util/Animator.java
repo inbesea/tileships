@@ -1,5 +1,6 @@
 package org.bitbucket.noahcrosby.shipGame.util;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-public class Animator {
+public class Animator implements Component {
     TextureAtlas textureAtlas;
     float frameDuration;
     com.badlogic.gdx.graphics.g2d.Animation.PlayMode playMode;
