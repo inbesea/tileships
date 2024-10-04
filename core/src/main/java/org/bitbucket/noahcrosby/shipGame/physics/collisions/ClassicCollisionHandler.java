@@ -1,5 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.physics.collisions;
 
+import org.bitbucket.noahcrosby.AppPreferences;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.Coin;
@@ -9,6 +11,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.managers.AsteroidManager;
 import org.bitbucket.noahcrosby.shipGame.util.ShipTileUtility;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 /**
  * Handles collisions in Classic mode
@@ -98,6 +101,10 @@ public class ClassicCollisionHandler extends CollisionHandler {
 
             TileShipGame.engine.addEntity(new Coin(ShipTileUtility.getRandomPointOnTile(newTile)));
 
+            Resources.PowerUpSfx.play(AppPreferences.getAppPreferences().getSoundVolume(),
+                generalUtil.getRandomNumber(0.8f, 1.2f),
+                0);
+
         } else if (tile.isInvulnerable()){
             return; // Do nothing, the tile cannot be destroyed
         } else {
@@ -105,6 +112,9 @@ public class ClassicCollisionHandler extends CollisionHandler {
             // destroy the tile
             // This means the tile is not a core tile or an invulnerable tile.
             // We will then conclude it can be destroyed.
+            Resources.ExplosionSfx.play(AppPreferences.getAppPreferences().getSoundVolume(),
+                generalUtil.getRandomNumber(0.8f, 1.2f),
+                0);
         }
     }
 }

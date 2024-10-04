@@ -4,7 +4,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Resources {
     public static AssetManager assetManager;
@@ -15,13 +14,19 @@ public class Resources {
 
     public static Sound BuildTileSoundSfx;
 
+    public static Sound PowerUpSfx;
+
     public static Sound DropSfx;
 
     public static Sound TilePlacementSfx;
 
     public static Sound MovingTileSoundSfx;
 
+    public static Sound PickupCoinSfx;
+
     public static Sound PlaceTileSoundSfx;
+
+    public static Sound ExplosionSfx;
 
     public static Sound PickUpTileQuick0Sfx;
 
@@ -105,17 +110,18 @@ public class Resources {
 
     public static Music MainMenuExtendedMessingaroundMusic;
 
-//    public static TextureAtlas CoinAnimateAnimation;
-
     public static void loadAssets() {
         assetManager = new AssetManager();
         assetManager.load("Sound Effects/rain.mp3", Sound.class);
         assetManager.load("Sound Effects/collectTileSound.mp3", Sound.class);
         assetManager.load("Sound Effects/buildTileSound.mp3", Sound.class);
+        assetManager.load("Sound Effects/powerUp.wav", Sound.class);
         assetManager.load("Sound Effects/drop.wav", Sound.class);
         assetManager.load("Sound Effects/tilePlacement.wav", Sound.class);
         assetManager.load("Sound Effects/MovingTileSound.wav", Sound.class);
+        assetManager.load("Sound Effects/pickupCoin.wav", Sound.class);
         assetManager.load("Sound Effects/PlaceTileSound.wav", Sound.class);
+        assetManager.load("Sound Effects/explosion.wav", Sound.class);
         assetManager.load("Sound Effects/PickUpTileQuick0.wav", Sound.class);
         assetManager.load("Sound Effects/SelectionBuzzLooped.wav", Sound.class);
         assetManager.load("Textures/SprayPaintBigTile.png", Texture.class);
@@ -157,7 +163,6 @@ public class Resources {
         assetManager.load("Textures/furnace.png", Texture.class);
         assetManager.load("Music/MainMenuTune.wav", Music.class);
         assetManager.load("Music/MainMenu Extended Messingaround.wav", Music.class);
-//        assetManager.load("Animations/coinAnimate.atlas", TextureAtlas.class);
     }
 
     public static void updateAssets() {
@@ -165,10 +170,13 @@ public class Resources {
             RainSfx = assetManager.get("Sound Effects/rain.mp3");
             CollectTileSoundSfx = assetManager.get("Sound Effects/collectTileSound.mp3");
             BuildTileSoundSfx = assetManager.get("Sound Effects/buildTileSound.mp3");
+            PowerUpSfx = assetManager.get("Sound Effects/powerUp.wav");
             DropSfx = assetManager.get("Sound Effects/drop.wav");
             TilePlacementSfx = assetManager.get("Sound Effects/tilePlacement.wav");
             MovingTileSoundSfx = assetManager.get("Sound Effects/MovingTileSound.wav");
+            PickupCoinSfx = assetManager.get("Sound Effects/pickupCoin.wav");
             PlaceTileSoundSfx = assetManager.get("Sound Effects/PlaceTileSound.wav");
+            ExplosionSfx = assetManager.get("Sound Effects/explosion.wav");
             PickUpTileQuick0Sfx = assetManager.get("Sound Effects/PickUpTileQuick0.wav");
             SelectionBuzzLoopedSfx = assetManager.get("Sound Effects/SelectionBuzzLooped.wav");
             SprayPaintBigTileTexture = assetManager.get("Textures/SprayPaintBigTile.png");
@@ -210,7 +218,6 @@ public class Resources {
             FurnaceTexture = assetManager.get("Textures/furnace.png");
             MainMenuTuneMusic = assetManager.get("Music/MainMenuTune.wav");
             MainMenuExtendedMessingaroundMusic = assetManager.get("Music/MainMenu Extended Messingaround.wav");
-//            CoinAnimateAnimation = assetManager.get("Animations/coinAnimate.txt");
         }
     }
 }

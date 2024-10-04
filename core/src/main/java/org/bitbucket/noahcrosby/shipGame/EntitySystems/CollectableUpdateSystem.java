@@ -2,13 +2,17 @@ package org.bitbucket.noahcrosby.shipGame.EntitySystems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.AppPreferences;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shipGame.Components.CollectableComponent;
 import org.bitbucket.noahcrosby.shipGame.Components.CollectorComponent;
 import org.bitbucket.noahcrosby.shipGame.Components.IDComponent;
 import org.bitbucket.noahcrosby.shipGame.Components.PositionComponent;
 import org.bitbucket.noahcrosby.shipGame.Money;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 /**
  * Gets collectables, and collector objects.
@@ -91,6 +95,9 @@ public class CollectableUpdateSystem extends EntitySystem {
         TileShipGame.engine.removeEntity(collectable);
 
         Money.addCoin();
+        Resources.PickupCoinSfx.play(AppPreferences.getAppPreferences().getSoundVolume(),
+            generalUtil.getRandomNumber(0.9f, 1.1f),
+            0);
     }
 
     private void MoveCloser() {
