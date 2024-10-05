@@ -244,11 +244,30 @@ public class Box2DWrapper implements Box2DWrapperInterface {
         }
     }
 
-    public void resetPhysicsObject(PhysicsObject physicsObject, Vector2 position) {
+    public void resetPhysicsObjectWithRandomVelocity(PhysicsObject physicsObject, Vector2 position, float minSpeed, float maxSpeed) {
+        /*
+        * How can we create a system that gives us a chance to push the asteroids out?
+         */
+        // remove old physBod
         this.deleteBody(physicsObject.getBody());
+        // Set new position for physicsObj
         physicsObject.setPosition(position);
+        // Give new physics velocity
         physicsObject.setVelocity(new Vector2((int) getRandomlyNegativeNumber(minSpeed,maxSpeed),
             (int) getRandomlyNegativeNumber(minSpeed,maxSpeed)));
+        // create new physics instance using new values.
+        this.initPhysicsObject(physicsObject);
+    }
+
+    public void sendPhysicsObjectAtLocation(PhysicsObject physicsObject, Vector2 position) {
+        // remove old physBod
+        this.deleteBody(physicsObject.getBody());
+        // Set new position for physicsObj
+        physicsObject.setPosition(position);
+        // Give new physics velocity
+        physicsObject.setVelocity(new Vector2((int) getRandomlyNegativeNumber(minSpeed,maxSpeed),
+            (int) getRandomlyNegativeNumber(minSpeed,maxSpeed)));
+        // create new physics instance using new values.
         this.initPhysicsObject(physicsObject);
     }
 }

@@ -70,6 +70,7 @@ public class CollectableUpdateSystem extends EntitySystem {
                     collectCurrent();
                 } else if (closeness == 1){
                     MoveCloser();
+
                 } else { // Does not need updated
                     stopMovement();
                 }
@@ -102,11 +103,8 @@ public class CollectableUpdateSystem extends EntitySystem {
 
     private void MoveCloser() {
         float moveSpeed = 0.1f;
-        // Move towards a point right?
-        collectablePosition.x += (collectorPosition.x - collectablePosition.x) * moveSpeed;
-        collectablePosition.y += (collectorPosition.y - collectablePosition.y) * moveSpeed;
 
-//        collectorPosition
+        generalUtil.moveTowardsPointSimple(collectablePosition, collectorPosition, moveSpeed);
     }
 
     private int entitiesAreClose() {

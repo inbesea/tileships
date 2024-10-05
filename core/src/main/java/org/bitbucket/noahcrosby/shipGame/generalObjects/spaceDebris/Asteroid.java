@@ -19,7 +19,7 @@ import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.getRandomlyNega
 
 public class Asteroid extends GameObject implements PhysicsObject {
 
-	public static float maxSpeed = 2f;
+    public static float maxSpeed = 2f;
 	public static float minSpeed = 0.2f;
 	public static float radius = 0.5f;
 	Circle circle;

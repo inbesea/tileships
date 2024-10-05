@@ -1,11 +1,14 @@
 package org.bitbucket.noahcrosby.shipGame.managers;
 
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.ID;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.Asteroid;
@@ -14,6 +17,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpaw
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.ColorAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
+import org.bitbucket.noahcrosby.shipGame.screens.GameScreen;
 import org.bitbucket.noahcrosby.shipGame.util.ObjectRoller;
 import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
@@ -26,7 +30,7 @@ import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
  * Handles the creation and upkeep of a game-object type.
  * Is a way to move the responsibilities of spawning to an object outside the Game screen
  */
-public class AsteroidManager implements Manager {
+public class AsteroidManager extends EntitySystem implements Manager {
     private boolean spawning;
     private int asteroidLimit;
     // Keep managed asteroid within manager
@@ -70,7 +74,8 @@ public class AsteroidManager implements Manager {
     /**
      * Method to tick to check for asteroid cleanups and additions
      */
-    public void checkForSpawn(){
+    @Override
+    public void update(float deltaTime){
 
         // Set asteroid spawn zone to be center of the screen at least.
         asteroidSpawnZone.setPosition(camera.position.x, camera.position.y);
@@ -120,7 +125,22 @@ public class AsteroidManager implements Manager {
             return;
         }
         // TODO : Encapsulate this behavior so we can update a physics game object's position and velocity
-        box2DWrapper.resetPhysicsObject(temp, getVectorInValidSpawnArea());
+        Vector2 newPosition = getVectorInValidSpawnArea();
+        box2DWrapper.resetPhysicsObjectWithRandomVelocity(temp, newPosition, Asteroid.minSpeed, Asteroid.maxSpeed);
+        launchAsteroid(temp, new Vector2(0,0), 2f);
+    }
+
+    public void launchAsteroid(Asteroid asteroid, Vector2 target, float speed){
+        /**
+         * Creating a vector that points in a direction with consistent magnitude is actually quite difficult? Why is this hard.
+         */
+
+        Line.DrawDebugLine(asteroid.getPosition(), target, 1, Color.WHITE, GameScreen.getGameCamera().combined);
+
+        // Get the diff, normalize length to 1, and scale up by speed! So easy, not confusing!
+        Vector2 diff = new Vector2(target.x - asteroid.getX(), target.y - asteroid.getY());
+        Vector2 normalizedDiff = generalUtil.normalizeVector(diff);
+        asteroid.getBody().setLinearVelocity(normalizedDiff.scl(speed));
     }
 
     /**

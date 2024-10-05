@@ -124,7 +124,7 @@ public class generalUtil {
     /**
      * Returns float within range  with randomly determined positivity/negativity.
      * <p>
-     * NOTE : CAN be given negative values, but will cause possible output space to just flip instead of forming a hole
+     * NOTE : CAN be given negative values, but can create unpredictable outcomes
      *
      * @param min - upper bounds in absolute value terms
      * @param max - lower bounds in absolute value terms
@@ -342,6 +342,14 @@ public class generalUtil {
         return Math.min(Math.max(value, min), max);
     }
 
+    /**
+     *
+     * @param currentPosition
+     * @param targetPoint
+     * @param speed
+     * @param deltaTime
+     * @return
+     */
     public static Vector2 moveTowardsPoint(Vector2 currentPosition,
                                            Vector2 targetPoint, float speed,
                                            float deltaTime) {
@@ -353,6 +361,7 @@ public class generalUtil {
             return currentPosition;
         }
 
+        //
         float normalizedDirectionX = dx / distance;
         float normalizedDirectionY = dy / distance;
         float displacementX = normalizedDirectionX * (speed * deltaTime);
@@ -361,7 +370,24 @@ public class generalUtil {
         float newY = currentPosition.y + displacementY;
 
         return new Vector2(newX, newY);
+    }
 
+    public static Vector2 normalizeVector(Vector2 vectorToNormalize){
+        Vector2 normalizedVector;
+
+        float distance = (float) Math.sqrt(vectorToNormalize.x * vectorToNormalize.x + vectorToNormalize.y * vectorToNormalize.y);
+        float normalizedDirectionX = vectorToNormalize.x / distance;
+        float normalizedDirectionY = vectorToNormalize.y / distance;
+
+        return new Vector2(normalizedDirectionX, normalizedDirectionY);
+    }
+
+
+    public static Vector2 moveTowardsPointSimple(Vector2 start, Vector2 finish, float speed){
+        start.x += (finish.x - start.x) * speed;
+        start.y += (finish.y - start.y) * speed;
+
+        return start;
     }
 
     public static Double clamp(Double value, Double max, Double min) {

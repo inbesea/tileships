@@ -34,7 +34,6 @@ import org.bitbucket.noahcrosby.shipGame.managers.MapNavManager;
 import org.bitbucket.noahcrosby.shipGame.managers.TextBoxManager;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.ClassicCollisionHandler;
-import org.bitbucket.noahcrosby.shipGame.physics.collisions.Collision;
 import org.bitbucket.noahcrosby.shipGame.physics.collisions.CollisionListener;
 import org.bitbucket.noahcrosby.shipGame.player.PlayerInput;
 import org.bitbucket.noahcrosby.javapoet.Resources;
@@ -172,7 +171,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         extendViewport.apply();
 
         // Update game object positions
-        asteroidManager.checkForSpawn(); // Handle the asteroid spawning
+        asteroidManager.update(Gdx.graphics.getDeltaTime()); // Handle the asteroid spawning
 
         backGround.draw(game);
         effects.update();

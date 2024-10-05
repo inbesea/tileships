@@ -105,7 +105,7 @@ public abstract class GameObject extends Entity {
 	}
 
 	public Vector2 getPosition() {
-		return position;
+        return getComponent(PositionComponent.class).position;
 	}
 
 	public void setPosition(Vector2 position) {
