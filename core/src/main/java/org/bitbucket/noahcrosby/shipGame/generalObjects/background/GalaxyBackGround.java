@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.bitbucket.noahcrosby.javapoet.Resources;
+import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.levelData.ForegroundObject;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.physics.box2d.Box2DWrapper;
@@ -54,7 +55,9 @@ public class GalaxyBackGround {
                 Vector2 size = new Vector2(1,1);
                 if(stars[i][n]){
                     // Terrible star drawing method. Uses the silver asteroid texture
-                    TileShipGame.batch.draw(starTexture, i, n, size.x, size.y);
+//                    TileShipGame.batch.draw(starTexture, i, n, size.x, size.y);
+//                    Line.drawRectangle();
+                    // TODO Fix this background render to be cheaper jesus christ.
                 }
             }
         }
