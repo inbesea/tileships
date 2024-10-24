@@ -21,6 +21,7 @@ import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 public class CollectableUpdateSystem extends EntitySystem {
     private ImmutableArray<Entity> collectableEntities;
     private Entity collectable, collector;
+    int pickupDistance = 15;
 
     Vector2 collectablePosition, collectorPosition;
 
@@ -110,7 +111,7 @@ public class CollectableUpdateSystem extends EntitySystem {
     private int entitiesAreClose() {
         int attractableDistance = collectable.getComponent(CollectableComponent.class).collectability + collector.getComponent(CollectorComponent.class).collectability;
         Float distanceBetween = collectablePosition.dst(collectorPosition);
-        if(distanceBetween < 10) return 0;
+        if(distanceBetween < pickupDistance) return 0; // Pickup the entity
         if(distanceBetween < attractableDistance) return 1;
         else return 2;
     }

@@ -22,6 +22,7 @@ public class Player extends GameObject {
     Ship playerShip; // Ship "owned" by player
     private TileShipGame game; // May need to remove this at some point. Only used for drawing within player, bad coding practice
     private Rectangle bounds;
+    public Abilities abilities;
 
     private float playerSpeed = ShipTile.TILE_SIZE * 1.5f;
 

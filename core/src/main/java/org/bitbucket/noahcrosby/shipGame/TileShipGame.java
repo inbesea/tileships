@@ -41,6 +41,7 @@ public class TileShipGame extends Game {
 	private Ship playerShip;
 	public static int zoomSpeed = 5;
 	public static float defaultViewportSizeX = 700f, defaultViewportSizeY = 500f;
+    public static int defaultResolutionSizeX = 1920, defaultResolutionSizeY = 1080;
     public static float spawnRadius = 700f;
 	public static float meterLength = 64f;
 	private Array<GameObject> gameObjects = new Array<>();
@@ -72,6 +73,9 @@ public class TileShipGame extends Game {
         font = new BitmapFont();
 
         appPreferences = AppPreferences.getAppPreferences();
+        if(appPreferences.isFullScreen()){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
 
         setBasicEngineSystems();
 
@@ -79,7 +83,7 @@ public class TileShipGame extends Game {
     }
 
     /**
-     * Give the engine basic systems
+     * Give the ECS engine basic systems
      */
     private void setBasicEngineSystems() {
         engine.addSystem(new DrawSystem());

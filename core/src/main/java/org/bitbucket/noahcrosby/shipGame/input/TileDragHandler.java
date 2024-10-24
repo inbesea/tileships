@@ -2,6 +2,7 @@ package org.bitbucket.noahcrosby.shipGame.input;
 
 import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.AppPreferences;
 import com.badlogic.gdx.Input;
@@ -16,6 +17,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.TileArrayToString;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 import org.bitbucket.noahcrosby.shipGame.util.SecondOrderDynamics;
+import org.bitbucket.noahcrosby.shipGame.util.generalUtil;
 
 import static org.bitbucket.noahcrosby.shipGame.util.generalUtil.returnUnprojectedInputPosition;
 
@@ -68,6 +70,7 @@ public class TileDragHandler extends InputAdapter {
         if (getDragging() && playerShip.isDragging()) { // We should only need to check is dragging in one place god damnit.
             ShipTile draggedTile = playerShip.getDraggedTile();
             Vector3 playerInputPosition = returnUnprojectedInputPosition(TileShipGame.getCurrentCamera());
+            Vector3 draggedLocation; // This should be adjusted by the effective range of the player
 
             draggedTile.setX(playerInputPosition.x - ShipTile.TILE_SIZE / 2.0f);
             draggedTile.setY(playerInputPosition.y - ShipTile.TILE_SIZE / 2.0f);
@@ -258,7 +261,9 @@ public class TileDragHandler extends InputAdapter {
          * Second Order Dynamics could make it look nice. Can we do that with a draw bool for the new tile? */
         playerShip.addTileToShip(placementIndicator.x, placementIndicator.y, tempTile);
         tempTile.replaced();
-        Resources.PlaceTileSoundSfx.play(AppPreferences.getAppPreferences().getSoundVolume());
+        Resources.PlaceTileSoundSfx.play(AppPreferences.getAppPreferences().getSoundVolume(),
+            generalUtil.getRandomNumber(0.5f, 1.5f),
+            0);
         this.setDraggingSound(false);
         // Dispose of used dragged tile references
         playerShip.setDraggedTile(null);

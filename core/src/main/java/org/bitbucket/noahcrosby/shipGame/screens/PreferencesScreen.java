@@ -100,8 +100,14 @@ public class PreferencesScreen implements Screen {
         fullScreenCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                boolean enabled = fullScreenCheckbox.isChecked();
-                game.getPreferences().setIsFullScreen(enabled);
+                if(event.toString() == "mouseMoved" ||
+                    event.toString() == "enter"){
+
+                } else if (event.toString() == "touchDown") {
+                    fullScreenCheckbox.toggle();
+                    boolean enabled = fullScreenCheckbox.isChecked();
+                    game.getPreferences().setIsFullScreen(enabled);
+                }
                 return game.getPreferences().isFullScreen();
             }
         });

@@ -63,7 +63,7 @@ public class MainMenu  extends ScreenAdapter implements Screen {
         initShipMenu();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY);
+        camera.setToOrtho(false, TileShipGame.defaultResolutionSizeX, TileShipGame.defaultResolutionSizeX);
         viewport = new ExtendViewport(TileShipGame.defaultViewportSizeX, TileShipGame.defaultViewportSizeY, camera);
 
 //        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());

@@ -12,6 +12,7 @@ import org.bitbucket.noahcrosby.shipGame.generalObjects.ship.Ship;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.tiles.tileTypes.ShipTile;
 
 public class PlayerInput extends InputAdapter {
+    boolean movingUp = false, movingDown = false, movingRight = false, movingLeft = false;
 
     /**
      * Holy cow pie this is a terrible class.
@@ -36,6 +37,7 @@ public class PlayerInput extends InputAdapter {
         Ship ship = player.getPlayerShip();
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
+            movingUp = true;
             // Get vector with position of moving up position
             Vector2 possibleUpPosition = new Vector2(
                     (playerPos.x),
@@ -48,8 +50,11 @@ public class PlayerInput extends InputAdapter {
             } else {
 //                System.out.println("Bumping up!");
             }
+        } else {
+            movingUp = false;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
+            movingLeft = true;
             Vector2 possibleLeftPosition = new Vector2(
                     (playerPos.x) - (player.getPlayerSpeed() * Gdx.graphics.getDeltaTime()),
                     playerPos.y);
@@ -62,8 +67,11 @@ public class PlayerInput extends InputAdapter {
             else {
 //                System.out.println("Bumping left!");
             }
+        } else {
+            movingLeft = false;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            movingRight = true;
             // Lets check if the new position is off the ship. Get possible position and opposite corner
             Vector2 possibleRightPosition = new Vector2(
                     (playerPos.x) + (player.getPlayerSpeed() * Gdx.graphics.getDeltaTime()),
@@ -77,8 +85,11 @@ public class PlayerInput extends InputAdapter {
             else {
 //                System.out.println("Bumping right!");
             }
+        } else {
+            movingRight = false;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
+            movingDown = true;
             Vector2 possibleDownPosition = new Vector2(playerPos.x,playerPos.y - player.getPlayerSpeed() * Gdx.graphics.getDeltaTime());
             Vector2 possibleDownCorner = new Vector2(possibleDownPosition.x + player.getWidth(),possibleDownPosition.y); //
             boolean isOffShip = ship.isHorizontalSpanOffShip(possibleDownPosition, possibleDownCorner);
@@ -89,6 +100,8 @@ public class PlayerInput extends InputAdapter {
             else {
 //                System.out.println("Bumping down!");
             }
+        } else {
+            movingDown = false;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             localZoomClamp(false, camera);
@@ -149,11 +162,11 @@ public class PlayerInput extends InputAdapter {
      * @param player - Player object
      * @param camera - Reference to camera context
      */
-    public static void updateCameraOnPlayer(Player player, OrthographicCamera camera){
-        // TODO : Migrate this and fix the camera flying off into nowhere when the screen is not focused.
-        float lerp = 0.8f;
+    public void updateCameraOnPlayer(Player player, OrthographicCamera camera){
+        float lerp = setLerpOnLookahead();
         Vector3 cameraPos = camera.position;
         Vector3 playerPos = new Vector3(player.getX(), player.getY(), 0);
+        playerPos = applyLookahead(playerPos);
 
         // Fix huge time deltas when not focused on game screen
         float delta = Gdx.graphics.getDeltaTime();
@@ -176,5 +189,35 @@ public class PlayerInput extends InputAdapter {
             cameraPos.y += (playerPos.y - cameraPos.y) *
                     lerp * delta;
         }
+    }
+
+    private float setLerpOnLookahead() {
+        float slowLerp = 1.1f;
+        float quickLerp = 1.8f;
+        boolean currentlyMoving = Gdx.input.isKeyPressed(Input.Keys.W)||
+            Gdx.input.isKeyPressed(Input.Keys.S)||
+            Gdx.input.isKeyPressed(Input.Keys.D)||
+            Gdx.input.isKeyPressed(Input.Keys.A);
+
+        if(currentlyMoving){
+            return quickLerp;
+        } else {
+            return quickLerp;
+        }
+    }
+
+    private Vector3 applyLookahead(Vector3 playerPos) {
+        int lookahead = 100;
+        if(Gdx.input.isKeyPressed(Input.Keys.W)){
+            playerPos.y += lookahead;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            playerPos.y -= lookahead;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            playerPos.x += lookahead;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)){
+            playerPos.x -= lookahead;
+        }
+        return playerPos;
     }
 }
