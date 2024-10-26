@@ -1,6 +1,7 @@
 package org.bitbucket.noahcrosby.shipGame.levelData;
 
 import com.badlogic.gdx.math.Vector2;
+import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AncientAsteroid;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpawner;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.spaceDebris.AsteroidSpawnVariables;
 import org.bitbucket.noahcrosby.shipGame.util.MapUtils;
@@ -54,6 +55,7 @@ public class Maps {
         entryNode.setAsteroids(
             AsteroidSpawner.generateRandomAsteroidsStatic(AsteroidSpawnVariables.EntryPlanetStandard(), AsteroidSpawnVariables.SOME())
         );
+        entryNode.getAsteroids().add(new AncientAsteroid());
 
         // Generate a bunch of nodes
         for(int i = 0; i < nodes; i++){

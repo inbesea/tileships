@@ -21,4 +21,9 @@ public class AncientAsteroid extends Asteroid{
     public ID productionOutputID(){
         return ID.AncientTile;
     }
+
+    @Override
+    public Class getTileType(){
+        return AncientTile.class;
+    }
 }

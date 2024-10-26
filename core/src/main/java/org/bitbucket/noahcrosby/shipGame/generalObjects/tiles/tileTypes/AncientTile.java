@@ -41,6 +41,11 @@ public class AncientTile extends ShipTile{
     }
 
     @Override
+    public boolean isInvulnerable(){
+        return true;
+    }
+
+    @Override
     public boolean deleteFromGame() {
         return false;
     }
