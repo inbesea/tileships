@@ -99,7 +99,7 @@ public class ClassicCollisionHandler extends CollisionHandler {
                 asteroid.getY() + asteroid.getHeight() / 2,
                 asteroid.getTileType());
 
-            TileShipGame.engine.addEntity(new Coin(ShipTileUtility.getRandomPointOnTile(newTile)));
+            TileShipGame.ECS.addEntity(new Coin(ShipTileUtility.getRandomPointOnTile(newTile)));
 
             Resources.PowerUpSfx.play(AppPreferences.getAppPreferences().getSoundVolume(),
                 generalUtil.getRandomNumber(0.8f, 1.2f),

@@ -2,7 +2,6 @@ package org.bitbucket.noahcrosby.shipGame.EntitySystems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Vector2;
 import org.bitbucket.noahcrosby.AppPreferences;
 import org.bitbucket.noahcrosby.javapoet.Resources;
@@ -94,7 +93,7 @@ public class CollectableUpdateSystem extends EntitySystem {
     }
 
     private void collectCurrent() {
-        TileShipGame.engine.removeEntity(collectable);
+        TileShipGame.ECS.removeEntity(collectable);
 
         Money.addCoin();
         Resources.PickupCoinSfx.play(AppPreferences.getAppPreferences().getSoundVolume(),

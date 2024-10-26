@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -105,7 +104,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
         // init player
         // Give player the game reference
         player = new Player(new Vector2(playerShip.getX(), playerShip.getY()), playerSize, ID.Player, this.game);
-        TileShipGame.engine.addEntity(player);
+        TileShipGame.ECS.addEntity(player);
 
         asteroidManager = new AsteroidManager(box2DWrapper, camera);
         mapNavigator = new MapNavManager(playerShip);
@@ -227,7 +226,7 @@ public class GameScreen implements Screen, Listener<MapNode> {
 
         tileDragHandler.update();
 
-        TileShipGame.engine.update(Gdx.graphics.getDeltaTime());
+        TileShipGame.ECS.update(Gdx.graphics.getDeltaTime());
 
         TileShipGame.batch.end();
 
