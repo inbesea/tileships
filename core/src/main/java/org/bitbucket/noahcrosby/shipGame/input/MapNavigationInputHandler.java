@@ -42,15 +42,15 @@ public class MapNavigationInputHandler extends InputAdapter {
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 touchPosition = generalUtil.returnUnprojectedInputVector2(camera);
-        MapNode closestNode = generalUtil.getClosestObject(touchPosition, currentMap.getMapNodes());
+        MapNode closestNodeToClick = generalUtil.getClosestObject(touchPosition, currentMap.getMapNodes());
 
-        boolean isSelectable = touchPosition.dst(closestNode.getPosition()) < NODE_SELECT_DISTANCE;
+        boolean isSelectable = touchPosition.dst(closestNodeToClick.getPosition()) < NODE_SELECT_DISTANCE;
         if(isSelectable){
-            boolean alreadySelected = closestNode.equals(this.navManager.getSelectedNode());
-            if(alreadySelected && !closestNode.playerIsHere()){
-                moveToNewNode(closestNode);
+            boolean alreadySelected = closestNodeToClick.equals(this.navManager.getSelectedNode());
+            if(alreadySelected && !closestNodeToClick.playerIsHere()){
+                moveToNewNode(closestNodeToClick);
             } else {
-                this.navManager.selectNode(closestNode);
+                this.navManager.selectNode(closestNodeToClick);
             }
         } else {
             clearSelections();

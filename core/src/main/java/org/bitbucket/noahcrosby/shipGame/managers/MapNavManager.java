@@ -111,7 +111,8 @@ public class MapNavManager {
     }
 
     /**
-     * Selects the given node and updates the selected node to be the new one
+     * Selects the given node and updates the selected node to be the new one.
+     * This is used when the user first clicks on a node
      * @param node - the node to be selected
      * @return the selected node
      */

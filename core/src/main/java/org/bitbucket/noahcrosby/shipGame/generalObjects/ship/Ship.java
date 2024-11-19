@@ -104,9 +104,6 @@ public class Ship extends GameObject {
         // Draw tiles
         for (int i = 0; i < existing.size; i++) {
             ShipTile tempTile = existing.get(i);
-            TileShipGame.batch.draw(tempTile.getTexture(),
-                tempTile.getX(), tempTile.getY(),
-                tempTile.getSize().x, tempTile.getSize().y);
             tempTile.render(game);
         }
 

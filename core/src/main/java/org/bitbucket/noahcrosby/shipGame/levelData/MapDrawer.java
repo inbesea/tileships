@@ -14,7 +14,7 @@ import static java.lang.Thread.sleep;
 /**
  * Takes a map and draws it. Assumes the map is fine as is.
  *
- * We will keep in mind the map may be changing a lot between draws.
+ * We will keep in mind the map may be changing a lot between draws.-
  */
 public class MapDrawer {
 
@@ -33,6 +33,9 @@ public class MapDrawer {
      * @param transform - Projection Matrix from Orthographic Camerad
      */
     public void drawMap(Matrix4 transform) {
+
+        drawConnectingEdges(transform);
+
         Array<MapNode> unvisitedMapNodes = new Array<>(); // Move to next nodes bit by bit
         unvisitedMapNodes.addAll(map.mapNodes);
         Array<MapNode> visited = new Array<>();
@@ -49,9 +52,8 @@ public class MapDrawer {
             for(MapNode mapNode : currentNode.edges){
                 if(!mapNode.visited || !currentNode.visited){
                     currentNode.visited = true;
-                    Line.DrawDebugLine(currentNode.getDrawPosition(), mapNode.getDrawPosition(), 1, Color.WHITE, transform);
                 }
-//                if(mapNode.drawn)continue; // Already drawn
+                // If not visited and not in the next nodes, add to next nodes
                 if(!nextNodes.contains(mapNode) && !visited.contains(mapNode, true))nextNodes.push(mapNode);
             }
             currentNode.draw(transform);
@@ -63,6 +65,42 @@ public class MapDrawer {
             unvisitedMapNodes.removeValue(currentNode, true);
             undrawnNodeCount = unvisitedMapNodes.size + nextNodes.size();
         }
+        resetVisitedNodes();
+    }
+
+    private void drawConnectingEdges(Matrix4 transform) {
+
+        Array<MapNode> unvisitedMapNodes = new Array<>(); // Move to next nodes bit by bit
+        unvisitedMapNodes.addAll(map.mapNodes);
+        Array<MapNode> visited = new Array<>();
+        Stack<MapNode> nextNodes = new Stack<>();
+
+        nextNodes.push(unvisitedMapNodes.pop());
+
+        // Draw the nodes and edges
+        int undrawnNodeCount = unvisitedMapNodes.size + nextNodes.size();
+        while (undrawnNodeCount > 0) { // There are unvisited nodes
+            separateGroupCheck(nextNodes, unvisitedMapNodes);
+
+            // Draw the connecting edges
+            MapNode currentNode = nextNodes.pop();
+            for(MapNode mapNode : currentNode.edges){
+                if(!mapNode.visited || !currentNode.visited){
+                    currentNode.visited = true;
+                    Line.DrawDebugLine(currentNode.getDrawPosition(), mapNode.getDrawPosition(), 1, Color.WHITE, transform);
+                }
+                // If not visited and not in the next nodes, add to next nodes
+                if(!nextNodes.contains(mapNode) && !visited.contains(mapNode, true))nextNodes.push(mapNode);
+            }
+
+            visited.add(currentNode);
+            unvisitedMapNodes.removeValue(currentNode, true);
+            undrawnNodeCount = unvisitedMapNodes.size + nextNodes.size();
+        }
+        resetVisitedNodes();
+    }
+
+    public void resetVisitedNodes() {
         for(int i = 0; i < map.mapNodes.size; i++){
             map.mapNodes.get(i).visited = false;
         }
