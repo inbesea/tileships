@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import org.bitbucket.noahcrosby.javapoet.Resources;
 import org.bitbucket.noahcrosby.shapes.Line;
 import org.bitbucket.noahcrosby.shipGame.TileShipGame;
 import org.bitbucket.noahcrosby.shipGame.generalObjects.GameObject;
@@ -78,6 +79,16 @@ public class MapNode extends GameObject {
             Line.drawFilledCircle(AngleUtils.getOrbitPoint(this.position, orbitRadius, rotation),
                 this.radius, Color.RED, transform);
         }
+
+        if (this.isHovered() || this.isClicked()){
+            drawNodeInfoPanel();
+        }
+    }
+
+    private void drawNodeInfoPanel() {
+        TileShipGame.batch.begin();
+        TileShipGame.batch.draw(Resources.InfoPlateTexture, this.position.x, this.position.y, 56 ,84);
+        TileShipGame.batch.end();
     }
 
     /**

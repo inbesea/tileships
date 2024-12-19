@@ -32,10 +32,14 @@ public class MapDrawer {
      *
      * @param transform - Projection Matrix from Orthographic Camerad
      */
-    public void drawMap(Matrix4 transform) {
+        public void drawMap(Matrix4 transform) {
 
         drawConnectingEdges(transform);
+        drawNodes(transform);
+        drawHoverIndicator(transform);
+    }
 
+    private void drawHoverIndicator(Matrix4 transform) {
         Array<MapNode> unvisitedMapNodes = new Array<>(); // Move to next nodes bit by bit
         unvisitedMapNodes.addAll(map.mapNodes);
         Array<MapNode> visited = new Array<>();
@@ -48,15 +52,57 @@ public class MapDrawer {
         while (undrawnNodeCount > 0) { // There are unvisited nodes
             separateGroupCheck(nextNodes, unvisitedMapNodes);
 
+            // This updates the visited nodes statuses.
+            // and the next nodes.
+            // We could put this on it's own method right?
             MapNode currentNode = nextNodes.pop();
-            for(MapNode mapNode : currentNode.edges){
-                if(!mapNode.visited || !currentNode.visited){
-                    currentNode.visited = true;
-                }
-                // If not visited and not in the next nodes, add to next nodes
-                if(!nextNodes.contains(mapNode) && !visited.contains(mapNode, true))nextNodes.push(mapNode);
-            }
+
+            updateNextNodes(nextNodes, currentNode, visited);
+
             currentNode.draw(transform);
+
+            if(AppPreferences.getAppPreferences().getIsDebug()) {
+                currentNode.drawDebug();
+            }
+
+            visited.add(currentNode);
+            unvisitedMapNodes.removeValue(currentNode, true);
+            undrawnNodeCount = unvisitedMapNodes.size + nextNodes.size();
+        }
+        resetVisitedNodes();
+    }
+
+    private void updateNextNodes(Stack<MapNode> nextNodes, MapNode currentNode, Array<MapNode> visited) {
+        for(MapNode mapNode : currentNode.edges){
+            if(!currentNode.visited){
+                currentNode.visited = true;
+            }
+            boolean nodeNotTouched = !visited.contains(mapNode, true) && !nextNodes.contains(mapNode); // nodeNotTouched
+            if(nodeNotTouched)nextNodes.push(mapNode);
+        }
+    }
+
+    private void drawNodes(Matrix4 transform) {
+        Array<MapNode> unvisitedMapNodes = new Array<>(); // Move to next nodes bit by bit
+        unvisitedMapNodes.addAll(map.mapNodes);
+        Array<MapNode> visited = new Array<>();
+        Stack<MapNode> nextNodes = new Stack<>();
+
+        nextNodes.push(unvisitedMapNodes.pop());
+
+        // Draw the nodes and edges
+        int undrawnNodeCount = unvisitedMapNodes.size + nextNodes.size();
+        while (undrawnNodeCount > 0) { // There are unvisited nodes
+            separateGroupCheck(nextNodes, unvisitedMapNodes);
+
+            // This updates the visited nodes statuses.
+            // and the next nodes.
+            // We could put this on it's own method right?
+            MapNode currentNode = nextNodes.pop();
+            updateNextNodes(nextNodes, currentNode, visited);
+
+            currentNode.draw(transform);
+
             if(AppPreferences.getAppPreferences().getIsDebug()) {
                 currentNode.drawDebug();
             }

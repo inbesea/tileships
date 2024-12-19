@@ -90,6 +90,8 @@ public class Resources {
 
     public static Texture ShipTileStrongTexture;
 
+    public static Texture InfoPlateTexture;
+
     public static Texture PowerTileUnpoweredTexture;
 
     public static Texture SprayPaintAsteroidTexture;
@@ -153,6 +155,7 @@ public class Resources {
         assetManager.load("Textures/constallationMap.png", Texture.class);
         assetManager.load("Textures/craftingIcon.png", Texture.class);
         assetManager.load("Textures/ShipTile_Strong.png", Texture.class);
+        assetManager.load("Textures/infoPlate.png", Texture.class);
         assetManager.load("Textures/PowerTile_Unpowered.png", Texture.class);
         assetManager.load("Textures/SprayPaintAsteroid.png", Texture.class);
         assetManager.load("Textures/asteroid_blue.png", Texture.class);
@@ -208,6 +211,7 @@ public class Resources {
             ConstallationMapTexture = assetManager.get("Textures/constallationMap.png");
             CraftingIconTexture = assetManager.get("Textures/craftingIcon.png");
             ShipTileStrongTexture = assetManager.get("Textures/ShipTile_Strong.png");
+            InfoPlateTexture = assetManager.get("Textures/infoPlate.png");
             PowerTileUnpoweredTexture = assetManager.get("Textures/PowerTile_Unpowered.png");
             SprayPaintAsteroidTexture = assetManager.get("Textures/SprayPaintAsteroid.png");
             AsteroidBlueTexture = assetManager.get("Textures/asteroid_blue.png");
