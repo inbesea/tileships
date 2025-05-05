@@ -2,7 +2,9 @@
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff).
 
-This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
+This is a game built using LibGDX, and Java Poet. 
+It's in a rough spot, and needs a lot of polish, optimization, and further features built out. 
+I think this will end up being fully rebuilt in Godot, as I am lacking enough basic built-in work that switching will be worth it. 
 
 ## Platforms
 
